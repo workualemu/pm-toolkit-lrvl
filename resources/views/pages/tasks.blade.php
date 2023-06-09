@@ -4,7 +4,7 @@
         <!-- Main Sidebar -->
         <x-app-partials.main-sidebar></x-app-partials.main-sidebar>
 
-        <!-- Sidebar Panel -->
+        <!-- Sidebar Panel 1-->
         <div class="sidebar-panel">
             <div class="flex h-full grow flex-col bg-white pl-[var(--main-sidebar-width)] dark:bg-navy-750">
                 <!-- Sidebar Panel Header -->
