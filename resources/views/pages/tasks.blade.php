@@ -1,10 +1,10 @@
-<x-base-layout title="Todo Application" is-sidebar-open="true" is-header-blur="true" has-min-sidebar="true">
+<x-app-layout title="Todo Application" is-sidebar-open="true" is-header-blur="true" has-min-sidebar="true">
     <!-- Sidebar -->
     <div class="sidebar print:hidden">
         <!-- Main Sidebar -->
         <x-app-partials.main-sidebar></x-app-partials.main-sidebar>
 
-        <!-- Sidebar Panel 1-->
+        <!-- Sidebar Panel -->
         <div class="sidebar-panel">
             <div class="flex h-full grow flex-col bg-white pl-[var(--main-sidebar-width)] dark:bg-navy-750">
                 <!-- Sidebar Panel Header -->
@@ -22,6 +22,7 @@
                         <div  class="flex block">
                           <p class="text-xl font-medium text-slate-800 dark:text-navy-50">
                             <span>Tasks</span>
+                            
                           </p>
                         </div>
                     </div>
@@ -34,6 +35,7 @@
                     </button>
                     
                 </div>
+
                 <!-- Sidebar Panel Body -->
                 <div class="flex h-[calc(100%-4.5rem)] grow flex-col">
                     <div class="is-scrollbar-hidden grow overflow-y-auto">
@@ -523,11 +525,11 @@
                                     x-transition:enter="transition-all duration-500 easy-in-out"
                                     x-transition:enter-start="opacity-0 [transform:translate3d(1rem,0,0)]"
                                     x-transition:enter-end="opacity-100 [transform:translate3d(0,0,0)]">
-                                    <div>
+                                  <div>
                                         
 
 
-                                    <div class="card px-4 pt-2 pb-4">
+                                  <div class="card px-4 pt-2 pb-4">
             <div x-init="Sortable.create($el, {
                 animation: 200,
                 easing: 'cubic-bezier(0, 0, 0.2, 1)',
@@ -535,6 +537,7 @@
                 delay: 150,
                 delayOnTouchOnly: true,
             })">
+            @livewire('task', ['task_title' => 'Review previous census methods for material distribution'])
                 <div class="border-b border-slate-150 py-3 dark:border-navy-500"
                     @click="$dispatch('show-drawer', { drawerId: 'edit-todo-drawer' })">
                     <div class="flex items-center space-x-2 sm:space-x-3">
@@ -1289,4 +1292,4 @@
         </button>
     </div>
 
-</x-base-layout>
+</x-app-layout>
