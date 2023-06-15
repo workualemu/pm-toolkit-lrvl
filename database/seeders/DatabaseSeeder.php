@@ -22,6 +22,14 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+        
+        //TeamSeeder, CategorySeeder, RoleSeeder,EnumerationAreaSeeder
+        $this->call([
+            TeamSeeder::class,
+            CategorySeeder::class,
+            RoleSeeder::class,
+            // EnumerationAreaSeeder::class,
+        ]);
 
         DB::table('users')->insert([
             'name' => 'Piniastudio',

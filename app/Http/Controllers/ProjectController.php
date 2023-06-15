@@ -26,10 +26,9 @@ class ProjectController extends Controller
 
     public function store(ProjectRequest $request)
     {
-        // $request->user_id = Auth::user()->id;
-        // $request->setAttribute('user_id', Auth::user()->id);
+
         $request->merge(array('user_id' => Auth::user()->id));
-        // dd($request);
+
         Project::create($request->only([
             'title', 'start_date', 'end_date', 'description', 'status', 'user_id'
         ]));

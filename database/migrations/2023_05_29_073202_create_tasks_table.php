@@ -30,6 +30,7 @@ return new class extends Migration
             $table->foreignId('task_type_id');
             $table->foreignId('task_status_id');
             $table->foreignId('task_priority_id');
+            $table->integer('kanban_list_rank')->default(1);
         });
     }
 

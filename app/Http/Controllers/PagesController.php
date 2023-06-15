@@ -8,7 +8,17 @@ use Config;
 
 class PagesController extends Controller
 {
-    
+    public $showModal = false;
+
+    public function newTask()
+    {
+        $user =  Auth::user();
+        $projectId = $user->project_id;
+        $project = Project::find($projectId);
+
+        $this->emit('openTaskModal', null);
+        $this->showModal = true;
+    }
     
     public function getTasks(int $project_id)
     {
@@ -28,18 +38,21 @@ class PagesController extends Controller
                 'labels'=>[
                     [
                         'label'=>'Logistics',
-                        'color'=>'primary'
+                        'color'=>'success'
                     ],
                     [
                         'label'=>'Finance',
-                        'color'=>'secondary'
+                        'color'=>'warning'
                     ],
                     [
                         'label'=>'HR',
                         'color'=>'info'
                     ]
                 ],
-                'priority'=>'High',
+                'priority'=>[
+                    'label'=>'High',
+                    'color'=>'error'
+                ],
                 'status'=>'In progress',
                 'kanban_order'=>30
             ],
@@ -51,14 +64,17 @@ class PagesController extends Controller
                 'labels'=>[
                     [
                         'label'=>'Logistics',
-                        'color'=>'primary'
+                        'color'=>'success'
                     ],
                     [
                         'label'=>'Finance',
-                        'color'=>'secondary'
+                        'color'=>'warning'
                     ]
                 ],
-                'priority'=>'Medium',
+                'priority'=>[
+                    'label'=>'Medium',
+                    'color'=>'warning'
+                ],
                 'status'=>'Pending',
                 'kanban_order'=>50
             ],
@@ -73,12 +89,15 @@ class PagesController extends Controller
                         'color'=>'info'
                     ]
                 ],
-                'priority'=>'Low',
+                'priority'=>[
+                    'label'=>'Low',
+                    'color'=>'success'
+                ],
                 'status'=>'In progress',
                 'kanban_order'=>20
             ]
         ];
-        return view('pages/tasks', compact('project'));
+        return view('pages/tasks', compact('project', 'tasks'));
     }
 
     public function getKanban()
@@ -108,7 +127,6 @@ class PagesController extends Controller
         return view('pages/reports', compact('project'));
     }
 
-    
     public function formsSetProfile()
     {
         $user =  Auth::user();

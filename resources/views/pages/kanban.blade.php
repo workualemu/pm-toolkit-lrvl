@@ -819,7 +819,7 @@
                 x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full">
                 <div class="flex h-14 items-center justify-between bg-slate-150 p-4 dark:bg-navy-800">
                     <h3 class="text-base font-medium text-slate-700 dark:text-navy-100">
-                        Banking App
+                        Kanban
                     </h3>
                     <div class="-mr-1.5 flex">
                         <button x-data="{ isImportant: false }" @click.stop="isImportant =! isImportant"

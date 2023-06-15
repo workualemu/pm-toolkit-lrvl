@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('task_statuses', function (Blueprint $table) {
+        Schema::create('kanban_lists', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->foreignId('kanban_list_id');
             $table->text('description');
             $table->timestamps();
             $table->string('value');
+            $table->integer('rank')->default(1);
         });
     }
 
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('task_statuses');
+        Schema::dropIfExists('kanban_lists');
     }
 };

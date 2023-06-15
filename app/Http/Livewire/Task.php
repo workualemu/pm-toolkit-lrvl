@@ -6,19 +6,44 @@ use Livewire\Component;
 
 class Task extends Component
 {
-    public $count = 0;
-    public $title = "";
- 
-    public function mount($task_title)
+    public $showModal = false;
+    public $modalTask = [];
+
+    public function openModal($data)
     {
-        $this->title = $task_title;
+        $this->emit('openTaskModal', $data);
+        $this->showModal = true;
+    }
+
+    public function closeModal()
+    {
+        $this->showModal = false;
+    }
+
+    public function storeTask($task)
+    {
+        // Perform data saving or processing logic here
+        // You can access the form data using $this->name and $this->email
+
+        // After saving or processing the data, you can reset the form fields
+
+        dd('here');
+        $this->reset(['title']);
+
+        // Close the modal after saving data
+        $this->showModal = false;
+        
+    }
+
+    public function mount($task)
+    {
+        $this->task = $task;
     }
 
     public function render()
     {
-
         return view('livewire.task', [
-            'task' => $this->title,
+            'task' => $this->task,
         ]);
     }
 }
