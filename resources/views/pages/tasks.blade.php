@@ -41,12 +41,14 @@
                   <div class="is-scrollbar-hidden grow overflow-y-auto">
                       <div class="mt-2 px-4">
                           <button 
+                            wire:click="openTaskModal()"
                               class="btn w-full space-x-2 rounded-full border border-slate-200 py-2 font-medium text-slate-800 hover:bg-slate-150 focus:bg-slate-150 active:bg-slate-150/80 dark:border-navy-500 dark:text-navy-50 dark:hover:bg-navy-500 dark:focus:bg-navy-500 dark:active:bg-navy-500/90">
                               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                                   viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                   <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                               </svg>
-                              <a href="{{ route('newtask') }}">New Task</a>
+                              <a href="{{ route('user.delete', $id) }}">New Task</a>
+                              <span> New Task </span>
                           </button>
                       </div>
                       <ul class="mt-5 space-y-1.5 px-2 font-inter text-xs+ font-medium">

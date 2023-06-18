@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\TaskPrioritys;
+use App\Models\TaskPriority;
 use Illuminate\Database\Seeder;
 
 class TaskPrioritySeeder extends Seeder
@@ -15,13 +15,13 @@ class TaskPrioritySeeder extends Seeder
     public function run()
     {
         $records = [
-            [ "value"=> "Urgent" ,"description"=>"Urgent", 'user_id'=>1],
-            [ "value"=> "High" ,"description"=>"High", 'user_id'=>1],
-            [ "value"=> "Midium" ,"description"=>"Midium", 'user_id'=>1],
-            [ "value"=> "Low" ,"description"=>"Low", 'user_id'=>1]
+            [ "value"=> "Urgent" ,"description"=>"Urgent", 'user_id'=>1, "color"=>"error"],
+            [ "value"=> "High" ,"description"=>"High", 'user_id'=>1, "color"=>"warning"],
+            [ "value"=> "Midium" ,"description"=>"Midium", 'user_id'=>1, "color"=>"info"],
+            [ "value"=> "Low" ,"description"=>"Low", 'user_id'=>1, "color"=>"success"]
         ];
         foreach ($records as $record) {
-            TaskPrioritys::create($record);
+            TaskPriority::create($record);
         }
     }
 }

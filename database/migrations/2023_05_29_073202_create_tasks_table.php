@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->timestamps();
             $table->string('title');
             $table->timestamp('planned_start_date')->nullable();
@@ -23,10 +23,10 @@ return new class extends Migration
             $table->timestamp('actual_end_date')->nullable();
             $table->float('budget')->default(0);
             $table->float('expense')->default(0);
-            $table->foreignId('parent_task_id');
+            $table->foreignId('parent_task_id')->nullable();
             $table->foreignId('project_id');
-            $table->foreignId('assigned_to');
-            $table->foreignId('report_by');
+            $table->foreignId('assigned_to')->nullable();
+            $table->foreignId('report_by')->nullable();
             $table->foreignId('task_type_id');
             $table->foreignId('task_status_id');
             $table->foreignId('task_priority_id');

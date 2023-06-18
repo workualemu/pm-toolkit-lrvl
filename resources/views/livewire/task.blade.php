@@ -1,6 +1,6 @@
 <div>
     <div class="border-b border-slate-150 py-3 dark:border-navy-500"
-        wire:click="openModal({{json_encode($task)}} )"
+        wire:click="openModal({{ $task->id }} )"
         >
         <div class="flex items-center space-x-2 sm:space-x-3">
             <h2 class="cursor-pointer text-slate-600 line-clamp-1 dark:text-navy-100">
@@ -9,7 +9,7 @@
         </div>
         <div class="mt-1 flex items-end justify-between">
             <div class="flex flex-wrap items-center font-inter text-xs">
-                <p>{{$task['end_date']}}</p>
+                <p>{{$task['planned_end_date']}}</p>
                 <div class="m-1.5 w-px self-stretch bg-slate-200 dark:bg-navy-500"></div>
                 <span class="flex items-center space-x-1">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
@@ -20,9 +20,9 @@
                     <span>{{$task['assigned_to']}}</span>
                 </span>
                 <div class="m-1.5 w-px self-stretch bg-slate-200 dark:bg-navy-500"></div>
-                <div class="badge space-x-2.5 px-1 text-{{$task['priority']['color']}}">
-                    <div class="h-2 w-2 rounded-full bg-current"></div>
-                    <span>{{$task['priority']['label']}}</span>
+                <div class="badge space-x-2.5 px-1 text-{{$task->task_priority->color}}">
+                    <div class="h-2 w-2 rounded-full bg-{{$task->task_priority->color}}"></div>
+                    <span>{{$task->task_priority->value}}</span>
                 </div>
             </div>
             <div class="flex items-center space-x-1">

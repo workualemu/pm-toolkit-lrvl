@@ -7,11 +7,12 @@ use Livewire\Component;
 class Task extends Component
 {
     public $showModal = false;
-    public $modalTask = [];
+    public $task;
 
-    public function openModal($data)
+    public function openModal($task_id)
     {
-        $this->emit('openTaskModal', $data);
+
+        $this->emit('openTaskModal', $task_id);
         $this->showModal = true;
     }
 
@@ -22,12 +23,6 @@ class Task extends Component
 
     public function storeTask($task)
     {
-        // Perform data saving or processing logic here
-        // You can access the form data using $this->name and $this->email
-
-        // After saving or processing the data, you can reset the form fields
-
-        dd('here');
         $this->reset(['title']);
 
         // Close the modal after saving data
@@ -35,13 +30,14 @@ class Task extends Component
         
     }
 
-    public function mount($task)
+    public function mount($task_id)
     {
-        $this->task = $task;
+        $this->task = \App\Models\Task::find($task_id);
     }
 
     public function render()
     {
+        // dd($this->task->task_priority);
         return view('livewire.task', [
             'task' => $this->task,
         ]);

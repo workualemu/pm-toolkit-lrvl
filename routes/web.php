@@ -3,6 +3,7 @@
 use App\Http\Controllers\PagesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectController;
+use App\Http\Livewire\Tasks;
 
 use App\Http\Livewire\TaskRightPopup;
 
@@ -30,8 +31,10 @@ Route::middleware('auth')->group(function () {
     Route::any('/', [ProjectController::class, 'index'])->name('index');
     Route::resource('project', ProjectController::class)->only(['index', 'create', 'update', 'store', 'edit', 'destroy']);
 
-    Route::get('tasks/{project_id}', [PagesController::class, 'getTasks'])->name('tasks');
-    Route::get('newtask', [PagesController::class, 'newTask'])->name('newtask');
+    // Route::get('tasks/{project_id}', [PagesController::class, 'getTasks'])->name('tasks');
+    Route::get('/tasks/{project_id}', Tasks::class)->name('tasks');
+    // Route::get('newtask', [Tasks::class, 'newTask'])->name('newtask');
+
     Route::get('kanban', [PagesController::class, 'getKanban'])->name('kanban');
     Route::get('gantt', [PagesController::class, 'getGantt'])->name('gantt');
     Route::get('reports', [PagesController::class, 'getReports'])->name('reports');

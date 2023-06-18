@@ -8,23 +8,26 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('task_prioritys', function (Blueprint $table) {
+        Schema::create('tag_tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->text('description');
+            $table->foreignId('task_id');
+            $table->foreignId('tag_id');
             $table->timestamps();
-            $table->string('value');
         });
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('task_prioritys');
+        Schema::dropIfExists('tag_tasks');
     }
 };

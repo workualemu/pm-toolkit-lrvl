@@ -19,7 +19,7 @@
                     </h3>
                     <div class="-mr-1.5 flex items-center space-x-2.5">
                         <input x-tooltip.primary="'Mark as Completed'"
-                            x-effect="showDrawer && setTimeout(() => showDrawer && $el.__x_tippy.show(), 500)"
+                            x-effect="showModal && setTimeout(() => showModal && $el.__x_tippy.show(), 500)"
                             class="form-checkbox is-basic h-5 w-5 rounded-full border-slate-400/70 checked:border-primary checked:bg-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:checked:border-accent dark:checked:bg-accent dark:hover:border-accent dark:focus:border-accent"
                             type="checkbox" />
                         <div class="flex">
@@ -37,7 +37,7 @@
                                         d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                 </svg>
                             </button>
-                            <button @click="showDrawer=false"
+                            <button @click="showModal=false"
                                 class="btn h-7 w-7 rounded-full p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -53,14 +53,14 @@
                         <div class="is-scrollbar-hidden flex grow flex-col space-y-4 overflow-y-auto p-4">
                             <label class="block">
                                 <span>Task title</span>
-                                <input id="title" wire:model="modalTask.title"
+                                <input id="title" wire:model.defer="task.title"
                                     class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                     placeholder="Enter task name" type="text" />
                             </label>
                             <div>
                                 <span>Due date:</span>
                                 <label class="relative mt-1.5 flex">
-                                    <input id="end_date" wire:model="modalTask.end_date" x-init="$el._x_flatpickr = flatpickr($el, { defaultDate: '2020-01-05' })"
+                                    <input id="end_date" wire:model.defer="task.planned_end_date" x-init="$el._x_flatpickr = flatpickr($el, { defaultDate: '2020-01-05' })"
                                         class="form-input peer w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                         placeholder="Choose date..." type="text" />
                                     <span
@@ -77,7 +77,7 @@
                             <label class="block">
                                 <span>Assigned to:</span>
                                 <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" multiple placeholder="Select the tags"
-                                    wire:model="modalTask.assigned_to" 
+                                    wire:model.defer="task.assigned_to" 
                                     autocomplete="off">
                                     <option value="WA">WA</option>
                                     <option value="YB">YB</option>
@@ -86,7 +86,7 @@
 
                             <label class="block">
                                 <span>Description</span>
-                                <textarea wire:model="modalTask.description"
+                                <textarea wire:model.defer="task.description"
                                 class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                     name="description"
                                     id="description">
@@ -101,7 +101,7 @@
                             <label class="block">
                                 <span>Label:</span>
                                 <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" multiple placeholder="Select the tags"
-                                    wire:model="modalTask.labels" 
+                                    wire:model.defer="task.labels" 
                                     autocomplete="off">
                                     <option value="Finance">Finance</option>
                                     <option value="HR">HR</option>
@@ -110,21 +110,21 @@
                             </label>
                             <label class="block">
                                 <span>Priority:</span>
-                                <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" multiple placeholder="Select the tags"
-                                    wire:model="modalTask.priority" 
+                                <select class="mt-1.5 w-full" placeholder="Select priority"
+                                    wire:model.defer="task.task_priority_id" 
                                     autocomplete="off">
-                                    <option value="Low">Low</option>
-                                    <option value="Medium">Medium</option>
-                                    <option value="High" selected>High</option>
+                                    @foreach($taskPriorities as $taskPriority)
+                                    <option value="{{$taskPriority->id}}">{{$taskPriority->value}}</option>
+                                    @endforeach
                                 </select>
                             </label>
                             <label class="block">
                                 <span>Status:</span>
-                                <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" multiple placeholder="Select the tags"
+                                <select class="mt-1.5 w-full" placeholder="Select status"
                                     autocomplete="off">
-                                    <option value="In progress">In progress</option>
-                                    <option value="Pending">Pending</option>
-                                    <option value="completed" selected>completed</option>
+                                    @foreach($taskStatuses as $taskStatus)
+                                    <option value="{{$taskStatus->id}}">{{$taskStatus->value}}</option>
+                                    @endforeach
                                 </select>
                             </label>
 
