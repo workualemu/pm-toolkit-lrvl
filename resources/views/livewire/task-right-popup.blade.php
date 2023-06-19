@@ -99,13 +99,13 @@
                     <div class="col-span-12 sm:col-span-6 lg:col-span-8">
                         <div class="is-scrollbar-hidden flex grow flex-col space-y-4 overflow-y-auto p-4">
                             <label class="block">
-                                <span>Label:</span>
+                                <span>Tag:</span>
                                 <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" multiple placeholder="Select the tags"
-                                    wire:model.defer="task.labels" 
+                                    wire:model.defer="tagTasks.tag_id" 
                                     autocomplete="off">
-                                    <option value="Finance">Finance</option>
-                                    <option value="HR">HR</option>
-                                    <option value="Logistics" selected>Logistics</option>
+                                    @foreach($tags as $tag)
+                                    <option value="{{$tag->id}}">{{$tag->label}}</option>
+                                    @endforeach
                                 </select>
                             </label>
                             <label class="block">
