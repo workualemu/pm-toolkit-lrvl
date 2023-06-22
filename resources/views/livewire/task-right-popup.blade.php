@@ -76,11 +76,12 @@
 
                             <label class="block">
                                 <span>Assigned to:</span>
-                                <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" multiple placeholder="Select the tags"
+                                <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" placeholder="Select user"
                                     wire:model.defer="task.assigned_to" 
                                     autocomplete="off">
-                                    <option value="WA">WA</option>
-                                    <option value="YB">YB</option>
+                                    @foreach($users as $user)
+                                    <option value="{{$user->id}}">{{$user->name}}</option>
+                                    @endforeach
                                 </select>
                             </label>
 
@@ -113,6 +114,7 @@
                                 <select class="mt-1.5 w-full" placeholder="Select priority"
                                     wire:model.defer="task.task_priority_id" 
                                     autocomplete="off">
+                                    <option value="">Select priority</option>
                                     @foreach($taskPriorities as $taskPriority)
                                     <option value="{{$taskPriority->id}}">{{$taskPriority->value}}</option>
                                     @endforeach
@@ -121,7 +123,9 @@
                             <label class="block">
                                 <span>Status:</span>
                                 <select class="mt-1.5 w-full" placeholder="Select status"
+                                    wire:model.defer="task.task_status_id" 
                                     autocomplete="off">
+                                    <option value="">Select status</option>
                                     @foreach($taskStatuses as $taskStatus)
                                     <option value="{{$taskStatus->id}}">{{$taskStatus->value}}</option>
                                     @endforeach

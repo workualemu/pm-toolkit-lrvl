@@ -8,6 +8,7 @@ use App\Models\TaskPriority;
 use App\Models\TaskStatus;
 use App\Models\Tag;
 use App\Models\TagTask;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class TaskRightPopup extends Component
@@ -18,6 +19,7 @@ class TaskRightPopup extends Component
     public $taskStatuses = [];
     public $tags = [];
     public TagTask $tagTasks;
+    public $users = [];
 
     protected $rules = [
         'task.title' => 'required|min:2',
@@ -26,6 +28,8 @@ class TaskRightPopup extends Component
         'task.task_priority_id'=>'required',
         'task.task_status_id'=>'required',
         'tagTasks.tag_id'=>'',
+        'task.description' => '',
+        'task.assigned_to'=>'',
     ];
     protected $listeners = ['openTaskModal' => 'openModal'];
 
@@ -40,6 +44,7 @@ class TaskRightPopup extends Component
         $this->taskPriorities = TaskPriority::all();
         $this->taskStatuses = TaskStatus::all();
         $this->tags = Tag::all();
+        $this->users = User::all();
 
         $this->showModal = true;
     }
@@ -55,6 +60,7 @@ class TaskRightPopup extends Component
         $user = Auth::user();
         $this->task->user_id = $user->id;
         $this->task->project_id = $user->project_id;
+
         $this->task->save();
         // dd($this->tagTasks->toArray()['tag_id']);
         // ->pluck('id')->toArray(); 

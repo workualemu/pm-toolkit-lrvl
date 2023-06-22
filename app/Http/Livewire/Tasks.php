@@ -12,12 +12,13 @@ class Tasks extends Component
     public $showModal = false;
     public $project;
     public $tasks;
+    public $searchValue = [];
 
-    protected $listeners = ['refreshTasks' => 'refreshPage'];
-    public function refreshPage()
-    {
-        $refresh;
-    }
+    protected $listeners = ['refreshTasks' => '$refresh', 
+                            'openNewTaskModal' => 'newTask',
+                            'filterTasks' => 'filterTasks',
+                            'showAllTasks' => 'allTasks'
+                        ];
     
     public function newTask()
     {
@@ -29,6 +30,26 @@ class Tasks extends Component
         $this->showModal = true;
     }
     
+    public function filterTasks($condition)
+    {
+        $user =  Auth::user();
+        $this->searchValue = array_merge([['project_id', $user->project_id]], $condition);
+    }
+
+    public function filterMyAssignedTasks()
+    {
+        $user =  Auth::user();
+        $this->searchValue = [['assigned_to', $user->id]];
+
+        $this->searchValue = array_merge([['project_id', $user->project_id]], $this->searchValue);
+    }
+
+    public function allTasks()
+    {
+        $user =  Auth::user();
+        $this->searchValue = [['project_id', $user->project_id]];
+    }
+
     public function mount($project_id)
     {
         $user =  Auth::user();
@@ -38,11 +59,13 @@ class Tasks extends Component
         }
         $projectId = $user->project_id;
         $this->project = Project::find($projectId);
-        $this->tasks = Task::where('project_id', $user->project_id)->get();
+        
+        $this->searchValue = array_merge([['project_id', $user->project_id]], $this->searchValue);
     }
 
     public function render()
     {
+        $this->tasks = Task::where($this->searchValue )->get();
         return view('livewire.tasks');
     }
 }

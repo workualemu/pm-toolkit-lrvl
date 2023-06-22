@@ -30,16 +30,14 @@ class Task extends Component
         
     }
 
-    public function mount($task_id)
+    public function mount($task)
     {
-        $this->task = \App\Models\Task::find($task_id);
+        $this->task = $task;
     }
 
     public function render()
     {
         // dd($this->task->task_priority);
-        return view('livewire.task', [
-            'task' => $this->task,
-        ]);
+        return view('livewire.task');
     }
 }

@@ -107,7 +107,6 @@
                 </div>
             </div>
         </div>
-
         <div class="flex h-[calc(100vh-8.5rem)] flex-grow flex-col">
             <div x-init="Sortable.create($el, {
                 animation: 200,
@@ -118,6 +117,10 @@
                 handle: '.board-draggable-handler'
             })"
                 class="kanban-scrollbar flex w-full items-start space-x-4 overflow-x-auto overflow-y-hidden px-[var(--margin-x)] transition-all duration-[.25s]">
+                
+                
+                
+                
                 <div class="board-draggable relative flex max-h-full w-72 shrink-0 flex-col">
                     <div class="board-draggable-handler flex items-center justify-between px-0.5 pb-3">
                         <div class="flex items-center space-x-2">
@@ -173,6 +176,8 @@
                             </template>
                         </div>
                     </div>
+
+
                     <div class="is-scrollbar-hidden relative space-y-2.5 overflow-y-auto p-0.5"
                         x-init="Sortable.create($el, {
                             animation: 200,
@@ -182,6 +187,10 @@
                             delay: 150,
                             delayOnTouchOnly: true,
                         })">
+
+
+
+
                         <div class="card cursor-pointer shadow-sm">
                             <div class="flex space-x-3 px-2.5 pb-2 pt-1.5">
                                 
@@ -243,6 +252,10 @@
                                 </div>
                             </div>
                         </div>
+
+
+                        
+
                         <div class="card cursor-pointer shadow-sm">
                             <div class="space-y-2 px-2.5 pb-2 pt-1.5">
                                 <div>
@@ -359,6 +372,10 @@
                             </div>
                         </div>
                     </div>
+
+
+
+
                     <div class="flex justify-center py-2">
                         <button
                             class="flex items-center justify-center space-x-2 font-medium text-slate-600 hover:text-primary focus:text-primary dark:text-navy-100 dark:hover:text-accent-light dark:focus:text-accent-light">

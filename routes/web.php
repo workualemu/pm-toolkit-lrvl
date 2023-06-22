@@ -31,8 +31,8 @@ Route::middleware('auth')->group(function () {
     Route::any('/', [ProjectController::class, 'index'])->name('index');
     Route::resource('project', ProjectController::class)->only(['index', 'create', 'update', 'store', 'edit', 'destroy']);
 
-    // Route::get('tasks/{project_id}', [PagesController::class, 'getTasks'])->name('tasks');
-    Route::get('/tasks/{project_id}', Tasks::class)->name('tasks');
+    Route::get('tasks/{project_id}', [PagesController::class, 'getTasks'])->name('tasks');
+    // Route::get('/tasks/{project_id}', Tasks::class)->name('tasks');
     // Route::get('newtask', [Tasks::class, 'newTask'])->name('newtask');
 
     Route::get('kanban', [PagesController::class, 'getKanban'])->name('kanban');
