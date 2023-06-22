@@ -29,7 +29,6 @@ class PagesController extends Controller
         }
         $projectId = $user->project_id;
         $project = Project::find($projectId);
-        
 
         return view('pages/tasks', compact('project'));
     }
@@ -40,6 +39,10 @@ class PagesController extends Controller
 
         $projectId = $user->project_id;
         $project = Project::find($projectId);
+        
+        // $searchValue = [['project_id', $user->project_id]];
+
+        // $tasks = Task::where($searchValue )->get();
         return view('pages/kanban', compact('project'));
     }
 
