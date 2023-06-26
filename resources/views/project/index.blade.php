@@ -162,7 +162,7 @@
                                 </div>
                                 <p class="text-xs+">
                                     @if($record->start_date)
-                                        {{date('d-m-Y', strtotime($record->start_date))}}
+                                        {{date('d-M-Y', strtotime($record->start_date))}}
                                     @endif
                                 </p>
                             </div>
@@ -171,59 +171,7 @@
                             </h2>
                             <p class="text-xs+">{{$record->description}}</p>
                         </div>
-                        <div>
-                            <div class="mt-4">
-                                <p class="text-xs+ text-slate-700 dark:text-navy-100">
-                                    Progress
-                                </p>
-                                <div class="progress my-2 h-1.5 bg-{{ $colors[$key] }}/15 dark:bg-{{ $colors[$key] }}/25">
-                                    <div class="w-4/12 rounded-full bg-{{ $colors[$key] }}"></div>
-                                </div>
-                                <p class="text-right text-xs+ font-medium text-{{ $colors[$key] }}">25%</p>
-                            </div>
-
-                            <div class="mt-5 flex flex-wrap -space-x-3">
-                                <div class="avatar h-8 w-8 hover:z-10">
-                                    <img class="rounded-full border-2 border-white dark:border-navy-700"
-                                        src="{{ asset('images/200x200.png') }}" alt="avatar" />
-                                </div>
-
-                                <div class="avatar h-8 w-8 hover:z-10">
-                                    <div
-                                        class="is-initial rounded-full border-2 border-white bg-warning text-xs+ uppercase text-white dark:border-navy-700">
-                                        ii
-                                    </div>
-                                </div>
-
-                                <div class="avatar h-8 w-8 hover:z-10">
-                                    <img class="rounded-full border-2 border-white dark:border-navy-700"
-                                        src="{{ asset('images/200x200.png') }}" alt="avatar" />
-                                </div>
-
-                                <div class="avatar h-8 w-8 hover:z-10">
-                                    <img class="rounded-full border-2 border-white dark:border-navy-700"
-                                        src="{{ asset('images/200x200.png') }}" alt="avatar" />
-                                </div>
-                            </div>
-
-                            <div class="mt-4 flex items-center justify-between space-x-2">
-                                <div class="badge h-5.5 rounded-full bg-{{ $colors[$key] }} px-2 text-xs+ text-white">
-                                    2 week left
-                                </div>
-                                <div>
-                                    <button
-                                        class="btn -mr-1.5 h-8 w-8 rounded-full p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
             </a>

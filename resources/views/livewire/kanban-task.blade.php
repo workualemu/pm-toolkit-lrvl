@@ -1,6 +1,6 @@
-<div class="card cursor-pointer shadow-sm">
+<div class="card cursor-pointer shadow-sm"
+    wire:click="openModal({{ $task->id }} )">
     <div class="flex space-x-3 px-2.5 pb-2 pt-1.5">
-        
         <div class="flex-1 space-y-2">
             <p class="font-medium tracking-wide text-slate-600 dark:text-navy-100">
                 {{$task->title}}
@@ -13,19 +13,15 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    <span> {{$task->planned_end_date}}</span>
+                    <span> 
+                        @if($task->planned_end_date)
+                            {{date('d-M-Y', strtotime($task->planned_end_date))}}
+                        @endif
+                    </span>
                 </div>
                 <div
-                    class="badge bg-secondary/10 py-1 px-1.5 text-secondary dark:bg-secondary-light/15 dark:text-secondary-light">
-                    High
-                </div>
-                <div class="badge space-x-1 bg-info/10 py-1 px-1.5 text-info dark:bg-info/15">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span>4/5</span>
+                    class="badge py-1 px-1.5 text-{{$task->task_priority->color}} dark:bg-secondary-light/15 dark:text-secondary-light">
+                    {{$task->task_priority->value}}
                 </div>
             </div>
             <div class="flex items-end justify-between pt-1">
@@ -34,12 +30,6 @@
                         <div
                             class="is-initial rounded-full bg-info text-tiny+ uppercase text-white ring-1 ring-white dark:ring-navy-700">
                             wa
-                        </div>
-                    </div>
-                    <div class="avatar h-5 w-5 hover:z-10">
-                        <div
-                            class="is-initial rounded-full bg-info text-tiny+ uppercase text-white ring-1 ring-white dark:ring-navy-700">
-                            yb
                         </div>
                     </div>
                 </div>

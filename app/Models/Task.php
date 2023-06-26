@@ -60,4 +60,10 @@ class Task extends Model
         return $this->belongsToMany(Tag::class);
     }
 
+    public static function scopeFilterByKanban($query,$kaban_id){
+        return $query->whereHas('taskStatus',function($query) use ($kaban_id){
+                return $query->where('kanban_list_id', '=', $kaban_id);
+        });
+    }
+
 }

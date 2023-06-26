@@ -9,7 +9,11 @@
         </div>
         <div class="mt-1 flex items-end justify-between">
             <div class="flex flex-wrap items-center font-inter text-xs">
-                <p>{{$task['planned_end_date']}}</p>
+                <p>
+                    @if($task->planned_end_date)
+                        {{date('d-M-Y', strtotime($task->planned_end_date))}}
+                    @endif
+                </p>
                 <div class="m-1.5 w-px self-stretch bg-slate-200 dark:bg-navy-500"></div>
                 <span class="flex items-center space-x-1">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"

@@ -14,6 +14,13 @@ class KanbanTasks extends Component
     public $tasks;
     public $kanbanLists;
 
+    protected $listeners = ['drag-end' => 'incrementPostCount'];
+
+    public function incrementPostCount()
+    {
+        dd('dragged');
+    }
+
     public function mount($project_id)
     {
         $user =  Auth::user();

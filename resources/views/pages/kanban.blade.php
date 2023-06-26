@@ -1,6 +1,6 @@
 <x-app-layout title="Kanban Board" is-header-blur="true">
 
-
+    <livewire:task-right-popup />
     <!-- Main Content Wrapper -->
     @livewire('kanban-tasks', ['project_id' => $project->id])
 
