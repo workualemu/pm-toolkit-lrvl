@@ -112,10 +112,7 @@
                 delay: 150,
                 delayOnTouchOnly: true,
                 draggable: '.board-draggable',
-                handle: '.board-draggable-handler',
-                onEnd: function (evt) {
-                    Livewire.emit('drag-end')
-                }
+                handle: '.board-draggable-handler'
                 })"
                 class="kanban-scrollbar flex w-full items-start space-x-4 overflow-x-auto overflow-y-hidden px-[var(--margin-x)] transition-all duration-[.25s]">
                 

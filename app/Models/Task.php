@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\DB;
 
 class Task extends Model
 {
@@ -60,10 +61,21 @@ class Task extends Model
         return $this->belongsToMany(Tag::class);
     }
 
-    public static function scopeFilterByKanban($query,$kaban_id){
-        return $query->whereHas('taskStatus',function($query) use ($kaban_id){
-                return $query->where('kanban_list_id', '=', $kaban_id);
-        });
+    public static function scopeFilterByStatus($query, $status_id){
+        return $query->where('task_status_id', '=', $status_id)->orderBy('kanban_list_rank', 'asc');
     }
+
+    public static function getBeyondRank($status_id, $rank){
+        return DB::table('tasks')
+                ->where('task_status_id', '=', $status_id)
+                ->where('kanban_list_rank', '>=', $rank)
+                ->orderBy('kanban_list_rank', 'asc')
+                ->get();
+    }
+    // public static function scopeFilterByKanban($query,$kaban_id){
+    //     return $query->whereHas('taskStatus',function($query) use ($kaban_id){
+    //             return $query->where('kanban_list_id', '=', $kaban_id);
+    //     });
+    // }
 
 }

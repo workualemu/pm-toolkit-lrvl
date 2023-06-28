@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('description');
             $table->timestamps();
             $table->string('value');
+            $table->integer('kanban_list_rank')->default(1);
         });
     }
 

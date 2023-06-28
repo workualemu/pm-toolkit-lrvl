@@ -1,4 +1,4 @@
-<div class="board-draggable relative flex max-h-full w-72 shrink-0 flex-col">
+<div  class="board-draggable relative flex max-h-full w-72 shrink-0 flex-col">
     <div class="board-draggable-handler flex items-center justify-between px-0.5 pb-3">
         <div class="flex items-center space-x-2">
             <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-info/10 text-info">
@@ -53,14 +53,16 @@
             </template>
         </div>
     </div>
-    <div class="is-scrollbar-hidden relative space-y-2.5 overflow-y-auto p-0.5"
+    <div id="{{$kanbanList->id}}" class="is-scrollbar-hidden relative space-y-2.5 overflow-y-auto p-0.5"
         x-init="Sortable.create($el, {
             animation: 200,
             group: 'board-cards',
             easing: 'cubic-bezier(0, 0, 0.2, 1)',
             direction: 'vertical',
-            delay: 150,
             delayOnTouchOnly: true,
+            onEnd: function (evt) {
+                Livewire.emit('end-drag', evt.item.id, evt.to.id, evt.newIndex);
+            }
         })">
 
         @forelse($tasks as $task)

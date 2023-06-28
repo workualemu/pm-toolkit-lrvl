@@ -12,11 +12,25 @@ class KanbanList extends Component
     public $tasks;
     public $kanbanList;
 
-    protected $listeners = ['SortableEvent.onAdd' => 'incrementPostCount'];
+    protected $listeners = ['end-drag' => 'incrementPostCount'];
  
-    public function incrementPostCount()
+    public function incrementPostCount($taskId, $statusId, $rank)
     {
-        dd('dragged');
+        $tasks = Task::getBeyondRank($statusId, $rank);
+        foreach($tasks as $task){
+            $taskT = Task::find($task->id);
+            $taskT->kanban_list_rank += 1;
+
+            $taskT->save();
+        }
+
+        $task = Task::find($taskId);
+        $task->task_status_id = $statusId;
+        $task->kanban_list_rank = $rank;
+        $task->save();
+        $task->refresh();
+        // dd($task);
+        // dd("Task ID: ".$taskId."  List ID: ".$statusId."  Rank:".$newRank);
     }
 
     public function mount()
@@ -38,7 +52,9 @@ class KanbanList extends Component
         //     $query->where('kanban_list_id', '=', 2);
         // })->get();
 
-        $this->tasks = Task::filterByKanban($this->kanbanList->id)->get();
+        $this->tasks = Task::filterByStatus($this->kanbanList->id)->get();
+        // $this->tasks = Task::filterByKanban($this->kanbanList->id)->get();
+
 
         return view('livewire.kanban-list');
     }

@@ -37,7 +37,7 @@ class KanbanTasks extends Component
     public function render()
     {
         $this->tasks = Task::where($this->searchValue )->get();
-        $this->kanbanLists = \App\Models\KanbanList::get();
+        $this->kanbanLists = \App\Models\TaskStatus::get();
 
         return view('livewire.kanban-tasks');
     }

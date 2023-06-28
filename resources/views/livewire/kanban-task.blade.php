@@ -1,5 +1,5 @@
-<div class="card cursor-pointer shadow-sm"
-    wire:click="openModal({{ $task->id }} )">
+<div id="{{ $task->id }}" class="card cursor-pointer shadow-sm"
+    wire:click="openModal({{ $task->id }} )" data-task="{{ $task->id }}">
     <div class="flex space-x-3 px-2.5 pb-2 pt-1.5">
         <div class="flex-1 space-y-2">
             <p class="font-medium tracking-wide text-slate-600 dark:text-navy-100">
