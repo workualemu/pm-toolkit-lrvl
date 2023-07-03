@@ -1,6 +1,5 @@
 <x-app-layout title="Gantt Chart" is-header-blur="true">
 
-
     <!-- Main Content Wrapper -->
     <main class="main-content kanban-app w-full">
         <p class="mt-1 text-xs text-info">
@@ -107,376 +106,342 @@
                 </div>
             </div>
         </div>
+        <div class='h-screen'>
+            <div class="gantt_control" >
+                <input type='button' id='default' onclick="toggleChart()" value="Toggle main Timeline">
+                <input type=button value="Zoom In" onclick="gantt.ext.zoom.zoomIn();">
+                <input type=button value="Zoom Out" onclick="gantt.ext.zoom.zoomOut();">		
+            </div>
+
+            <div id="gantt_here" style='width:100%; height:100%;'></div>
+            <script type="text/javascript">
+                function toggleChart(){
+		gantt.config.show_chart = !gantt.config.show_chart;
+		gantt.render()
+	}
+
+	gantt.message({
+		text:"The values in the resource timeline are calculated depending on the zoom level. <br/>" +
+		"You can change the zoom level with and without the main timeline.",
+		expire: -1
+	});
+
+	var zoomConfig = {
+		levels: [
+			{
+				name: "day",
+				scale_height: 27,
+				min_column_width: 80,
+				scales: [
+					{ unit: "day", step: 1, format: "%d %M" }
+				]
+			},
+			{
+				name: "week",
+				scale_height: 50,
+				min_column_width: 50,
+				scales: [
+					{
+						unit: "week", step: 1, format: function (date) {
+							var dateToStr = gantt.date.date_to_str("%d %M");
+							var endDate = gantt.date.add(date, -6, "day");
+							var weekNum = gantt.date.date_to_str("%W")(date);
+							return "#" + weekNum + ", " + dateToStr(date) + " - " + dateToStr(endDate);
+						}
+					},
+					{ unit: "day", step: 1, format: "%j %D" }
+				]
+			},
+			{
+				name: "month",
+				scale_height: 50,
+				min_column_width: 120,
+				scales: [
+					{ unit: "month", format: "%F, %Y" },
+					{ unit: "week", format: "Week #%W" }
+				]
+			},
+			{
+				name: "quarter",
+				height: 50,
+				min_column_width: 90,
+				scales: [
+					{ unit: "month", step: 1, format: "%M" },
+					{
+						unit: "quarter", step: 1, format: function (date) {
+							var dateToStr = gantt.date.date_to_str("%M");
+							var endDate = gantt.date.add(gantt.date.add(date, 3, "month"), -1, "day");
+							return dateToStr(date) + " - " + dateToStr(endDate);
+						}
+					}
+				]
+			},
+			{
+				name: "year",
+				scale_height: 50,
+				min_column_width: 30,
+				scales: [
+					{ unit: "year", step: 1, format: "%Y" }
+				]
+			}
+		]
+	};
+
+	gantt.ext.zoom.init(zoomConfig);
+	gantt.ext.zoom.setLevel("week");
+
+	function zoomIn() {
+		gantt.ext.zoom.zoomIn();
+	}
+	function zoomOut() {
+		gantt.ext.zoom.zoomOut()
+	}
+
+
+	var resourceConfig = {
+		columns: [
+			{
+				name: "name", label: "Name", tree: true, template: function (resource) {
+					return resource.text;
+				}
+			},
+			{
+				name: "workload", label: "Workload", template: function (resource) {
+					var tasks;
+					var store = gantt.getDatastore(gantt.config.resource_store),
+						field = gantt.config.resource_property;
+
+					if (store.hasChild(resource.id)) {
+						tasks = gantt.getTaskBy(field, store.getChildren(resource.id));
+					} else {
+						tasks = gantt.getTaskBy(field, resource.id);
+					}
+
+					var totalDuration = 0;
+					for (var i = 0; i < tasks.length; i++) {
+						totalDuration += tasks[i].duration;
+					}
+
+					return (totalDuration || 0) * 8 + "h";
+				}
+			}
+		],
+	};
+
+	gantt.templates.resource_cell_class = function (start_date, end_date, resource, tasks) {
+		var css = [];
+		css.push("resource_marker");
+		if (tasks.length <= 1) {
+			css.push("workday_ok");
+		} else {
+			css.push("workday_over");
+		}
+		return css.join(" ");
+	};
+
+
+
+	gantt.templates.resource_cell_value = function (start_date, end_date, resource, tasks) {
+		var cell_duration = gantt.calculateDuration({ start_date: start_date, end_date: end_date });
+
+		var result = 0;
+		tasks.forEach(function (item) {
+			var assignments = gantt.getResourceAssignments(resource.id, item.id);
+			assignments.forEach(function (assignment) {
+				var task = gantt.getTask(assignment.task_id);
+				var hours_amount = 0;
+
+				if (+task.start_date <= +start_date && +task.end_date >= +end_date) {
+					hours_amount += cell_duration;
+				}
+				//the task is in the left part
+				else if (+task.start_date <= +start_date && +task.end_date >= +start_date && +task.end_date < +end_date) {
+					var left_duration = gantt.calculateDuration({ start_date: start_date, end_date: task.end_date });
+					hours_amount += left_duration;
+				}
+				//the task is in the right part
+				else if (+task.end_date >= +end_date && +task.start_date >= +start_date && +task.start_date < +end_date) {
+					var right_duration = gantt.calculateDuration({ start_date: task.start_date, end_date: end_date });
+					hours_amount += right_duration;
+				}
+				//the task is inside cell
+				else if (+task.start_date >= +start_date && +task.end_date <= +end_date) {
+					var task_duration = gantt.calculateDuration({ start_date: task.start_date, end_date: task.end_date });
+					hours_amount += task_duration;
+				}
+
+				result += assignment.value * hours_amount;
+			});
+		});
+
+		if (result % 1) {
+			result = Math.round(result * 10) / 10;
+		}
+		return "<div>" + result + "</div>";
+	};
+
+	gantt.config.columns = [
+		{ name: "text", tree: true, width: 320, resize: true },
+		{ name: "start_date", align: "center", width: 80, resize: true },
+		{
+			name: "resources", align: "center", width: 80, label: "Resources", resize: true,
+			template: function (task) {
+				if (task.type == gantt.config.types.project) {
+					return "";
+				}
+
+				var result = "";
+				var store = gantt.getDatastore("resource");
+				var assignments = task[gantt.config.resource_property];
+
+				if (!assignments || !assignments.length) {
+					return "";
+				}
+
+				if (assignments.length == 1) {
+					return store.getItem(assignments[0].resource_id).text.split(",")[0];
+				}
+
+				assignments.forEach(function (assignment) {
+					var resource = store.getItem(assignment.resource_id);
+					if (!resource)
+						return;
+					result += "<div class='owner-label' title='" + resource.text + "'>" + resource.text.substr(0, 1) + "</div>";
+
+				});
+
+				return result;
+			}
+		},
+		{ name: "duration", width: 60, align: "center", resize: true },
+		{ name: "add", width: 44 }
+	];
+
+
+
+	gantt.locale.labels.section_owner = "Owner";
+	gantt.config.lightbox.sections = [
+		{ name: "description", height: 38, map_to: "text", type: "textarea", focus: true },
+		{
+			name: "resources", type: "resources", map_to: "owner", options: gantt.serverList("people"), default_value: 8
+		},
+		{ name: "time", type: "duration", map_to: "auto" }
+	];
+
+	gantt.config.resource_store = "resource";
+	gantt.config.resource_property = "owner";
+	gantt.config.order_branch = true;
+	gantt.config.open_tree_initially = true;
+	gantt.config.layout = {
+		css: "gantt_container",
+		rows: [
+			{
+				cols: [
+					{ view: "grid", group: "grids", scrollY: "scrollVer" },
+					{ resizer: true, width: 1 },
+					{ view: "timeline", scrollX: "scrollHor", scrollY: "scrollVer" },
+					{ view: "scrollbar", id: "scrollVer", group: "vertical" }
+				],
+				gravity: 2
+			},
+			{ resizer: true, width: 1 },
+			{
+				config: resourceConfig,
+				cols: [
+					{ view: "resourceGrid", group: "grids", width: 435, scrollY: "resourceVScroll" },
+					{ resizer: true, width: 1 },
+					{ view: "resourceTimeline", scrollX: "scrollHor", scrollY: "resourceVScroll" },
+					{ view: "scrollbar", id: "resourceVScroll", group: "vertical" }
+				],
+				gravity: 1
+			},
+			{ view: "scrollbar", id: "scrollHor" }
+		]
+	};
+
+	var resourcesStore = gantt.createDatastore({
+		name: gantt.config.resource_store,
+		type: "treeDatastore",
+		initItem: function (item) {
+			item.parent = item.parent || gantt.config.root_id;
+			item[gantt.config.resource_property] = item.parent;
+			item.open = true;
+			return item;
+		}
+	});
+
+	resourcesStore.attachEvent("onParse", function () {
+		var people = [];
+		resourcesStore.eachItem(function (res) {
+			if (!resourcesStore.hasChild(res.id)) {
+				var copy = gantt.copy(res);
+				copy.key = res.id;
+				copy.label = res.text;
+				people.push(copy);
+			}
+		});
+		gantt.updateCollection("people", people);
+	});
+
+	resourcesStore.parse([
+		{ id: 1, text: "QA", parent: null },
+		{ id: 2, text: "Development", parent: null },
+		{ id: 3, text: "Sales", parent: null },
+		{ id: 4, text: "Other", parent: null },
+		{ id: 5, text: "Unassigned", parent: 4 },
+		{ id: 6, text: "John", parent: 1 },
+		{ id: 7, text: "Mike", parent: 2 },
+		{ id: 8, text: "Anna", parent: 2 },
+		{ id: 9, text: "Bill", parent: 3 },
+		{ id: 10, text: "Floe", parent: 3 }
+	]);
+
+	gantt.init("gantt_here");
+	gantt.parse({
+		"data": [
+			{ "id": 1, "text": "Office itinerancy", "type": "project", "start_date": "02-04-2024 00:00", "duration": 17, "progress": 0.4, "owner": [{ "resource_id": "5", "value": 3 }], "parent": 0 },
+			{ "id": 2, "text": "Office facing", "type": "project", "start_date": "02-04-2024 00:00", "duration": 8, "progress": 0.6, "owner": [{ "resource_id": "5", "value": 4 }], "parent": "1" },
+			{ "id": 3, "text": "Furniture installation", "type": "project", "start_date": "11-04-2024 00:00", "duration": 8, "parent": "1", "progress": 0.6, "owner": [{ "resource_id": "5", "value": 2 }] },
+			{ "id": 4, "text": "The employee relocation", "type": "project", "start_date": "13-04-2024 00:00", "duration": 5, "parent": "1", "progress": 0.5, "owner": [{ "resource_id": "5", "value": 4 }], "priority": 3 },
+			{ "id": 5, "text": "Interior office", "type": "task", "start_date": "03-04-2024 00:00", "duration": 7, "parent": "2", "progress": 0.6, "owner": [{ "resource_id": "6", "value": 5 }], "priority": 1 },
+			{ "id": 6, "text": "Air conditioners check", "type": "task", "start_date": "03-04-2024 00:00", "duration": 7, "parent": "2", "progress": 0.6, "owner": [{ "resource_id": "7", "value": 1 }], "priority": 2 },
+			{ "id": 7, "text": "Workplaces preparation", "type": "task", "start_date": "12-04-2024 00:00", "duration": 8, "parent": "3", "progress": 0.6, "owner": [{ "resource_id": "10", "value": 2 }] },
+			{ "id": 8, "text": "Preparing workplaces", "type": "task", "start_date": "14-04-2024 00:00", "duration": 5, "parent": "4", "progress": 0.5, "owner": [{ "resource_id": "10", "value": 4 }, { "resource_id": "9", "value": 5 }], "priority": 1 },
+			{ "id": 9, "text": "Workplaces importation", "type": "task", "start_date": "21-04-2024 00:00", "duration": 4, "parent": "4", "progress": 0.5, "owner": [{ "resource_id": "7", "value": 3 }] },
+			{ "id": 10, "text": "Workplaces exportation", "type": "task", "start_date": "27-04-2024 00:00", "duration": 3, "parent": "4", "progress": 0.5, "owner": [{ "resource_id": "8", "value": 5 }], "priority": 2 },
+			{ "id": 11, "text": "Product launch", "type": "project", "progress": 0.6, "start_date": "02-04-2024 00:00", "duration": 13, "owner": [{ "resource_id": "5", "value": 4 }], "parent": 0 },
+			{ "id": 12, "text": "Perform Initial testing", "type": "task", "start_date": "03-04-2024 00:00", "duration": 5, "parent": "11", "progress": 1, "owner": [{ "resource_id": "7", "value": 6 }] },
+			{ "id": 13, "text": "Development", "type": "project", "start_date": "03-04-2024 00:00", "duration": 11, "parent": "11", "progress": 0.5, "owner": [{ "resource_id": "5", "value": 2 }] },
+			{ "id": 14, "text": "Analysis", "type": "task", "start_date": "03-04-2024 00:00", "duration": 6, "parent": "11", "owner": [], "progress": 0.8 },
+			{ "id": 15, "text": "Design", "type": "project", "start_date": "03-04-2024 00:00", "duration": 5, "parent": "11", "progress": 0.2, "owner": [{ "resource_id": "5", "value": 5 }] },
+			{ "id": 16, "text": "Documentation creation", "type": "task", "start_date": "03-04-2024 00:00", "duration": 7, "parent": "11", "progress": 0, "owner": [{ "resource_id": "7", "value": 2 }], "priority": 1 },
+			{ "id": 17, "text": "Develop System", "type": "task", "start_date": "03-04-2024 00:00", "duration": 2, "parent": "13", "progress": 1, "owner": [{ "resource_id": "8", "value": 1 }], "priority": 2 },
+			{ "id": 25, "text": "Beta Release", "type": "milestone", "start_date": "06-04-2024 00:00", "parent": "13", "progress": 0, "owner": [{ "resource_id": "5", "value": 1 }], "duration": 0 },
+			{ "id": 18, "text": "Integrate System", "type": "task", "start_date": "10-04-2024 00:00", "duration": 2, "parent": "13", "progress": 0.8, "owner": [{ "resource_id": "6", "value": 2 }], "priority": 3 },
+			{ "id": 19, "text": "Test", "type": "task", "start_date": "13-04-2024 00:00", "duration": 4, "parent": "13", "progress": 0.2, "owner": [{ "resource_id": "6", "value": 3 }] },
+			{ "id": 20, "text": "Marketing", "type": "task", "start_date": "13-04-2024 00:00", "duration": 4, "parent": "13", "progress": 0, "owner": [{ "resource_id": "8", "value": 4 }], "priority": 1 },
+			{ "id": 21, "text": "Design database", "type": "task", "start_date": "03-04-2024 00:00", "duration": 4, "parent": "15", "progress": 0.5, "owner": [{ "resource_id": "6", "value": 5 }] },
+			{ "id": 22, "text": "Software design", "type": "task", "start_date": "03-04-2024 00:00", "duration": 4, "parent": "15", "progress": 0.1, "owner": [{ "resource_id": "8", "value": 3 }], "priority": 1 },
+			{ "id": 23, "text": "Interface setup", "type": "task", "start_date": "03-04-2024 00:00", "duration": 5, "parent": "15", "progress": 0, "owner": [{ "resource_id": "8", "value": 5 }], "priority": 1 },
+			{ "id": 24, "text": "Release v1.0", "type": "milestone", "start_date": "20-04-2024 00:00", "parent": "11", "progress": 0, "owner": [{ "resource_id": "5", "value": 3 }], "duration": 0 }
+		],
+		"links": [
+			{ "id": "2", "source": "2", "target": "3", "type": "0" },
+			{ "id": "3", "source": "3", "target": "4", "type": "0" },
+			{ "id": "7", "source": "8", "target": "9", "type": "0" },
+			{ "id": "8", "source": "9", "target": "10", "type": "0" },
+			{ "id": "16", "source": "17", "target": "25", "type": "0" },
+			{ "id": "17", "source": "18", "target": "19", "type": "0" },
+			{ "id": "18", "source": "19", "target": "20", "type": "0" },
+			{ "id": "22", "source": "13", "target": "24", "type": "0" },
+			{ "id": "23", "source": "25", "target": "18", "type": "0" }
+		]
+	});
+                
+            </script>
+        </div>
     </main>
 
-    <div x-show="showDrawer" x-data="{ showDrawer: false }"
-        x-on:show-drawer.window="($event.detail.drawerId === 'kanban-setting-drawer') && (showDrawer = true)"
-        @keydown.window.escape="showDrawer = false">
-        <div class="fixed inset-0 z-[100] bg-slate-900/60 transition-opacity duration-200"
-            @click="showDrawer = false" x-show="showDrawer" x-transition:enter="ease-out"
-            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in"
-            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"></div>
-        <div class="fixed right-0 top-0 z-[101] h-full w-full sm:w-80">
-            <div class="flex h-full w-full transform-gpu flex-col bg-white transition-transform duration-200 dark:bg-navy-700"
-                x-show="showDrawer" x-transition:enter="ease-out" x-transition:enter-start="translate-x-full"
-                x-transition:enter-end="translate-x-0" x-transition:leave="ease-in"
-                x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full">
-                <div class="flex h-14 items-center justify-between bg-slate-150 p-4 dark:bg-navy-800">
-                    <h3 class="text-base font-medium text-slate-700 dark:text-navy-100">
-                        Tasks
-                    </h3>
-                    <div class="-mr-1.5 flex">
-                        <button x-data="{ isImportant: false }" @click.stop="isImportant =! isImportant"
-                            class="btn h-7 w-7 rounded-full p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
-                            <svg x-show="!isImportant" xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5"
-                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                    d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                            </svg>
-                            <svg x-show="isImportant" xmlns="http://www.w3.org/2000/svg"
-                                class="h-5.5 w-5.5 text-primary dark:text-accent" viewBox="0 0 20 20"
-                                fill="currentColor" style="display: none">
-                                <path
-                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                        </button>
-                        <button @click="showDrawer=false"
-                            class="btn h-7 w-7 rounded-full p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div x-init="$el._x_simplebar = new SimpleBar($el)" class="flex grow flex-col overflow-y-auto">
-                    <div x-data="{ expanded: true }">
-                        <div class="mt-3 flex items-center justify-between px-4">
-                            <span class="text-xs+ font-medium uppercase">Actions</span>
-                            <div class="-mr-1.5 flex">
-                                <button @click="expanded =! expanded"
-                                    class="btn h-6 w-6 rounded-full p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 transition-transform"
-                                        :class="expanded && 'rotate-180'" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <div x-show="expanded" x-collapse>
-                            <ul class="mt-2 space-y-3 px-4 font-inter font-medium">
-                                <li>
-                                    <a class="group inline-flex items-center space-x-2 tracking-wide outline-none transition-colors hover:text-slate-800 focus:text-navy-800 dark:hover:text-navy-100 dark:focus:text-navy-100"
-                                        href="#">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="h-5 w-5 text-slate-400 transition-colors group-hover:text-slate-500 group-focus:text-slate-500 dark:text-navy-300 dark:group-hover:text-navy-200 dark:group-focus:text-navy-200"
-                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="1.5"
-                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                        </svg>
-                                        <span>Edit Board</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="group inline-flex items-center space-x-2 tracking-wide outline-none transition-colors hover:text-slate-800 focus:text-navy-800 dark:hover:text-navy-100 dark:focus:text-navy-100"
-                                        href="#">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="h-5 w-5 text-slate-400 transition-colors group-hover:text-slate-500 group-focus:text-slate-500 dark:text-navy-300 dark:group-hover:text-navy-200 dark:group-focus:text-navy-200"
-                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="1.5"
-                                                d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-                                        </svg>
-                                        <span>Archive</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="group inline-flex items-center space-x-2 tracking-wide outline-none transition-colors hover:text-slate-800 focus:text-navy-800 dark:hover:text-navy-100 dark:focus:text-navy-100"
-                                        href="#">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="h-5 w-5 text-slate-400 transition-colors group-hover:text-slate-500 group-focus:text-slate-500 dark:text-navy-300 dark:group-hover:text-navy-200 dark:group-focus:text-navy-200"
-                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="1.5"
-                                                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                        </svg>
-                                        <span>Clone</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="group inline-flex items-center space-x-2 tracking-wide outline-none transition-colors hover:text-slate-800 focus:text-navy-800 dark:hover:text-navy-100 dark:focus:text-navy-100"
-                                        href="#">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="h-5 w-5 text-slate-400 transition-colors group-hover:text-slate-500 group-focus:text-slate-500 dark:text-navy-300 dark:group-hover:text-navy-200 dark:group-focus:text-navy-200"
-                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="1.5"
-                                                d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
-                                        </svg>
-                                        <span>About Board</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="group inline-flex items-center space-x-2 tracking-wide outline-none transition-colors hover:text-slate-800 focus:text-navy-800 dark:hover:text-navy-100 dark:focus:text-navy-100"
-                                        href="#">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="h-5 w-5 text-slate-400 transition-colors group-hover:text-slate-500 group-focus:text-slate-500 dark:text-navy-300 dark:group-hover:text-navy-200 dark:group-focus:text-navy-200"
-                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="1.5"
-                                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                        </svg>
-                                        <span>Visibility</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="group inline-flex items-center space-x-2 tracking-wide text-error outline-none"
-                                        href="#">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="1.5"
-                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                        <span>Delete</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="my-4 mx-4 h-px shrink-0 bg-slate-200 dark:bg-navy-500"></div>
-                    <div x-data="{ expanded: true }">
-                        <div class="flex items-center justify-between px-4">
-                            <span class="text-xs+ font-medium uppercase">Activities</span>
-                            <div class="-mr-1.5 flex">
-                                <button
-                                    class="btn h-6 w-6 rounded-full p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                    </svg>
-                                </button>
-                                <button @click="expanded =! expanded"
-                                    class="btn h-6 w-6 rounded-full p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 transition-transform"
-                                        :class="expanded && 'rotate-180'" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <div x-show="expanded" x-collapse>
-                            <ol class="timeline line-space max-w-sm p-4 [--size:1.5rem]">
-                                <li class="timeline-item">
-                                    <div
-                                        class="timeline-item-point rounded-full border border-current bg-white text-secondary dark:bg-navy-700 dark:text-secondary-light">
-                                        <i class="fa fa-user-edit text-tiny"></i>
-                                    </div>
-                                    <div class="timeline-item-content flex-1 pl-4">
-                                        <div class="flex flex-col justify-between pb-2 sm:flex-row sm:pb-0">
-                                            <p
-                                                class="pb-2 font-medium leading-none text-slate-600 dark:text-navy-100 sm:pb-0">
-                                                User Photo Changed
-                                            </p>
-                                            <span class="text-xs text-slate-400 dark:text-navy-300">12 minute
-                                                ago</span>
-                                        </div>
-                                        <p class="py-1">John Doe changed his avatar photo</p>
-                                        <div class="avatar mt-2 h-20 w-20">
-                                            <img class="mask is-squircle" src="{{asset('images/200x200.png')}}"
-                                                alt="avatar" />
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="timeline-item">
-                                    <div
-                                        class="timeline-item-point rounded-full border border-current bg-white text-primary dark:bg-navy-700 dark:text-accent">
-                                        <i class="fa-solid fa-image text-tiny"></i>
-                                    </div>
-                                    <div class="timeline-item-content flex-1 pl-4">
-                                        <div class="flex flex-col justify-between pb-2 sm:flex-row sm:pb-0">
-                                            <p
-                                                class="pb-2 font-medium leading-none text-slate-600 dark:text-navy-100 sm:pb-0">
-                                                Images Added
-                                            </p>
-                                            <span class="text-xs text-slate-400 dark:text-navy-300">1 hour ago</span>
-                                        </div>
-                                        <p class="py-1">Mores Clarke added new image gallery</p>
-                                        <div class="mt-4 grid grid-cols-3 gap-3">
-                                            <img class="rounded-lg" src="{{asset('images/800x600.png')}}"
-                                                alt="image" />
-                                            <img class="rounded-lg" src="{{asset('images/800x600.png')}}"
-                                                alt="image" />
-                                            <img class="rounded-lg" src="{{asset('images/800x600.png')}}"
-                                                alt="image" />
-                                            <img class="rounded-lg" src="{{asset('images/800x600.png')}}"
-                                                alt="image" />
-                                            <img class="rounded-lg" src="{{asset('images/800x600.png')}}"
-                                                alt="image" />
-                                            <img class="rounded-lg" src="{{asset('images/800x600.png')}}"
-                                                alt="image" />
-                                        </div>
-                                        <div class="mt-4">
-                                            <span class="font-medium text-slate-600 dark:text-navy-100">
-                                                Category:
-                                            </span>
-
-                                            <a href="#"
-                                                class="text-xs text-primary hover:text-primary-focus dark:text-accent-light dark:hover:text-accent">
-                                                #Tag
-                                            </a>
-
-                                            <a href="#"
-                                                class="text-xs text-primary hover:text-primary-focus dark:text-accent-light dark:hover:text-accent">
-                                                #Category
-                                            </a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="timeline-item">
-                                    <div
-                                        class="timeline-item-point rounded-full border border-current bg-white text-success dark:bg-navy-700">
-                                        <i class="fa fa-leaf text-tiny"></i>
-                                    </div>
-                                    <div class="timeline-item-content flex-1 pl-4">
-                                        <div class="flex flex-col justify-between pb-2 sm:flex-row sm:pb-0">
-                                            <p
-                                                class="pb-2 font-medium leading-none text-slate-600 dark:text-navy-100 sm:pb-0">
-                                                Design Completed
-                                            </p>
-                                            <span class="text-xs text-slate-400 dark:text-navy-300">3 hours ago</span>
-                                        </div>
-                                        <p class="py-1">
-                                            Robert Nolan completed the design of the CRM
-                                            application
-                                        </p>
-                                        <a href="#"
-                                            class="inline-flex items-center space-x-1 pt-2 text-slate-600 transition-colors hover:text-primary dark:text-navy-100 dark:hover:text-accent">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                            </svg>
-                                            <span>File_final.fig</span>
-                                        </a>
-                                        <div class="pt-2">
-                                            <a href="#"
-                                                class="tag rounded-full border border-secondary/30 bg-secondary/10 text-secondary hover:bg-secondary/20 focus:bg-secondary/20 active:bg-secondary/25 dark:border-secondary-light/30 dark:bg-secondary-light/10 dark:text-secondary-light dark:hover:bg-secondary-light/20 dark:focus:bg-secondary-light/20 dark:active:bg-secondary-light/25">
-                                                UI/UX
-                                            </a>
-
-                                            <a href="#"
-                                                class="tag rounded-full border border-info/30 bg-info/10 text-info hover:bg-info/20 focus:bg-info/20 active:bg-info/25">
-                                                CRM
-                                            </a>
-
-                                            <a href="#"
-                                                class="tag rounded-full border border-success/30 bg-success/10 text-success hover:bg-success/20 focus:bg-success/20 active:bg-success/25">
-                                                Dashboard
-                                            </a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="timeline-item">
-                                    <div
-                                        class="timeline-item-point rounded-full border border-current bg-white text-warning dark:bg-navy-700">
-                                        <i class="fa fa-project-diagram text-tiny"></i>
-                                    </div>
-                                    <div class="timeline-item-content flex-1 pl-4">
-                                        <div class="flex flex-col justify-between pb-2 sm:flex-row sm:pb-0">
-                                            <p
-                                                class="pb-2 font-medium leading-none text-slate-600 dark:text-navy-100 sm:pb-0">
-                                                ER Diagram
-                                            </p>
-                                            <span class="text-xs text-slate-400 dark:text-navy-300">a day ago</span>
-                                        </div>
-                                        <p class="py-1">Team completed the ER diagram app</p>
-                                        <div>
-                                            <p class="text-xs text-slate-400 dark:text-navy-300">
-                                                Members:
-                                            </p>
-                                            <div class="mt-2 flex justify-between">
-                                                <div class="flex flex-wrap -space-x-2">
-                                                    <div class="avatar h-7 w-7 hover:z-10">
-                                                        <img class="rounded-full ring ring-white dark:ring-navy-700"
-                                                            src="{{asset('images/200x200.png')}}" alt="avatar" />
-                                                    </div>
-
-                                                    <div class="avatar h-7 w-7 hover:z-10">
-                                                        <div
-                                                            class="is-initial rounded-full bg-info text-xs+ uppercase text-white ring ring-white dark:ring-navy-700">
-                                                            jd
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="avatar h-7 w-7 hover:z-10">
-                                                        <img class="rounded-full ring ring-white dark:ring-navy-700"
-                                                            src="{{asset('images/200x200.png')}}" alt="avatar" />
-                                                    </div>
-
-                                                    <div class="avatar h-7 w-7 hover:z-10">
-                                                        <img class="rounded-full ring ring-white dark:ring-navy-700"
-                                                            src="{{asset('images/200x200.png')}}" alt="avatar" />
-                                                    </div>
-
-                                                    <div class="avatar h-7 w-7 hover:z-10">
-                                                        <img class="rounded-full ring ring-white dark:ring-navy-700"
-                                                            src="{{asset('images/200x200.png')}}" alt="avatar" />
-                                                    </div>
-                                                </div>
-                                                <button
-                                                    class="btn h-7 w-7 rounded-full bg-slate-150 p-0 font-medium text-slate-800 hover:bg-slate-200 focus:bg-slate-200 active:bg-slate-200/80 dark:bg-navy-500 dark:text-navy-50 dark:hover:bg-navy-450 dark:focus:bg-navy-450 dark:active:bg-navy-450/90">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="h-5 w-5 rotate-45" fill="none"
-                                                        viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="timeline-item">
-                                    <div
-                                        class="timeline-item-point rounded-full border border-current bg-white text-error dark:bg-navy-700">
-                                        <i class="fa fa-history text-tiny"></i>
-                                    </div>
-                                    <div class="timeline-item-content flex-1 pl-4">
-                                        <div class="flex flex-col justify-between pb-2 sm:flex-row sm:pb-0">
-                                            <p
-                                                class="pb-2 font-medium leading-none text-slate-600 dark:text-navy-100 sm:pb-0">
-                                                Weekly Report
-                                            </p>
-                                            <span class="text-xs text-slate-400 dark:text-navy-300">a day ago</span>
-                                        </div>
-                                        <p class="py-1">The weekly report was uploaded</p>
-                                    </div>
-                                </li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div @click="$dispatch('show-drawer', { drawerId: 'kanban-setting-drawer' })"
-        class="fixed right-3 bottom-3 rounded-full bg-white dark:bg-navy-700">
-        <button
-            class="btn h-14 w-14 rounded-full bg-success p-0 font-medium text-white hover:bg-success-focus focus:bg-success-focus active:bg-success-focus/90 sm:hidden">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
-            </svg>
-        </button>
-    </div>
+    
 
 </x-app-layout>

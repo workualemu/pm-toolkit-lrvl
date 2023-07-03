@@ -23,13 +23,15 @@ return new class extends Migration
             $table->timestamp('actual_end_date')->nullable();
             $table->float('budget')->default(0);
             $table->float('expense')->default(0);
-            $table->foreignId('parent_task_id')->nullable();
+            $table->foreignId('parent')->nullable();
             $table->foreignId('project_id');
             $table->foreignId('assigned_to')->nullable();
             $table->foreignId('report_by')->nullable();
             $table->foreignId('task_type_id');
             $table->foreignId('task_status_id');
             $table->foreignId('task_priority_id');
+            $table->integer('duration')->default(1);
+            $table->float('progress')->default(0);
             $table->integer('kanban_list_rank')->default(1);
         });
     }

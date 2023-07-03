@@ -12,7 +12,12 @@ class Task extends Model
 {
     use HasFactory;
     protected $fillable = ['project_id', 'title', 'start_date', 'end_date', 'description', 'status', 'user_id'];
-
+    protected $appends = ["open"];
+ 
+    public function getOpenAttribute(){
+        return true;
+    }
+    
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
