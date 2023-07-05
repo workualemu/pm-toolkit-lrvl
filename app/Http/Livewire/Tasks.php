@@ -17,8 +17,17 @@ class Tasks extends Component
     protected $listeners = ['refreshTasks' => '$refresh', 
                             'openNewTaskModal' => 'newTask',
                             'filterTasks' => 'filterTasks',
-                            'showAllTasks' => 'allTasks'
+                            'showAllTasks' => 'allTasks',
+                            'gantt-task-dragged' => 'onGanttTaskDrag'
                         ];
+
+
+    public function onGanttTaskDrag($taskId, $mode, $task, $original)
+    {
+        
+        dd($task);
+        
+    }
     
     public function newTask()
     {

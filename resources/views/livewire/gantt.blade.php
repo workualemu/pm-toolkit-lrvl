@@ -1,6 +1,5 @@
 <x-app-layout title="Gantt Chart" is-header-blur="true">
 
-
     <!-- Main Content Wrapper -->
     <main class="main-content kanban-app w-full">
         <p class="mt-1 text-xs text-info">

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->timestamps();
             $table->string('title');
-            $table->timestamp('planned_start_date')->nullable();
-            $table->timestamp('planned_end_date')->nullable();
+            $table->timestamp('start_date')->nullable();
+            $table->timestamp('end_date')->nullable();
             $table->timestamp('actual_start_date')->nullable();
             $table->timestamp('actual_end_date')->nullable();
             $table->float('budget')->default(0);
@@ -33,6 +33,8 @@ return new class extends Migration
             $table->integer('duration')->default(1);
             $table->float('progress')->default(0);
             $table->integer('kanban_list_rank')->default(1);
+            $table->string('text')->nullable();
+            $table->string('type')->nullable();
         });
     }
 
