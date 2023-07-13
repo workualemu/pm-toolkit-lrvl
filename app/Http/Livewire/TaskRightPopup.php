@@ -10,9 +10,14 @@ use App\Models\Tag;
 use App\Models\TagTask;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Livewire\WithFileUploads;
+use App\Models\File;
+use Livewire\TemporaryUploadedFile;
 
 class TaskRightPopup extends Component
 {
+    use WithFileUploads;
+
     public $showModal = false;
     public Task $task;
     public $taskPriorities = [];
@@ -20,6 +25,10 @@ class TaskRightPopup extends Component
     public $tags = [];
     public TagTask $tagTasks;
     public $users = [];
+
+    public $files = []; 
+    
+    public $file, $title;
 
     protected $rules = [
         'task.title' => 'required|min:2',
@@ -33,8 +42,95 @@ class TaskRightPopup extends Component
     ];
     protected $listeners = ['openTaskModal' => 'openModal'];
 
+    public function finishUpload($name, $tmpPath, $isMultiple) 
+    {
+        $this->cleanupOldUploads();
+
+        $files = collect($tmpPath)->map(function ($i) {
+            return TemporaryUploadedFile::createFromLivewire($i);
+        })->toArray();
+        
+        $this->emitSelf('upload:finished', $name, collect($files)->map->getFilename()->toArray());
+ 
+        $files = array_merge($this->getPropertyValue($name), $files);
+        $this->syncInput($name, $files);
+
+        foreach($files as $file){
+            File::updateOrCreate(
+                ['title' => $file->getClientOriginalName(), 'task_id' => $this->task->id],
+                ['name' => $file->getFileName()]
+            );
+
+            // File::create([
+            //     'title' => $file->getClientOriginalName(),
+            //     'task_id' => $this->task->id,
+            //     'name' => $file->getFileName(),
+            // ]);
+        }
+        
+    } 
+
+    public function downloadFile($file, $originalFileName)
+    {
+        return response()->download(storage_path('app/livewire-tmp/'.$file), $originalFileName);
+    }
+
+    public function removeUpload($name, $tmpFilename)
+    {
+        $uploads = $this->getPropertyValue($name);
+
+        if (is_array($uploads) && isset($uploads[0]) && $uploads[0] instanceof TemporaryUploadedFile) {
+            $this->emit('upload:removed', $name, $tmpFilename)->self();
+            
+            $this->syncInput($name, array_values(array_filter($uploads, function ($upload) use ($tmpFilename) {
+                if ($upload->getFilename() === $tmpFilename) {
+                    $numb = File::where(['task_id'=>$this->task->id, 'name'=> $upload->getFilename()])->delete();
+                    $upload->delete();
+                    return false;
+                }
+                return true;
+            })));
+        } elseif ($uploads instanceof TemporaryUploadedFile && $uploads->getFilename() === $tmpFilename) {
+            $uploads->delete();
+
+            $this->emit('upload:removed', $name, $tmpFilename)->self();
+
+            $this->syncInput($name, null);
+        }
+        
+    }
+
+  
+    // /**
+    //  * Write code on Method
+    //  *
+    //  * @return response()
+    //  */
+    // public function submit()
+    // {
+    //     $validatedData = $this->validate([
+    //         'file' => 'required',
+    //     ]);
+  
+    //     $validatedData['title'] = $this->file->getClientOriginalName();
+    //     $validatedData['name'] = $this->file->store('files', 'public');
+    //     $validatedData['task_id'] = $this->task->id;
+        
+
+
+    //     File::create($validatedData);
+  
+    //     session()->flash('message', 'File successfully uploaded.');
+    //     // $this->files = File::filterByTask($this->task->id)->get();
+    // }
+
     public function openModal($task_id)
     {
+        $attachments = File::filterByTask($task_id)->get();
+
+        $files = TemporaryUploadedFile::serializeMultipleForLivewireResponse($attachments);
+        $this->files = TemporaryUploadedFile::unserializeFromLivewireRequest($files);
+
         $this->tagTasks = new TagTask();
         $this->task = new Task();
         if($task_id > 0){
@@ -75,6 +171,7 @@ class TaskRightPopup extends Component
     public function mount()
     {
         $this->modalTask = new Task();
+        $this->task = new Task();
     }
 
     public function render()

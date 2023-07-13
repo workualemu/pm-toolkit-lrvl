@@ -1,4 +1,17 @@
 <div x-data="{ showModal: @entangle('showModal') }">
+<div x-data="fileUpload()"> 
+<div class="flex flex-col items-center justify-center h-screen bg-slate-200"
+         x-on:drop="isDroppingFile = false"
+         x-on:drop.prevent="handleFileDrop($event)"
+         x-on:dragover.prevent="isDroppingFile = true"
+         x-on:dragleave.prevent="isDroppingFile = false"
+    >
+    <div class="absolute top-0 bottom-0 left-0 right-0 z-30 flex items-center justify-center bg-blue-500 opacity-90"
+             x-show="isDropping"
+        >
+            <span class="text-3xl text-white">Release file to upload!</span>
+    </div>
+
     <div x-show="showModal" @click.away="showModal = false">
         <div class="fixed inset-0 z-[100] bg-slate-900/60 transition-opacity duration-200" @click="showModal = false"
             x-show="showModal" x-transition:enter="ease-out" x-transition:enter-start="opacity-0"
@@ -93,47 +106,132 @@
                                     id="description">
                                 </textarea>
                             </label>
+
+                            <label class="flex-col">
+                                <span class="bg-blue-200 w-1/2">Attachment</span>
+                                <div class="bg-gray-200 h-[5px] w-1/2 mt-3"> 
+                                    <div
+                                        class="bg-blue-500 h-[5px]"
+                                        style="transition: width 1s"
+                                        :style="`width: ${progress}%;`"
+                                        x-show="isUploading"
+                                    >
+                                    </div>
+                                </div>
+                                <input type="file" id="file-upload" multiple @change="handleFileSelect" class="hidden" />
+                            
+                                
+                            </label>
+                            @if(count($files)) 
+                                <ul 
+                                    class="mt-1.5 w-full px-3 py-2 "
+                                >
+                                    @foreach($files as $file)
+                                        <li>
+                                            <button class="text-blue-500" wire:click="downloadFile('{{$file->getFilename()}}', '{{$file->getClientOriginalName()}}')">{{$file->getClientOriginalName()}}</button>
+                                            <button class="text-red-500" @click="removeUpload('{{$file->getFilename()}}')">X</button>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif 
+                            
+                            <script>
+                                function fileUpload() {
+                                    return {
+                                        isDropping: false,
+                                        isUploading: false,
+                                        progress: 0,
+                                        handleFileSelect(event) {
+                                            if (event.target.files.length) {
+                                                this.uploadFiles(event.target.files)
+                                            }
+                                        },
+                                        handleFileDrop(event) { 
+                                            if (event.dataTransfer.files.length > 0) {
+                                                this.uploadFiles(event.dataTransfer.files)
+                                            }
+                                        }, 
+                                        uploadFiles(files) {
+                                            const $this = this;
+                                            this.isUploading = true
+                                            @this.uploadMultiple('files', files,
+                                                function (success) {
+                                                    $this.isUploading = false
+                                                    $this.progress = 0
+                                                },
+                                                function(error) {
+                                                    console.log('error', error)
+                                                },
+                                                function (event) {
+                                                    $this.progress = event.detail.progress
+                                                }
+                                            )
+                                        },
+                                        removeUpload(filename) { 
+                                            @this.removeUpload('files', filename) 
+                                        }, 
+                                    }
+                                }
+                            </script> 
+
+                            
+
+                            <!-- <form wire:submit.prevent="submit" enctype="multipart/form-data">
+                                <div>
+                                    @if(session()->has('message'))
+                                        <div class="alert alert-success">
+                                            {{ session('message') }}
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputName">File:</label>
+                                    <input wire:model="file" type="file">
+                                    @error('name') <span class="text-danger">{{ $message }}</span> @enderror
+                                </div>
+                            
+                                <button type="submit" class="btn btn-success">Upload</button>
+                            </form> -->
                         </div>
                     </div>
 
                     <div class="hidden sm:col-span-6 sm:block lg:col-span-4 border bg-slate-50">
-                    <div class="col-span-12 sm:col-span-6 lg:col-span-8">
-                        <div class="is-scrollbar-hidden flex grow flex-col space-y-4 overflow-y-auto p-4">
-                            <label class="block">
-                                <span>Tag:</span>
-                                <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" multiple placeholder="Select the tags"
-                                    wire:model.defer="tagTasks.tag_id" 
-                                    autocomplete="off">
-                                    @foreach($tags as $tag)
-                                    <option value="{{$tag->id}}">{{$tag->label}}</option>
-                                    @endforeach
-                                </select>
-                            </label>
-                            <label class="block">
-                                <span>Priority:</span>
-                                <select class="mt-1.5 w-full" placeholder="Select priority"
-                                    wire:model.defer="task.task_priority_id" 
-                                    autocomplete="off">
-                                    <option value="">Select priority</option>
-                                    @foreach($taskPriorities as $taskPriority)
-                                    <option value="{{$taskPriority->id}}">{{$taskPriority->value}}</option>
-                                    @endforeach
-                                </select>
-                            </label>
-                            <label class="block">
-                                <span>Status:</span>
-                                <select class="mt-1.5 w-full" placeholder="Select status"
-                                    wire:model.defer="task.task_status_id" 
-                                    autocomplete="off">
-                                    <option value="">Select status</option>
-                                    @foreach($taskStatuses as $taskStatus)
-                                    <option value="{{$taskStatus->id}}">{{$taskStatus->value}}</option>
-                                    @endforeach
-                                </select>
-                            </label>
-
+                        <div class="col-span-12 sm:col-span-6 lg:col-span-8">
+                            <div class="is-scrollbar-hidden flex grow flex-col space-y-4 overflow-y-auto p-4">
+                                <label class="block">
+                                    <span>Tag:</span>
+                                    <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" multiple placeholder="Select the tags"
+                                        wire:model.defer="tagTasks.tag_id" 
+                                        autocomplete="off">
+                                        @foreach($tags as $tag)
+                                        <option value="{{$tag->id}}">{{$tag->label}}</option>
+                                        @endforeach
+                                    </select>
+                                </label>
+                                <label class="block">
+                                    <span>Priority:</span>
+                                    <select class="mt-1.5 w-full" placeholder="Select priority"
+                                        wire:model.defer="task.task_priority_id" 
+                                        autocomplete="off">
+                                        <option value="">Select priority</option>
+                                        @foreach($taskPriorities as $taskPriority)
+                                        <option value="{{$taskPriority->id}}">{{$taskPriority->value}}</option>
+                                        @endforeach
+                                    </select>
+                                </label>
+                                <label class="block">
+                                    <span>Status:</span>
+                                    <select class="mt-1.5 w-full" placeholder="Select status"
+                                        wire:model.defer="task.task_status_id" 
+                                        autocomplete="off">
+                                        <option value="">Select status</option>
+                                        @foreach($taskStatuses as $taskStatus)
+                                        <option value="{{$taskStatus->id}}">{{$taskStatus->value}}</option>
+                                        @endforeach
+                                    </select>
+                                </label>
+                            </div>
                         </div>
-                    </div>
                     </div>
                 </div>
                 <div
@@ -158,7 +256,8 @@
                     </button>
                 </div>
             </div>
-            
         </div>
     </div>
+</div>
+</div>
 </div>

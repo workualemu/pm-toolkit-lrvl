@@ -15,7 +15,7 @@ class GanttController extends Controller
         $links = new Link();
 
         return response()->json([
-            "tasks" => $tasks->all(), //select('id', 'text', 'type', 'start_date', 'duration', 'progress', 'parent')->get(),
+            "tasks" => $tasks->all(), 
             "links" => $links->all()
         ]);
     }

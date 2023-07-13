@@ -1,6 +1,4 @@
-<x-app-layout title="Gantt Chart" is-header-blur="true">
-
-    <!-- Main Content Wrapper -->
+<div>
     <main class="main-content kanban-app w-full">
         <p class="mt-1 text-xs text-info">
           <span>{{ $project->title }}</span>
@@ -122,7 +120,7 @@
                 </button>	
             </div>
 
-            <div id="gantt_here" style='width:100%; height:100%;'></div>
+            <div id="gantt_here" style='width:100%; height:100%;' wire:ignore></div>
             <script type="text/javascript">
                 function toggleChart(){
                     gantt.config.show_chart = !gantt.config.show_chart;
@@ -370,8 +368,9 @@
                     }
                 });
 
-                gantt.attachEvent("onTaskDrag", function(id, mode, task, original){
-                    Livewire.emit('gantt-task-dragged', id, mode, task, original);
+                gantt.attachEvent("onAfterTaskDrag", function(id, mode, e){
+                    task = gantt.getTask(id);
+                    Livewire.emit('gantt-task-dragged', id, mode, task);
                 });
 
                 resourcesStore.attachEvent("onParse", function () {
@@ -401,52 +400,10 @@
                 ]);
 
 	            gantt.init("gantt_here");
-                gantt.load("/api/data");
-                // gantt.parse({
-                //     "data": [
-                //         { "id": 1, "text": "Office itinerancy", "type": "project", "start_date": "02-04-2024 00:00", "duration": 17, "progress": 0.4, "owner": [{ "resource_id": "5", "value": 3 }], "parent": 0 },
-                //         { "id": 2, "text": "Office facing", "type": "project", "start_date": "02-04-2024 00:00", "duration": 8, "progress": 0.6, "owner": [{ "resource_id": "5", "value": 4 }], "parent": "1" },
-                //         { "id": 3, "text": "Furniture installation", "type": "project", "start_date": "11-04-2024 00:00", "duration": 8, "parent": "1", "progress": 0.6, "owner": [{ "resource_id": "5", "value": 2 }] },
-                //         { "id": 4, "text": "The employee relocation", "type": "project", "start_date": "13-04-2024 00:00", "duration": 5, "parent": "1", "progress": 0.5, "owner": [{ "resource_id": "5", "value": 4 }], "priority": 3 },
-                //         { "id": 5, "text": "Interior office", "type": "task", "start_date": "03-04-2024 00:00", "duration": 7, "parent": "2", "progress": 0.6, "owner": [{ "resource_id": "6", "value": 5 }], "priority": 1 },
-                //         { "id": 6, "text": "Air conditioners check", "type": "task", "start_date": "03-04-2024 00:00", "duration": 7, "parent": "2", "progress": 0.6, "owner": [{ "resource_id": "7", "value": 1 }], "priority": 2 },
-                //         { "id": 7, "text": "Workplaces preparation", "type": "task", "start_date": "12-04-2024 00:00", "duration": 8, "parent": "3", "progress": 0.6, "owner": [{ "resource_id": "10", "value": 2 }] },
-                //         { "id": 8, "text": "Preparing workplaces", "type": "task", "start_date": "14-04-2024 00:00", "duration": 5, "parent": "4", "progress": 0.5, "owner": [{ "resource_id": "10", "value": 4 }, { "resource_id": "9", "value": 5 }], "priority": 1 },
-                //         { "id": 9, "text": "Workplaces importation", "type": "task", "start_date": "21-04-2024 00:00", "duration": 4, "parent": "4", "progress": 0.5, "owner": [{ "resource_id": "7", "value": 3 }] },
-                //         { "id": 10, "text": "Workplaces exportation", "type": "task", "start_date": "27-04-2024 00:00", "duration": 3, "parent": "4", "progress": 0.5, "owner": [{ "resource_id": "8", "value": 5 }], "priority": 2 },
-                //         { "id": 11, "text": "Product launch", "type": "project", "progress": 0.6, "start_date": "02-04-2024 00:00", "duration": 13, "owner": [{ "resource_id": "5", "value": 4 }], "parent": 0 },
-                //         { "id": 12, "text": "Perform Initial testing", "type": "task", "start_date": "03-04-2024 00:00", "duration": 5, "parent": "11", "progress": 1, "owner": [{ "resource_id": "7", "value": 6 }] },
-                //         { "id": 13, "text": "Development", "type": "project", "start_date": "03-04-2024 00:00", "duration": 11, "parent": "11", "progress": 0.5, "owner": [{ "resource_id": "5", "value": 2 }] },
-                //         { "id": 14, "text": "Analysis", "type": "task", "start_date": "03-04-2024 00:00", "duration": 6, "parent": "11", "owner": [], "progress": 0.8 },
-                //         { "id": 15, "text": "Design", "type": "project", "start_date": "03-04-2024 00:00", "duration": 5, "parent": "11", "progress": 0.2, "owner": [{ "resource_id": "5", "value": 5 }] },
-                //         { "id": 16, "text": "Documentation creation", "type": "task", "start_date": "03-04-2024 00:00", "duration": 7, "parent": "11", "progress": 0, "owner": [{ "resource_id": "7", "value": 2 }], "priority": 1 },
-                //         { "id": 17, "text": "Develop System", "type": "task", "start_date": "03-04-2024 00:00", "duration": 2, "parent": "13", "progress": 1, "owner": [{ "resource_id": "8", "value": 1 }], "priority": 2 },
-                //         { "id": 25, "text": "Beta Release", "type": "milestone", "start_date": "06-04-2024 00:00", "parent": "13", "progress": 0, "owner": [{ "resource_id": "5", "value": 1 }], "duration": 0 },
-                //         { "id": 18, "text": "Integrate System", "type": "task", "start_date": "10-04-2024 00:00", "duration": 2, "parent": "13", "progress": 0.8, "owner": [{ "resource_id": "6", "value": 2 }], "priority": 3 },
-                //         { "id": 19, "text": "Test", "type": "task", "start_date": "13-04-2024 00:00", "duration": 4, "parent": "13", "progress": 0.2, "owner": [{ "resource_id": "6", "value": 3 }] },
-                //         { "id": 20, "text": "Marketing", "type": "task", "start_date": "13-04-2024 00:00", "duration": 4, "parent": "13", "progress": 0, "owner": [{ "resource_id": "8", "value": 4 }], "priority": 1 },
-                //         { "id": 21, "text": "Design database", "type": "task", "start_date": "03-04-2024 00:00", "duration": 4, "parent": "15", "progress": 0.5, "owner": [{ "resource_id": "6", "value": 5 }] },
-                //         { "id": 22, "text": "Software design", "type": "task", "start_date": "03-04-2024 00:00", "duration": 4, "parent": "15", "progress": 0.1, "owner": [{ "resource_id": "8", "value": 3 }], "priority": 1 },
-                //         { "id": 23, "text": "Interface setup", "type": "task", "start_date": "03-04-2024 00:00", "duration": 5, "parent": "15", "progress": 0, "owner": [{ "resource_id": "8", "value": 5 }], "priority": 1 },
-                //         { "id": 24, "text": "Release v1.0", "type": "milestone", "start_date": "20-04-2024 00:00", "parent": "11", "progress": 0, "owner": [{ "resource_id": "5", "value": 3 }], "duration": 0 }
-                //     ],
-                //     "links": [
-                //         { "id": "2", "source": "2", "target": "3", "type": "1" },
-                //         { "id": "3", "source": "3", "target": "4", "type": "0" },
-                //         { "id": "7", "source": "8", "target": "9", "type": "0" },
-                //         { "id": "8", "source": "9", "target": "10", "type": "0" },
-                //         { "id": "16", "source": "17", "target": "25", "type": "0" },
-                //         { "id": "17", "source": "18", "target": "19", "type": "0" },
-                //         { "id": "18", "source": "19", "target": "20", "type": "0" },
-                //         { "id": "22", "source": "13", "target": "24", "type": "0" },
-                //         { "id": "23", "source": "25", "target": "18", "type": "0" }
-                //     ]
-                // });
-                
+                // gantt.load("/api/data");
+                gantt.load($data);
+                // gantt.parse({"tasks":[{"id":19,"user_id":1,"description":"finalize HR recruitment","created_at":"2023-06-19T12:37:55.000000Z","updated_at":"2023-07-06T03:34:57.000000Z","title":"finalize HR recruitment","start_date":"19-06-2023","planned_end_date":"2023-06-19 21:00:00","actual_start_date":null,"actual_end_date":null,"budget":"0","expense":"0","project_id":1,"assigned_to":1,"report_by":2,"task_type_id":1,"task_status_id":4,"task_priority_id":4,"kanban_list_rank":1,"duration":0,"progress":"0","parent":8,"text":"finalize HR recruitment","type":"milestone"},{"id":11,"user_id":1,"description":null,"created_at":"2023-06-17T20:30:37.000000Z","updated_at":"2023-07-06T13:00:07.000000Z","title":"some normal","start_date":"07-06-2023","planned_end_date":"2023-06-19 21:00:00","actual_start_date":null,"actual_end_date":null,"budget":"0","expense":"0","project_id":1,"assigned_to":1,"report_by":1,"task_type_id":1,"task_status_id":4,"task_priority_id":4,"kanban_list_rank":14,"duration":12,"progress":"0","parent":6,"text":"some normal","type":"task"},{"id":16,"user_id":1,"description":null,"created_at":"2023-06-19T11:16:54.000000Z","updated_at":"2023-07-06T13:00:32.000000Z","title":"This is new","start_date":"07-06-2023","planned_end_date":"2023-06-17 21:00:00","actual_start_date":null,"actual_end_date":null,"budget":"0","expense":"0","project_id":1,"assigned_to":2,"report_by":2,"task_type_id":1,"task_status_id":2,"task_priority_id":2,"kanban_list_rank":1,"duration":10,"progress":"0.36948529411765","parent":7,"text":"This is new","type":"task"},{"id":7,"user_id":1,"description":null,"created_at":"2023-06-17T17:55:46.000000Z","updated_at":"2023-07-06T13:00:32.000000Z","title":"Another correction1","start_date":"07-06-2023","planned_end_date":"2023-06-20 21:00:00","actual_start_date":null,"actual_end_date":null,"budget":"0","expense":"0","project_id":1,"assigned_to":2,"report_by":1,"task_type_id":1,"task_status_id":3,"task_priority_id":1,"kanban_list_rank":0,"duration":13,"progress":"0","parent":0,"text":"Another correction1","type":"project"},{"id":6,"user_id":1,"description":null,"created_at":"2023-06-17T17:24:57.000000Z","updated_at":"2023-07-06T13:10:59.000000Z","title":"Test98","start_date":"03-06-2023","planned_end_date":"2023-06-21 21:00:00","actual_start_date":null,"actual_end_date":null,"budget":"0","expense":"0","project_id":1,"assigned_to":2,"report_by":2,"task_type_id":1,"task_status_id":1,"task_priority_id":2,"kanban_list_rank":0,"duration":18,"progress":"0","parent":0,"text":"Test98","type":"project"},{"id":10,"user_id":1,"description":null,"created_at":"2023-06-17T20:26:31.000000Z","updated_at":"2023-07-06T13:11:43.000000Z","title":"next12300","start_date":"03-06-2023","planned_end_date":"2023-06-15 21:00:00","actual_start_date":null,"actual_end_date":null,"budget":"0","expense":"0","project_id":1,"assigned_to":2,"report_by":1,"task_type_id":1,"task_status_id":5,"task_priority_id":1,"kanban_list_rank":0,"duration":12,"progress":"0.57215189873418","parent":6,"text":"next12300","type":"task"},{"id":9,"user_id":1,"description":null,"created_at":"2023-06-17T20:21:18.000000Z","updated_at":"2023-07-06T13:11:58.000000Z","title":"correct","start_date":"03-06-2023","planned_end_date":"2023-06-13 21:00:00","actual_start_date":null,"actual_end_date":null,"budget":"0","expense":"0","project_id":1,"assigned_to":1,"report_by":2,"task_type_id":1,"task_status_id":4,"task_priority_id":1,"kanban_list_rank":0,"duration":10,"progress":"0.33738601823708","parent":6,"text":"correct","type":"task"},{"id":18,"user_id":1,"description":null,"created_at":"2023-06-19T12:26:27.000000Z","updated_at":"2023-07-06T10:43:28.000000Z","title":"testing13234","start_date":"10-06-2023","planned_end_date":"2023-06-21 21:00:00","actual_start_date":null,"actual_end_date":null,"budget":"0","expense":"0","project_id":1,"assigned_to":1,"report_by":1,"task_type_id":1,"task_status_id":2,"task_priority_id":4,"kanban_list_rank":0,"duration":11,"progress":"0","parent":8,"text":"testing13234","type":"task"},{"id":8,"user_id":1,"description":null,"created_at":"2023-06-17T20:13:05.000000Z","updated_at":"2023-07-06T10:43:28.000000Z","title":"task planned date","start_date":"10-06-2023","planned_end_date":"2023-06-22 21:00:00","actual_start_date":null,"actual_end_date":null,"budget":"0","expense":"0","project_id":1,"assigned_to":2,"report_by":1,"task_type_id":1,"task_status_id":3,"task_priority_id":4,"kanban_list_rank":1,"duration":12,"progress":"0","parent":0,"text":"task planned date","type":"project"}],"links":[]} )
             </script>
         </div>
     </main>
-
-    
-
-</x-app-layout>
+</div>

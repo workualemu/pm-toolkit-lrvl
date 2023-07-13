@@ -7,7 +7,7 @@ use Livewire\Component;
 class Task extends Component
 {
     public $showModal = false;
-    public $task;
+    public \App\Models\Task $task;
 
     public function openModal($task_id)
     {
