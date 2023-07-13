@@ -60,12 +60,6 @@ class TaskRightPopup extends Component
                 ['title' => $file->getClientOriginalName(), 'task_id' => $this->task->id],
                 ['name' => $file->getFileName()]
             );
-
-            // File::create([
-            //     'title' => $file->getClientOriginalName(),
-            //     'task_id' => $this->task->id,
-            //     'name' => $file->getFileName(),
-            // ]);
         }
         
     } 
@@ -97,32 +91,7 @@ class TaskRightPopup extends Component
 
             $this->syncInput($name, null);
         }
-        
     }
-
-  
-    // /**
-    //  * Write code on Method
-    //  *
-    //  * @return response()
-    //  */
-    // public function submit()
-    // {
-    //     $validatedData = $this->validate([
-    //         'file' => 'required',
-    //     ]);
-  
-    //     $validatedData['title'] = $this->file->getClientOriginalName();
-    //     $validatedData['name'] = $this->file->store('files', 'public');
-    //     $validatedData['task_id'] = $this->task->id;
-        
-
-
-    //     File::create($validatedData);
-  
-    //     session()->flash('message', 'File successfully uploaded.');
-    //     // $this->files = File::filterByTask($this->task->id)->get();
-    // }
 
     public function openModal($task_id)
     {

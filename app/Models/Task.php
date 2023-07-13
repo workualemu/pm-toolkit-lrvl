@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\DB;
-use Usamamuneerchaudhary\Commentify\Traits\Commentable;
+use App\Traits\Commentable;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Task extends Model
 {
@@ -18,6 +19,11 @@ class Task extends Model
     // protected $appends = ["open"];
  
     protected $casts = ['start_date'=>'datetime:d-m-Y'];
+
+    // public function comments(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    // {
+    //     return $this->morphMany(Comment::class, 'commentable');
+    // }
 
     public function getOpenAttribute(){
         return true;

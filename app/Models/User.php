@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Usamamuneerchaudhary\Commentify\Traits\HasUserAvatar;
+use App\Traits\HasUserAvatar;
 
 class User extends Authenticatable
 {

@@ -42,10 +42,25 @@ module.exports = {
     "./src/**/*.{php,html,js,jsx,ts,tsx,vue}",
     "./resources/**/*.{php,html,js,jsx,ts,tsx,vue}",
     "./storage/framework/views/*.php",
+    './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
   ],
   darkMode: "class",
   theme: {
     extend: {
+      colors: {
+        primary: {
+            "50": "#eff6ff",
+            "100": "#dbeafe",
+            "200": "#bfdbfe",
+            "300": "#93c5fd",
+            "400": "#60a5fa",
+            "500": "#3b82f6",
+            "600": "#2563eb",
+            "700": "#1d4ed8",
+            "800": "#1e40af",
+            "900": "#1e3a8a"
+        }
+      },
       fontFamily: {
         sans: ["Poppins", ...defaultTheme.fontFamily.sans],
         inter: ["Inter", ...defaultTheme.fontFamily.sans],

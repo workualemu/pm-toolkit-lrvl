@@ -181,7 +181,6 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        Usamamuneerchaudhary\Commentify\Providers\CommentifyServiceProvider::class,
 
         /*
          * Package Service Providers...
