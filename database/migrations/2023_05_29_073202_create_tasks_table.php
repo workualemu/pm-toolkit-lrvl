@@ -35,6 +35,7 @@ return new class extends Migration
             $table->integer('kanban_list_rank')->default(1);
             $table->string('text')->nullable();
             $table->string('type')->nullable();
+            $table->integer('level')->default(0);
         });
     }
 

@@ -123,16 +123,37 @@
                                 
                             </label>
                             @if(count($files)) 
-                                <ul 
-                                    class="mt-1.5 w-full px-3 py-2 "
-                                >
-                                    @foreach($files as $file)
-                                        <li>
-                                            <button class="text-blue-500" wire:click="downloadFile('{{$file->getFilename()}}', '{{$file->getClientOriginalName()}}')">{{$file->getClientOriginalName()}}</button>
+                            
+                                <div class="flex flex-col space-y-3.5">
+                                @foreach($files as $file)
+                                    <div class="flex items-center space-x-3">
+                                        <div
+                                            class="mask is-squircle flex h-11 w-11 items-center justify-center bg-secondary text-white">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            
+                                            <span wire:click="downloadFile('{{$file->getFilename()}}', '{{$file->getClientOriginalName()}}')"
+                                                class="font-medium text-slate-700 dark:text-navy-100">
+                                                {{$file->getClientOriginalName()}}
+                                            </span>
                                             <button class="text-red-500" @click="removeUpload('{{$file->getFilename()}}')">X</button>
-                                        </li>
-                                    @endforeach
-                                </ul>
+
+                                            <div class="flex text-xs text-slate-400 dark:text-navy-300">
+                                                <span>03:12</span>
+                                                <div class="mx-2 my-1 w-px bg-slate-200 dark:bg-navy-500"></div>
+
+                                                <span>8.32 MB</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                                </div>
                             @endif 
                             
                             <script>

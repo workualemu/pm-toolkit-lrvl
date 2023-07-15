@@ -12,16 +12,50 @@ class Gantt extends Component
 {
     public $project;
     public $searchValue = [];
-    public $data;
+    public $data ='';
+    public $tasks;
 
-    protected $listeners = ['gantt-task-dragged' => 'taskDragged'];
+    protected $listeners = ['gantt-task-added' => 'onTaskAdd', 
+                            'gantt-task-dragged' => 'onTaskDragged',
+                            'gantt-task-deleted' => 'onTaskDeleted',
+                            'gantt-task-updated' => 'onTaskUpdated',
+                            'gantt-link-added' => 'onLinkAdd',
+                            'gantt-link-deleted' => 'onLinkDeleted',
+                            'gantt-task-vertical_moved' => 'onTaskMove'
+                            ];
 
-    public function taskDragged($task_id, $mode, $task)
+    public function onTaskAdd($task)
+    {
+        // dd($task);
+        $user =  Auth::user();
+        $projectId = $user->project_id;
+        $this->project = Project::find($projectId);
+
+        $type = 'task';
+        if($task['$level'] == 0){
+            $type = 'project';
+        }
+        $task = Task::create([
+            'project_id' => $user->project_id,
+            'user_id' => $user->id,
+            'title' => $task['text'], 
+            'start_date' => $task['start_date'],
+            'duration' => $task['duration'],
+            'parent' => $task['parent'],
+            'task_status_id' => 1,
+            'text' => $task['text'],
+            'description' => $task['text'],
+            'type' => $type,
+            'progress' => $task['progress'],
+            'level' => $task['$level']
+        ]);
+
+    }
+
+    public function onTaskDragged($task_id, $mode, $task)
     {
         $dt = $this->tasks->keyBy('id');
 
-        // dd($task);
-        // $dt[$task['id']]->text = 'zzzzzzzzzz';
         $dTask = Task::find($task['id']);
         $dTask->start_date = $task['start_date'];
         $dTask->duration = $task['duration'];
@@ -46,6 +80,52 @@ class Gantt extends Component
         // dd($dTask);
     }
 
+    public function onTaskUpdated($id, $task)
+    {
+        // dd($task);
+
+        $task = Task::updateOrCreate(
+            ['id' => $task['id']],
+            [
+            'title' => $task['text'], 
+            'start_date' => $task['start_date'],
+            'duration' => $task['duration'],
+            'parent' => $task['parent'],
+            'task_status_id' => 1,
+            'text' => $task['text'],
+            'description' => $task['text'],
+            'type' => $task['$rendered_type'],
+            'progress' => $task['progress'],
+            'level' => $task['$level']
+        ]);
+
+    }
+
+    public function onTaskDeleted($id)
+    {
+        $res=Task::where('id', $id)->delete(); 
+    }
+
+    public function onLinkAdd($id, $item)
+    {
+        Link::updateOrCreate(
+            ['source' => $item['source'], 'target' => $item['target']],
+            ['type' => $item['type']]
+        );
+    }
+
+    public function onLinkDeleted($id, $item)
+    {
+        $res=Link::where('id', $id)->delete(); 
+    }
+
+    public function onTaskMove($id, $parent, $tindex)
+    {
+        $task = Task::find($id); 
+        $task->parent = $parent;
+        $task->save();
+    }
+
     public function mount($project_id)
     {
         $user =  Auth::user();
@@ -64,18 +144,15 @@ class Gantt extends Component
         $tasks = Task::where($this->searchValue )->get();
         $links = new Link();
 
-        // return response()->json([
-        //     "tasks" => $tasks->all(), 
-        //     "links" => $links->all()
-        // ]);
+        $this->tasks = Task::where($this->searchValue )->get();
 
         $ldata = response()->json([
             "tasks" => $tasks->all(), 
             "links" => $links->all()
         ]);
 
-        $this->data = $ldata;
-// dd(json_decode($ldata));
+        $this->data = $ldata->content();
+// dd($ldata->content());
         return view('livewire.gantt');
     }
 }

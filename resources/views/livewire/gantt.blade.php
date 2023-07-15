@@ -106,9 +106,13 @@
         </div>
         <div class='h-screen'>
             <div class="gantt_control" >
+                <button id='default' onclick="toggleGrid();" 
+                    class="btn min-w-[7rem] bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
+                    Grid
+                </button>
                 <button id='default' onclick="toggleChart();" 
                     class="btn min-w-[7rem] bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
-                    Toggle main timeline
+                    Timeline
                 </button>
                 <button id='default' onclick="gantt.ext.zoom.zoomIn();" 
                     class="btn min-w-[7rem] bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
@@ -124,6 +128,11 @@
             <script type="text/javascript">
                 function toggleChart(){
                     gantt.config.show_chart = !gantt.config.show_chart;
+                    gantt.render()
+                }
+
+                function toggleGrid(){
+                    gantt.config.show_grid = !gantt.config.show_grid;
                     gantt.render()
                 }
 
@@ -327,7 +336,7 @@
 
                 // gantt.config.resource_store = "resource";
                 // gantt.config.resource_property = "owner";
-                // gantt.config.order_branch = true;
+                gantt.config.order_branch = true;
                 gantt.config.open_tree_initially = true;
 
                 gantt.config.layout = {
@@ -367,10 +376,35 @@
                         return item;
                     }
                 });
+                
+
+                gantt.attachEvent("onAfterTaskAdd", function(id, task){
+                    Livewire.emit('gantt-task-added', task);
+                });
 
                 gantt.attachEvent("onAfterTaskDrag", function(id, mode, e){
                     task = gantt.getTask(id);
                     Livewire.emit('gantt-task-dragged', id, mode, task);
+                });
+                
+                gantt.attachEvent("onAfterTaskUpdate", function(id, task){
+                    Livewire.emit('gantt-task-updated', id, task);
+                });
+
+                gantt.attachEvent("onAfterTaskDelete", function(id, task){
+                    Livewire.emit('gantt-task-deleted', id);
+                });
+
+                gantt.attachEvent("onAfterLinkAdd", function(id, item){
+                    Livewire.emit('gantt-link-added', id, item);
+                });
+
+                gantt.attachEvent("onAfterLinkDelete", function(id, item){
+                    Livewire.emit('gantt-link-deleted', id, item);
+                });
+
+                gantt.attachEvent("onAfterTaskMove", function(id, parent, tindex){
+                    Livewire.emit('gantt-task-vertical_moved', id, parent, tindex);
                 });
 
                 resourcesStore.attachEvent("onParse", function () {
@@ -400,8 +434,9 @@
                 ]);
 
 	            gantt.init("gantt_here");
-                // gantt.load("/api/data");
-                gantt.load($data);
+                gantt.load("/api/data");
+                // alert(data);
+                // gantt.load(data);
                 // gantt.parse({"tasks":[{"id":19,"user_id":1,"description":"finalize HR recruitment","created_at":"2023-06-19T12:37:55.000000Z","updated_at":"2023-07-06T03:34:57.000000Z","title":"finalize HR recruitment","start_date":"19-06-2023","planned_end_date":"2023-06-19 21:00:00","actual_start_date":null,"actual_end_date":null,"budget":"0","expense":"0","project_id":1,"assigned_to":1,"report_by":2,"task_type_id":1,"task_status_id":4,"task_priority_id":4,"kanban_list_rank":1,"duration":0,"progress":"0","parent":8,"text":"finalize HR recruitment","type":"milestone"},{"id":11,"user_id":1,"description":null,"created_at":"2023-06-17T20:30:37.000000Z","updated_at":"2023-07-06T13:00:07.000000Z","title":"some normal","start_date":"07-06-2023","planned_end_date":"2023-06-19 21:00:00","actual_start_date":null,"actual_end_date":null,"budget":"0","expense":"0","project_id":1,"assigned_to":1,"report_by":1,"task_type_id":1,"task_status_id":4,"task_priority_id":4,"kanban_list_rank":14,"duration":12,"progress":"0","parent":6,"text":"some normal","type":"task"},{"id":16,"user_id":1,"description":null,"created_at":"2023-06-19T11:16:54.000000Z","updated_at":"2023-07-06T13:00:32.000000Z","title":"This is new","start_date":"07-06-2023","planned_end_date":"2023-06-17 21:00:00","actual_start_date":null,"actual_end_date":null,"budget":"0","expense":"0","project_id":1,"assigned_to":2,"report_by":2,"task_type_id":1,"task_status_id":2,"task_priority_id":2,"kanban_list_rank":1,"duration":10,"progress":"0.36948529411765","parent":7,"text":"This is new","type":"task"},{"id":7,"user_id":1,"description":null,"created_at":"2023-06-17T17:55:46.000000Z","updated_at":"2023-07-06T13:00:32.000000Z","title":"Another correction1","start_date":"07-06-2023","planned_end_date":"2023-06-20 21:00:00","actual_start_date":null,"actual_end_date":null,"budget":"0","expense":"0","project_id":1,"assigned_to":2,"report_by":1,"task_type_id":1,"task_status_id":3,"task_priority_id":1,"kanban_list_rank":0,"duration":13,"progress":"0","parent":0,"text":"Another correction1","type":"project"},{"id":6,"user_id":1,"description":null,"created_at":"2023-06-17T17:24:57.000000Z","updated_at":"2023-07-06T13:10:59.000000Z","title":"Test98","start_date":"03-06-2023","planned_end_date":"2023-06-21 21:00:00","actual_start_date":null,"actual_end_date":null,"budget":"0","expense":"0","project_id":1,"assigned_to":2,"report_by":2,"task_type_id":1,"task_status_id":1,"task_priority_id":2,"kanban_list_rank":0,"duration":18,"progress":"0","parent":0,"text":"Test98","type":"project"},{"id":10,"user_id":1,"description":null,"created_at":"2023-06-17T20:26:31.000000Z","updated_at":"2023-07-06T13:11:43.000000Z","title":"next12300","start_date":"03-06-2023","planned_end_date":"2023-06-15 21:00:00","actual_start_date":null,"actual_end_date":null,"budget":"0","expense":"0","project_id":1,"assigned_to":2,"report_by":1,"task_type_id":1,"task_status_id":5,"task_priority_id":1,"kanban_list_rank":0,"duration":12,"progress":"0.57215189873418","parent":6,"text":"next12300","type":"task"},{"id":9,"user_id":1,"description":null,"created_at":"2023-06-17T20:21:18.000000Z","updated_at":"2023-07-06T13:11:58.000000Z","title":"correct","start_date":"03-06-2023","planned_end_date":"2023-06-13 21:00:00","actual_start_date":null,"actual_end_date":null,"budget":"0","expense":"0","project_id":1,"assigned_to":1,"report_by":2,"task_type_id":1,"task_status_id":4,"task_priority_id":1,"kanban_list_rank":0,"duration":10,"progress":"0.33738601823708","parent":6,"text":"correct","type":"task"},{"id":18,"user_id":1,"description":null,"created_at":"2023-06-19T12:26:27.000000Z","updated_at":"2023-07-06T10:43:28.000000Z","title":"testing13234","start_date":"10-06-2023","planned_end_date":"2023-06-21 21:00:00","actual_start_date":null,"actual_end_date":null,"budget":"0","expense":"0","project_id":1,"assigned_to":1,"report_by":1,"task_type_id":1,"task_status_id":2,"task_priority_id":4,"kanban_list_rank":0,"duration":11,"progress":"0","parent":8,"text":"testing13234","type":"task"},{"id":8,"user_id":1,"description":null,"created_at":"2023-06-17T20:13:05.000000Z","updated_at":"2023-07-06T10:43:28.000000Z","title":"task planned date","start_date":"10-06-2023","planned_end_date":"2023-06-22 21:00:00","actual_start_date":null,"actual_end_date":null,"budget":"0","expense":"0","project_id":1,"assigned_to":2,"report_by":1,"task_type_id":1,"task_status_id":3,"task_priority_id":4,"kanban_list_rank":1,"duration":12,"progress":"0","parent":0,"text":"task planned date","type":"project"}],"links":[]} )
             </script>
         </div>

@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->string('type')->nullable();
+            $table->integer('level')->default(0);
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('tasks', function (Blueprint $table) {
-            $table->dropColumn('type');
+        Schema::table('task', function (Blueprint $table) {
+            $table->dropColumn('level');
         });
     }
 };
