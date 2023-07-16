@@ -1,9 +1,4 @@
 <div>
-    {{-- Care about people's approval and you will be their prisoner. --}}
-</div>
-
-
-<div>
     <main class="main-content kanban-app w-full">
         <p class="mt-1 text-xs text-info">
           <span>{{ $project->title }}</span>
@@ -111,12 +106,12 @@
         </div>
         <div class='h-screen'>
             <div class="gantt_control" >
-                <button id='default' onclick="generateReport();" 
-                    class="btn min-w-[7rem] bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
+                <button wire:click="generateReport()"
+                    class="btn bg-info font-medium text-white hover:bg-info-focus hover:shadow-lg hover:shadow-info/50 focus:bg-info-focus focus:shadow-lg focus:shadow-info/50 active:bg-info-focus/90"
+                >
                     Generate report
                 </button>
             </div>
-
         </div>
     </main>
 </div>
