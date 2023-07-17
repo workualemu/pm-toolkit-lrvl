@@ -1,5 +1,7 @@
-<x-app-layout title="Gantt Chart" is-header-blur="true">
+<x-app-layout title="Reports" is-header-blur="true">
     <!-- Main Content Wrapper -->
-    @livewire('reports', ['project_id' => $project->id])
+    
+    <livewire:report-admin-modal />
+    @livewire('reports-page', ['project_id' => $project->id])
 
 </x-app-layout>

@@ -7,7 +7,7 @@
             class="flex items-center justify-between space-x-2 px-[var(--margin-x)] py-5 transition-all duration-[.25s]">
             <div class="flex items-center space-x-1">
                 <h3 class="text-lg font-medium text-slate-700 line-clamp-1 dark:text-navy-50">
-                    Gantt chart
+                    Reports
                 </h3>
             </div>
             <label class="relative hidden w-full max-w-[16rem] sm:flex">
@@ -23,7 +23,7 @@
                     </svg>
                 </span>
             </label>
-            <div class="flex space-x-1">
+            <div class="flex space-x-1 w-4">
                 <div class="flex -space-x-2">
                     <div class="avatar h-6 w-6 hover:z-10 sm:h-8 sm:w-8">
                         <img class="rounded-full border-2 border-slate-50 dark:border-navy-900"
@@ -104,12 +104,15 @@
                 </div>
             </div>
         </div>
-        <div class='h-screen'>
-            <div class="gantt_control" >
+        <div class="grid grid-cols-10 gap-4">
+            <div class="col-span-5 ...">
+                @livewire('reports-admin')
+            </div>
+            <div class="...">
                 <button wire:click="generateReport()"
                     class="btn bg-info font-medium text-white hover:bg-info-focus hover:shadow-lg hover:shadow-info/50 focus:bg-info-focus focus:shadow-lg focus:shadow-info/50 active:bg-info-focus/90"
                 >
-                    Generate report
+                    Second part
                 </button>
             </div>
         </div>

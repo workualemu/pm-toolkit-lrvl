@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use ExcelReport;
 
 
-class Reports extends Component
+class ReportsPage extends Component
 {
     
     public $project;
@@ -68,6 +68,6 @@ class Reports extends Component
 
     public function render()
     {
-        return view('livewire.reports');
+        return view('livewire.reports-page');
     }
 }

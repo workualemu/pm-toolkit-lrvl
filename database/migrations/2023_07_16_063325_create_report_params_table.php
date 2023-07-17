@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignId('user_id');
-            $table->text('description');
+            $table->foreignId('report_id');
+            $table->text('description')->nullable();
             $table->string('title');
             $table->string('db_column');
             $table->enum('type', ['boolean', 'date', 'record', 'text']);
