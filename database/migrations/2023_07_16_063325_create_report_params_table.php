@@ -21,9 +21,9 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('title');
             $table->string('db_column');
-            $table->enum('type', ['boolean', 'date', 'record', 'text']);
-            $table->string('ref_table');
-            $table->string('ref_column');
+            $table->enum('type', ['boolean', 'date', 'record', 'text'])->nullable();
+            $table->string('ref_table')->nullable();
+            $table->string('ref_column')->nullable();
         });
     }
 

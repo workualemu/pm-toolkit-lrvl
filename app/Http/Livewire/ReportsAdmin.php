@@ -10,15 +10,21 @@ class ReportsAdmin extends Component
 
     public $reports = [];
 
-    public $selectedReport;
+    public $selectedReportId;
 
     public $showReportModal = false;
-
+   
     public function addNewReport()
     {
         $this->emit('openReportModal', null);
     }
 
+    public function updateParamColumn($report_id)
+    {
+        $this->selectedReportId = $report_id;
+        $this->emit('renderReportParam', $report_id);
+    }
+    
 
     public function render()
     {

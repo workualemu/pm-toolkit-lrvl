@@ -1,15 +1,13 @@
 <div class="grid grid-cols-1 gap-4 sm:gap-5 lg:gap-6">
     <div>
         <div class="flex items-center justify-between">
-            
             <div>
-                <button wire:click="addNewReport()"
+                <button wire:click="addNewReportParam()"
                     class="border-b border-dotted border-current pb-0.5 font-medium text-primary outline-none transition-colors duration-300 hover:text-primary/70 focus:text-primary/70 dark:text-accent-light dark:hover:text-accent-light/70 dark:focus:text-accent-light/70"
                 >
-                    Add new report
+                    Add new parameter
                 </button>
             </div>
-
         </div>
 
         <div class="card mt-3">
@@ -28,12 +26,12 @@
                             <th
                                 class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
                             >
-                                Sort by
+                                Column
                             </th>
                             <th
                                 class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
                             >
-                                Published
+                                Description
                             </th>
                             <th
                                 class="whitespace-nowrap rounded-tr-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
@@ -43,37 +41,25 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($reports AS $index=>$report)
-                            <tr wire:click="updateParamColumn({{$report->id}})"
-                                @if($report->id == $selectedReportId)
-                                    class="bg-blue-100 border-y border-transparent border-b-slate-200 dark:border-b-navy-500"
-                                @else
-                                    class="bg-white border-y border-transparent border-b-slate-200 dark:border-b-navy-500"
-                                @endif
+                        @foreach($params AS $index=>$item)
+                            <tr 
+                                class="border-y border-transparent border-b-slate-200 dark:border-b-navy-500"
                             >
                                 
                                 <td
                                     class="whitespace-nowrap px-3 py-3 font-medium text-slate-700 dark:text-navy-100 lg:px-5"
                                 >
-                                    {{$report->title}}
+                                    {{$item->title}}
                                 </td>
                                 <td
                                     class="whitespace-nowrap px-3 py-3 font-medium text-slate-700 dark:text-navy-100 lg:px-5"
                                 >
-                                {{$report->sort_by}}
+                                    {{$item->db_column}}
                                 </td>
                                 <td
-                                    class="whitespace-nowrap px-4 py-3 sm:px-5"
+                                    class="whitespace-nowrap px-3 py-3 font-medium text-slate-700 dark:text-navy-100 lg:px-5"
                                 >
-                                    <label class="inline-flex items-center space-x-2">
-                                        <input disabled
-                                            class="form-switch h-5 w-10 rounded-lg bg-slate-300 before:rounded-md before:bg-slate-50 checked:!bg-info checked:before:bg-white dark:bg-navy-900 dark:before:bg-navy-300 dark:checked:before:bg-white"
-                                            type="checkbox"
-                                            @if($report->published) 
-                                                checked
-                                            @endif
-                                        />
-                                    </label>
+                                    {{$item->description}}
                                 </td>
                                 <td class="whitespace-nowrap px-4 py-3 sm:px-5">
                                     <div
@@ -244,4 +230,5 @@
             </div>
         </div>
     </div>
+    
 </div>

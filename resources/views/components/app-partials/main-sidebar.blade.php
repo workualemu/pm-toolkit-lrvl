@@ -120,6 +120,27 @@
                         
                         <div class="flex flex-col pt-2 pb-5">
                             
+                            <a href="{{ route('reports') }}"
+                                class="group flex items-center space-x-3 py-2 px-4 tracking-wide outline-none transition-all hover:bg-slate-100 focus:bg-slate-100 dark:hover:bg-navy-600 dark:focus:bg-navy-600">
+                                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-info text-white">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                    </svg>
+                                </div>
+
+                                <div>
+                                    <h2
+                                        class="font-medium text-slate-700 transition-colors group-hover:text-primary group-focus:text-primary dark:text-navy-100 dark:group-hover:text-accent-light dark:group-focus:text-accent-light">
+                                        Report configuration
+                                    </h2>
+                                    <div class="text-xs text-slate-400 line-clamp-1 dark:text-navy-300">
+                                        Manage report definition
+                                    </div>
+                                </div>
+                            </a>
+
                             <a href="#"
                                 class="group flex items-center space-x-3 py-2 px-4 tracking-wide outline-none transition-all hover:bg-slate-100 focus:bg-slate-100 dark:hover:bg-navy-600 dark:focus:bg-navy-600">
                                 <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-info text-white">

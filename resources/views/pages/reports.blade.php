@@ -2,6 +2,7 @@
     <!-- Main Content Wrapper -->
     
     <livewire:report-admin-modal />
+    <livewire:report-param-modal />
     @livewire('reports-page', ['project_id' => $project->id])
 
 </x-app-layout>

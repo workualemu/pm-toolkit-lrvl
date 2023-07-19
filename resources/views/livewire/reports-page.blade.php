@@ -104,16 +104,12 @@
                 </div>
             </div>
         </div>
-        <div class="grid grid-cols-10 gap-4">
-            <div class="col-span-5 ...">
+        <div class="grid grid-cols-2 gap-4">
+            <div class="col-span-1">
                 @livewire('reports-admin')
             </div>
-            <div class="...">
-                <button wire:click="generateReport()"
-                    class="btn bg-info font-medium text-white hover:bg-info-focus hover:shadow-lg hover:shadow-info/50 focus:bg-info-focus focus:shadow-lg focus:shadow-info/50 active:bg-info-focus/90"
-                >
-                    Second part
-                </button>
+            <div class="col-span-1">
+                @livewire('report-params')
             </div>
         </div>
     </main>
