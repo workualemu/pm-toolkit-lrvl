@@ -37,6 +37,16 @@ class ReportAdminModal extends Component
         $this->showReportModal = true;
     }
 
+    // public function openReportModal($report_id)
+    // {
+    //     $this->report = new Report();
+    //     if($report_id > 0){
+    //         $this->report = Report::find($report_id);
+    //     }
+
+    //     $this->showReportModal = true;
+    // }
+
     public function closeModal()
     {
         $this->showReportModal = false;

@@ -19,6 +19,11 @@ class ReportsAdmin extends Component
         $this->emit('openReportModal', null);
     }
 
+    public function editReport($report_id)
+    {
+        $this->emit('openReportModal', $report_id);
+    }
+
     public function updateParamColumn($report_id)
     {
         $this->selectedReportId = $report_id;

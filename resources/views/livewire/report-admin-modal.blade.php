@@ -61,8 +61,14 @@
                                         placeholder="Enter report title" type="text" />
                                 </label>
                                 <label class="block">
+                                    <span>Description</span>
+                                    <input id="description" wire:model.defer="report.description"
+                                        class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                                        placeholder="Enter report rescription" type="text" />
+                                </label>
+                                <label class="block">
                                     <span>Sort by</span>
-                                    <input id="title" wire:model.defer="report.sort_by"
+                                    <input id="sort_by" wire:model.defer="report.sort_by"
                                         class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                         placeholder="Enter report title" type="text" />
                                 </label>

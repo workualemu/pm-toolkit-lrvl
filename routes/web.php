@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::get('kanban', [PagesController::class, 'getKanban'])->name('kanban');
     Route::get('gantt', [PagesController::class, 'getGantt'])->name('gantt');
     Route::get('reports', [PagesController::class, 'getReports'])->name('reports');
+    Route::get('reports-use', [PagesController::class, 'getReportsUse'])->name('reports-use');
     
     Route::get('setProfile', [PagesController::class, 'formsSetProfile'])->name('setProfile');
 
