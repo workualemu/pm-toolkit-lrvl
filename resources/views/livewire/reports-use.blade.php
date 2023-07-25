@@ -104,13 +104,8 @@
                 </div>
             </div>
         </div>
-        <div class="grid grid-cols-2 gap-4">
+        <div class="w-10/12 grid grid-cols-2 gap-4">
             <div class="col-span-1">
-                
-
-
-
-
             <div
                     class="popper-box w-128 rounded-lg border border-slate-150 bg-white shadow-soft dark:border-navy-600 dark:bg-navy-700">
                     <div class="flex flex-col pt-2 pb-5">
@@ -138,10 +133,6 @@
                         @endforeach
                     </div>
                 </div>
-
-
-
-
             </div>
             <div class="col-span-1">
                 @livewire('report-use-param')

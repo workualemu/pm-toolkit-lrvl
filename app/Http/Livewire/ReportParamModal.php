@@ -11,6 +11,7 @@ class ReportParamModal extends Component
     public $showModal = false;
     public $param;
     public $report_id;
+    public $table_columns = [];
 
     protected $rules = [
         'param.title' => 'required|min:2',
@@ -27,7 +28,11 @@ class ReportParamModal extends Component
 
     public function openModal($report_id, $param_id)
     {
+        $this->table_columns = \DB::getSchemaBuilder()->getColumnListing('tasks_view');
+        $this->table_columns = collect($this->table_columns)->sort();
+
         $this->report_id = $report_id;
+
         $this->param = new ReportParam();
         if($param_id > 0){
             $this->param = ReportParam::find($param_id);

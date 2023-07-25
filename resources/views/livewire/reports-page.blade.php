@@ -109,7 +109,9 @@
                 @livewire('reports-admin')
             </div>
             <div class="col-span-1">
-                @livewire('report-params')
+                <div> @livewire('report-params') </div>
+                <div class="h-10"> </div>
+                <div> @livewire('report-columns') </div>
             </div>
         </div>
     </main>

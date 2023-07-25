@@ -62,8 +62,8 @@ class ReportAdminModal extends Component
         $this->report->save();
         $this->report->refresh();
 
+        $this->emit('refreshReport');
         $this->showReportModal = false;
-        // $this->emit('refreshTasks');
         
     }
 

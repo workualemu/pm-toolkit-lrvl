@@ -368,7 +368,7 @@
             <div class="card pb-4">
                 <div class="my-3 flex h-8 items-center justify-between px-4 sm:px-5">
                     <h2 class="font-medium tracking-wide text-slate-700 line-clamp-1 dark:text-navy-100 lg:text-base">
-                        GridJS Advanced Table
+                        GridJS Advanced Table1
                     </h2>
                     <div x-data="usePopper({ placement: 'bottom-end', offset: 4 })" @click.outside="if(isShowPopper) isShowPopper = false"
                         class="inline-flex">

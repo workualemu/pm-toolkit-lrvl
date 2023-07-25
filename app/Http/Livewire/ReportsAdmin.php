@@ -9,10 +9,11 @@ class ReportsAdmin extends Component
 {
 
     public $reports = [];
-
     public $selectedReportId;
-
     public $showReportModal = false;
+
+    protected $listeners = ['refreshReport' => '$refresh'
+    ];
    
     public function addNewReport()
     {
@@ -28,6 +29,7 @@ class ReportsAdmin extends Component
     {
         $this->selectedReportId = $report_id;
         $this->emit('renderReportParam', $report_id);
+        $this->emit('renderReportColumn', $report_id);
     }
     
 

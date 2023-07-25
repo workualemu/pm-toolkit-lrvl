@@ -55,6 +55,7 @@ import * as Gridjs from "gridjs";
 import "@caneara/iodine"; // @see https://github.com/caneara/iodine
 import * as FilePond from "filepond"; // @see https://pqina.nl/filepond/
 import FilePondPluginImagePreview from "filepond-plugin-image-preview"; // @see https://pqina.nl/filepond/docs/api/plugins/image-preview/
+import FilePondPluginGetFile from 'filepond-plugin-get-file';
 import Quill from "quill/dist/quill.min"; // @see https://quilljs.com/
 import flatpickr from "flatpickr"; // @see https://flatpickr.js.org/
 import Tom from "tom-select/dist/js/tom-select.complete.min"; // @see https://tom-select.js.org/
@@ -93,6 +94,8 @@ hljs.configure({ ignoreUnescapedHTML: true });
 
 // Register plugin image preview for filepond
 FilePond.registerPlugin(FilePondPluginImagePreview);
+// Register plugin to download files from filepond
+FilePond.registerPlugin(FilePondPluginGetFile);
 
 window.hljs = hljs;
 window.dayjs = dayjs;

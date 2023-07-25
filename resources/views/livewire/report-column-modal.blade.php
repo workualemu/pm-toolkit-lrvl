@@ -15,7 +15,7 @@
                 <div class="flex w-full flex-col bg-white dark:bg-navy-700">
                     <div class="flex h-14 items-center justify-between bg-slate-150 p-4 dark:bg-navy-800">
                         <h3 class="text-base font-medium text-slate-700 dark:text-navy-100">
-                            Report parameter
+                            Report columns
                         </h3>
                     </div>
 
@@ -23,19 +23,14 @@
                         <div class="col-span-12 sm:col-span-6 lg:col-span-8">
                             <div class="is-scrollbar-hidden flex grow flex-col space-y-4 overflow-y-auto p-4">
                                 <label class="block">
-                                    <span>Parameter</span>
-                                    <input wire:model.defer="param.title"
+                                    <span>Column</span>
+                                    <input wire:model.defer="column.title"
                                         class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                                        placeholder="Enter parameter title" type="text" />
+                                        placeholder="Enter column title" type="text" />
                                 </label>
-
-                                <label class="block">
-                                    
-                                </label>
-
                                 <label class="block">
                                     <span>Column</span>
-                                    <select wire:model.defer="param.db_column" 
+                                    <select wire:model.defer="column.db_column" 
                                         class="form-select mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent"
                                     >
                                         @foreach($table_columns as $option)
@@ -45,21 +40,9 @@
                                 </label>
                                 <label class="block">
                                     <span>Description</span>
-                                    <input wire:model.defer="param.description" type ="text"
+                                    <input wire:model.defer="column.description" type ="text"
                                         class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                         placeholder="Enter description" type="text" />
-                                </label>
-                                <label class="block">
-                                    <span>Type</span>
-                                    <select wire:model.defer="param.type" 
-                                        class="form-select mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent"
-                                    >
-                                        <option>Contain</option>
-                                        <option>Date</option>
-                                        <option>Date range</option>
-                                        <option>Range</option>
-                                        <option>Text</option>
-                                    </select>
                                 </label>
                             </div>
                         </div>
