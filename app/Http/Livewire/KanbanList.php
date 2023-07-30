@@ -29,8 +29,6 @@ class KanbanList extends Component
         $task->kanban_list_rank = $rank;
         $task->save();
         $task->refresh();
-        // dd($task);
-        // dd("Task ID: ".$taskId."  List ID: ".$statusId."  Rank:".$newRank);
     }
 
     public function mount()

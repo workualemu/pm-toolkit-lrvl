@@ -73,6 +73,16 @@ class PagesController extends Controller
         return view('pages/reports-use', compact('project'));
     }
 
+    public function getReportViewer($report_id, $params)
+    {
+        $user =  Auth::user();
+
+        $projectId = $user->project_id;
+        $project = Project::find($projectId);
+        return view('pages/report-viewer', compact('project', 'report_id', 'params'));
+    }
+
+
     public function formsSetProfile()
     {
         $user =  Auth::user();

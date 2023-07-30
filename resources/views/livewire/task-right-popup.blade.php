@@ -1,16 +1,10 @@
 <div x-data="{ showModal: @entangle('showModal') }">
-<div x-data="fileUpload()"> 
 <div class="flex flex-col items-center justify-center h-screen bg-slate-200"
          x-on:drop="isDroppingFile = false"
          x-on:drop.prevent="handleFileDrop($event)"
          x-on:dragover.prevent="isDroppingFile = true"
          x-on:dragleave.prevent="isDroppingFile = false"
     >
-    <div class="absolute top-0 bottom-0 left-0 right-0 z-30 flex items-center justify-center bg-blue-500 opacity-90"
-             x-show="isDropping"
-        >
-            <span class="text-3xl text-white">Release file to upload!</span>
-    </div>
 
     <div x-show="showModal" @click.away="showModal = false">
         <div class="fixed inset-0 z-[100] bg-slate-900/60 transition-opacity duration-200" @click="showModal = false"
@@ -107,93 +101,34 @@
                                 </textarea>
                             </label>
 
-                            <label class="flex-col">
-                                <span class="bg-blue-200 w-1/2">Attachment</span>
-                                <div class="bg-gray-200 h-[5px] w-1/2 mt-3"> 
-                                    <div
-                                        class="bg-blue-500 h-[5px]"
-                                        style="transition: width 1s"
-                                        :style="`width: ${progress}%;`"
-                                        x-show="isUploading"
-                                    >
-                                    </div>
-                                </div>
-                                <input type="file" id="file-upload" multiple @change="handleFileSelect" class="hidden" />
-                            
-                                
-                            </label>
-                            @if(count($files)) 
-                            
-                                <div class="flex flex-col space-y-3.5">
-                                @foreach($files as $file)
-                                    <div class="flex items-center space-x-3">
-                                        <div
-                                            class="mask is-squircle flex h-11 w-11 items-center justify-center bg-secondary text-white">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6"
-                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    stroke-width="2"
-                                                    d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            
-                                            <span wire:click="downloadFile('{{$file->getFilename()}}', '{{$file->getClientOriginalName()}}')"
-                                                class="font-medium text-slate-700 dark:text-navy-100">
-                                                {{$file->getClientOriginalName()}}
-                                            </span>
-                                            <button class="text-red-500" @click="removeUpload('{{$file->getFilename()}}')">X</button>
-
-                                            <div class="flex text-xs text-slate-400 dark:text-navy-300">
-                                                <span>03:12</span>
-                                                <div class="mx-2 my-1 w-px bg-slate-200 dark:bg-navy-500"></div>
-
-                                                <span>8.32 MB</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                                </div>
-                            @endif 
-                            
-                            <script>
-                                function fileUpload() {
-                                    return {
-                                        isDropping: false,
-                                        isUploading: false,
-                                        progress: 0,
-                                        handleFileSelect(event) {
-                                            if (event.target.files.length) {
-                                                this.uploadFiles(event.target.files)
-                                            }
-                                        },
-                                        handleFileDrop(event) { 
-                                            if (event.dataTransfer.files.length > 0) {
-                                                this.uploadFiles(event.dataTransfer.files)
-                                            }
-                                        }, 
-                                        uploadFiles(files) {
-                                            const $this = this;
-                                            this.isUploading = true
-                                            @this.uploadMultiple('files', files,
-                                                function (success) {
-                                                    $this.isUploading = false
-                                                    $this.progress = 0
-                                                },
-                                                function(error) {
-                                                    console.log('error', error)
-                                                },
-                                                function (event) {
-                                                    $this.progress = event.detail.progress
+                            <div>
+                                <span>Attachment</span>
+                                <div
+                                    wire:ignore
+                                    x-data
+                                    x-init="
+                                        FilePond.setOptions({
+                                            allowMultiple: true,
+                                            server: {
+                                                process: (fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
+                                                    @this.upload('files', file, load, error, progress);
                                                 }
-                                            )
-                                        },
-                                        removeUpload(filename) { 
-                                            @this.removeUpload('files', filename) 
-                                        }, 
-                                    }
-                                }
-                            </script> 
+                                            },
+                                            revert: (filename, load) => {
+                                                @this.removeUpload(filename, load);
+
+                                            }
+                                        });
+
+                                        FilePond.create($refs.input);
+
+                                    "
+                                >
+                                    <input type="file" x-ref="input" wire:model="files"/>
+
+                                </div>
+                                
+                            </div>
                         </div>
                     </div>
 
@@ -261,6 +196,5 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 </div>

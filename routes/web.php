@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::get('gantt', [PagesController::class, 'getGantt'])->name('gantt');
     Route::get('reports', [PagesController::class, 'getReports'])->name('reports');
     Route::get('reports-use', [PagesController::class, 'getReportsUse'])->name('reports-use');
+    Route::get('report-viewer/{report_id}/{params}', [PagesController::class, 'getReportViewer'])->name('report-viewer');
     
     Route::get('setProfile', [PagesController::class, 'formsSetProfile'])->name('setProfile');
 

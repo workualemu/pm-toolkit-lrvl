@@ -11,10 +11,29 @@ class ReportsUse extends Component
 {
     public $reports = [];
     public $project;
+    public $showReportUse = true;
+    public $results;
+    public $queryBuilder;
+
+    public $selectedReportID;
+    public $selectedParams;
 
     public $selectedReportId;
 
     public $showReportModal = false;
+
+    protected $listeners = ['showReportViewer' => 'showReportViewer',
+                            'refreshReportUsePage' => '$refresh'];
+
+    public function showReportViewer($report_id, $results, $queryBuilder)
+    {
+        $this->selectedReportID = $report_id;
+        $this->results = $results;
+        $this->showReportUse = false;
+        $this->queryBuilder = $queryBuilder;
+        $this->emit('refreshReportUsePage');
+
+    }
 
     public function mount($project_id)
     {

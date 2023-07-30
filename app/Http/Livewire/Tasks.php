@@ -25,8 +25,6 @@ class Tasks extends Component
     public function onGanttTaskDrag($taskId, $mode, $task, $original)
     {
         
-        dd($task);
-        
     }
     
     public function newTask()

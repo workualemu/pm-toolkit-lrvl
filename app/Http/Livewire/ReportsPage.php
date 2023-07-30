@@ -22,7 +22,6 @@ class ReportsPage extends Component
 
         // $columns = \DB::getSchemaBuilder()->getColumnListing('tasks');
 
-        // dd($columns);
         // $fromDate = $request->input('from_date');
         // $toDate = $request->input('to_date');
         // $sortBy = $request->input('sort_by');

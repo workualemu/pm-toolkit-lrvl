@@ -1,0 +1,97 @@
+<?php
+
+namespace App\Http\Livewire;
+
+use Livewire\Component;
+use App\Models\ReportColumn;
+use App\Models\ReportParam;
+use App\Models\Task;
+use App\Models\Report;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\ReportController;
+use Maatwebsite\Excel\Facades\Excel;
+use ExcelReport;
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
+
+class ReportView extends Component
+{
+    public $report_id;
+    public $params;
+    public $columns;
+    public $results;
+
+    public function mount($report_id, $results)
+    {
+        $this->report_id = $report_id;
+        $this->results = $results;
+        $this->columns = ReportColumn::getByReport($this->report_id)->get();
+        if($this->columns->count() <= 0){
+            $this->getAllColumns();
+        }
+    }
+
+    public function getAllColumns()
+    {
+        $this->columns = \DB::getSchemaBuilder()->getColumnListing('tasks_view');
+        $cols = collect($this->columns);
+        // dd($cols);
+        $cols = $cols->map( function ($column) {
+            $column->title = $column->db_column;
+            $column->published = true;
+            return $column;
+        });
+        $this->columns = $cols->toArray();
+    }
+
+    public function exportToExcel()
+    {
+        // $where_clause = '';
+
+        // foreach($this->params as $key => $param){
+        //     if($params[$key]->type == 'Range' || $params[$key]->type == 'Date range'){
+        //         $fromAvailable = false;
+        //         if(isSet($param['from'])){
+        //             $where_clause = ($where_clause == '' ? '':  $where_clause. ' AND '). $key. " >= '" . $param['from'] . "'";
+        //             $fromAvailable = ' AND ';
+        //         }
+        //         if(isSet($param['to'])){
+        //             $where_clause = ($where_clause == '' ? '':  $where_clause. ' AND ') . $key. " <= '" . $param['to'] . ($fromAvailable ? "'" : "'");
+        //         }
+        //     } elseif($params[$key]->type == 'Contain' ){
+        //         $where_clause = ($where_clause == '' ? '':  $where_clause. ' AND '). $key. " IN (" . $param . ")";
+        //     } else{
+        //         $where_clause = ($where_clause == '' ? '':  $where_clause. ' AND '). $key. " = '" . $param . "'";
+        //     }
+        // }
+
+        // $this->columns = ReportColumn::getByReport($this->report_id)->get();
+        $sortBy = 'title';
+
+        $report = Report::find($this->report_id);
+
+        // $meta = [ 
+        //     'All Tasks' => '',
+        //     'Sort By' => $sortBy
+        // ];
+       
+        // $queryBuilder = DB::table('tasks_view')
+        //                 ->select($this->columns->pluck('db_column')->toArray()) // Do some querying..
+        //                     ->whereRaw($where_clause)
+        //                     ->orderBy($sortBy);
+        
+        // $this->results = $queryBuilder->get();
+        $columns = array_merge( 
+            [[$report->title]],
+            [['Print print: '.Carbon::now()]],
+            [$this->columns->pluck('title')->toArray()]);
+
+        return Excel::download(new ReportController($this->results,
+            $report->title, null, $columns), 'export.xlsx');
+    }
+
+    public function render()
+    {
+        return view('livewire.report-view');
+    }
+}

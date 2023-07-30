@@ -36,7 +36,7 @@ class Comments extends Component
 
     public function render()
     {
-        // dd($this->task_id);
+
         // if($this->task_id > 0) {
         //     $this->model = Task::find($this->task_id);
         // } else {
@@ -71,7 +71,6 @@ class Comments extends Component
     {
         
         $this->model = \App\Models\Task::find($this->task_id);
-        // dd($this->model);
 
         $this->validate([
             'newCommentState.body' => 'required'
@@ -80,7 +79,6 @@ class Comments extends Component
         $comment = $this->model->comments()->make($this->newCommentState);
         
         $comment->user()->associate(auth()->user());
-        // dd($this->model);
         $comment->save();
 
         $this->newCommentState = [

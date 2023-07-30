@@ -26,7 +26,6 @@ class Gantt extends Component
 
     public function onTaskAdd($task)
     {
-        // dd($task);
         $user =  Auth::user();
         $projectId = $user->project_id;
         $this->project = Project::find($projectId);
@@ -77,13 +76,10 @@ class Gantt extends Component
             $parent->save();
             $parent_id = $parent->parent;
         }
-        // dd($dTask);
     }
 
     public function onTaskUpdated($id, $task)
     {
-        // dd($task);
-
         $task = Task::updateOrCreate(
             ['id' => $task['id']],
             [
@@ -152,7 +148,6 @@ class Gantt extends Component
         ]);
 
         $this->data = $ldata->content();
-// dd($ldata->content());
         return view('livewire.gantt');
     }
 }
