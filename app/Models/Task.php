@@ -15,10 +15,10 @@ class Task extends Model
     use HasFactory;
     use Commentable;
 
-    protected $fillable = ['project_id', 'title', 'start_date', 'planned_end_date', 
+    protected $fillable = ['project_id', 'title', 'start_date', 'planned_end_date',
         'description', 'status', 'user_id', 'text', 'type', 'parent', 'level'];
     // protected $appends = ["open"];
- 
+
     protected $casts = ['start_date'=>'datetime:d-m-Y'];
 
     // public function comments(): \Illuminate\Database\Eloquent\Relations\MorphMany
@@ -26,10 +26,11 @@ class Task extends Model
     //     return $this->morphMany(Comment::class, 'commentable');
     // }
 
-    public function getOpenAttribute(){
+    public function getOpenAttribute()
+    {
         return true;
     }
-    
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -78,11 +79,13 @@ class Task extends Model
         return $this->belongsToMany(Tag::class);
     }
 
-    public static function scopeFilterByStatus($query, $status_id){
+    public static function scopeFilterByStatus($query, $status_id)
+    {
         return $query->where('task_status_id', '=', $status_id)->orderBy('kanban_list_rank', 'asc');
     }
 
-    public static function getBeyondRank($status_id, $rank){
+    public static function getBeyondRank($status_id, $rank)
+    {
         return DB::table('tasks')
                 ->where('task_status_id', '=', $status_id)
                 ->where('kanban_list_rank', '>=', $rank)

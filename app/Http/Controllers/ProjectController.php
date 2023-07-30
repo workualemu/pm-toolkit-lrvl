@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
-
     public function index()
     {
         $records = Project::orderBy('title')->get();
@@ -33,7 +32,7 @@ class ProjectController extends Controller
             'title', 'start_date', 'end_date', 'description', 'status', 'user_id'
         ]));
         return redirect()->route('project.index')->withMessage('Record created');
-        
+
     }
 
     public function edit(Project $project)

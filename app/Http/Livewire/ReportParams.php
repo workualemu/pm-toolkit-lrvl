@@ -15,14 +15,14 @@ class ReportParams extends Component
     protected $listeners = ['renderReportParam' => 'renderReportParam',
                             'refreshReportParams' => '$refresh'
     ];
-    
+
     public function renderReportParam($report_id)
     {
         $this->report_id = $report_id;
         $this->render();
     }
 
-    
+
     public function addNewReportParam()
     {
         $this->emit('openReportParamModal', $this->report_id, null);

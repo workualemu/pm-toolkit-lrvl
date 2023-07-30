@@ -11,7 +11,10 @@ use App\Traits\HasUserAvatar;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUserAvatar;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
+    use HasUserAvatar;
 
     /**
      * The attributes that are mass assignable.

@@ -27,7 +27,7 @@ class Task extends Component
 
         // Close the modal after saving data
         $this->showModal = false;
-        
+
     }
 
     public function mount($task)

@@ -16,8 +16,10 @@ use App\Scopes\HasLikes;
 
 class Comment extends Model
 {
-
-    use CommentScopes, SoftDeletes, HasFactory, HasLikes;
+    use CommentScopes;
+    use SoftDeletes;
+    use HasFactory;
+    use HasLikes;
 
     /**
      * @var string

@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire;
 
-
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -99,7 +98,7 @@ class Comment extends Component
      */
     public function postReply(): void
     {
-        
+
         if (!$this->comment->isParent()) {
             return;
         }
@@ -126,13 +125,19 @@ class Comment extends Component
     public function selectUser($userName): void
     {
         if ($this->replyState['body']) {
-            $this->replyState['body'] = preg_replace('/@(\w+)$/', '@'.str_replace(' ', '_', Str::lower($userName)).' ',
-                $this->replyState['body']);
-//            $this->replyState['body'] =$userName;
+            $this->replyState['body'] = preg_replace(
+                '/@(\w+)$/',
+                '@'.str_replace(' ', '_', Str::lower($userName)).' ',
+                $this->replyState['body']
+            );
+            //            $this->replyState['body'] =$userName;
             $this->users = [];
         } elseif ($this->editState['body']) {
-            $this->editState['body'] = preg_replace('/@(\w+)$/', '@'.str_replace(' ', '_', Str::lower($userName)).' ',
-                $this->editState['body']);
+            $this->editState['body'] = preg_replace(
+                '/@(\w+)$/',
+                '@'.str_replace(' ', '_', Str::lower($userName)).' ',
+                $this->editState['body']
+            );
             $this->users = [];
         }
     }

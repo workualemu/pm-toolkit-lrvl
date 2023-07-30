@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire;
 
-
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -31,7 +30,7 @@ class Comments extends Component
 
     // public function mount()
     // {
-        
+
     // }
 
     public function render()
@@ -61,7 +60,7 @@ class Comments extends Component
         return view('livewire.comments', [
             'comments' => $comments
         ]);
-        
+
     }
 
     /**
@@ -69,7 +68,7 @@ class Comments extends Component
      */
     public function postComment(): void
     {
-        
+
         $this->model = \App\Models\Task::find($this->task_id);
 
         $this->validate([
@@ -77,7 +76,7 @@ class Comments extends Component
         ]);
 
         $comment = $this->model->comments()->make($this->newCommentState);
-        
+
         $comment->user()->associate(auth()->user());
         $comment->save();
 

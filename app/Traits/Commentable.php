@@ -7,7 +7,6 @@ use App\Models\Comment;
 
 trait Commentable
 {
-
     /**
      * @return MorphMany
      */

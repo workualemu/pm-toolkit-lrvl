@@ -11,10 +11,8 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Facades\Excel;
 use ExcelReport;
 
-
 class ReportsPage extends Component
 {
-    
     public $project;
 
     public function generateReport()
@@ -30,7 +28,7 @@ class ReportsPage extends Component
 
         $title = 'Tasks'; // Report title
 
-        $meta = [ 
+        $meta = [
             'All Tasks' => '',
             'Sort By' => $sortBy
         ];
@@ -39,7 +37,7 @@ class ReportsPage extends Component
                             ->where('type', 'task')
                             ->orderBy($sortBy);
 
-        $columns = [ 
+        $columns = [
             ['This is the title of the report'],
             ['Date of printing '],
             ['Title',
@@ -48,10 +46,14 @@ class ReportsPage extends Component
         ];
 
 
-        return Excel::download(new ReportController($queryBuilder->get(),
-            'Tasks', null, $columns), 'export.xlsx');
+        return Excel::download(new ReportController(
+            $queryBuilder->get(),
+            'Tasks',
+            null,
+            $columns
+        ), 'export.xlsx');
         // return Excel::download($queryBuilder->get(), 'export.xlsx');
-        
+
         // ExcelReport::of($title, $meta, $queryBuilder, $columns)
         //     ->simple()
         //     ->download('report_test.xlsx');
@@ -61,7 +63,7 @@ class ReportsPage extends Component
     {
         $user =  Auth::user();
         $this->project = Project::find($user->project_id);
-        
+
         $this->searchValue = ['project_id', $user->project_id];
     }
 

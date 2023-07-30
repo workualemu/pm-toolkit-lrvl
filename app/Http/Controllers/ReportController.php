@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -29,7 +30,7 @@ class ReportController implements FromCollection, WithHeadings, WithProperties
     public function collection()
     {
         return $this->data;
-        
+
     }
 
     public function headings(): array

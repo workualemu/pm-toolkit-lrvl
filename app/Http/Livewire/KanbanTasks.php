@@ -16,19 +16,19 @@ class KanbanTasks extends Component
     public function mount($project_id)
     {
         $user =  Auth::user();
-        if($project_id > 0){
+        if($project_id > 0) {
             $user->project_id = $project_id;
             $user->save();
         }
         $projectId = $user->project_id;
         $this->project = Project::find($projectId);
-        
+
         $this->searchValue = array_merge([['project_id', $user->project_id]], $this->searchValue);
     }
 
     public function render()
     {
-        $this->tasks = Task::where($this->searchValue )->get();
+        $this->tasks = Task::where($this->searchValue)->get();
         $this->kanbanLists = \App\Models\TaskStatus::get();
 
         return view('livewire.kanban-tasks');

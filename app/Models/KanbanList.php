@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class KanbanList extends Model
 {
     use HasFactory;
-    
+
     /**
      * The attributes that are mass assignable.
      *

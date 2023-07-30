@@ -15,7 +15,7 @@ class Gantt extends Component
     public $data ='';
     public $tasks;
 
-    protected $listeners = ['gantt-task-added' => 'onTaskAdd', 
+    protected $listeners = ['gantt-task-added' => 'onTaskAdd',
                             'gantt-task-dragged' => 'onTaskDragged',
                             'gantt-task-deleted' => 'onTaskDeleted',
                             'gantt-task-updated' => 'onTaskUpdated',
@@ -31,13 +31,13 @@ class Gantt extends Component
         $this->project = Project::find($projectId);
 
         $type = 'task';
-        if($task['$level'] == 0){
+        if($task['$level'] == 0) {
             $type = 'project';
         }
         $task = Task::create([
             'project_id' => $user->project_id,
             'user_id' => $user->id,
-            'title' => $task['text'], 
+            'title' => $task['text'],
             'start_date' => $task['start_date'],
             'duration' => $task['duration'],
             'parent' => $task['parent'],
@@ -62,12 +62,12 @@ class Gantt extends Component
         $dTask->planned_end_date = $dTask->start_date->addDays($dTask->duration);
         $dTask->save();
         $parent_id = $dTask->parent;
-        while($parent_id != null){
+        while($parent_id != null) {
             $parent = Task::find($parent_id);
-            if($parent->start_date > $dTask->start_date){
+            if($parent->start_date > $dTask->start_date) {
                 $parent->start_date = $dTask->start_date;
             }
-            if($parent->planned_end_date < $dTask->planned_end_date){
+            if($parent->planned_end_date < $dTask->planned_end_date) {
                 $parent->planned_end_date = $dTask->planned_end_date;
             }
             $to = \Carbon\Carbon::parse($parent->planned_end_date);
@@ -83,7 +83,7 @@ class Gantt extends Component
         $task = Task::updateOrCreate(
             ['id' => $task['id']],
             [
-            'title' => $task['text'], 
+            'title' => $task['text'],
             'start_date' => $task['start_date'],
             'duration' => $task['duration'],
             'parent' => $task['parent'],
@@ -93,13 +93,14 @@ class Gantt extends Component
             'type' => $task['$rendered_type'],
             'progress' => $task['progress'],
             'level' => $task['$level']
-        ]);
+        ]
+        );
 
     }
 
     public function onTaskDeleted($id)
     {
-        $res=Task::where('id', $id)->delete(); 
+        $res=Task::where('id', $id)->delete();
     }
 
     public function onLinkAdd($id, $item)
@@ -112,12 +113,12 @@ class Gantt extends Component
 
     public function onLinkDeleted($id, $item)
     {
-        $res=Link::where('id', $id)->delete(); 
+        $res=Link::where('id', $id)->delete();
     }
 
     public function onTaskMove($id, $parent, $tindex)
     {
-        $task = Task::find($id); 
+        $task = Task::find($id);
         $task->parent = $parent;
         $task->save();
     }
@@ -125,25 +126,25 @@ class Gantt extends Component
     public function mount($project_id)
     {
         $user =  Auth::user();
-        if($project_id > 0){
+        if($project_id > 0) {
             $user->project_id = $project_id;
             $user->save();
         }
         $projectId = $user->project_id;
         $this->project = Project::find($projectId);
-        
+
         $this->searchValue = array_merge([['project_id', $user->project_id]], $this->searchValue);
     }
 
     public function render()
     {
-        $tasks = Task::where($this->searchValue )->get();
+        $tasks = Task::where($this->searchValue)->get();
         $links = new Link();
 
-        $this->tasks = Task::where($this->searchValue )->get();
+        $this->tasks = Task::where($this->searchValue)->get();
 
         $ldata = response()->json([
-            "tasks" => $tasks->all(), 
+            "tasks" => $tasks->all(),
             "links" => $links->all()
         ]);
 

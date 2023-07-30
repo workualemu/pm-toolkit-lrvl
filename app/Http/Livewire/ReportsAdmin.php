@@ -7,14 +7,13 @@ use App\Models\Report;
 
 class ReportsAdmin extends Component
 {
-
     public $reports = [];
     public $selectedReportId;
     public $showReportModal = false;
 
     protected $listeners = ['refreshReport' => '$refresh'
     ];
-   
+
     public function addNewReport()
     {
         $this->emit('openReportModal', null);
@@ -31,7 +30,7 @@ class ReportsAdmin extends Component
         $this->emit('renderReportParam', $report_id);
         $this->emit('renderReportColumn', $report_id);
     }
-    
+
 
     public function render()
     {

@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire;
 
-
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -10,7 +9,6 @@ use Livewire\Component;
 
 class Like extends Component
 {
-
     public $comment;
     public $count;
 
@@ -49,8 +47,7 @@ class Like extends Component
      * @return Factory|Application|View|\Illuminate\Contracts\Foundation\Application|null
      */
     public function render(
-    ): \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application|null
-    {
+    ): \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application|null {
         return view('commentify::livewire.like');
     }
 

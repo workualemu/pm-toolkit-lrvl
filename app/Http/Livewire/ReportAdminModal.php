@@ -30,7 +30,7 @@ class ReportAdminModal extends Component
     public function openReportModal($report_id)
     {
         $this->report = new Report();
-        if($report_id > 0){
+        if($report_id > 0) {
             $this->report = Report::find($report_id);
         }
 
@@ -64,7 +64,7 @@ class ReportAdminModal extends Component
 
         $this->emit('refreshReport');
         $this->showReportModal = false;
-        
+
     }
 
     public function mount()

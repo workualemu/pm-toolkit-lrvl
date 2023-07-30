@@ -30,13 +30,13 @@ class ReportColumnModal extends Component
     {
         $this->table_columns = \DB::getSchemaBuilder()->getColumnListing('tasks_view');
         $this->table_columns = collect($this->table_columns)->sort();
-        
+
         $this->report_id = $report_id;
         $this->column = new ReportColumn();
-        if($column_id > 0){
+        if($column_id > 0) {
             $this->column = ReportColumn::find($column_id);
         }
-        
+
         $this->showModal = true;
     }
 
@@ -58,7 +58,7 @@ class ReportColumnModal extends Component
 
         $this->emit('refreshReportColumns');
         $this->showModal = false;
-        
+
     }
 
     public function render()

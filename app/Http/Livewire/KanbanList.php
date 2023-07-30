@@ -13,11 +13,11 @@ class KanbanList extends Component
     public $kanbanList;
 
     protected $listeners = ['end-drag' => 'incrementPostCount'];
- 
+
     public function incrementPostCount($taskId, $statusId, $rank)
     {
         $tasks = Task::getBeyondRank($statusId, $rank);
-        foreach($tasks as $task){
+        foreach($tasks as $task) {
             $taskT = Task::find($task->id);
             $taskT->kanban_list_rank += 1;
 
@@ -36,7 +36,7 @@ class KanbanList extends Component
         $user =  Auth::user();
 
         $searchValue = [['project_id', $user->project_id]];
-        $this->tasks = Task::where($searchValue )->get();
+        $this->tasks = Task::where($searchValue)->get();
 
     }
 

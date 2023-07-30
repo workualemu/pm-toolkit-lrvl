@@ -26,7 +26,7 @@ class ReportView extends Component
         $this->report_id = $report_id;
         $this->results = $results;
         $this->columns = ReportColumn::getByReport($this->report_id)->get();
-        if($this->columns->count() <= 0){
+        if($this->columns->count() <= 0) {
             $this->getAllColumns();
         }
     }
@@ -36,7 +36,7 @@ class ReportView extends Component
         $this->columns = \DB::getSchemaBuilder()->getColumnListing('tasks_view');
         $cols = collect($this->columns);
         // dd($cols);
-        $cols = $cols->map( function ($column) {
+        $cols = $cols->map(function ($column) {
             $column->title = $column->db_column;
             $column->published = true;
             return $column;
@@ -70,24 +70,29 @@ class ReportView extends Component
 
         $report = Report::find($this->report_id);
 
-        // $meta = [ 
+        // $meta = [
         //     'All Tasks' => '',
         //     'Sort By' => $sortBy
         // ];
-       
+
         // $queryBuilder = DB::table('tasks_view')
         //                 ->select($this->columns->pluck('db_column')->toArray()) // Do some querying..
         //                     ->whereRaw($where_clause)
         //                     ->orderBy($sortBy);
-        
+
         // $this->results = $queryBuilder->get();
-        $columns = array_merge( 
+        $columns = array_merge(
             [[$report->title]],
             [['Print print: '.Carbon::now()]],
-            [$this->columns->pluck('title')->toArray()]);
+            [$this->columns->pluck('title')->toArray()]
+        );
 
-        return Excel::download(new ReportController($this->results,
-            $report->title, null, $columns), 'export.xlsx');
+        return Excel::download(new ReportController(
+            $this->results,
+            $report->title,
+            null,
+            $columns
+        ), 'export.xlsx');
     }
 
     public function render()

@@ -2,7 +2,6 @@
 
 namespace App\Scopes;
 
-
 use Illuminate\Database\Eloquent\Builder;
 
 trait CommentScopes

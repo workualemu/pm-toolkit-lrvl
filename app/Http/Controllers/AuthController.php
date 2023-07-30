@@ -33,18 +33,21 @@ class AuthController extends Controller
             return redirect()->route('index');
         } else {
             $validator->errors()->add(
-                'password', 'The password does not match with username'
+                'password',
+                'The password does not match with username'
             );
             return redirect()->back()->withErrors($validator)->withInput();
         }
     }
 
-    public function registerView(){
+    public function registerView()
+    {
         return view('register');
     }
 
-    public function register(Request $request){
-        
+    public function register(Request $request)
+    {
+
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string'],
             'email' => ['required', 'email','unique:users'],

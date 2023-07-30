@@ -9,7 +9,7 @@ class TaskStatus extends Model
 {
     use HasFactory;
 
-    
+
     /**
      * The attributes that are mass assignable.
      *

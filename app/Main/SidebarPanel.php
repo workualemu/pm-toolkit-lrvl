@@ -2,7 +2,6 @@
 
 namespace App\Main;
 
-
 class SidebarPanel
 {
     public static function elements()
@@ -350,7 +349,8 @@ class SidebarPanel
         ];
     }
 
-    public static function all(){
+    public static function all()
+    {
         return [self::dashboards(),self::apps(), self::layouts(), self::forms(), self::components(), self::elements()];
     }
 }

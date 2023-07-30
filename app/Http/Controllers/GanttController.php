@@ -9,13 +9,14 @@ use Illuminate\Support\Facades\DB;
 
 class GanttController extends Controller
 {
-    public function get(){
-        
+    public function get()
+    {
+
         $tasks = new Task();
         $links = new Link();
 
         return response()->json([
-            "tasks" => $tasks->all(), 
+            "tasks" => $tasks->all(),
             "links" => $links->all()
         ]);
     }

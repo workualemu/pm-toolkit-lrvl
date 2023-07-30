@@ -15,7 +15,7 @@ class ReportColumns extends Component
     protected $listeners = ['renderReportColumn' => 'renderReportColumn',
                             'refreshReportColumns' => '$refresh'
     ];
-    
+
     public function renderReportColumn($report_id)
     {
         $this->report_id = $report_id;

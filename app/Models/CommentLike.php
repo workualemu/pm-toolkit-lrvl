@@ -14,7 +14,6 @@ use App\Scopes\CommentScopes;
 
 class CommentLike extends Model
 {
-
     /**
      * @var string
      */

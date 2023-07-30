@@ -26,9 +26,12 @@ class TaskRightPopup extends Component
     public TagTask $tagTasks;
     public $users = [];
 
-    public $files = []; 
-    
-    public $file, $title;
+    public $files = [];
+
+    public $file;
+
+
+    public $title;
 
     protected $rules = [
         'task.title' => 'required|min:2',
@@ -43,24 +46,24 @@ class TaskRightPopup extends Component
     protected $listeners = ['openTaskModal' => 'openModal',
                             'addFile' => 'addFile'];
 
-    public function addFile($file) 
+    public function addFile($file)
     {
         // dd($file);
-    } 
+    }
 
-    // public function finishUpload($name, $tmpPath, $isMultiple) 
+    // public function finishUpload($name, $tmpPath, $isMultiple)
     // {
     //     $this->cleanupOldUploads();
 
     //     $files = collect($tmpPath)->map(function ($i) {
     //         return TemporaryUploadedFile::createFromLivewire($i);
     //     })->toArray();
-        
+
     //     $this->emitSelf('upload:finished', $name, collect($files)->map->getFilename()->toArray());
- 
+
     //     $files = array_merge($this->getPropertyValue($name), $files);
     //     $this->syncInput($name, $files);
-        
+
     //     foreach($files as $file){
     //         dd($file);
     //         File::updateOrCreate(
@@ -68,8 +71,8 @@ class TaskRightPopup extends Component
     //             ['name' => $file->getFileName()]
     //         );
     //     }
-        
-    // } 
+
+    // }
 
     // public function downloadFile($file, $originalFileName)
     // {
@@ -82,7 +85,7 @@ class TaskRightPopup extends Component
 
     //     if (is_array($uploads) && isset($uploads[0]) && $uploads[0] instanceof TemporaryUploadedFile) {
     //         $this->emit('upload:removed', $name, $tmpFilename)->self();
-            
+
     //         $this->syncInput($name, array_values(array_filter($uploads, function ($upload) use ($tmpFilename) {
     //             if ($upload->getFilename() === $tmpFilename) {
     //                 $numb = File::where(['task_id'=>$this->task->id, 'name'=> $upload->getFilename()])->delete();
@@ -109,7 +112,7 @@ class TaskRightPopup extends Component
 
         $this->tagTasks = new TagTask();
         $this->task = new Task();
-        if($task_id > 0){
+        if($task_id > 0) {
             $this->task = Task::find($task_id);
         }
 
@@ -135,13 +138,13 @@ class TaskRightPopup extends Component
 
         $this->task->save();
         // dd($this->tagTasks->toArray()['tag_id']);
-        // ->pluck('id')->toArray(); 
+        // ->pluck('id')->toArray();
         // $this->task->tags()->attach($this->tagTasks->toArray()['tag_id']);
         $this->task->refresh();
 
         $this->showModal = false;
         $this->emit('refreshTasks');
-        
+
     }
 
     public function mount()
@@ -154,5 +157,5 @@ class TaskRightPopup extends Component
     {
         return view('livewire.task-right-popup');
     }
-    
+
 }

@@ -19,11 +19,11 @@ class PagesController extends Controller
         $this->emit('openTaskModal', null);
         $this->showModal = true;
     }
-    
+
     public function getTasks(int $project_id)
     {
         $user =  Auth::user();
-        if($project_id > 0){
+        if($project_id > 0) {
             $user->project_id = $project_id;
             $user->save();
         }
@@ -39,7 +39,7 @@ class PagesController extends Controller
 
         $projectId = $user->project_id;
         $project = Project::find($projectId);
-        
+
         // $searchValue = [['project_id', $user->project_id]];
 
         // $tasks = Task::where($searchValue )->get();
@@ -708,7 +708,7 @@ class PagesController extends Controller
         return view('pages/dashboards-meetings');
     }
 
-    
+
 
     public function dashboardsWidgetUi()
     {

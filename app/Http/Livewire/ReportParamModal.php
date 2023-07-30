@@ -34,10 +34,10 @@ class ReportParamModal extends Component
         $this->report_id = $report_id;
 
         $this->param = new ReportParam();
-        if($param_id > 0){
+        if($param_id > 0) {
             $this->param = ReportParam::find($param_id);
         }
-        
+
         $this->showModal = true;
     }
 
@@ -58,7 +58,7 @@ class ReportParamModal extends Component
 
         $this->emit('refreshReportParams');
         $this->showModal = false;
-        
+
     }
 
     public function render()

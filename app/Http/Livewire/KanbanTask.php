@@ -6,7 +6,6 @@ use Livewire\Component;
 
 class KanbanTask extends Component
 {
-    
     public $task;
     public $searchValue = [];
     public $showModal = false;
