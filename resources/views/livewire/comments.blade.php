@@ -7,7 +7,7 @@
                 </label>
             </div>
             @auth
-                @include('livewire.partials.comment-form',[
+                @include('commentify::livewire.partials.comment-form',[
                     'method'=>'postComment',
                     'state'=>'newCommentState',
                     'inputId'=> 'comment',

@@ -1,5 +1,5 @@
 <div>
-    <main class="main-content kanban-app w-full">
+    <main class="main-content w-full">
         <p class="mt-1 text-xs text-info">
           <span>{{ $project->title }}</span>
         </p>

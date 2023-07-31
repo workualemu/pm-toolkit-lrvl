@@ -48,7 +48,7 @@ class TaskRightPopup extends Component
 
     public function addFile($file)
     {
-        // dd($file);
+        
     }
 
     // public function finishUpload($name, $tmpPath, $isMultiple)
@@ -65,7 +65,7 @@ class TaskRightPopup extends Component
     //     $this->syncInput($name, $files);
 
     //     foreach($files as $file){
-    //         dd($file);
+    //         
     //         File::updateOrCreate(
     //             ['title' => $file->getClientOriginalName(), 'task_id' => $this->task->id],
     //             ['name' => $file->getFileName()]
@@ -122,6 +122,7 @@ class TaskRightPopup extends Component
         $this->users = User::all();
 
         $this->showModal = true;
+        $this->emit('taskModalOpenForCommentModel', $this->task);
     }
 
     public function closeModal()
@@ -137,7 +138,7 @@ class TaskRightPopup extends Component
         $this->task->project_id = $user->project_id;
 
         $this->task->save();
-        // dd($this->tagTasks->toArray()['tag_id']);
+        
         // ->pluck('id')->toArray();
         // $this->task->tags()->attach($this->tagTasks->toArray()['tag_id']);
         $this->task->refresh();

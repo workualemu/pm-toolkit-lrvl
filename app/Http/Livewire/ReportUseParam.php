@@ -48,6 +48,10 @@ class ReportUseParam extends Component
         }
 
         $columns = ReportColumn::getByReport($this->report_id)->get();
+        if($columns->count() <= 0) {
+            $columns = ReportView::getAllColumns();
+        }
+
         $sortBy = 'title';
 
         $report = Report::find($this->report_id);

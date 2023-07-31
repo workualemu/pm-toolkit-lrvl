@@ -11,11 +11,12 @@
                 class="is-scrollbar-hidden min-w-full overflow-x-auto"
                 x-data="pages.tables.initExample1"
             >
-                
-
                 <div class="mt-3 grid grid-cols-12 gap-4 sm:gap-5 lg:gap-6">
                     <div class="col-span-12 sm:col-span-6 lg:col-span-8">
                         <div class="is-scrollbar-hidden flex grow flex-col space-y-4 overflow-y-auto p-4">
+                            @if(!isset($report_id))
+                                <span>Select a report</span>
+                            @endif
                             @foreach($params as $param)
                                 @if($param->type == 'Date')
                                     <div>
@@ -123,10 +124,12 @@
                     class="flex items-center justify-between border-t border-slate-150 py-3 px-4 dark:border-navy-600">
                     <div class="flex space-x-1">
                     </div>
-                    <button wire:click="generateReport()"
-                        class="btn min-w-[7rem] bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
-                        Generate report
-                    </button>
+                    @if(isset($report_id))
+                        <button wire:click="generateReport()"
+                            class="btn min-w-[7rem] bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
+                            Generate report
+                        </button>     
+                    @endif
                 </div>
             </div>
         </div>

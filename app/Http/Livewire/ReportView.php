@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ReportController;
 use Maatwebsite\Excel\Facades\Excel;
 use ExcelReport;
+use PDF;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
@@ -27,21 +28,25 @@ class ReportView extends Component
         $this->results = $results;
         $this->columns = ReportColumn::getByReport($this->report_id)->get();
         if($this->columns->count() <= 0) {
-            $this->getAllColumns();
+            $this->columns = self::getAllColumns();
         }
     }
 
-    public function getAllColumns()
+    public static function getAllColumns()
     {
-        $this->columns = \DB::getSchemaBuilder()->getColumnListing('tasks_view');
-        $cols = collect($this->columns);
-        // dd($cols);
-        $cols = $cols->map(function ($column) {
-            $column->title = $column->db_column;
-            $column->published = true;
-            return $column;
+        $cols = \DB::getSchemaBuilder()->getColumnListing('tasks_view');
+        $cols = collect($cols);
+        
+        $cols = $cols->map(function ($col) {
+            $column = $col;
+            $col = (object) $col;
+            $col->title = $column;
+            $col->db_column = $column;
+            $col->published = true;
+            return $col;
         });
-        $this->columns = $cols->toArray();
+
+        return $cols;
     }
 
     public function exportToExcel()
@@ -94,6 +99,16 @@ class ReportView extends Component
             $columns
         ), 'export.xlsx');
     }
+
+    public function showPDF()
+    {
+        $pdf = PDF::loadView('livewire.report-view', $this->columns->toArray(), $this->results);
+     
+        return $pdf->download('w3adda.pdf');
+
+    }
+
+
 
     public function render()
     {

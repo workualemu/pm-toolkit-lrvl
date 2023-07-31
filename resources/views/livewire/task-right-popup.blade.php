@@ -55,7 +55,7 @@
                     </div>
                 </div>
 
-                <div class="mt-3 grid grid-cols-12 gap-4 sm:gap-5 lg:gap-6">
+                <div class="w-full h-full outline-none overflow-x-hidden overflow-y-auto mt-3 grid grid-cols-12 gap-4 sm:gap-5 lg:gap-6">
                     <div class="col-span-12 sm:col-span-6 lg:col-span-8">
                         <div class="is-scrollbar-hidden flex grow flex-col space-y-4 overflow-y-auto p-4">
                             <label class="block">
@@ -100,6 +100,12 @@
                                     id="description">
                                 </textarea>
                             </label>
+
+                            <div>
+                                <div>
+                                    @livewire('comments', ['model' => $task])
+                                </div>
+                            </div>
 
                             <div>
                                 <span>Attachment</span>
@@ -168,7 +174,6 @@
                                     </select>
                                 </label>
                             </div>
-                            <livewire:comments :model="$task" :task_id="$task->id" />
                         </div>
                     </div>
                 </div>

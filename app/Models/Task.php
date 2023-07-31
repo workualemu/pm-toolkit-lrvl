@@ -7,24 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\DB;
-use App\Traits\Commentable;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Usamamuneerchaudhary\Commentify\Traits\Commentable;
 
 class Task extends Model
 {
-    use HasFactory;
-    use Commentable;
+    use HasFactory, Commentable;
 
     protected $fillable = ['project_id', 'title', 'start_date', 'planned_end_date',
         'description', 'status', 'user_id', 'text', 'type', 'parent', 'level'];
-    // protected $appends = ["open"];
 
     protected $casts = ['start_date'=>'datetime:d-m-Y'];
-
-    // public function comments(): \Illuminate\Database\Eloquent\Relations\MorphMany
-    // {
-    //     return $this->morphMany(Comment::class, 'commentable');
-    // }
 
     public function getOpenAttribute()
     {

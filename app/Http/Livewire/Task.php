@@ -37,7 +37,6 @@ class Task extends Component
 
     public function render()
     {
-        // dd($this->task->task_priority);
         return view('livewire.task');
     }
 }
