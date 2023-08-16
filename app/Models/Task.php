@@ -85,6 +85,16 @@ class Task extends Model
                 ->orderBy('kanban_list_rank', 'asc')
                 ->get();
     }
+
+    public function getNumberOfComments()
+    {
+        return DB::table('comments')
+                ->where('commentable_id', '=', $this->id)
+                ->where('parent_id', '=', null)
+                ->where('deleted_at', '=', null)
+                ->get()->count();
+    }
+
     // public static function scopeFilterByKanban($query,$kaban_id){
     //     return $query->whereHas('taskStatus',function($query) use ($kaban_id){
     //             return $query->where('kanban_list_id', '=', $kaban_id);

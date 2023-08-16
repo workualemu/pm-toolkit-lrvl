@@ -3,6 +3,7 @@
 use App\Http\Controllers\PagesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\UploadTemporaryFileController;
 use App\Http\Livewire\Tasks;
 
 use App\Http\Livewire\TaskRightPopup;
@@ -32,7 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('project', ProjectController::class)->only(['index', 'create', 'update', 'store', 'edit', 'destroy']);
 
     Route::get('tasks/{project_id}', [PagesController::class, 'getTasks'])->name('tasks');
-    // Route::get('/tasks/{project_id}', Tasks::class)->name('tasks');
+    Route::post('upload-file', UploadTemporaryFileController::class);
     // Route::get('newtask', [Tasks::class, 'newTask'])->name('newtask');
 
     Route::get('kanban', [PagesController::class, 'getKanban'])->name('kanban');
@@ -40,6 +41,8 @@ Route::middleware('auth')->group(function () {
     Route::get('reports', [PagesController::class, 'getReports'])->name('reports');
     Route::get('reports-use', [PagesController::class, 'getReportsUse'])->name('reports-use');
     Route::get('report-viewer/{report_id}/{params}', [PagesController::class, 'getReportViewer'])->name('report-viewer');
+    
+    Route::get('tags', [PagesController::class, 'getTags'])->name('tags');
     
     Route::get('setProfile', [PagesController::class, 'formsSetProfile'])->name('setProfile');
 

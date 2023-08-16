@@ -28,7 +28,7 @@ class TaskRightPopup extends Component
 
     public $files = [];
 
-    public $file;
+    public $file = 's9fwyeVg3ZO1j1V2vyNILxYD0PqqAl-metaZXhwb3J0ICg0KS54bHN4-.xlsx';
 
 
     public $title;
@@ -51,57 +51,55 @@ class TaskRightPopup extends Component
         
     }
 
-    // public function finishUpload($name, $tmpPath, $isMultiple)
-    // {
-    //     $this->cleanupOldUploads();
+    public function finishUpload($name, $tmpPath, $isMultiple)
+    {
+        $this->cleanupOldUploads();
 
-    //     $files = collect($tmpPath)->map(function ($i) {
-    //         return TemporaryUploadedFile::createFromLivewire($i);
-    //     })->toArray();
+        $files = collect($tmpPath)->map(function ($i) {
+            return TemporaryUploadedFile::createFromLivewire($i);
+        })->toArray();
 
-    //     $this->emitSelf('upload:finished', $name, collect($files)->map->getFilename()->toArray());
+        $this->emitSelf('upload:finished', $name, collect($files)->map->getFilename()->toArray());
 
-    //     $files = array_merge($this->getPropertyValue($name), $files);
-    //     $this->syncInput($name, $files);
+        $this->syncInput($name, $files);
 
-    //     foreach($files as $file){
-    //         
-    //         File::updateOrCreate(
-    //             ['title' => $file->getClientOriginalName(), 'task_id' => $this->task->id],
-    //             ['name' => $file->getFileName()]
-    //         );
-    //     }
+        foreach($files as $file){
+            File::updateOrCreate(
+                ['path' => $file->getPath(), 'task_id' => $this->task->id],
+                ['name' => $file->getFileName()]
+            );
+        }
 
-    // }
+    }
 
     // public function downloadFile($file, $originalFileName)
     // {
     //     return response()->download(storage_path('app/livewire-tmp/'.$file), $originalFileName);
     // }
 
-    // public function removeUpload($name, $tmpFilename)
-    // {
-    //     $uploads = $this->getPropertyValue($name);
+    public function removeUpload($name, $tmpFilename)
+    {
+        $uploads = $this->getPropertyValue($name);
 
-    //     if (is_array($uploads) && isset($uploads[0]) && $uploads[0] instanceof TemporaryUploadedFile) {
-    //         $this->emit('upload:removed', $name, $tmpFilename)->self();
+        if (is_array($uploads) && isset($uploads[0]) && $uploads[0] instanceof TemporaryUploadedFile) {
+            $this->emit('upload:removed', $name, $tmpFilename)->self();
 
-    //         $this->syncInput($name, array_values(array_filter($uploads, function ($upload) use ($tmpFilename) {
-    //             if ($upload->getFilename() === $tmpFilename) {
-    //                 $numb = File::where(['task_id'=>$this->task->id, 'name'=> $upload->getFilename()])->delete();
-    //                 $upload->delete();
-    //                 return false;
-    //             }
-    //             return true;
-    //         })));
-    //     } elseif ($uploads instanceof TemporaryUploadedFile && $uploads->getFilename() === $tmpFilename) {
-    //         $uploads->delete();
+            $this->syncInput($name, array_values(array_filter($uploads, function ($upload) use ($tmpFilename) {
+                if ($upload->getFilename() === $tmpFilename) {
+                    $numb = File::where(['task_id'=>$this->task->id, 'name'=> $upload->getFilename()])->delete();
+                    $upload->delete();
+                    return false;
+                }
+                return true;
+            })));
+        } elseif ($uploads instanceof TemporaryUploadedFile && $uploads->getFilename() === $tmpFilename) {
+            $uploads->delete();
 
-    //         $this->emit('upload:removed', $name, $tmpFilename)->self();
+            $this->emit('upload:removed', $name, $tmpFilename)->self();
 
-    //         $this->syncInput($name, null);
-    //     }
-    // }
+            $this->syncInput($name, null);
+        }
+    }
 
     public function openModal($task_id)
     {

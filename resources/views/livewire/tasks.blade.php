@@ -447,12 +447,12 @@
                             </td>
 
                             <td class="whitespace-nowrap px-4 py-3 sm:px-5">
-                              <div
-                                x-tooltip.primary="'42% Completed'"
-                                class="progress h-2 bg-slate-150 dark:bg-navy-500"
+                              <div  style="width: 100px"
+                                x-tooltip.primary="'{{$task->progress * 100}}% Completed'"
+                                class="progress h-2 {{$task->color}} dark:bg-navy-500"
                               >
-                                <div
-                                  class="w-5/12 rounded-full bg-primary dark:bg-accent"
+                                <div style="width: {{$task->progress * 100}}px"
+                                  class="rounded-full bg-primary dark:bg-accent"
                                 ></div>
                               </div>
                             </td>

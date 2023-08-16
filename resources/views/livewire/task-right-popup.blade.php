@@ -100,13 +100,6 @@
                                     id="description">
                                 </textarea>
                             </label>
-
-                            <div>
-                                <div>
-                                    @livewire('comments', ['model' => $task])
-                                </div>
-                            </div>
-
                             <div>
                                 <span>Attachment</span>
                                 <div
@@ -117,13 +110,23 @@
                                             allowMultiple: true,
                                             server: {
                                                 process: (fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
-                                                    @this.upload('files', file, load, error, progress);
+                                                    @this.upload('files', file, 
+                                                    (uploadedFilename) => {
+                                                        load(uploadedFilename);
+                                                    }, 
+                                                    error, progress);
+                                                },
+                                                revert: (filename, load) => {
+                                                    @this.removeUpload(filename, load);
+
                                                 }
                                             },
-                                            revert: (filename, load) => {
-                                                @this.removeUpload(filename, load);
-
-                                            }
+                                            files: [{
+                                                source: 'task-files',
+                                                options: {
+                                                    type: 'local',
+                                                }
+                                            }]
                                         });
 
                                         FilePond.create($refs.input);
@@ -134,6 +137,12 @@
 
                                 </div>
                                 
+                            </div>
+
+                            <div>
+                                <div>
+                                    @livewire('comments', ['model' => $task])
+                                </div>
                             </div>
                         </div>
                     </div>

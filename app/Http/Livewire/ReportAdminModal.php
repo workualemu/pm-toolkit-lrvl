@@ -23,8 +23,6 @@ class ReportAdminModal extends Component
         'report.show_print_date'=>''
     ];
 
-    // ['title', 'db_table', 'sort_by', 'description', 'published', 'user_id',
-    //     'show_meta', 'show_print_user', 'show_print_date'];
     protected $listeners = ['openReportModal' => 'openReportModal'];
 
     public function openReportModal($report_id)

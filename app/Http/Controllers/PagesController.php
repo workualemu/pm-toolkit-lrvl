@@ -61,7 +61,10 @@ class PagesController extends Controller
 
         $projectId = $user->project_id;
         $project = Project::find($projectId);
-        return view('pages/reports', compact('project'));
+
+        $page_title = "Reports";
+        $page_type = "REPORT";
+        return view('pages/reports', compact('project', 'page_title', 'page_type' ));
     }
 
     public function getReportsUse()
@@ -80,6 +83,18 @@ class PagesController extends Controller
         $projectId = $user->project_id;
         $project = Project::find($projectId);
         return view('pages/report-viewer', compact('project', 'report_id', 'params'));
+    }
+
+    
+    public function getTags()
+    {
+        $user =  Auth::user();
+
+        $projectId = $user->project_id;
+        $project = Project::find($projectId);
+        $page_title = "Tags";
+        $page_type = "TAG";
+        return view('pages/reports', compact('project', 'page_title', 'page_type' ));
     }
 
 

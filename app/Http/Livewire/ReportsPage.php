@@ -14,6 +14,8 @@ use ExcelReport;
 class ReportsPage extends Component
 {
     public $project;
+    public $page_title;
+    public $page_type;
 
     public function generateReport()
     {
@@ -59,10 +61,12 @@ class ReportsPage extends Component
         //     ->download('report_test.xlsx');
     }
 
-    public function mount($project_id)
+    public function mount($project_id, $title, $type)
     {
         $user =  Auth::user();
         $this->project = Project::find($user->project_id);
+        $this->page_title = $title;
+        $this->page_type = $type;
 
         $this->searchValue = ['project_id', $user->project_id];
     }

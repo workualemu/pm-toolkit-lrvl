@@ -7,7 +7,7 @@
             class="flex items-center justify-between space-x-2 px-[var(--margin-x)] py-5 transition-all duration-[.25s]">
             <div class="flex items-center space-x-1">
                 <h3 class="text-lg font-medium text-slate-700 line-clamp-1 dark:text-navy-50">
-                    Reports
+                    {{ $page_title }}
                 </h3>
             </div>
             <label class="relative hidden w-full max-w-[16rem] sm:flex">
@@ -105,14 +105,22 @@
             </div>
         </div>
         <div class="grid grid-cols-2 gap-4">
-            <div class="col-span-1">
-                @livewire('reports-admin')
-            </div>
-            <div class="col-span-1">
-                <div> @livewire('report-params') </div>
-                <div class="h-10"> </div>
-                <div> @livewire('report-columns') </div>
-            </div>
+            @if($page_type == 'REPORT')
+                <div class="col-span-1">
+                    @livewire('reports-admin')
+                </div>
+                <div class="col-span-1">
+                    <div> @livewire('report-params') </div>
+                    <div class="h-10"> </div>
+                    <div> @livewire('report-columns') </div>
+                </div>
+            @elseif($page_type == 'TAG')
+                <div class="col-span-1">
+                    @livewire('tags')
+                </div>
+            @else
+                
+            @endif
         </div>
     </main>
 </div>

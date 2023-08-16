@@ -73,6 +73,21 @@ class Tasks extends Component
     public function render()
     {
         $this->tasks = Task::where($this->searchValue)->get();
+        $this->tasks = $this->tasks->map( function ($task) {
+            // $task->color = 'bg-slate-150';
+            $progress = $task->progress * 100;
+            if( $progress < 1){ 
+                $task->color = 'bg-slate-150';
+            } elseif($progress < 40){ 
+                $task->color = 'bg-red-500';
+            } elseif($progress < 90){ 
+                $task->color = 'bg-yellow-500';
+            } else{
+                $task->color = 'bg-green-500';
+            }  
+            return $task;
+        } );
+        // dd($this->tasks);
         return view('livewire.tasks');
     }
 }

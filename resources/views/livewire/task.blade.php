@@ -28,6 +28,19 @@
                     <div class="h-2 w-2 rounded-full bg-{{$task->task_priority->color}}"></div>
                     <span>{{$task->task_priority->value}}</span>
                 </div>
+                <div class="m-1.5 w-px self-stretch bg-slate-200 dark:bg-navy-500"></div>
+                <div
+                    class="flex items-center space-x-2 text-xs text-slate-400 dark:text-navy-300">
+                    <div class="flex items-center space-x-0.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                        </svg>
+                        <span>{{$task->getNumberOfComments()}}</span>
+                    </div>
+                </div>
             </div>
             <div class="flex items-center space-x-1">
                 <button x-data="{ isImportant: false }" @click.stop="isImportant =! isImportant"
