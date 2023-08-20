@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::get('report-viewer/{report_id}/{params}', [PagesController::class, 'getReportViewer'])->name('report-viewer');
     
     Route::get('tags', [PagesController::class, 'getTags'])->name('tags');
+    Route::get('prioritys', [PagesController::class, 'getPrioritys'])->name('prioritys');
     
     Route::get('setProfile', [PagesController::class, 'formsSetProfile'])->name('setProfile');
 

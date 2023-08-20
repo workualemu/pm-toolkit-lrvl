@@ -118,6 +118,10 @@
                 <div class="col-span-1">
                     @livewire('tags')
                 </div>
+            @elseif($page_type == 'PRIORITY')
+                <div class="col-span-1">
+                    @livewire('prioritys')
+                </div>
             @else
                 
             @endif

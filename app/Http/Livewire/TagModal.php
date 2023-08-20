@@ -10,6 +10,7 @@ class TagModal extends Component
 {
     public $tag;
     public $showModal = false;
+    public $colorSelected = 'success';
 
     protected $rules = [
         'tag.label' => 'required|min:2',
@@ -25,6 +26,7 @@ class TagModal extends Component
         $this->tag = new Tag();
         if($tag_id > 0) {
             $this->tag = Tag::find($tag_id);
+            // $this->selectedColor = $this->tag->color;
         }
 
         $this->showModal = true;
@@ -39,9 +41,11 @@ class TagModal extends Component
     {
         $user = Auth::user();
         $this->tag->user_id = $user->id;
-        if($this->tag->color == null){
-            $this->tag->color = 'primary';
-        }
+        // if($this->tag->color == null){
+        //     $this->tag->color = 'primary';
+        // }
+        // dd($this->colorSelected);
+        $this->tag->color = $this->colorSelected;
 
         $this->tag->save();
         $this->tag->refresh();

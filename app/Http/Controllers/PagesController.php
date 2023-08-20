@@ -85,7 +85,6 @@ class PagesController extends Controller
         return view('pages/report-viewer', compact('project', 'report_id', 'params'));
     }
 
-    
     public function getTags()
     {
         $user =  Auth::user();
@@ -97,6 +96,16 @@ class PagesController extends Controller
         return view('pages/reports', compact('project', 'page_title', 'page_type' ));
     }
 
+    public function getPrioritys()
+    {
+        $user =  Auth::user();
+
+        $projectId = $user->project_id;
+        $project = Project::find($projectId);
+        $page_title = "Priorities";
+        $page_type = "PRIORITY";
+        return view('pages/reports', compact('project', 'page_title', 'page_type' ));
+    }
 
     public function formsSetProfile()
     {
