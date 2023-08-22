@@ -75,7 +75,7 @@
         {{ $slot }}
 
     </div>
-
+    <wireui:scripts />
     <!--
   This is a place for Alpine.js Teleport feature
   @see https://alpinejs.dev/directives/teleport
