@@ -3,10 +3,10 @@
         <div class="flex items-center justify-between">
             
             <div>
-                <button wire:click="addNewPriority()"
+                <button wire:click="addNewStatus()"
                     class="border-b border-dotted border-current pb-0.5 font-medium text-primary outline-none transition-colors duration-300 hover:text-primary/70 focus:text-primary/70 dark:text-accent-light dark:hover:text-accent-light/70 dark:focus:text-accent-light/70"
                 >
-                    Add new priority
+                    Add new task status
                 </button>
             </div>
 
@@ -23,12 +23,17 @@
                             <th
                                 class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
                             >
-                                Priority
+                                Status
                             </th>
                             <th
                                 class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
                             >
                                 Descripton
+                            </th>
+                            <th
+                                class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
+                            >
+                                Kanban list rank
                             </th>
                             <th
                                 class="whitespace-nowrap rounded-tr-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
@@ -38,25 +43,30 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($prioritys AS $index=>$priority)
+                        @foreach($statuses AS $index=>$status)
                             <tr>
                                 <td
                                     class="whitespace-nowrap px-3 py-3 font-medium text-slate-700 dark:text-navy-100 lg:px-5"
                                 >
-                                    {{$priority->value}}
+                                    {{$status->value}}
                                 </td>
                                 <td
                                     class="whitespace-nowrap px-3 py-3 font-medium text-slate-700 dark:text-navy-100 lg:px-5"
                                 >
-                                {{$priority->description}}
+                                {{$status->description}}
+                                </td>
+                                <td
+                                    class="whitespace-nowrap px-3 py-3 font-medium text-slate-700 dark:text-navy-100 lg:px-5"
+                                >
+                                {{$status->kanban_list_rank}}
                                 </td>
                                 <td class="whitespace-nowrap px-4 py-3 sm:px-5 relative">
                                     <div class="flex justify-center space-x-2">
-                                        <button wire:click="editPriority({{$priority->id}})" 
+                                        <button wire:click="editStatus({{$status->id}})" 
                                             class="btn h-8 w-8 p-0 text-info hover:bg-info/20 focus:bg-info/20 active:bg-info/25">
                                             <i class="fa fa-edit"></i>
                                         </button>
-                                        <button wire:click="deletePriority({{$priority->id}})" class="btn h-8 w-8 p-0 text-error hover:bg-error/20 focus:bg-error/20 active:bg-error/25">
+                                        <button wire:click="deleteStatus({{$status->id}})" class="btn h-8 w-8 p-0 text-error hover:bg-error/20 focus:bg-error/20 active:bg-error/25">
                                             <i class="fa fa-trash-alt"></i>
                                         </button>
                                     </div>
@@ -66,6 +76,7 @@
                     </tbody>
                 </table>
             </div>
+            {{ $statuses->links() }}
         </div>
     </div>
 </div>

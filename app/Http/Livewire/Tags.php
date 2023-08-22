@@ -4,10 +4,13 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\Tag;
+use Livewire\WithPagination;
 
 class Tags extends Component
 {
-    public $tags = [];
+    use WithPagination;
+
+    // public $tags = [];
     public $showTagModal = false;
 
     protected $listeners = ['refreshTag' => '$refresh'
@@ -31,7 +34,8 @@ class Tags extends Component
 
     public function render()
     {
-        $this->tags = Tag::all();
-        return view('livewire.tags');
+        return view('livewire.tags', [
+            'tags' => Tag::paginate(10),
+        ]);
     }
 }

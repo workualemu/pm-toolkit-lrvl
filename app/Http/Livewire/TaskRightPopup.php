@@ -23,13 +23,12 @@ class TaskRightPopup extends Component
     public $taskPriorities = [];
     public $taskStatuses = [];
     public $tags = [];
-    public TagTask $tagTasks;
+    public $taskTags = [];
     public $users = [];
 
     public $files = [];
 
     public $file = 's9fwyeVg3ZO1j1V2vyNILxYD0PqqAl-metaZXhwb3J0ICg0KS54bHN4-.xlsx';
-
 
     public $title;
 
@@ -108,7 +107,6 @@ class TaskRightPopup extends Component
         $this->files = TemporaryUploadedFile::serializeMultipleForLivewireResponse($attachments);
         // $this->files = TemporaryUploadedFile::unserializeFromLivewireRequest($files);
 
-        $this->tagTasks = new TagTask();
         $this->task = new Task();
         if($task_id > 0) {
             $this->task = Task::find($task_id);
@@ -118,6 +116,10 @@ class TaskRightPopup extends Component
         $this->taskStatuses = TaskStatus::all();
         $this->tags = Tag::all();
         $this->users = User::all();
+
+        $this->taskTags = TagTask::where(['task_id'=>$this->task->id])->get();
+        $this->taskTags = $this->taskTags->pluck('tag_id');
+        // dd($this->taskTags);
 
         $this->showModal = true;
         $this->emit('taskModalOpenForCommentModel', $this->task);
@@ -136,9 +138,10 @@ class TaskRightPopup extends Component
         $this->task->project_id = $user->project_id;
 
         $this->task->save();
-        
-        // ->pluck('id')->toArray();
-        // $this->task->tags()->attach($this->tagTasks->toArray()['tag_id']);
+
+        $this->task->tags()->detach();    
+        $this->task->tags()->attach($this->taskTags);   
+
         $this->task->refresh();
 
         $this->showModal = false;

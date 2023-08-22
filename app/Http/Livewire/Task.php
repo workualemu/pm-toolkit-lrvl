@@ -24,8 +24,6 @@ class Task extends Component
     public function storeTask($task)
     {
         $this->reset(['title']);
-
-        // Close the modal after saving data
         $this->showModal = false;
 
     }

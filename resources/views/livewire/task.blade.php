@@ -41,6 +41,15 @@
                         <span>{{$task->getNumberOfComments()}}</span>
                     </div>
                 </div>
+
+                <div class="m-1.5 w-px self-stretch bg-slate-200 dark:bg-navy-500"></div>
+                <div
+                    class="flex items-center space-x-2 text-xs text-slate-400 dark:text-navy-300">
+                    @foreach($task->tags as $tag)
+                        <div class="badge bg-{{$tag->color}} text-white">{{$tag->label}}</div>
+                    @endforeach
+                </div>
+
             </div>
             <div class="flex items-center space-x-1">
                 <button x-data="{ isImportant: false }" @click.stop="isImportant =! isImportant"

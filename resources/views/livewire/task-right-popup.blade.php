@@ -153,10 +153,10 @@
                                 <label class="block">
                                     <span>Tag:</span>
                                     <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" multiple placeholder="Select the tags"
-                                        wire:model.defer="tagTasks.tag_id" 
+                                        wire:model.defer="taskTags" 
                                         autocomplete="off">
                                         @foreach($tags as $tag)
-                                        <option value="{{$tag->id}}">{{$tag->label}}</option>
+                                            <option value="{{$tag->id}}">{{$tag->label}}</option>
                                         @endforeach
                                     </select>
                                 </label>

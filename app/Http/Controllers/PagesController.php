@@ -107,6 +107,17 @@ class PagesController extends Controller
         return view('pages/reports', compact('project', 'page_title', 'page_type' ));
     }
 
+    public function getStatuses()
+    {
+        $user =  Auth::user();
+
+        $projectId = $user->project_id;
+        $project = Project::find($projectId);
+        $page_title = "Task statuses";
+        $page_type = "STATUS";
+        return view('pages/reports', compact('project', 'page_title', 'page_type' ));
+    }
+
     public function formsSetProfile()
     {
         $user =  Auth::user();
