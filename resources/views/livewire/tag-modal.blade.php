@@ -39,25 +39,22 @@
                                 <label class="block">
                                     <span>Color</span>
                                     <x-color-picker
-    placeholder="Select color"
-    :colors="[
-        [ 'name' => 'White',  'value' => '#FFF' ],
-        [ 'name' => 'Black',  'value' => '#000' ],
-        [ 'name' => 'Teal',   'value' => '#14b8a6' ],
-        [ 'name' => 'Slate',  'value' => '#64748b' ],
-        [ 'name' => 'Red',    'value' => '#ef4444' ],
-        [ 'name' => 'Lime',   'value' => '#a3e635' ],
-        [ 'name' => 'Sky',    'value' => '#38bdf8' ],
-        [ 'name' => 'Violet', 'value' => '#8b5cf6' ],
-        [ 'name' => 'Pink',   'value' => '#8b5cf6' ],
-        [ 'name' => 'Indigo', 'value' => '#6366f1' ],
-    ]"
-/>
+                                        placeholder="Select color"
+                                        wire:model.defer="tag.color"
+                                        :colors="[
+                                            [ 'name' => 'Primary',   'value' => '#3490dc' ],
+                                            [ 'name' => 'Teal',   'value' => '#14b8a6' ],
+                                            [ 'name' => 'Slate',  'value' => '#64748b' ],
+                                            [ 'name' => 'Red',    'value' => '#ef4444' ],
+                                            [ 'name' => 'Lime',   'value' => '#a3e635' ],
+                                            [ 'name' => 'Sky',    'value' => '#38bdf8' ],
+                                            [ 'name' => 'Violet', 'value' => '#8b5cf6' ],
+                                            [ 'name' => 'Secondary',   'value' => '#ffed4a' ],
+                                            [ 'name' => 'Indigo', 'value' => '#6366f1' ],
+                                            [ 'name' => 'Danger', 'value' => '#e3342f' ],
+                                        ]"
+                                    />
                                 </label>
-
-                                
-                                
-
                             </div>
                         </div>
                     </div>

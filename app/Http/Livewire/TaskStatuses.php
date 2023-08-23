@@ -29,13 +29,12 @@ class TaskStatuses extends Component
     public function deleteStatus($status_id)
     {
         $res=TaskStatus::where('id', $status_id)->delete();
-        // $this->emit('openStatusModal', $status_id);
     }
 
     public function render()
     {
         return view('livewire.task-statuses', [
-            'statuses' => TaskStatus::paginate(10),
+            'statuses' => TaskStatus::paginate(5),
         ]);
 
     }

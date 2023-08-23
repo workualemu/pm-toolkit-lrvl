@@ -6,9 +6,12 @@ use Livewire\Component;
 use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Support\Facades\Auth;
+use Livewire\WithPagination;
 
 class Tasks extends Component
 {
+    use WithPagination;
+
     public $showModal = false;
     public $project;
     public $tasks;
@@ -87,7 +90,10 @@ class Tasks extends Component
             }  
             return $task;
         } );
-        // dd($this->tasks);
+
         return view('livewire.tasks');
+        // return view('livewire.tags', [
+        //     'tags' => Tag::paginate(10),
+        // ]);
     }
 }

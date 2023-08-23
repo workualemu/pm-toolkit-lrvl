@@ -41,11 +41,6 @@ class TagModal extends Component
     {
         $user = Auth::user();
         $this->tag->user_id = $user->id;
-        // if($this->tag->color == null){
-        //     $this->tag->color = 'primary';
-        // }
-        // dd($this->colorSelected);
-        $this->tag->color = $this->colorSelected;
 
         $this->tag->save();
         $this->tag->refresh();

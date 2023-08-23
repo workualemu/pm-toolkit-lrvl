@@ -46,7 +46,7 @@
                 <div
                     class="flex items-center space-x-2 text-xs text-slate-400 dark:text-navy-300">
                     @foreach($task->tags as $tag)
-                        <div class="badge bg-{{$tag->color}} text-white">{{$tag->label}}</div>
+                        <div style="background-color: {{$tag->color}};" class="badge text-white">{{$tag->label}}</div>
                     @endforeach
                 </div>
 

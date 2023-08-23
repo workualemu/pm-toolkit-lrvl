@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('task_statuses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->foreignId('kanban_list_id');
+            $table->foreignId('kanban_list_id')->nullable();
             $table->text('description');
             $table->timestamps();
             $table->string('value');
