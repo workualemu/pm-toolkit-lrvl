@@ -15,6 +15,7 @@ class Tasks extends Component
     public $showModal = false;
     public $project;
     public $tasks;
+    public $phases;
     public $searchValue = [];
 
     protected $listeners = ['refreshTasks' => '$refresh',
@@ -75,6 +76,8 @@ class Tasks extends Component
 
     public function render()
     {
+        $this->phases = Task::where(array_merge([['parent', 0]], $this->searchValue))->get();
+
         $this->tasks = Task::where($this->searchValue)->get();
         $this->tasks = $this->tasks->map( function ($task) {
             // $task->color = 'bg-slate-150';

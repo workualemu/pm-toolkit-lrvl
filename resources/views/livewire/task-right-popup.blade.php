@@ -133,7 +133,7 @@
 
                                     "
                                 >
-                                    <input type="file" x-ref="input" wire:model="files"/>
+                                    <input type="file" x-ref="input" wire:model="files" multiple/>
 
                                 </div>
                                 

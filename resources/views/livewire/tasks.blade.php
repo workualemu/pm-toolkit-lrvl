@@ -115,19 +115,6 @@
                 </svg>
                 <span>Table</span>
             </button>
-            <button @click="activeTab = 'tabTree'"
-                :class="activeTab === 'tabTree' ?
-                    'border-primary dark:border-accent text-primary dark:text-accent-light' :
-                    'border-transparent hover:text-slate-800 focus:text-slate-800 dark:hover:text-navy-100 dark:focus:text-navy-100'"
-                class="btn shrink-0 space-x-2 rounded-none border-b-2 px-3 py-2 font-medium">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5"
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                    stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-                <span>Tree view</span>
-            </button>
           </div>
         </div>
       </div>
@@ -168,11 +155,6 @@
               <div>
                 <div x-data="{isFilterExpanded:false}">
                   <div class="flex items-center justify-between">
-                    <h2
-                      class="text-base font-medium tracking-wide text-slate-700 line-clamp-1 dark:text-navy-100"
-                    >
-                      Tasks
-                    </h2>
                     <div class="flex">
                       <div class="flex items-center" x-data="{isInputActive:false}">
                         <label class="block">
@@ -259,34 +241,14 @@
                         <label class="block">
                           <span>Phase:</span>
                           <div class="relative mt-1.5 flex">
-                            <input
-                              class="form-input peer w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                              placeholder="Enter phase title"
-                              type="text"
-                            />
-                            <span
-                              class="pointer-events-none absolute flex h-full w-10 items-center justify-center text-slate-400 peer-focus:text-primary dark:text-navy-300 dark:peer-focus:text-accent"
+                            <select
+                              class="form-select mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-4.5 w-4.5 transition-colors duration-200"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  stroke="currentColor"
-                                  stroke-width="1.5"
-                                  d="M3.082 13.944c-.529-.95-.793-1.425-.793-1.944 0-.519.264-.994.793-1.944L4.43 7.63l1.426-2.381c.559-.933.838-1.4 1.287-1.66.45-.259.993-.267 2.08-.285L12 3.26l2.775.044c1.088.018 1.631.026 2.08.286.45.26.73.726 1.288 1.659L19.57 7.63l1.35 2.426c.528.95.792 1.425.792 1.944 0 .519-.264.994-.793 1.944L19.57 16.37l-1.426 2.381c-.559.933-.838 1.4-1.287 1.66-.45.259-.993.267-2.08.285L12 20.74l-2.775-.044c-1.088-.018-1.631-.026-2.08-.286-.45-.26-.73-.726-1.288-1.659L4.43 16.37l-1.35-2.426z"
-                                />
-                                <circle
-                                  cx="12"
-                                  cy="12"
-                                  r="3"
-                                  stroke="currentColor"
-                                  stroke-width="1.5"
-                                />
-                              </svg>
-                            </span>
+                              <option>Select project phase</option>
+                              @foreach($phases as $phase)
+                                <option value="{{$phase->id}}">{{$phase->title}}</option>
+                              @endforeach
+                            </select>
                           </div>
                         </label>
                         <label class="block">
