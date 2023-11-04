@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\Task;
+use App\Models\TaskStatus;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -11,6 +12,7 @@ class KanbanList extends Component
 {
     public $tasks;
     public $kanbanList;
+    public $taskStatus;
 
     protected $listeners = ['end-drag' => 'incrementPostCount'];
 
@@ -42,18 +44,8 @@ class KanbanList extends Component
 
     public function render()
     {
-        // $this->tasks = Task::join('task_statuses', 'tasks.task_status_id', '=', 'task_statuses.id')
-        //     ->where('task_statuses.id', $this->kanbanList->id)
-        //     ->get();
-
-        // $this->tasks = Task::whereHas('taskStatus' ,function($query)  {
-        //     $query->where('kanban_list_id', '=', 2);
-        // })->get();
-
         $this->tasks = Task::filterByStatus($this->kanbanList->id)->get();
-        // $this->tasks = Task::filterByKanban($this->kanbanList->id)->get();
-
-
+        $this->taskStatus = TaskStatus::find($this->kanbanList->id);
         return view('livewire.kanban-list');
     }
 }

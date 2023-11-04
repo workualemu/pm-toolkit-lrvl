@@ -29,7 +29,7 @@ class KanbanTasks extends Component
     public function render()
     {
         $this->tasks = Task::where($this->searchValue)->get();
-        $this->kanbanLists = \App\Models\TaskStatus::get();
+        $this->kanbanLists = \App\Models\TaskStatus::orderBy('kanban_list_rank')->get();
 
         return view('livewire.kanban-tasks');
     }

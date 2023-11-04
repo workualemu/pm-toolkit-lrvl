@@ -314,36 +314,16 @@
                           <div
                             class="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-4 sm:gap-5 lg:gap-6"
                           >
-                            <label class="inline-flex items-center space-x-2">
-                              <input
-                                class="form-checkbox is-basic h-5 w-5 rounded border-slate-400/70 checked:border-secondary checked:bg-secondary hover:border-secondary focus:border-secondary dark:border-navy-400 dark:checked:border-secondary-light dark:checked:bg-secondary-light dark:hover:border-secondary-light dark:focus:border-secondary-light"
-                                type="checkbox"
-                              />
-                              <span>Upcoming</span>
-                            </label>
-                            <label class="inline-flex items-center space-x-2">
-                              <input
-                                class="form-checkbox is-basic h-5 w-5 rounded border-slate-400/70 checked:border-primary checked:bg-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:checked:border-accent dark:checked:bg-accent dark:hover:border-accent dark:focus:border-accent"
-                                type="checkbox"
-                              />
-                              <span>In Progress</span>
-                            </label>
-                            <label class="inline-flex items-center space-x-2">
-                              <input
-                                checked
-                                class="form-checkbox is-basic h-5 w-5 rounded border-slate-400/70 checked:!border-success checked:bg-success hover:!border-success focus:!border-success dark:border-navy-400"
-                                type="checkbox"
-                              />
-                              <span>Complete</span>
-                            </label>
-                            <label class="inline-flex items-center space-x-2">
-                              <input
-                                checked
-                                class="form-checkbox is-basic h-5 w-5 rounded border-slate-400/70 checked:!border-error checked:bg-error hover:!border-error focus:!border-error dark:border-navy-400"
-                                type="checkbox"
-                              />
-                              <span>Cancelled</span>
-                            </label>
+                            @foreach($statuses as $status)
+                              <label class="inline-flex items-center space-x-2">
+                                <input
+                                  style="background-color: {{$status->color}} ;"
+                                  class="form-checkbox is-basic h-5 w-5 rounded border-slate-400/70 checked:border-secondary checked:{{$status->color}} hover:border-secondary focus:border-secondary dark:border-navy-400 dark:checked:border-secondary-light dark:checked:bg-secondary-light dark:hover:border-secondary-light dark:focus:border-secondary-light"
+                                  type="checkbox"
+                                />
+                                <span>{{$status->value}}</span>
+                              </label>
+                            @endforeach
                           </div>
                         </div>
                       </div>
@@ -364,6 +344,8 @@
                       </div>
                     </div>
                   </div>
+
+
                   <div class="card mt-3">
                     <div class="is-scrollbar-hidden min-w-full overflow-x-auto">
                       <table class="is-hoverable w-full text-left">

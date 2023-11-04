@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\TaskStatus;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
 
@@ -15,6 +16,7 @@ class Tasks extends Component
     public $showModal = false;
     public $project;
     public $tasks;
+    public $statuses;
     public $phases;
     public $searchValue = [];
 
@@ -76,6 +78,7 @@ class Tasks extends Component
 
     public function render()
     {
+        $this->statuses = TaskStatus::all();
         $this->phases = Task::where(array_merge([['parent', 0]], $this->searchValue))->get();
 
         $this->tasks = Task::where($this->searchValue)->get();

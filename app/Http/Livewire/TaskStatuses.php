@@ -10,7 +10,6 @@ class TaskStatuses extends Component
 {
     use WithPagination;
 
-    // public $statuses = [];
     public $showStatusModal = false;
 
     protected $listeners = ['refreshStatus' => '$refresh'
@@ -34,7 +33,7 @@ class TaskStatuses extends Component
     public function render()
     {
         return view('livewire.task-statuses', [
-            'statuses' => TaskStatus::paginate(5),
+            'statuses' => TaskStatus::orderby('kanban_list_rank')->paginate(10),
         ]);
 
     }

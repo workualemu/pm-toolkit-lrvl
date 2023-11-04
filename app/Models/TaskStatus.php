@@ -19,6 +19,7 @@ class TaskStatus extends Model
         'value',
         'kanban_list_id',
         'description',
-        'user_id'
+        'user_id',
+        'color'
     ];
 }

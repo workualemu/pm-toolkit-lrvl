@@ -1,4 +1,4 @@
-<div id="{{ $task->id }}" class="card cursor-pointer shadow-sm"
+<div id="{{ $task->id }}" class="card cursor-pointer shadow-sm bg-{{$task->taskStatus->color}}-100"
     wire:click="openModal({{ $task->id }} )" data-task="{{ $task->id }}">
     <div class="flex space-x-3 px-2.5 pb-2 pt-1.5">
         <div class="flex-1 space-y-2">
@@ -7,7 +7,7 @@
             </p>
             <div class="flex flex-wrap space-x-1">
                 <div
-                    class="badge space-x-1 bg-slate-150 py-1 px-1.5 text-slate-800 dark:bg-navy-500 dark:text-navy-100">
+                    class="badge space-x-1 py-1 px-1.5 text-slate-800 dark:bg-navy-500 dark:text-navy-100">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
