@@ -10,7 +10,8 @@ class PriorityModal extends Component
 {
     public $priority;
     public $showModal = false;
-    public $colorSelected = 'success';
+    
+    public $currentColor;
 
     protected $rules = [
         'priority.value' => 'required|min:2',
@@ -27,7 +28,8 @@ class PriorityModal extends Component
         if($priority_id > 0) {
             $this->priority = TaskPriority::find($priority_id);
         }
-
+        
+        $this->currentColor =  $this->priority->color ?? 'blue';
         $this->showModal = true;
     }
 
@@ -40,7 +42,7 @@ class PriorityModal extends Component
     {
         $user = Auth::user();
         $this->priority->user_id = $user->id;
-        $this->priority->color = $this->colorSelected;
+        $this->priority->color = $this->currentColor;
 
         $this->priority->save();
         $this->priority->refresh();

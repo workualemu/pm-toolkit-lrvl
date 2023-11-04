@@ -80,14 +80,14 @@
             <li>
                 <a class="group flex space-x-2 rounded-lg p-2 tracking-wide outline-none transition-all hover:bg-blue-200 focus:bg-blue-200"
                     wire:click="filterTasksByPriority({{$priority->id}})">
-                    <svg class="h-4.5 w-4.5 text-success" stroke="currentColor" viewBox="0 0 24 24"
+                    <svg class="h-4.5 w-4.5 text-success" stroke="{{$priority->color}}" viewBox="0 0 24 24"
                         stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M7 6H21M7 12H21M7 18H21" stroke-linecap="round"
                             stroke-linejoin="round" />
                         <path d="M3 6H4M3 12H4M3 18H4" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
-                    <span class="text-slate-800 dark:text-navy-100">{{$priority->value}}</span>
+                    <span class="text-{{$priority->color}}-700 dark:text-navy-100">{{$priority->value}}</span>
                 </a>
             </li>
             @endforeach

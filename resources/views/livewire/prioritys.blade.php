@@ -41,7 +41,7 @@
                         @foreach($prioritys AS $index=>$priority)
                             <tr>
                                 <td
-                                    class="whitespace-nowrap px-3 py-3 font-medium text-slate-700 dark:text-navy-100 lg:px-5"
+                                    class="whitespace-nowrap px-3 py-3 font-medium text-{{$priority->color}}-700 dark:text-navy-100 lg:px-5"
                                 >
                                     {{$priority->value}}
                                 </td>

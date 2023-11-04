@@ -24,8 +24,7 @@
                     <span>{{$task['assigned_to']}}</span>
                 </span>
                 <div class="m-1.5 w-px self-stretch bg-slate-200 dark:bg-navy-500"></div>
-                <div class="badge space-x-2.5 px-1 text-{{$task->task_priority->color}}">
-                    <div class="h-2 w-2 rounded-full bg-{{$task->task_priority->color}}"></div>
+                <div class="badge space-x-2.5 px-1 text-{{$task->task_priority->color}}-700">
                     <span>{{$task->task_priority->value}}</span>
                 </div>
                 <div class="m-1.5 w-px self-stretch bg-slate-200 dark:bg-navy-500"></div>

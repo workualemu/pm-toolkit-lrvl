@@ -63,6 +63,24 @@
                                       bg-purple-100 bg-purple-200 bg-purple-300 bg-purple-400 bg-purple-500 bg-purple-600 bg-purple-700 bg-purple-800 bg-purple-900 
                                       bg-pink-100 bg-pink-200 bg-pink-300 bg-pink-400 bg-pink-500 bg-pink-600 bg-pink-700 bg-pink-800 bg-pink-900
                                       bg-yellow-100 bg-yellow-200 bg-yellow-300 bg-yellow-400 bg-yellow-500 bg-yellow-600 bg-yellow-700 bg-yellow-800 bg-yellow-900
+                                      text-blue-700  
+                                      text-gray-700 
+                                      text-green-700
+                                      text-red-700
+                                      text-indigo-700 
+                                      text-teal-700
+                                      text-purple-700 
+                                      text-pink-700 
+                                      text-yellow-700 
+                                      border-blue-900  
+                                      border-gray-900 
+                                      border-green-900
+                                      border-red-900
+                                      border-indigo-900 
+                                      border-teal-900
+                                      border-purple-900 
+                                      border-pink-900 
+                                      border-yellow-900 
                                       "> </div>
                                       <div x-show="isOpen" @click.away="isOpen = false" x-transition:enter="transition ease-out duration-100 transform"
                                         x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
