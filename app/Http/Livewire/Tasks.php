@@ -15,9 +15,10 @@ class Tasks extends Component
 
     public $showModal = false;
     public $project;
-    public $tasks;
+    public $tasks2;
     public $statuses;
     public $phases;
+    public $searchTerm;
     public $searchValue = [];
 
     protected $listeners = ['refreshTasks' => '$refresh',
@@ -80,26 +81,35 @@ class Tasks extends Component
     {
         $this->statuses = TaskStatus::all();
         $this->phases = Task::where(array_merge([['parent', 0]], $this->searchValue))->get();
+        // $this->searchValue = $this->searchValue . ' AND (' . "title LIKE '%". $this->searchTerm . "%')";
 
-        $this->tasks = Task::where($this->searchValue)->get();
-        $this->tasks = $this->tasks->map( function ($task) {
-            // $task->color = 'bg-slate-150';
-            $progress = $task->progress * 100;
-            if( $progress < 1){ 
-                $task->color = 'bg-slate-150';
-            } elseif($progress < 40){ 
-                $task->color = 'bg-red-500';
-            } elseif($progress < 90){ 
-                $task->color = 'bg-yellow-500';
-            } else{
-                $task->color = 'bg-green-500';
-            }  
-            return $task;
-        } );
+        if(!empty($this->searchTerm)) {
+            $tasks1 = Task::where(function($query)
+            {
+                $query->where('title', 'Like', "%".$this->searchTerm."%");
+            })->where($this->searchValue)->paginate(10);
+        } else {
+            $tasks1 = Task::where($this->searchValue)->paginate(5);
+        }
+        
+        // 
+        // $tasks1 = $tasks1->map( function ($task) {
+        //     $progress = $task->progress * 100;
+        //     if( $progress < 1){ 
+        //         $task->color = 'bg-slate-150';
+        //     } elseif($progress < 40){ 
+        //         $task->color = 'bg-red-500';
+        //     } elseif($progress < 90){ 
+        //         $task->color = 'bg-yellow-500';
+        //     } else{
+        //         $task->color = 'bg-green-500';
+        //     }  
+        //     return $task;
+        // } );
 
-        return view('livewire.tasks');
-        // return view('livewire.tags', [
-        //     'tags' => Tag::paginate(10),
-        // ]);
+        // return view('livewire.tasks');
+        return view('livewire.tasks', [
+            'tasks' =>  $tasks1,
+        ]);
     }
 }
