@@ -44,7 +44,7 @@
                                 <td
                                     class="whitespace-nowrap px-3 py-3 font-medium text-slate-700 dark:text-navy-100 lg:px-5"
                                 >
-                                    <div style="background-color: {{$tag->color}} ;" class="badge text-white">{{$tag->label}}</div>
+                                    <div class="bg-{{$tag->color}}-600 badge text-white">{{$tag->label}}</div>
                                 </td>
                                 <td
                                     class="whitespace-nowrap px-3 py-3 font-medium text-slate-700 dark:text-navy-100 lg:px-5"
