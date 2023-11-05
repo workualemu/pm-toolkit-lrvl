@@ -21,6 +21,15 @@ class Tasks extends Component
     public $searchTerm;
     public $searchValue = [];
 
+    public $fTitle = '';
+    public $fPhase;
+    public $fDateFrom;
+    public $fDateTo;
+    public $fStatus = [];
+    public $filterStatuses = [];
+
+
+
     protected $listeners = ['refreshTasks' => '$refresh',
                             'openNewTaskModal' => 'newTask',
                             'filterTasks' => 'filterTasks',
@@ -42,6 +51,20 @@ class Tasks extends Component
 
         $this->emit('openTaskModal', 0);
         $this->showModal = true;
+    }
+    public function applyFilter()
+    {
+        $this->filterStatuses = [];
+        foreach($this->statuses as $status){
+            if(isset($this->fStatus[$status->id]) && $this->fStatus[$status->id]){
+               array_push($this->filterStatuses, $status->id) ;
+            }
+            
+        }
+        $user =  Auth::user();
+        // dd($this->tempStatus);
+        $this->render();
+        // $this->searchValue = array_merge([['project_id', $user->project_id]], $condition);
     }
 
     public function filterTasks($condition)
@@ -77,35 +100,40 @@ class Tasks extends Component
         $this->searchValue = array_merge([['project_id', $user->project_id]], $this->searchValue);
     }
 
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
     public function render()
     {
         $this->statuses = TaskStatus::all();
         $this->phases = Task::where(array_merge([['parent', 0]], $this->searchValue))->get();
-        // $this->searchValue = $this->searchValue . ' AND (' . "title LIKE '%". $this->searchTerm . "%')";
 
-        if(!empty($this->searchTerm)) {
-            $tasks1 = Task::where(function($query)
-            {
-                $query->where('title', 'Like', "%".$this->searchTerm."%");
-            })->where($this->searchValue)->paginate(10);
-        } else {
-            $tasks1 = Task::where($this->searchValue)->paginate(5);
-        }
+        $qBuilder = Task::query();
+
+        $qBuilder = $qBuilder->when(count($this->filterStatuses) > 0, function ($query) {
+            $query->whereIn('task_status_id', $this->filterStatuses);
+        });
+
+        $qBuilder = $qBuilder->when(!empty($this->searchTerm), function ($query) {
+            $query->where('title', 'Like', "%".$this->searchTerm."%");
+        });
+
+        $tasks1 = $qBuilder->where($this->searchValue)->paginate(10);
         
-        // 
-        // $tasks1 = $tasks1->map( function ($task) {
-        //     $progress = $task->progress * 100;
-        //     if( $progress < 1){ 
-        //         $task->color = 'bg-slate-150';
-        //     } elseif($progress < 40){ 
-        //         $task->color = 'bg-red-500';
-        //     } elseif($progress < 90){ 
-        //         $task->color = 'bg-yellow-500';
-        //     } else{
-        //         $task->color = 'bg-green-500';
-        //     }  
-        //     return $task;
-        // } );
+        foreach( $tasks1 as $task) {
+            $task->progress = number_format($task->progress * 100, 2);
+            if( $task->progress < 1){ 
+                $task->color = 'bg-slate-150';
+            } elseif($task->progress < 40){ 
+                $task->color = 'bg-red-500';
+            } elseif($task->progress < 90){ 
+                $task->color = 'bg-yellow-500';
+            } else{
+                $task->color = 'bg-green-500';
+            }  
+        } ;
 
         // return view('livewire.tasks');
         return view('livewire.tasks', [
