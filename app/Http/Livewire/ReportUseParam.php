@@ -75,14 +75,6 @@ class ReportUseParam extends Component
         $this->results = $queryBuilder->get();
 
         $this->emit('showReportViewer', $this->report_id, $this->results, $queryBuilder);
-
-        // $columns = array_merge(
-        //     [[$report->title]],
-        //     [['Print print: '.Carbon::now()]],
-        //     [$columns->pluck('title')->toArray()]);
-
-        // return Excel::download(new ReportController($queryBuilder->get(),
-        //     'Tasks', null, $columns), 'export.xlsx');
     }
 
     public function renderUseParam($report_id)

@@ -29,7 +29,7 @@ class ReportController implements FromCollection, WithHeadings, WithProperties
 
     public function collection()
     {
-        return $this->data;
+        return collect($this->data);;
 
     }
 
