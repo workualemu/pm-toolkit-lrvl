@@ -45,6 +45,9 @@ Route::middleware('auth')->group(function () {
     Route::get('tags', [PagesController::class, 'getTags'])->name('tags');
     Route::get('task-status', [PagesController::class, 'getStatuses'])->name('task-status');
     Route::get('prioritys', [PagesController::class, 'getPrioritys'])->name('prioritys');
+
+    Route::get('users', [PagesController::class, 'getUsers'])->name('users');
+    Route::get('invitations', [PagesController::class, 'getInvitations'])->name('invitations');
     
     Route::get('setProfile', [PagesController::class, 'formsSetProfile'])->name('setProfile');
 

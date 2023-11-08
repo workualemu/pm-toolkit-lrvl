@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Config;
 
@@ -105,6 +106,24 @@ class PagesController extends Controller
         $page_title = "Priorities";
         $page_type = "PRIORITY";
         return view('pages/reports', compact('project', 'page_title', 'page_type' ));
+    }
+
+    public function getUsers()
+    {
+        $user =  Auth::user();
+
+        $page_title = "Users";
+        $page_type = "USER";
+        return view('pages/users', compact('page_title', 'page_type' ));
+    }
+
+    public function getInvitations()
+    {
+        $user =  Auth::user();
+
+        $page_title = "Invitations";
+        $page_type = "INVITATION";
+        return view('pages/users', compact('page_title', 'page_type' ));
     }
 
     public function getStatuses()

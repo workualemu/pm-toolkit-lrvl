@@ -116,13 +116,14 @@ class TaskRightPopup extends Component
         $this->taskStatuses = TaskStatus::all();
         $this->tags = Tag::all();
         $this->users = User::all();
-
+        
         $this->taskTags = TagTask::where(['task_id'=>$this->task->id])->get();
         $this->taskTags = $this->taskTags->pluck('tag_id');
-        // dd($this->taskTags);
 
         $this->showModal = true;
+        
         $this->emit('taskModalOpenForCommentModel', $this->task);
+
     }
 
     public function closeModal()
