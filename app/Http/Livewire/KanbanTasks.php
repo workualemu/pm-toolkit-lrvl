@@ -13,11 +13,11 @@ class KanbanTasks extends Component
     public $searchValue = [];
     public $tasks;
 
-    public function mount($project_id)
+    public function mount($project)
     {
         $user =  Auth::user();
-        if($project_id > 0) {
-            $user->project_id = $project_id;
+        if($project != null) {
+            $user->project_id = $project->id;
             $user->save();
         }
         $projectId = $user->project_id;

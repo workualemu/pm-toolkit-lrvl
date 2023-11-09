@@ -1,5 +1,14 @@
 <div>
     <main class="main-content kanban-app w-full">
+    @if($project == null)
+      <div class="text-center text-error">
+          <div class="mt-4">
+              <p class="text-error dark:text-navy-300">
+                  Please select a project
+              </p>
+          </div>
+      </div>
+    @else
         <p class="mt-1 text-xs text-info">
           <span>{{ $project->title }}</span>
         </p>
@@ -66,5 +75,6 @@
                 </div>
             </div>
         @endif
+    @endif
     </main>
 </div>

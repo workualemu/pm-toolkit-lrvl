@@ -35,7 +35,7 @@ class ReportsUse extends Component
 
     }
 
-    public function mount($project_id)
+    public function mount($project)
     {
         $user =  Auth::user();
         $this->project = Project::find($user->project_id);

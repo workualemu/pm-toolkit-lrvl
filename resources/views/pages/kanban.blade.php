@@ -2,7 +2,7 @@
 
     <livewire:task-right-popup />
     <!-- Main Content Wrapper -->
-    @livewire('kanban-tasks', ['project_id' => $project->id])
+    @livewire('kanban-tasks', ['project' => $project])
 
     <div x-show="showDrawer" x-data="{ showDrawer: false }"
         x-on:show-drawer.window="($event.detail.drawerId === 'kanban-setting-drawer') && (showDrawer = true)"

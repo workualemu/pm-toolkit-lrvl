@@ -2,6 +2,6 @@
     <!-- Main Content Wrapper -->
     
     <livewire:report-use-modal />
-    @livewire('reports-use', ['project_id' => $project->id])
+    @livewire('reports-use', ['project' => $project])
 
 </x-app-layout>

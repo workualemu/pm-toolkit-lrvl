@@ -61,7 +61,7 @@ class ReportsPage extends Component
         //     ->download('report_test.xlsx');
     }
 
-    public function mount($project_id, $title, $type)
+    public function mount($project, $title, $type)
     {
         $user =  Auth::user();
         $this->project = Project::find($user->project_id);

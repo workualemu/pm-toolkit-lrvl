@@ -25,10 +25,6 @@
                         Task
                     </h3>
                     <div class="-mr-1.5 flex items-center space-x-2.5">
-                        <input x-tooltip.primary="'Mark as Completed'"
-                            x-effect="showModal && setTimeout(() => showModal && $el.__x_tippy.show(), 500)"
-                            class="form-checkbox is-basic h-5 w-5 rounded-full border-slate-400/70 checked:border-primary checked:bg-primary hover:border-primary focus:border-primary dark:border-navy-400 dark:checked:border-accent dark:checked:bg-accent dark:hover:border-accent dark:focus:border-accent"
-                            type="checkbox" />
                         <div class="flex">
                             <button x-data="{ isImportant: false }" @click.stop="isImportant =! isImportant"
                                 class="btn h-7 w-7 rounded-full p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
@@ -54,7 +50,15 @@
                         </div>
                     </div>
                 </div>
-
+                @if($project == null)
+                <div class="text-center text-error">
+                    <div class="mt-4">
+                        <p class="text-error dark:text-navy-300">
+                            Please select a project
+                        </p>
+                    </div>
+                </div>
+                @else
                 <div class="w-full h-full outline-none overflow-x-hidden overflow-y-auto mt-3 grid grid-cols-12 gap-4 sm:gap-5 lg:gap-6">
                     <div class="col-span-12 sm:col-span-6 lg:col-span-8">
                         <div class="is-scrollbar-hidden flex grow flex-col space-y-4 overflow-y-auto p-4">
@@ -139,11 +143,11 @@
                                 
                             </div>
 
-                            <div>
-                                <div>
+                            @if($task->id > 0)
+                                <label class="block">
                                     @livewire('comments', ['model' => $task])
-                                </div>
-                            </div>
+                                </label>
+                            @endif
                         </div>
                     </div>
 
@@ -186,8 +190,10 @@
                         </div>
                     </div>
                 </div>
+                @endif
                 <div
                     class="flex items-center justify-between border-t border-slate-150 py-3 px-4 dark:border-navy-600">
+                    @if($project != null)
                     <div class="flex space-x-1">
                         <button
                             class="btn h-8 w-8 rounded-full p-0 text-error hover:bg-error/20 focus:bg-error/20 active:bg-error/25">
@@ -202,6 +208,7 @@
                         class="btn min-w-[7rem] bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
                         Save
                     </button>
+                    @endif
                     <button @click="showModal=false"
                         class="btn min-w-[7rem] bg-error font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
                         Close

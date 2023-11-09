@@ -9,6 +9,7 @@ use App\Models\TaskStatus;
 use App\Models\Tag;
 use App\Models\TagTask;
 use App\Models\User;
+use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithFileUploads;
 use App\Models\File;
@@ -18,6 +19,7 @@ class TaskRightPopup extends Component
 {
     use WithFileUploads;
 
+    public $project;
     public $showModal = false;
     public Task $task;
     public $taskPriorities = [];
@@ -121,8 +123,8 @@ class TaskRightPopup extends Component
         $this->taskTags = $this->taskTags->pluck('tag_id');
 
         $this->showModal = true;
-        
         $this->emit('taskModalOpenForCommentModel', $this->task);
+        
 
     }
 
@@ -154,6 +156,7 @@ class TaskRightPopup extends Component
     {
         $this->modalTask = new Task();
         $this->task = new Task();
+        $this->project = Project::find(Auth::user()->project_id);
     }
 
     public function render()
