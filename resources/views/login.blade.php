@@ -92,23 +92,6 @@
                             href="{{ route('registerView') }}">Create account</a>
                     </p>
                 </div>
-                <div class="my-7 flex items-center space-x-3">
-                    <div class="h-px flex-1 bg-slate-200 dark:bg-navy-500"></div>
-                    <p>OR</p>
-                    <div class="h-px flex-1 bg-slate-200 dark:bg-navy-500"></div>
-                </div>
-                <div class="flex space-x-4">
-                    <button
-                        class="btn w-full space-x-3 border border-slate-300 font-medium text-slate-800 hover:bg-slate-150 focus:bg-slate-150 active:bg-slate-150/80 dark:border-navy-450 dark:text-navy-50 dark:hover:bg-navy-500 dark:focus:bg-navy-500 dark:active:bg-navy-500/90">
-                        <img class="h-5.5 w-5.5" src="{{ asset('images/100x100.png')}}"/>
-                        <span>Google</span>
-                    </button>
-                    <button
-                        class="btn w-full space-x-3 border border-slate-300 font-medium text-slate-800 hover:bg-slate-150 focus:bg-slate-150 active:bg-slate-150/80 dark:border-navy-450 dark:text-navy-50 dark:hover:bg-navy-500 dark:focus:bg-navy-500 dark:active:bg-navy-500/90">
-                        <img class="h-5.5 w-5.5" src="{{ asset('images/100x100.png')}}"/>
-                        <span>Github</span>
-                    </button>
-                </div>
             </form>
         </div>
         <div class="my-5 flex justify-center text-xs text-slate-400 dark:text-navy-300">
