@@ -54,10 +54,8 @@
   <!-- Right Sidebar -->
   <x-app-partials.right-sidebar></x-app-partials.right-sidebar>
 
-
   <!-- Main Content Wrapper -->
-  @livewire('tasks', ['project_id' => $project->id])
-
+  @livewire('tasks', ['project' => $project])
   <div class="fixed right-3 bottom-3 rounded-full bg-white dark:bg-navy-700">
       <button
           class="btn h-14 w-14 rounded-full bg-info p-0 font-medium text-white hover:bg-info-focus focus:bg-info-focus active:bg-info-focus/90 sm:hidden">

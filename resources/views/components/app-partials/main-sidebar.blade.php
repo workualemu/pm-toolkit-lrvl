@@ -299,7 +299,7 @@
                                     {{$user->name}}
                                 </a>
                                 <p class="text-xs text-slate-400 dark:text-navy-300">
-                                    System administrator
+                                    {{$user->roles->first()->name}}
                                 </p>
                             </div>
                         </div>
