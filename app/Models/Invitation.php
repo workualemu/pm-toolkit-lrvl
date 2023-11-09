@@ -21,6 +21,8 @@ class Invitation extends Model
         'expires_at' => 'datetime',
     ];
 
+    protected $fillable = ['email', 'link', 'expires_at', 'status', 'role'];
+
     public function getIsExpiredAttribute()
     {
         return $this->expires_at->isPast();

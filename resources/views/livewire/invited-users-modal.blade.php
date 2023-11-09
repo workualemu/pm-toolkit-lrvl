@@ -31,6 +31,17 @@
                                         placeholder="Enter email address" type="email" />
                                 </label>
                                 <label class="block">
+                                    <span>Role:</span>
+                                    <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" placeholder="Select user"
+                                        wire:model.defer="invitation.role" 
+                                        autocomplete="off">
+                                        <option value="">Select role</option>
+                                        @foreach($roles as $key=>$role)
+                                        <option>{{$role->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </label>
+                                <label class="block">
                                     <div>
                                         <script>
                                             function copyToClipboard(textToCopy) {

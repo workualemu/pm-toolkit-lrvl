@@ -15,7 +15,7 @@ class RoleSeeder extends Seeder
     public function run()
     {
         $roles = [
-            [ "name"=> "Project Owner"],
+            [ "name"=> "Project Manager"],
             [ "name"=> "Project Officer"]
         ];
         foreach ($roles as $role) {

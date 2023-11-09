@@ -7,16 +7,18 @@ use App\Models\Invitation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Mail;
+use Spatie\Permission\Models\Role;
 
 class InvitedUsersModal extends Component
 {
     public $invitation;
     public $showModal = false;
-    
-    public $currentColor;
+    public $roles =[];
+    // public $role;
 
     protected $rules = [
-        'invitation.email' => 'required|min:2'
+        'invitation.email' => 'required|min:2',
+        'invitation.role' => '',
     ];
 
     protected $listeners = ['openInvitationModal' => 'openInvitationModal'];
@@ -28,6 +30,7 @@ class InvitedUsersModal extends Component
             $this->invitation = Invitation::find($invitation_id);
         }
         
+        $this->roles = Role::where('name', '!=', 'Super Admin')->get();
         $this->showModal = true;
     }
 
@@ -46,6 +49,7 @@ class InvitedUsersModal extends Component
                 'email' => $this->invitation->email,
                 'link' => URL::temporarySignedRoute('register', $expiresAt, ['email' => $this->invitation->email]),
                 'expires_at' => $expiresAt,
+                'role' => $this->invitation->role,
             ]);
 
             // $this->loadData();
@@ -71,7 +75,8 @@ class InvitedUsersModal extends Component
             $expiresAt = now()->addHours(24);
             $this->invitation->update([
                 'link' => URL::temporarySignedRoute('register', $expiresAt, ['email' => $this->invitation->email]),
-                'expires_at' => $expiresAt
+                'expires_at' => $expiresAt,
+                'role' => $this->invitation->role,
             ]);
 
             // $this->invitation->link = URL::temporarySignedRoute('register', $expiresAt, ['email' => $this->invitation->email]);

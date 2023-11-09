@@ -29,11 +29,11 @@
                 </div>
             </div>
 
-            @if($data['expires'])
+            @if((isSet($data_validity) && $data_validity == 'INVALID') || $data['expires'] )
                 <div class="text-center text-error">
                      <div class="mt-4">
                         <p class="text-error dark:text-navy-300">
-                            Your invitation has expired. Please contact the System Administrator
+                            Your invitation has expired or your email is invalid. Please contact the System Administrator
                         </p>
                     </div>
                 </div>

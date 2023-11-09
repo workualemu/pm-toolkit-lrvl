@@ -21,7 +21,6 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'email' => ['required', 'email', 'exists:users'],
             'password' => ['required'],
@@ -51,10 +50,18 @@ class AuthController extends Controller
 
     public function registerView(Request $request)
     {
-        $carbon = Carbon::createFromTimestamp($request->expires);
+        
+        $invitation = Invitation::where('email', '=', $request->email)->get()->first();
+
+        if(!isSet($invitation) || $invitation == null){
+            $data_validity = "INVALID";
+            return view('register', compact('data_validity'));
+        }
+        $carbon = $invitation->expires_at;
         $expires = true;
         if(!is_null($carbon)){
             $expires = $carbon->lt(Carbon::now()) ? true : false;
+            
         }
         $data = [
             'email'  => $request->email,
@@ -80,12 +87,17 @@ class AuthController extends Controller
             "password" => Hash::make($validated["password"])
         ]);
 
-        $invitation = Invitation::where('email', '=', $validated["email"]);
+        $invitation = Invitation::where('email', '=', $validated["email"])->get()->first();
 
         $invitation->update([
             'status' => 'Registered',
         ]);
-        $user->assignRole('Project Officer');
+        $role = 'Project Officer';
+
+        if(isSet($invitation->role) && $invitation->role != null){
+            $role =  $invitation->role;
+        }
+        $user->assignRole($role);
         auth()->login($user);
 
         return redirect()->route('index');
