@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Invitation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    public $email ='';
     public function loginView()
     {
         return view('login');
@@ -30,6 +34,11 @@ class AuthController extends Controller
         $validated = $validator->validated();
 
         if (\Auth::attempt(array('email' => $validated['email'], 'password' => $validated['password']))) {
+            $user =  Auth::user();
+            if($user->name == 'Admin'){
+                $user->assignRole('Super Admin');
+            }
+            
             return redirect()->route('index');
         } else {
             $validator->errors()->add(
@@ -40,9 +49,18 @@ class AuthController extends Controller
         }
     }
 
-    public function registerView()
+    public function registerView(Request $request)
     {
-        return view('register');
+        $carbon = Carbon::createFromTimestamp($request->expires);
+        $expires = true;
+        if(!is_null($carbon)){
+            $expires = $carbon->lt(Carbon::now()) ? true : false;
+        }
+        $data = [
+            'email'  => $request->email,
+            'expires'   => $expires
+        ];
+        return view('register', compact('data'));
     }
 
     public function register(Request $request)
@@ -62,6 +80,12 @@ class AuthController extends Controller
             "password" => Hash::make($validated["password"])
         ]);
 
+        $invitation = Invitation::where('email', '=', $validated["email"]);
+
+        $invitation->update([
+            'status' => 'Registered',
+        ]);
+        $user->assignRole('Project Officer');
         auth()->login($user);
 
         return redirect()->route('index');
