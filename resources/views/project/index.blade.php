@@ -1,6 +1,7 @@
 <x-app-layout title="Project Board" is-header-blur="true">
     <!-- Main Content Wrapper -->
     <main class="main-content w-full px-[var(--margin-x)] pb-8">
+        <livewire:project-modal />
         <div
             class="mt-6 flex flex-col items-center justify-between space-y-2 text-center sm:flex-row sm:space-y-0 sm:text-left">
             <div>
@@ -153,28 +154,66 @@
         @endif
         <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
             @forelse($records as $key=>$record)
-            <a href="{{ route('tasks', ['project_id' => $record->id]) }}">
+            
                 <div class="card shadow-none">
                     <div class="flex flex-1 flex-col justify-between rounded-lg bg-{{ $colors[$key] }}/15 p-4 dark:bg-transparent sm:p-5">
                         <div>
                             <div class="flex items-start justify-between">
-                                <div class="h-12 w-12 rounded-lg object-cover object-center">
-                                </div>
                                 <p class="text-xs+">
                                     @if($record->start_date)
                                         {{date('d-M-Y', strtotime($record->start_date))}}
                                     @endif
                                 </p>
+                                
+                                <div x-data="usePopper({ placement: 'bottom-end', offset: 4 })" @click.outside="isShowPopper && (isShowPopper = false)"
+                                    class="inline-flex">
+                                    <button x-ref="popperRef" @click="isShowPopper = !isShowPopper"
+                                        class="btn -mr-1.5 h-8 w-8 rounded-full p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
+                                        </svg>
+                                    </button>
+
+                                    <div x-ref="popperRoot" class="popper-root" :class="isShowPopper && 'show'">
+                                        <div
+                                            class="popper-box rounded-md border border-slate-150 bg-white py-1.5 font-inter dark:border-navy-500 dark:bg-navy-700">
+                                            <ul>
+                                                <li>
+                                                    <a href="#"
+                                                        class="flex h-8 items-center px-3 pr-8 font-medium tracking-wide outline-none transition-all hover:bg-slate-100 hover:text-slate-800 focus:bg-slate-100 focus:text-slate-800 dark:hover:bg-navy-600 dark:hover:text-navy-100 dark:focus:bg-navy-600 dark:focus:text-navy-100">
+                                                        Edit
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#"
+                                                        class="flex h-8 items-center px-3 pr-8 font-medium tracking-wide outline-none transition-all hover:bg-slate-100 hover:text-slate-800 focus:bg-slate-100 focus:text-slate-800 dark:hover:bg-navy-600 dark:hover:text-navy-100 dark:focus:bg-navy-600 dark:focus:text-navy-100">
+                                                        Delete
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <div class="my-1 h-px bg-slate-150 dark:bg-navy-500"></div>
+                                            <ul>
+                                                <li>
+                                                    <a href="#"
+                                                        class="flex h-8 items-center px-3 pr-8 font-medium tracking-wide outline-none transition-all hover:bg-slate-100 hover:text-slate-800 focus:bg-slate-100 focus:text-slate-800 dark:hover:bg-navy-600 dark:hover:text-navy-100 dark:focus:bg-navy-600 dark:focus:text-navy-100">
+                                                        Manage project users</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                        </div>
+                        <a href="{{ route('tasks', ['project_id' => $record->id]) }}">
                             <h2 class="mt-3 font-medium text-slate-700 line-clamp-2 dark:text-navy-100">
                                 {{$record->title}} 
                             </h2>
                             <p class="text-xs+">{{$record->description}}</p>
-                        </div>
-                        
+                        </a>
                     </div>
                 </div>
-            </a>
             @empty
                 <div>
                     <div colspan="6" class="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400">

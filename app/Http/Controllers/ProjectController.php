@@ -15,7 +15,7 @@ class ProjectController extends Controller
         $records = Project::orderBy('title')->get();
         $colors = ['info', 'primary', 'secondary', 'success', 'error', 'warning'];
 
-        return view('project.index', compact('records', 'colors'));
+        return view('pages.projects-frame');
     }
 
     public function create()

@@ -11,6 +11,14 @@ class PagesController extends Controller
 {
     public $showModal = false;
 
+    public function index()
+    {
+        $records = Project::orderBy('title')->get();
+        $colors = ['info', 'primary', 'secondary', 'success', 'error', 'warning'];
+
+        return view('pages.projects-frame');
+    }
+    
     public function newTask()
     {
         $user =  Auth::user();

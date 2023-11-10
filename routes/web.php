@@ -29,7 +29,7 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
-    Route::any('/', [ProjectController::class, 'index'])->name('index');
+    Route::any('/', [PagesController::class, 'index'])->name('index');
     Route::resource('project', ProjectController::class)->only(['index', 'create', 'update', 'store', 'edit', 'destroy']);
 
     Route::get('tasks/{project_id}', [PagesController::class, 'getTasks'])->name('tasks');
