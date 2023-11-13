@@ -17,7 +17,7 @@ class ProjectModal extends Component
         'project.description'=>'',
         'project.start_date'=>'',
         'project.end_date'=>'',
-        'reprojectport.status' => 'required'
+        'project.status' => 'required'
     ];
 
     protected $listeners = ['openProjectModal' => 'openProjectModal'];

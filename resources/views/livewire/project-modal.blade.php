@@ -70,10 +70,13 @@
                     <div class="mt-4 space-y-4">
                         <label class="block">
                             <span>Status:</span>
-                            <input  wire:model.lazy='project.status' 
-                                type="text"  
-                                class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                                placeholder="Project status"/>
+                            <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" placeholder="Select project status"
+                                wire:model.lazy="project.status" 
+                                autocomplete="off">
+                                <option value="ACTIVE">Active</option>
+                                <option value="SUSPENDED">Suspended</option>
+                                <option value="CLOSED">Closed</option>
+                            </select>
                         </label>
                     </div>
                 </div>

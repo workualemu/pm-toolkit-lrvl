@@ -145,6 +145,13 @@ class PagesController extends Controller
         return view('pages/reports', compact('project', 'page_title', 'page_type' ));
     }
 
+    public function projectUsers($project_id)
+    {
+        $project = Project::find($project_id);
+        return view('pages/project-users-frame', compact('project'));
+    }
+
+
     public function formsSetProfile()
     {
         $user =  Auth::user();

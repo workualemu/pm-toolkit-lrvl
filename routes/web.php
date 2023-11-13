@@ -48,6 +48,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('users', [PagesController::class, 'getUsers'])->name('users');
     Route::get('invitations', [PagesController::class, 'getInvitations'])->name('invitations');
+    Route::get('project-users/{project_id}', [PagesController::class, 'projectUsers'])->name('project-users');
+   
+    // Route::post('project-users', [PagesController::class, 'projectUsers'])->name('project-users');
     
     Route::get('setProfile', [PagesController::class, 'formsSetProfile'])->name('setProfile');
 

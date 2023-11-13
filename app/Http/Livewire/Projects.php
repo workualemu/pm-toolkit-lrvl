@@ -29,15 +29,20 @@ class Projects extends Component
         $this->emit('openProjectModal', $project);
     }
 
-    public function manageUsers(Project $project)
+    public function manageProjectUsers(Project $project)
     {
-        dd('manage users');
+        return redirect()->route('project-users', ['project_id'=>$project->id]);
+
+        // $this->redirect('project-users', ['project-id'=>$project->id]); 
+        // $this->emit('openProjectUsersPage', $project);
     }
 
     public function deleteProject(Project $project)
     {
         dd('delete');
     }
+
+
     // public function applyFilter()
     // {
     //     $this->filterStatuses = [];
@@ -88,7 +93,7 @@ class Projects extends Component
 
     public function render()
     {
-        $this->projects = Project::where('status','=','Active')->get();
+        $this->projects = Project::all()->sortBy('status');
         // $this->phases = Task::where(array_merge([['parent', 0]], $this->searchValue))->get();
 
         // $qBuilder = Task::query();
