@@ -10,6 +10,7 @@ class ProjectModal extends Component
 {
     public Project $project;
     public $showProjectModal = false;
+    public $readOnly = '';
 
     protected $rules = [
         'project.title' => 'required|min:2',
@@ -65,6 +66,10 @@ class ProjectModal extends Component
     public function mount()
     {
         $this->project = new Project();
+        $user =  Auth::user();
+        if(!$user->hasRole('Project Manager')){
+            $this->readOnly = 'readonly';
+        }
     }
 
     public function render()

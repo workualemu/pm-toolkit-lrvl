@@ -4,8 +4,10 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\Project;
+use App\Models\UserProject;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class Projects extends Component
 {
@@ -32,55 +34,16 @@ class Projects extends Component
     public function manageProjectUsers(Project $project)
     {
         return redirect()->route('project-users', ['project_id'=>$project->id]);
-
-        // $this->redirect('project-users', ['project-id'=>$project->id]); 
-        // $this->emit('openProjectUsersPage', $project);
     }
 
     public function deleteProject(Project $project)
     {
-        dd('delete');
+        $project->delete();
     }
-
-
-    // public function applyFilter()
-    // {
-    //     $this->filterStatuses = [];
-    //     foreach($this->statuses as $status){
-    //         if(isset($this->fStatus[$status->id]) && $this->fStatus[$status->id]){
-    //            array_push($this->filterStatuses, $status->id) ;
-    //         }
-            
-    //     }
-    //     $user =  Auth::user();
-    //     // dd($this->tempStatus);
-    //     $this->render();
-    //     // $this->searchValue = array_merge([['project_id', $user->project_id]], $condition);
-    // }
-
-    // public function filterTasks($condition)
-    // {
-    //     $user =  Auth::user();
-    //     $this->searchValue = array_merge([['project_id', $user->project_id]], $condition);
-    // }
-
-    // public function filterMyAssignedTasks()
-    // {
-    //     $user =  Auth::user();
-    //     $this->searchValue = [['assigned_to', $user->id]];
-
-    //     $this->searchValue = array_merge([['project_id', $user->project_id]], $this->searchValue);
-    // }
-
-    // public function allTasks()
-    // {
-    //     $user =  Auth::user();
-    //     $this->searchValue = [['project_id', $user->project_id]];
-    // }
 
     public function mount()
     {
-        // $user =  Auth::user();
+        
         // if($project != null) {
         //     $user->project_id = $project->id;
         //     $user->save();
@@ -93,7 +56,15 @@ class Projects extends Component
 
     public function render()
     {
-        $this->projects = Project::all()->sortBy('status');
+        if(Auth::user()->hasRole('Super Admin') ){
+            $this->projects = Project::all()->sortBy('status');
+        } else{
+            $projects = UserProject::select('project_id')
+                ->where([['user_id', '=', Auth::user()->id], ['status', '=', 'GRANTED']])->get();
+            $this->projects = Project::whereIn('id', $projects)->get();
+        }
+        
+        
         // $this->phases = Task::where(array_merge([['parent', 0]], $this->searchValue))->get();
 
         // $qBuilder = Task::query();

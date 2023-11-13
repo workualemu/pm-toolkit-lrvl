@@ -32,7 +32,7 @@
                 <div class="mt-4 space-y-4">
                     <label class="block">
                         <span>Title:</span>
-                        <input type="text" wire:model.lazy='project.title'
+                        <input {{$readOnly}} type="text" wire:model.lazy='project.title'
                             class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                             placeholder="Enter title"/>
                     </label>
@@ -41,7 +41,7 @@
                 <div class="mt-4 space-y-4">
                     <label class="block">
                         <span>Description:</span>
-                        <textarea wire:model.lazy='project.description' 
+                        <textarea {{$readOnly}} wire:model.lazy='project.description' 
                             rows="4" placeholder="Enter description"
                             class="form-textarea mt-1.5 w-full resize-none rounded-lg border border-slate-300 bg-transparent p-2.5 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"></textarea>
                     </label>
@@ -51,14 +51,14 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <label class="block">
                             <span>Start date:</span>
-                            <input  wire:model.lazy='project.start_date' 
+                            <input {{$readOnly}}  wire:model.lazy='project.start_date' 
                                 type="date"
                                 class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                 placeholder="Select start date"/>
                         </label>
                         <label class="block">
                             <span>End date:</span>
-                            <input  wire:model.lazy='project.end_date' 
+                            <input {{$readOnly}}  wire:model.lazy='project.end_date' 
                                 type="date" 
                                 class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                 placeholder="Select end date"/>
@@ -70,7 +70,7 @@
                     <div class="mt-4 space-y-4">
                         <label class="block">
                             <span>Status:</span>
-                            <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" placeholder="Select project status"
+                            <select {{$readOnly}} x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" placeholder="Select project status"
                                 wire:model.lazy="project.status" 
                                 autocomplete="off">
                                 <option value="ACTIVE">Active</option>
@@ -84,12 +84,20 @@
                     <div class="space-x-2 text-right">
                         <button @click="showModal = false"
                             class="btn min-w-[7rem] rounded-full border border-slate-300 font-medium text-slate-800 hover:bg-slate-150 focus:bg-slate-150 active:bg-slate-150/80 dark:border-navy-450 dark:text-navy-50 dark:hover:bg-navy-500 dark:focus:bg-navy-500 dark:active:bg-navy-500/90">
-                            <a href="{{ route('index') }}">{{ __('Cancel') }}</a>
+                            <a href="{{ route('index') }}">
+                                @role('Project Manager')
+                                {{ __('Cancel') }}
+                                @else
+                                {{ __('Close') }}
+                                @endrole
+                            </a>
                         </button>
+                        @role('Project Manager')
                         <button  wire:click="store()"
                             class="btn min-w-[7rem] rounded-full bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
                             {{ __('Save') }}
                         </button>
+                        @endrole
                     </div>
                 </div>
             </div>
