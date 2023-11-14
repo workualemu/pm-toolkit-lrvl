@@ -32,55 +32,62 @@
             </svg>
         </button>
     </div>
-
-
     <div  x-ref="panel"
-            x-show="open"
-            x-transition.origin.top.right
-            x-on:click.outside="close($refs.button)"
-            :id="$id('dropdown-button')"
-            style="display: none;"
-            class="origin-top-right absolute {{$panelPosition}}-0 mt-2 w-56 rounded-md " 
-            role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-            <div
-                class="rounded-md border border-slate-150 bg-white py-1.5 font-inter dark:border-navy-500 dark:bg-navy-700">
-                <ul>
-                    <li>
-                        <a wire:click="editProject({{$record}})"
-                            x-on:click="close($refs.button)"
-                            class="flex h-8 items-center px-3 pr-8 font-medium tracking-wide outline-none transition-all hover:bg-slate-100 hover:text-slate-800 focus:bg-slate-100 focus:text-slate-800 dark:hover:bg-navy-600 dark:hover:text-navy-100 dark:focus:bg-navy-600 dark:focus:text-navy-100">
-                            @role('Project Manager' )
-                                Edit project
-                            @else
-                                View project details
-                            @endrole
-                        </a>
-                    </li>
-                    @role('Super Admin') 
-                    <li>
-                        <a  wire:confirm="Are you sure you want to delete this project?"
-                            wire:click="deleteProject({{$record}})"
-                            x-on:click="close($refs.button)"
-                            class="flex h-8 items-center px-3 pr-8 font-medium tracking-wide outline-none transition-all hover:bg-slate-100 hover:text-slate-800 focus:bg-slate-100 focus:text-slate-800 dark:hover:bg-navy-600 dark:hover:text-navy-100 dark:focus:bg-navy-600 dark:focus:text-navy-100">
-                            Delete project
-                        </a>
-                    </li>
-                    @endrole
-                </ul>
-                @role('Project Manager') 
-                <div class="my-1 h-px bg-slate-150 dark:bg-navy-500"></div>
-                <ul>
-                    <li>
-                        <a wire:click="manageProjectUsers({{$record}})"
-                            x-on:click="close($refs.button)"
-                            class="flex h-8 items-center px-3 pr-8 font-medium tracking-wide outline-none transition-all hover:bg-slate-100 hover:text-slate-800 focus:bg-slate-100 focus:text-slate-800 dark:hover:bg-navy-600 dark:hover:text-navy-100 dark:focus:bg-navy-600 dark:focus:text-navy-100">
-                            Manage project users</a>
-                    </li>
-                </ul>
+        x-show="open"
+        x-transition.origin.top.right
+        x-on:click.outside="close($refs.button)"
+        :id="$id('dropdown-button')"
+        style="display: none;"
+        class="origin-top-right absolute {{$panelPosition}}-0 mt-2 w-56 rounded-md " 
+        role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+        <div
+            class="rounded-md border border-slate-150 bg-white py-1.5 font-inter dark:border-navy-500 dark:bg-navy-700">
+            <ul>
+                <li>
+                    <a wire:click="editProject({{$record}})"
+                        x-on:click="close($refs.button)"
+                        class="flex h-8 items-center px-3 pr-8 font-medium tracking-wide outline-none transition-all hover:bg-slate-100 hover:text-slate-800 focus:bg-slate-100 focus:text-slate-800 dark:hover:bg-navy-600 dark:hover:text-navy-100 dark:focus:bg-navy-600 dark:focus:text-navy-100">
+                        @role('Project Manager' )
+                            Edit project
+                        @else
+                            View project details
+                        @endrole
+                    </a>
+                </li>
+                @role('Super Admin') 
+                <li>
+                    <a  wire:confirm="Are you sure you want to delete this project?"
+                        wire:click="deleteProject({{$record}})"
+                        x-on:click="close($refs.button)"
+                        class="flex h-8 items-center px-3 pr-8 font-medium tracking-wide outline-none transition-all hover:bg-slate-100 hover:text-slate-800 focus:bg-slate-100 focus:text-slate-800 dark:hover:bg-navy-600 dark:hover:text-navy-100 dark:focus:bg-navy-600 dark:focus:text-navy-100">
+                        Delete project
+                    </a>
+                </li>
                 @endrole
-            </div>
-
-            
+            </ul>
+            @role('Project Manager') 
+            <div class="my-1 h-px bg-slate-150 dark:bg-navy-500"></div>
+            <ul>
+                <li>
+                    <a wire:click="manageProjectUsers({{$record}})"
+                        x-on:click="close($refs.button)"
+                        class="flex h-8 items-center px-3 pr-8 font-medium tracking-wide outline-none transition-all hover:bg-slate-100 hover:text-slate-800 focus:bg-slate-100 focus:text-slate-800 dark:hover:bg-navy-600 dark:hover:text-navy-100 dark:focus:bg-navy-600 dark:focus:text-navy-100">
+                        Manage project users</a>
+                </li>
+            </ul>
+            @endrole
+            @role('Super Admin') 
+            <div class="my-1 h-px bg-slate-150 dark:bg-navy-500"></div>
+            <ul>
+                <li>
+                    <a wire:click="manageProjectUsers({{$record}})"
+                        x-on:click="close($refs.button)"
+                        class="flex h-8 items-center px-3 pr-8 font-medium tracking-wide outline-none transition-all hover:bg-slate-100 hover:text-slate-800 focus:bg-slate-100 focus:text-slate-800 dark:hover:bg-navy-600 dark:hover:text-navy-100 dark:focus:bg-navy-600 dark:focus:text-navy-100">
+                        Manage project users</a>
+                </li>
+            </ul>
+            @endrole
+        </div>
     </div>
     </div>
 </div>

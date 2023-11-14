@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
 
 class AppServiceProvider extends ServiceProvider
 {
+    
     /**
      * Register any application services.
      *
@@ -28,5 +30,12 @@ class AppServiceProvider extends ServiceProvider
             $view->with('user', Auth::user());
             $view->with('projectId', 0);
         });
+
+        Blade::if('roles', function (array $roles) { 
+            return Auth::check() 
+                && in_array(Auth::user()->role, $roles, true); 
+        });
     }
+
+    
 }
