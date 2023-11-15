@@ -14,6 +14,9 @@ class Gantt extends Component
     public $searchValue = [];
     public $data ='';
     public $tasks;
+    public $dragEnded = false;
+    public $moveToIndex = -1;
+    public $moveToParent = -1;
 
     protected $listeners = ['gantt-task-added' => 'onTaskAdd',
                             'gantt-task-dragged' => 'onTaskDragged',
@@ -21,7 +24,8 @@ class Gantt extends Component
                             'gantt-task-updated' => 'onTaskUpdated',
                             'gantt-link-added' => 'onLinkAdd',
                             'gantt-link-deleted' => 'onLinkDeleted',
-                            'gantt-task-vertical_moved' => 'onTaskMove'
+                            'gantt-task-vertical_moved' => 'onAfterTaskMove',
+                            'gantt-before-row-drag-end' => 'onBeforeRowDraggedEnd'
                             ];
 
     public function onTaskAdd($task)
@@ -116,13 +120,47 @@ class Gantt extends Component
         $res=Link::where('id', $id)->delete();
     }
 
-    public function onTaskMove($id, $parent, $tindex)
+    public function onAfterTaskMove($id, $parent, $tindex)
     {
-        $task = Task::find($id);
-        $task->parent = $parent;
-        $task->save();
+        // these variables are used to avoid repetitive calls during mouse drag.
+        // refer onBeforeRowDraggedEnd() method
+        $this->moveToIndex = $tindex;  
+        $this->moveToParent = $parent;
     }
 
+    public function onBeforeRowDraggedEnd($id, $parent, $tindex)
+    {
+    
+        $tasks = Task::filterByParent($this->moveToParent);
+
+        $rank = 0;
+        $task = Task::find($id);
+        $task->parent = $this->moveToParent;
+        $task->list_order = $this->moveToIndex;
+        $task->save();
+
+        foreach($tasks as $ts){
+            if($rank == $this->moveToIndex){
+                $rank += 1;
+                $ts->list_order = $rank;
+                $ts->save();
+                $rank += 1;
+                continue;
+            }
+            if($ts->id == $task->id) {
+                continue;
+            } 
+            
+            $ts->list_order = $rank;
+            $ts->save();
+            $rank += 1;
+        }
+
+        $this->moveToIndex = -1;  
+        $this->moveToParent = -1;
+    }
+
+    
     public function mount($project)
     {
         $user =  Auth::user();
@@ -138,10 +176,14 @@ class Gantt extends Component
 
     public function render()
     {
-        $tasks = Task::where($this->searchValue)->get();
+        $tasks = Task::where($this->searchValue)->orderBy('list_order', 'asc')->get();
         $links = new Link();
 
-        $this->tasks = Task::where($this->searchValue)->get();
+        /**
+         * @TBD to be refactored for searching. Searching to be implemented from the API
+         */
+
+        $this->tasks = Task::where($this->searchValue)->get()->sortBy('list_sort');
 
         $ldata = response()->json([
             "tasks" => $tasks->all(),

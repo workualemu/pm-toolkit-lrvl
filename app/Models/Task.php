@@ -16,7 +16,7 @@ class Task extends Model
     use HasFactory, Commentable;
 
     protected $fillable = ['project_id', 'title', 'start_date', 'planned_end_date',
-        'description', 'status', 'user_id', 'text', 'type', 'parent', 'level'];
+        'description', 'status', 'user_id', 'text', 'type', 'parent', 'level', 'list_order'];
 
     protected $casts = ['start_date'=>'datetime:d-m-Y'];
 
@@ -77,6 +77,11 @@ class Task extends Model
     public static function scopeFilterByStatus($query, $status_id)
     {
         return $query->where('task_status_id', '=', $status_id)->orderBy('kanban_list_rank', 'asc');
+    }
+
+    public static function scopeFilterByParent($query, $parent_id)
+    {
+        return $query->where('parent', '=', $parent_id)->orderBy('list_order', 'asc')->get();
     }
 
     public static function getBeyondRank($status_id, $rank)

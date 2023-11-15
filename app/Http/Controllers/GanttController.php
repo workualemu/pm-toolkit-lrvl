@@ -11,12 +11,13 @@ class GanttController extends Controller
 {
     public function get()
     {
-
-        $tasks = new Task();
+        $tasks = Task::where('id', '!=', null)->orderBy('list_order')->get();
+        // $tasks = Task::where($this->searchValue)->orderBy('list_order', 'asc')->get();
+        
         $links = new Link();
 
         return response()->json([
-            "tasks" => $tasks->all(),
+            "tasks" =>$tasks,
             "links" => $links->all()
         ]);
     }
