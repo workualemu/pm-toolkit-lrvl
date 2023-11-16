@@ -237,7 +237,19 @@
               <div class="card px-4 pt-2 pb-4">
                 <div>
                   @forelse($tasks as $task)
-                    @livewire('task', ['task' => $task], key(crc32($task)))
+                    <div  class="bg-blue-100">
+                      @livewire('task', ['task_id' => $task->id])
+                    </div>
+                    @foreach ($task->children as $child)
+                        <div style="margin-left: 20px;" class="bg-blue-50">
+                          @livewire('task', ['task_id' => $child->id])
+                        </div>
+                        @foreach ($child->children as $gchild)
+                          <div style="margin-left: 40px;">
+                            @livewire('task', ['task_id' => $gchild->id])
+                          </div>
+                        @endforeach
+                    @endforeach
                   @empty
                     <div>
                       <div colspan="6" class="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400">
@@ -247,7 +259,6 @@
                   @endforelse
                 </div>
               </div>
-              {{ $tasks->links('pagination-links') }}
             </div>
         </div>
 
@@ -326,7 +337,7 @@
                 </table>
               </div>
             </div>
-            {{ $tasks->links('pagination-links') }}
+            
           </div>
         </div>
       </div>

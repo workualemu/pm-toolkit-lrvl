@@ -10,15 +10,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Usamamuneerchaudhary\Commentify\Traits\Commentable;
+// use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 class Task extends Model
 {
     use HasFactory, Commentable;
+    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
     protected $fillable = ['project_id', 'title', 'start_date', 'planned_end_date',
         'description', 'status', 'user_id', 'text', 'type', 'parent', 'level', 'list_order'];
 
     protected $casts = ['start_date'=>'datetime:d-m-Y'];
+
+    //From HasRecursiveRelationships trait
+    public function getParentKeyName()
+    {
+        return 'parent';
+    }
 
     public function getOpenAttribute()
     {

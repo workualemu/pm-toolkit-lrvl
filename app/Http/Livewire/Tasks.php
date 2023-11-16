@@ -8,6 +8,10 @@ use App\Models\Task;
 use App\Models\TaskStatus;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
+// use Illuminate\Database\Eloquent\Builder;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\Collection;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\Builder;
 
 class Tasks extends Component
 {
@@ -135,9 +139,61 @@ class Tasks extends Component
             }  
         } ;
 
-        // return view('livewire.tasks');
+        // $constraint = function ($query) {
+        //     $query->where('tasks.title', 'Like', "%Development%");
+        // };
+        // $tasks2 = Task::treeOf($constraint)->orderBy('list_order')->get();
+
+        // $tasks2 = Task::withRecursiveQueryConstraint(function (Builder $query) {
+        //     $query->where("tasks.user_id", '=', 1);
+        //  }, function () {
+        //     return Task::tree()->get()->toTree();
+        //  });
+
+         
+        $tasks2 = Task::tree()->orderBy('list_order')->get();
+
+        $tasks2 = $tasks2->filter(function ($task){
+            return str($task['title'])->contains('CENSUS');
+        });
+
+        $result = $tasks2;
+        
+        foreach ($tasks2 as $item) {
+            $ancestors = $item->ancestors;
+            
+            if($ancestors != null){
+                $ancestors = collect($ancestors)->sortBy('depth');
+            }
+            $paths = [];
+            $cntr = 0;
+            $path = '';
+            foreach ($ancestors as $ancestor) {
+                $ancestor->depth = $item->depth + $ancestor->depth;
+                if($ancestor->depth == 0 ){
+                    $pathes = explode('.', $ancestor->path);
+                    $cntr = count($pathes)-1;
+                    $path = $pathes[$cntr];
+                    $ancestor->path = $path;
+                    if(!$result->contains('id', $ancestor->id)){
+                        $result->push($ancestor);
+                    }
+                    $cntr -= 1;
+                    continue;
+                }
+                $path = $path.'.'.$pathes[$cntr];
+                $ancestor->path = $path;
+                if(!$result->contains('id', $ancestor->id)){
+                    $result->push($ancestor);
+                }
+                $cntr -= 1;
+            }
+        }
+
+        $tasks3 = $result->toTree();
+
         return view('livewire.tasks', [
-            'tasks' =>  $tasks1,
+            'tasks' =>  $tasks3,
         ]);
     }
 }

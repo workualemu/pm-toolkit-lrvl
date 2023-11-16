@@ -28,9 +28,10 @@ class Task extends Component
 
     }
 
-    public function mount($task)
+    public function mount($task_id)
     {
-        $this->task = $task;
+
+        $this->task = \App\Models\Task::find($task_id);
     }
 
     public function render()
