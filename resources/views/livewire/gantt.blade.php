@@ -381,8 +381,8 @@
                     name: gantt.config.resource_store,
                     type: "treeDatastore",
                     initItem: function (item) {
-                        item.parent = item.parent || gantt.config.root_id;
-                        item[gantt.config.resource_property] = item.parent;
+                        item.task_id = item.task_id || gantt.config.root_id;
+                        item[gantt.config.resource_property] = item.task_id;
                         item.open = true;
                         return item;
                     }
@@ -440,16 +440,16 @@
                 });
 
                 resourcesStore.parse([
-                    { id: 1, text: "QA", parent: null },
-                    { id: 2, text: "Development", parent: null },
-                    { id: 3, text: "Sales", parent: null },
-                    { id: 4, text: "Other", parent: null },
-                    { id: 5, text: "Unassigned", parent: 4 },
-                    { id: 6, text: "John", parent: 1 },
-                    { id: 7, text: "Mike", parent: 2 },
-                    { id: 8, text: "Anna", parent: 2 },
-                    { id: 9, text: "Bill", parent: 3 },
-                    { id: 10, text: "Floe", parent: 3 }
+                    { id: 1, text: "QA", task_id: null },
+                    { id: 2, text: "Development", task_id: null },
+                    { id: 3, text: "Sales", task_id: null },
+                    { id: 4, text: "Other", task_id: null },
+                    { id: 5, text: "Unassigned", task_id: 4 },
+                    { id: 6, text: "John", task_id: 1 },
+                    { id: 7, text: "Mike", task_id: 2 },
+                    { id: 8, text: "Anna", task_id: 2 },
+                    { id: 9, text: "Bill", task_id: 3 },
+                    { id: 10, text: "Floe", task_id: 3 }
                 ]);
 
 	            gantt.init("gantt_here");

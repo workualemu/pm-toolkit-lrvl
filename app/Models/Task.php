@@ -10,23 +10,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Usamamuneerchaudhary\Commentify\Traits\Commentable;
-// use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 class Task extends Model
 {
     use HasFactory, Commentable;
-    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
     protected $fillable = ['project_id', 'title', 'start_date', 'planned_end_date',
         'description', 'status', 'user_id', 'text', 'type', 'parent', 'level', 'list_order'];
 
     protected $casts = ['start_date'=>'datetime:d-m-Y'];
 
-    //From HasRecursiveRelationships trait
-    public function getParentKeyName()
-    {
-        return 'parent';
-    }
 
     public function getOpenAttribute()
     {
@@ -38,9 +31,9 @@ class Task extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function parent(): BelongsTo
+    public function getParent(): BelongsTo
     {
-        return $this->belongsTo(Task::class, 'parent_task_id');
+        return $this->belongsTo(Task::class, 'parent');
     }
 
     public function project(): BelongsTo
@@ -73,13 +66,22 @@ class Task extends Model
         return $this->belongsTo(TaskPriority::class);
     }
 
+    public function children(): HasMany
+    {
+        return $this->hasMany(Task::class, 'parent');
+    }
+
+    public function descendantTasks(): HasMany
+    {
+        return $this->hasMany(Task::class, 'parent')->with('children');
+    }
+
     /**
      * The tags that belong to the task.
      */
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'tag_tasks');
-        // return $this->belongsToMany('App\Models\Tag', 'tag_tasks');
     }
 
     public static function scopeFilterByStatus($query, $status_id)
@@ -109,11 +111,5 @@ class Task extends Model
                 ->where('deleted_at', '=', null)
                 ->get()->count();
     }
-
-    // public static function scopeFilterByKanban($query,$kaban_id){
-    //     return $query->whereHas('taskStatus',function($query) use ($kaban_id){
-    //             return $query->where('kanban_list_id', '=', $kaban_id);
-    //     });
-    // }
 
 }

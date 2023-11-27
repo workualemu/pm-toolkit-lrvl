@@ -8,6 +8,7 @@ class Task extends Component
 {
     public $showModal = false;
     public \App\Models\Task $task;
+    public $task_id = 0;
 
     public function openModal($task_id)
     {
@@ -28,14 +29,21 @@ class Task extends Component
 
     }
 
-    public function mount($task_id)
+    public function mount($task)
     {
 
-        $this->task = \App\Models\Task::find($task_id);
+        
+        $this->task = $task;
+        // dd($task);
+        // $this->task_id = $task_id;
+        // $this->task = \App\Models\Task::find($task_id);
+        // dd($this->task);
     }
 
     public function render()
     {
+        // if($this->task->id != 7)
+        //     dd($this->task);
         return view('livewire.task');
     }
 }

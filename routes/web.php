@@ -36,19 +36,35 @@ Route::middleware('auth')->group(function () {
     Route::post('upload-file', UploadTemporaryFileController::class);
     // Route::get('newtask', [Tasks::class, 'newTask'])->name('newtask');
 
-    Route::get('kanban', [PagesController::class, 'getKanban'])->name('kanban');
-    Route::get('gantt', [PagesController::class, 'getGantt'])->name('gantt');
-    Route::get('reports', [PagesController::class, 'getReports'])->name('reports');
-    Route::get('reports-use', [PagesController::class, 'getReportsUse'])->name('reports-use');
-    Route::get('report-viewer/{report_id}/{params}', [PagesController::class, 'getReportViewer'])->name('report-viewer');
+    Route::controller(PagesController::class)->group(function(){
+        Route::get('kanban', 'getKanban')->name('kanban');
+        Route::get('gantt', 'getGantt')->name('gantt');
+        Route::get('reports', 'getReports')->name('reports');
+        Route::get('reports-use', 'getReportsUse')->name('reports-use');
+        Route::get('report-viewer/{report_id}/{params}', 'getReportViewer')->name('report-viewer');
+        Route::get('tags', 'getTags')->name('tags');
+        Route::get('task-status', 'getStatuses')->name('task-status');
+        Route::get('prioritys', 'getPrioritys')->name('prioritys');
     
-    Route::get('tags', [PagesController::class, 'getTags'])->name('tags');
-    Route::get('task-status', [PagesController::class, 'getStatuses'])->name('task-status');
-    Route::get('prioritys', [PagesController::class, 'getPrioritys'])->name('prioritys');
+        Route::get('users', 'getUsers')->name('users');
+        Route::get('invitations', 'getInvitations')->name('invitations');
+        Route::get('project-users/{project_id}', 'projectUsers')->name('project-users');
+       
+    });
 
-    Route::get('users', [PagesController::class, 'getUsers'])->name('users');
-    Route::get('invitations', [PagesController::class, 'getInvitations'])->name('invitations');
-    Route::get('project-users/{project_id}', [PagesController::class, 'projectUsers'])->name('project-users');
+    // Route::get('kanban', [PagesController::class, 'getKanban'])->name('kanban');
+    // Route::get('gantt', [PagesController::class, 'getGantt'])->name('gantt');
+    // Route::get('reports', [PagesController::class, 'getReports'])->name('reports');
+    // Route::get('reports-use', [PagesController::class, 'getReportsUse'])->name('reports-use');
+    // Route::get('report-viewer/{report_id}/{params}', [PagesController::class, 'getReportViewer'])->name('report-viewer');
+    
+    // Route::get('tags', [PagesController::class, 'getTags'])->name('tags');
+    // Route::get('task-status', [PagesController::class, 'getStatuses'])->name('task-status');
+    // Route::get('prioritys', [PagesController::class, 'getPrioritys'])->name('prioritys');
+
+    // Route::get('users', [PagesController::class, 'getUsers'])->name('users');
+    // Route::get('invitations', [PagesController::class, 'getInvitations'])->name('invitations');
+    // Route::get('project-users/{project_id}', [PagesController::class, 'projectUsers'])->name('project-users');
    
     // Route::post('project-users', [PagesController::class, 'projectUsers'])->name('project-users');
     

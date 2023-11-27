@@ -31,29 +31,10 @@ class AppServiceProvider extends ServiceProvider
             $view->with('projectId', 0);
         });
 
-        if ($this->app['livewire']->isLivewireRequest()) {
-            $this->bypassMiddleware([
-                TrimStrings::class,
-                ConvertEmptyStringsToNull::class,
-            ]);
-        }
-
         Blade::if('roles', function (array $roles) { 
             return Auth::check() 
                 && in_array(Auth::user()->role, $roles, true); 
         });
     }
 
-    protected function bypassMiddleware(array $middlewareToExclude)
-    {
-        $kernel = $this->app->make(\Illuminate\Contracts\Http\Kernel::class);
-        
-        $openKernel = new ObjectPrybar($kernel);
-        
-        $middleware = $openKernel->getProperty('middleware');
-        
-        $openKernel->setProperty('middleware', array_diff($middleware, $middlewareToExclude));
-    }
-
-    
 }

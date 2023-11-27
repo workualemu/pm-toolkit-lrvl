@@ -29,7 +29,7 @@
         </div>
         <div class="flex items-center space-x-2">
           <label class="relative hidden sm:flex">
-            <input wire:model = "searchTerm"
+            <input wire:model.live = "searchTerm"
               class="form-input peer h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:z-10 hover:border-slate-400 focus:z-10 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
               placeholder="Search tasks..." type="text" />
             <span
@@ -238,15 +238,15 @@
                 <div>
                   @forelse($tasks as $task)
                     <div  class="bg-blue-100">
-                      @livewire('task', ['task_id' => $task->id])
+                      @livewire('task', ['task' => $task], key(crc32($task->id)))
                     </div>
                     @foreach ($task->children as $child)
                         <div style="margin-left: 20px;" class="bg-blue-50">
-                          @livewire('task', ['task_id' => $child->id])
+                          @livewire('task', ['task' => $child], key(crc32($child->id)))
                         </div>
                         @foreach ($child->children as $gchild)
                           <div style="margin-left: 40px;">
-                            @livewire('task', ['task_id' => $gchild->id])
+                            @livewire('task', ['task' => $gchild], key(crc32($gchild->id)))
                           </div>
                         @endforeach
                     @endforeach

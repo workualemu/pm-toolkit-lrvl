@@ -9,9 +9,8 @@ use App\Models\TaskStatus;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
-// use Illuminate\Database\Eloquent\Builder;
-use Staudenmeir\LaravelAdjacencyList\Eloquent\Collection;
-use Staudenmeir\LaravelAdjacencyList\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 class Tasks extends Component
 {
@@ -32,7 +31,7 @@ class Tasks extends Component
     public $fStatus = [];
     public $filterStatuses = [];
 
-
+    public Illuminate\Database\Eloquent\Collection $result;
 
     protected $listeners = ['refreshTasks' => '$refresh',
                             'openNewTaskModal' => 'newTask',
@@ -93,6 +92,7 @@ class Tasks extends Component
 
     public function mount($project)
     {
+
         $user =  Auth::user();
         if($project != null) {
             $user->project_id = $project->id;
@@ -111,11 +111,12 @@ class Tasks extends Component
 
     public function render()
     {
+
         $this->statuses = TaskStatus::all();
         $this->phases = Task::where(array_merge([['parent', 0]], $this->searchValue))->get();
 
         $qBuilder = Task::query();
-
+        
         $qBuilder = $qBuilder->when(count($this->filterStatuses) > 0, function ($query) {
             $query->whereIn('task_status_id', $this->filterStatuses);
         });
@@ -145,55 +146,59 @@ class Tasks extends Component
         // $tasks2 = Task::treeOf($constraint)->orderBy('list_order')->get();
 
         // $tasks2 = Task::withRecursiveQueryConstraint(function (Builder $query) {
-        //     $query->where("tasks.user_id", '=', 1);
+        //     $query->where('tasks.user_id', 1);
         //  }, function () {
-        //     return Task::tree()->get()->toTree();
+        //     return Task::tree()->get();
+        //  });
+ 
+        //  $tree = User::withRecursiveQueryConstraint(function (Builder $query) {
+        //     $query->where('users.active', true);
+        //  }, function () {
+        //     return User::tree()->get();
         //  });
 
-         
-        $tasks2 = Task::tree()->orderBy('list_order')->get();
+        // $tasks2 = Task::tree()->orderBy('list_order')->get();
+       
 
-        $tasks2 = $tasks2->filter(function ($task){
-            return str($task['title'])->contains('CENSUS');
-        });
-
-        $result = $tasks2;
+        // $tasks2 = Task::whereHas('descendantTasks', function (Builder $query) {
+        //     $query->where('title', 'Like', '%Software%');
+        //    })->get();
+        // $this->searchTerm = 'mapping';
         
-        foreach ($tasks2 as $item) {
-            $ancestors = $item->ancestors;
-            
-            if($ancestors != null){
-                $ancestors = collect($ancestors)->sortBy('depth');
-            }
-            $paths = [];
-            $cntr = 0;
-            $path = '';
-            foreach ($ancestors as $ancestor) {
-                $ancestor->depth = $item->depth + $ancestor->depth;
-                if($ancestor->depth == 0 ){
-                    $pathes = explode('.', $ancestor->path);
-                    $cntr = count($pathes)-1;
-                    $path = $pathes[$cntr];
-                    $ancestor->path = $path;
-                    if(!$result->contains('id', $ancestor->id)){
-                        $result->push($ancestor);
-                    }
-                    $cntr -= 1;
-                    continue;
+        $st = $this->searchTerm==null ? '%' : '%'.$this->searchTerm.'%';
+
+        $clause = [['title', 'Like', $st]];
+        $this->searchValue = array_merge($this->searchValue, $clause);
+        $clause = $this->searchValue;
+        $tasks2 = Task::whereNull('parent')
+            ->with([
+                'children' => function ($query) use ($clause){
+                    $query->whereHas('children', function ($q) use ($clause){
+                        $q->where($clause);
+                    });
+                    $query->orWhere($clause);                   
+                }, 
+                'children.children' => function ($query) use ($clause){
+                    $query->where($clause);
                 }
-                $path = $path.'.'.$pathes[$cntr];
-                $ancestor->path = $path;
-                if(!$result->contains('id', $ancestor->id)){
-                    $result->push($ancestor);
-                }
-                $cntr -= 1;
-            }
+            ])
+            ->orderBy('list_order')
+            ->get();
+
+        // $authors = Author::with(['books' => fn($query) => $query->where('title', 'like', 'PHP%')])
+        //     ->whereHas('books', fn ($query) => 
+        //     $query->where('title', 'like', 'PHP%')
+        //     )
+        //     ->get();
+
+        // dd($tasks2);
+        foreach($tasks2 as $task2){
+            // dd($task2);
+            // dd($task2->children);
         }
 
-        $tasks3 = $result->toTree();
-
         return view('livewire.tasks', [
-            'tasks' =>  $tasks3,
+            'tasks' =>  $tasks2,
         ]);
     }
 }
