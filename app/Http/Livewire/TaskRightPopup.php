@@ -2,18 +2,20 @@
 
 namespace App\Http\Livewire;
 
-use Livewire\Component;
+use App\Models\File;
+use App\Models\Project;
+use App\Models\Tag;
+use App\Models\TagTask;
 use App\Models\Task;
 use App\Models\TaskPriority;
 use App\Models\TaskStatus;
-use App\Models\Tag;
-use App\Models\TagTask;
 use App\Models\User;
-use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
-use Livewire\WithFileUploads;
-use App\Models\File;
+use Illuminate\Support\Facades\Notification;
+use Livewire\Component;
 use Livewire\TemporaryUploadedFile;
+use Livewire\WithFileUploads;
+use App\Notifications\TaskAssignment;
 
 class TaskRightPopup extends Component
 {
@@ -139,6 +141,11 @@ class TaskRightPopup extends Component
         $user = Auth::user();
         $this->task->user_id = $user->id;
         $this->task->project_id = $user->project_id;
+
+        if($this->task->isDirty('assigned_to') ){
+            $assgnee = User::find($this->task->assigned_to);
+            Notification::send($assgnee, new TaskAssignment($this->task));
+        }
 
         $this->task->save();
 

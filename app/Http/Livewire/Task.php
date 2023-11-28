@@ -26,7 +26,6 @@ class Task extends Component
     {
         $this->reset(['title']);
         $this->showModal = false;
-
     }
 
     public function mount($task)

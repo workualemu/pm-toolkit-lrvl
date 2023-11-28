@@ -98,6 +98,7 @@ class Tasks extends Component
             $user->project_id = $project->id;
             $user->save();
         }
+        // dd($user->notifications);
         $projectId = $user->project_id;
         $this->project = Project::find($projectId);
 
@@ -168,8 +169,8 @@ class Tasks extends Component
         $st = $this->searchTerm==null ? '%' : '%'.$this->searchTerm.'%';
 
         $clause = [['title', 'Like', $st]];
-        $this->searchValue = array_merge($this->searchValue, $clause);
-        $clause = $this->searchValue;
+        $clause = array_merge($this->searchValue, $clause);
+
         $tasks2 = Task::whereNull('parent')
             ->with([
                 'children' => function ($query) use ($clause){
@@ -185,17 +186,6 @@ class Tasks extends Component
             ->orderBy('list_order')
             ->get();
 
-        // $authors = Author::with(['books' => fn($query) => $query->where('title', 'like', 'PHP%')])
-        //     ->whereHas('books', fn ($query) => 
-        //     $query->where('title', 'like', 'PHP%')
-        //     )
-        //     ->get();
-
-        // dd($tasks2);
-        foreach($tasks2 as $task2){
-            // dd($task2);
-            // dd($task2->children);
-        }
 
         return view('livewire.tasks', [
             'tasks' =>  $tasks2,

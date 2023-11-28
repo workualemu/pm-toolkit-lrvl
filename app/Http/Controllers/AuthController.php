@@ -32,7 +32,7 @@ class AuthController extends Controller
 
         $validated = $validator->validated();
 
-        if (\Auth::attempt(array('email' => $validated['email'], 'password' => $validated['password']))) {
+        if (Auth::attempt(array('email' => $validated['email'], 'password' => $validated['password']))) {
             $user =  Auth::user();
             if($user->name == 'Admin'){
                 $user->assignRole('Super Admin');

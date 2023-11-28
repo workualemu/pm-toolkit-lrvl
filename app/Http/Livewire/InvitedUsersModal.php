@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Mail;
 use Spatie\Permission\Models\Role;
+use App\Mail\InvitationMail;
 
 class InvitedUsersModal extends Component
 {
@@ -52,18 +53,13 @@ class InvitedUsersModal extends Component
                 'role' => $this->invitation->role,
             ]);
 
-            // $this->loadData();
-            // $this->email = '';
-            // $this->role = '';
-            // $this->emit('invited');
+            Mail::to($invitation['email'])->send(new InvitationMail($invitation));
 
-            // if ($this->sendEmail) {
-            //     $this->sendEmail($invitation);
-            // }
         } catch (Exception $exception) {
             $this->addError('email', $exception->getMessage());
         }
 
+        
         $this->showModal = false;
         $this->emit('refreshInvitation');
     }
@@ -78,18 +74,8 @@ class InvitedUsersModal extends Component
                 'expires_at' => $expiresAt,
                 'role' => $this->invitation->role,
             ]);
-
-            // $this->invitation->link = URL::temporarySignedRoute('register', $expiresAt, ['email' => $this->invitation->email]);
-            // $this->invitation->expires_at = $expiresAt; 
-            // $this->invitation->save();
-            // $this->loadData();
-            // $this->email = '';
-            // $this->role = '';
-            // $this->emit('invited');
-
-            // if ($this->sendEmail) {
-            //     $this->sendEmail($invitation);
-            // }
+            Mail::to($this->invitation['email'])->send(new InvitationMail($this->invitation));
+            
         } catch (Exception $exception) {
             // $this->addError('email', $exception->getMessage());
         }

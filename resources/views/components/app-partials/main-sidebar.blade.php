@@ -105,7 +105,8 @@
         <div class="flex flex-col items-center space-y-3 py-3">
 
         <!-- Users -->
-        <!-- @role('Super Admin') -->
+        
+            @can('manage-users')
             <div x-data="usePopper({ placement: 'right-end', offset: 12 })" @click.outside="if(isShowPopper) isShowPopper = false" class="flex">
                 <button @click="isShowPopper = !isShowPopper" x-ref="popperRef" 
                     x-tooltip.placement.right="'Users'"
@@ -167,8 +168,10 @@
                     </div>
                 </div>
             </div>
-        <!-- @endrole -->
+            @endcan
+      
             <!-- Settings -->
+            @can('manage-projects')
             <div x-data="usePopper({ placement: 'right-end', offset: 12 })" @click.outside="if(isShowPopper) isShowPopper = false" class="flex">
                 <button @click="isShowPopper = !isShowPopper" x-ref="popperRef" 
                     x-tooltip.placement.right="'Settings'"
@@ -275,6 +278,7 @@
                     </div>
                 </div>
             </div>
+            @endcan
 
             <!-- Profile -->
             <div x-data="usePopper({ placement: 'right-end', offset: 12 })" @click.outside="if(isShowPopper) isShowPopper = false" class="flex">

@@ -1,19 +1,6 @@
 <div>
   <!-- Main Content Wrapper -->
   <main class="main-content todo-app w-full px-[var(--margin-x)] pb-8">
-    @if($project == null)
-      <div class="text-center text-error">
-          <div class="mt-4">
-              <p class="text-error dark:text-navy-300">
-                  Please select a project
-              </p>
-          </div>
-      </div>
-    @else
-    <p class="mt-1 text-xs text-info">
-      <span>{{ $project->title }}</span>
-    </p>
-    
     <!--header, title search, and filter block -->
     <div class="" x-data="{ isFilterExpanded: false }"
       x-effect="$store.breakpoints.smAndUp ">
@@ -302,36 +289,102 @@
                   </thead>
                   <tbody>
                   @foreach($tasks as $index=>$task)
-                    <tr class="border-y border-transparent border-b-slate-200 dark:border-b-navy-500"
-                    >
-                      <td class="whitespace-nowrap px-4 py-3 sm:px-5">{{$index + 1}}</td>
-                      <td
-                        class="whitespace-nowrap px-4 py-3 font-medium text-slate-700 dark:text-navy-100 sm:px-5"
+                      <tr class="bg-blue-100 border-y border-transparent border-b-slate-200 dark:border-b-navy-500"
                       >
-                        {{$task->title}}
-                      </td>
+                        <td class="whitespace-nowrap px-4 py-3 sm:px-5">{{$index + 1}}</td>
+                        <td
+                          class="whitespace-nowrap px-4 py-3 font-medium text-slate-700 dark:text-navy-100 sm:px-5"
+                        >
+                          {{$task->title}}
+                        </td>
 
-                      <td class="whitespace-nowrap px-4 py-3 sm:px-5">
-                        <div  style="width: 100px"
-                          x-tooltip.primary="'{{$task->progress}}% Completed'"
-                          class="progress h-2 {{$task->color}} dark:bg-navy-500"
-                        >
-                          <div style="width: {{$task->progress}}px"
-                            class="rounded-full bg-primary dark:bg-accent"
-                          ></div>
-                        </div>
-                      </td>
-                      <td class="whitespace-nowrap px-4 py-3 sm:px-5">
-                        <div
-                          class="badge space-x-2.5 px-0 text-{{$task->taskStatus->color}}-700 dark:text-accent-light"
-                        >
-                          <span>{{$task->taskStatus->value}}</span>
-                        </div>
-                      </td>
-                      <td class="whitespace-nowrap px-4 py-3 sm:px-5">
-                        {{$task->planned_end_date}}
-                      </td>
-                    </tr>
+                        <td class="whitespace-nowrap px-4 py-3 sm:px-5">
+                          <div  style="width: 100px"
+                            x-tooltip.primary="'{{$task->progress}}% Completed'"
+                            class="progress h-2 {{$task->color}} dark:bg-navy-500"
+                          >
+                            <div style="width: {{$task->progress}}px"
+                              class="rounded-full bg-primary dark:bg-accent"
+                            ></div>
+                          </div>
+                        </td>
+                        <td class="whitespace-nowrap px-4 py-3 sm:px-5">
+                          <div
+                            class="badge space-x-2.5 px-0 text-{{$task->taskStatus->color}}-700 dark:text-accent-light"
+                          >
+                            <span>{{$task->taskStatus->value}}</span>
+                          </div>
+                        </td>
+                        <td class="whitespace-nowrap px-4 py-3 sm:px-5">
+                          {{$task->planned_end_date}}
+                        </td>
+                      </tr>
+                    @foreach ($task->children as  $c_index=>$child)
+                          <tr style="margin-left: 20px;" class="bg-blue-50 border-y border-transparent border-b-slate-200 dark:border-b-navy-500"
+                          >
+                            <td class="whitespace-nowrap px-4 py-3 sm:px-5">{{$index + 1}}.{{$c_index + 1}}</td>
+                            <td
+                              class="whitespace-nowrap px-4 py-3 font-medium text-slate-700 dark:text-navy-100 sm:px-5"
+                            >
+                              {{$child->title}}
+                            </td>
+
+                            <td class="whitespace-nowrap px-4 py-3 sm:px-5">
+                              <div  style="width: 100px"
+                                x-tooltip.primary="'{{$child->progress}}% Completed'"
+                                class="progress h-2 {{$child->color}} dark:bg-navy-500"
+                              >
+                                <div style="width: {{$child->progress}}px"
+                                  class="rounded-full bg-primary dark:bg-accent"
+                                ></div>
+                              </div>
+                            </td>
+                            <td class="whitespace-nowrap px-4 py-3 sm:px-5">
+                              <div
+                                class="badge space-x-2.5 px-0 text-{{$child->taskStatus->color}}-700 dark:text-accent-light"
+                              >
+                                <span>{{$child->taskStatus->value}}</span>
+                              </div>
+                            </td>
+                            <td class="whitespace-nowrap px-4 py-3 sm:px-5">
+                              {{$child->planned_end_date}}
+                            </td>
+                          </tr>
+                        @foreach ($child->children as  $g_index=>$gchild)
+                          <div style="margin-left: 40px;">
+                            <tr class="border-y border-transparent border-b-slate-200 dark:border-b-navy-500"
+                            >
+                              <td class="whitespace-nowrap px-4 py-3 sm:px-5">{{$index + 1}}.{{$c_index + 1}}.{{$g_index + 1}}</td>
+                              <td
+                                class="whitespace-nowrap px-4 py-3 font-medium text-slate-700 dark:text-navy-100 sm:px-5"
+                              >
+                                {{$gchild->title}}
+                              </td>
+
+                              <td class="whitespace-nowrap px-4 py-3 sm:px-5">
+                                <div  style="width: 100px"
+                                  x-tooltip.primary="'{{$gchild->progress}}% Completed'"
+                                  class="progress h-2 {{$gchild->color}} dark:bg-navy-500"
+                                >
+                                  <div style="width: {{$gchild->progress}}px"
+                                    class="rounded-full bg-primary dark:bg-accent"
+                                  ></div>
+                                </div>
+                              </td>
+                              <td class="whitespace-nowrap px-4 py-3 sm:px-5">
+                                <div
+                                  class="badge space-x-2.5 px-0 text-{{$gchild->taskStatus->color}}-700 dark:text-accent-light"
+                                >
+                                  <span>{{$task->taskStatus->value}}</span>
+                                </div>
+                              </td>
+                              <td class="whitespace-nowrap px-4 py-3 sm:px-5">
+                                {{$gchild->planned_end_date}}
+                              </td>
+                            </tr>
+                          </div>
+                        @endforeach
+                    @endforeach
                   @endforeach
                   </tbody>
                 </table>
@@ -342,6 +395,5 @@
         </div>
       </div>
     </div>
-    @endif
   </main>
 </div>
