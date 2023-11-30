@@ -65,7 +65,7 @@
 
         <!-- App Header -->
         <x-app-partials.header></x-app-partials.header>
-
+    
         <!-- Mobile Searchbar -->
         <x-app-partials.mobile-searchbar></x-app-partials.mobile-searchbar>
 

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\UploadTemporaryFileController;
 use App\Http\Livewire\Tasks;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Livewire\TaskRightPopup;
 
@@ -35,6 +36,18 @@ Route::middleware('auth')->group(function () {
     Route::get('tasks/{project_id}', [PagesController::class, 'getTasks'])->name('tasks');
     Route::post('upload-file', UploadTemporaryFileController::class);
     // Route::get('newtask', [Tasks::class, 'newTask'])->name('newtask');
+    Route::get('toggle-notification/{id}', function($id) {
+        $notification = Auth::user()->notifications()->where('id', $id)->first();
+
+        if(isset($notification)){
+            if($notification->read()){
+                $notification->markAsUnread();
+            } else {
+                $notification->markAsRead();
+            }
+        }
+        return redirect()->back();
+    })->name('toggle-read');
 
     Route::controller(PagesController::class)->group(function(){
         Route::get('kanban', 'getKanban')->name('kanban');
@@ -45,7 +58,8 @@ Route::middleware('auth')->group(function () {
         Route::get('tags', 'getTags')->name('tags');
         Route::get('task-status', 'getStatuses')->name('task-status');
         Route::get('prioritys', 'getPrioritys')->name('prioritys');
-    
+        
+
         Route::get('users', 'getUsers')->name('users');
         Route::get('invitations', 'getInvitations')->name('invitations');
         Route::get('project-users/{project_id}', 'projectUsers')->name('project-users');

@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Config;
+use Illuminate\Notifications\DatabaseNotification;
 
 class PagesController extends Controller
 {
@@ -150,7 +151,6 @@ class PagesController extends Controller
         $project = Project::find($project_id);
         return view('pages/project-users-frame', compact('project'));
     }
-
 
     public function formsSetProfile()
     {

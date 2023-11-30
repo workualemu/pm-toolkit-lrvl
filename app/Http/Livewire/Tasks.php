@@ -76,6 +76,20 @@ class Tasks extends Component
         $this->searchValue = array_merge([['project_id', $user->project_id]], $condition);
     }
 
+    public function toggleRead($id)
+    {
+        dd('here');
+        // $notification = $this->user->notifications()->where('id', $id)->first();
+
+        // if(isset($notification)){
+        //     if($notification->read()){
+        //         $notification->markAsUnread();
+        //     } else {
+        //         $notification->markAsRead();
+        //     }
+        // }
+    }
+
     public function filterMyAssignedTasks()
     {
         $user =  Auth::user();
