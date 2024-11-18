@@ -22,7 +22,7 @@
                             Project users
                         </p>
                     </div>
-                    <p class="mt-1 text-xs">Manage users assignment to this project</p>
+                    <p class="mt-1 text-xs">{{ __('Manage users assignment to this project') }}</p>
                 </div>
                 <div class="flex items-center space-x-2">
                     <label class="relative hidden sm:flex">

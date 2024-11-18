@@ -135,6 +135,15 @@ class PagesController extends Controller
         return view('pages/users', compact('page_title', 'page_type' ));
     }
 
+    public function getTeams()
+    {
+        $user =  Auth::user();
+
+        $page_title = "Teams";
+        $page_type = "TEAM";
+        return view('pages/users', compact('page_title', 'page_type' ));
+    }
+
     public function getStatuses()
     {
         $user =  Auth::user();
@@ -148,8 +157,15 @@ class PagesController extends Controller
 
     public function projectUsers($project_id)
     {
+        dd('here');
         $project = Project::find($project_id);
         return view('pages/project-users-frame', compact('project'));
+    }
+
+    public function teamMembers($team_id)
+    {
+        $team = Team::find($team_id);
+        return view('pages/team-members-frame', compact('team'));
     }
 
     public function formsSetProfile()

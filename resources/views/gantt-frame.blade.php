@@ -1,11 +1,26 @@
-<x-app-layout title="Button Element" is-sidebar-open="true" is-header-blur="true"  sidebarToggle="false">
+<!DOCTYPE html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+ 
+    <script src="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.js"></script>
+    <link href="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.css" rel="stylesheet">
+ 
+    <style type="text/css">
+        html, body{
+            height:100%;
+            padding:0px;
+            margin:0px;
+            overflow: hidden;
+        }
 
-<main style='width:100%; height:100%;' class="main-content kanban-app px-5">
+    </style>
+</head>
+<body>
 <div style='width:100%; height:100%;'>
 <div id="gantt_here" style='width:100%; height:100%;'></div>
-</div>
-</main>
 <script type="text/javascript">
+
+
 gantt.config.columns = [
     { name: "text", tree: true, width: 200, resize: true },
     { name: "start_date", align: "center", width: 80, resize: true },
@@ -67,5 +82,5 @@ gantt.config.layout = {
     gantt.init("gantt_here");
     gantt.load("/api/data");
 </script>
-
-</x-app-layout>
+</div>
+</body>

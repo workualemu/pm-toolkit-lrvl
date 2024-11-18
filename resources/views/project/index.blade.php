@@ -6,7 +6,7 @@
             class="mt-6 flex flex-col items-center justify-between space-y-2 text-center sm:flex-row sm:space-y-0 sm:text-left">
             <div>
                 <h3 class="text-xl font-semibold text-slate-700 dark:text-navy-100">
-                    Projects Board
+                    {{ __('Projects board') }}
                 </h3>
                 <p class="mt-1 hidden sm:block">List of your ongoing projects</p>
             </div>

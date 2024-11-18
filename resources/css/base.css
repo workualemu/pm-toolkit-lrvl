@@ -33,7 +33,7 @@ html.dark {
 }
 
 body {
-    @apply bg-slate-50 font-sans text-sm leading-5 text-slate-500 antialiased [text-rendering:optimizeLegibility] dark:bg-navy-900 dark:text-navy-200 dark:[color-scheme:dark];
+    @apply h-full overflow-hidden bg-slate-50 font-sans text-sm leading-5 text-slate-500 antialiased [text-rendering:optimizeLegibility] dark:bg-navy-900 dark:text-navy-200 dark:[color-scheme:dark];
 }
 
 body.is-monochrome::before {

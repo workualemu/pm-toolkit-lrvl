@@ -1,8 +1,8 @@
 <div>
     <main class="main-content kanban-app w-full">
         <div
-            class="flex items-center justify-between space-x-2 px-[var(--margin-x)] py-5 transition-all duration-[.25s]">
-            <div class="flex items-center space-x-1">
+            class="flex justify-between space-x-2 px-2 py-2 transition-all duration-[.25s]">
+            <div class="flex">
                 <h3 class="text-lg font-medium text-slate-700 line-clamp-1 dark:text-navy-50">
                     {{ $page_title }}
                 </h3>
@@ -30,6 +30,10 @@
             @elseif($page_type == 'USER')
                 <div class="col-span-1">
                     @livewire('registered-users')
+                </div>
+            @elseif($page_type == 'TEAM')
+                <div class="col-span-1">
+                    @livewire('teams')
                 </div>
             @endif
         </div>

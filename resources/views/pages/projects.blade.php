@@ -1,11 +1,10 @@
 <x-app-layout title="Project Board" is-header-blur="true">
     <!-- Main Content Wrapper -->
-    <main class="main-content w-full px-[var(--margin-x)] pb-8">
-        <div
-            class="mt-6 flex flex-col items-center justify-between space-y-2 text-center sm:flex-row sm:space-y-0 sm:text-left">
-            <div>
+    <main class="main-content kanban-app w-full">
+        <div class="flex justify-between space-x-2 px-2 py-2 transition-all duration-[.25s]">
+            <div class="flex items-center space-x-1">
                 <h3 class="text-xl font-semibold text-slate-700 dark:text-navy-100">
-                    Projects Board
+                    {{ __('Projects board') }}
                 </h3>
                 <p class="mt-1 hidden sm:block">List of your ongoing projects 123</p>
             </div>

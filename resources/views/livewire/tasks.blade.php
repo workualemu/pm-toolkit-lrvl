@@ -1,21 +1,18 @@
 <div>
   <!-- Main Content Wrapper -->
-  <main class="main-content todo-app w-full px-[var(--margin-x)] pb-8">
+  <main class="main-content todo-app w-full px-[2 * var(--margin-x)] pb-6">
     <!--header, title search, and filter block -->
     <div class="" x-data="{ isFilterExpanded: false }"
       x-effect="$store.breakpoints.smAndUp ">
       <!-- My task and search bar -->
-      <div class="flex items-center justify-between">
-        <div>
-          <div class="flex space-x-2">
-            <p class="text-xl font-medium text-slate-800 dark:text-navy-50">
-              My tasks
-            </p>
-          </div>
-          <p class="mt-1 text-xs">Tasks assigned to me</p>
+      <div class="flex justify-between space-x-2 px-2 py-2 transition-all duration-[.25s]">
+        <div class="flex items-center space-x-1">
+          <h3 class="text-lg font-medium text-slate-700 line-clamp-1 dark:text-navy-50">
+            {{ __('My tasks') }} 
+          </h3>
         </div>
-        <div class="flex items-center space-x-2">
-          <label class="relative hidden sm:flex">
+        <div class="relative hidden w-full max-w-[16rem] sm:flex">
+          <label class="relative hidden w-full max-w-[16rem] sm:flex">
             <input wire:model.live = "searchTerm"
               class="form-input peer h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:z-10 hover:border-slate-400 focus:z-10 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
               placeholder="Search tasks..." type="text" />
@@ -40,14 +37,24 @@
             <button x-tooltip="'Filter'"
                 @click="isFilterExpanded = !isFilterExpanded"
                 class="btn h-9 w-9 p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                        d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none"
+                      viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                  </svg>
             </button>
           </div>
         </div>
+        <div class="relative hidden w-full max-w-[12rem] sm:flex">
+                <button
+                    class="btn h-6 w-6 rounded-full p-0 font-medium text-info hover:bg-info/20 focus:bg-info/20 active:bg-info/25 sm:h-8 sm:w-8">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path
+                            d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
+                    </svg>
+                </button>
+            </div>
       </div>
 
       <!-- Filter block -->
@@ -191,12 +198,13 @@
                     'border-primary dark:border-accent text-primary dark:text-accent-light' :
                     'border-transparent hover:text-slate-800 focus:text-slate-800 dark:hover:text-navy-100 dark:focus:text-navy-100'"
                 class="btn shrink-0 space-x-2 rounded-none border-b-2 px-3 py-2 font-medium">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5"
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                    stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
+                <svg class="h-4.5 w-4.5" stroke="currentColor" viewBox="0 0 24 24"
+                      stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M7 6H21M7 12H21M7 18H21" stroke-linecap="round"
+                          stroke-linejoin="round" />
+                      <path d="M3 6H4M3 12H4M3 18H4" stroke-linecap="round"
+                          stroke-linejoin="round" />
+                  </svg>
                 <span>List</span>
             </button>
             <button @click="activeTab = 'tabTable'"
@@ -204,11 +212,9 @@
                     'border-primary dark:border-accent text-primary dark:text-accent-light' :
                     'border-transparent hover:text-slate-800 focus:text-slate-800 dark:hover:text-navy-100 dark:focus:text-navy-100'"
                 class="btn shrink-0 space-x-2 rounded-none border-b-2 px-3 py-2 font-medium">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5"
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                    stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
+                    class="h-4.5 w-4.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0112 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125M3.375 8.25c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m17.25-3.75h-7.5c-.621 0-1.125.504-1.125 1.125m8.625-1.125c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M12 10.875v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125M13.125 12h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125M20.625 12c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5M12 14.625v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 14.625c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m0 1.5v-1.5m0 0c0-.621.504-1.125 1.125-1.125m0 0h7.5" />
                 </svg>
                 <span>Table</span>
             </button>
@@ -252,36 +258,32 @@
         <div x-show="activeTab === 'tabTable'"
           x-transition:enter="transition-all duration-500 easy-in-out"
           x-transition:enter-start="opacity-0 [transform:translate3d(1rem,0,0)]"
-          x-transition:enter-end="opacity-100 [transform:translate3d(0,0,0)]">
-          <div class="w-full >">
+          x-transition:enter-end="opacity-100 [transform:translate3d(0,0,0)]"
+          class="w-full" >
+          <div class="w-full">
             <div class="card px-4 pt-2 pb-4">
               <div class="w-full">
-                <table class="is-hoverable text-left w-full " >
+                <table class="is-hoverable text-left w-full table-fixed" >
                   <thead>
                     <tr>
                       <th
-                        class="whitespace-nowrap rounded-tl-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
-                      >
-                        #
-                      </th>
-                      <th
-                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
+                        class="w-6/12 bg-slate-200 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
                       >
                         Title
                       </th>
 
                       <th
-                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
+                        class="w-2/12 whitespace-nowrap bg-slate-200 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
                       >
                         Progress
                       </th>
                       <th
-                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
+                        class="w-2/12 whitespace-nowrap bg-slate-200 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
                       >
                         Status
                       </th>
                       <th
-                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
+                        class="w-2/12 whitespace-nowrap bg-slate-200 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
                       >
                         Due date
                       </th>
@@ -289,16 +291,15 @@
                   </thead>
                   <tbody>
                   @foreach($tasks as $index=>$task)
-                      <tr class="bg-blue-100 border-y border-transparent border-b-slate-200 dark:border-b-navy-500"
+                      <tr class="h-1 w-full bg-blue-100 border-y border-transparent border-b-slate-200 dark:border-b-navy-500"
                       >
-                        <td class="whitespace-nowrap px-4 py-3 sm:px-5">{{$index + 1}}</td>
                         <td
-                          class="whitespace-nowrap px-4 py-3 font-medium text-slate-700 dark:text-navy-100 sm:px-5"
+                          class="font-medium text-slate-700 dark:text-navy-100"
                         >
                           {{$task->title}}
                         </td>
 
-                        <td class="whitespace-nowrap px-4 py-3 sm:px-5">
+                        <td class="whitespace-nowrap sm:px-5">
                           <div  style="width: 100px"
                             x-tooltip.primary="'{{$task->progress}}% Completed'"
                             class="progress h-2 {{$task->color}} dark:bg-navy-500"
@@ -308,28 +309,27 @@
                             ></div>
                           </div>
                         </td>
-                        <td class="whitespace-nowrap px-4 py-3 sm:px-5">
+                        <td class="whitespace-nowrap sm:px-5">
                           <div
                             class="badge space-x-2.5 px-0 text-{{$task->taskStatus->color}}-700 dark:text-accent-light"
                           >
                             <span>{{$task->taskStatus->value}}</span>
                           </div>
                         </td>
-                        <td class="whitespace-nowrap px-4 py-3 sm:px-5">
-                          {{$task->planned_end_date}}
+                        <td class="whitespace-nowrap sm:px-5">
+                          {{date('d-M-Y', strtotime($task->planned_end_date))}}
                         </td>
                       </tr>
                     @foreach ($task->children as  $c_index=>$child)
-                          <tr style="margin-left: 20px;" class="bg-blue-50 border-y border-transparent border-b-slate-200 dark:border-b-navy-500"
+                          <tr style="margin-left: 20px;" class="h-1 bg-blue-50 border-y border-transparent border-b-slate-200 dark:border-b-navy-500"
                           >
-                            <td class="whitespace-nowrap px-4 py-3 sm:px-5">{{$index + 1}}.{{$c_index + 1}}</td>
                             <td
-                              class="whitespace-nowrap px-4 py-3 font-medium text-slate-700 dark:text-navy-100 sm:px-5"
+                              class="font-inter text-slate-700 dark:text-navy-100 px-5"
                             >
                               {{$child->title}}
                             </td>
 
-                            <td class="whitespace-nowrap px-4 py-3 sm:px-5">
+                            <td class="whitespace-nowrap sm:px-5">
                               <div  style="width: 100px"
                                 x-tooltip.primary="'{{$child->progress}}% Completed'"
                                 class="progress h-2 {{$child->color}} dark:bg-navy-500"
@@ -339,29 +339,27 @@
                                 ></div>
                               </div>
                             </td>
-                            <td class="whitespace-nowrap px-4 py-3 sm:px-5">
+                            <td class="whitespace-nowrap sm:px-5">
                               <div
-                                class="badge space-x-2.5 px-0 text-{{$child->taskStatus->color}}-700 dark:text-accent-light"
+                                class="badge font-inter space-x-2.5 px-0 text-{{$child->taskStatus->color}}-700 dark:text-accent-light"
                               >
                                 <span>{{$child->taskStatus->value}}</span>
                               </div>
                             </td>
-                            <td class="whitespace-nowrap px-4 py-3 sm:px-5">
-                              {{$child->planned_end_date}}
+                            <td class="whitespace-nowrap font-inter sm:px-5">
+                              {{date('d-M-Y', strtotime($child->planned_end_date))}}
                             </td>
                           </tr>
                         @foreach ($child->children as  $g_index=>$gchild)
-                          <div style="margin-left: 40px;">
                             <tr class="border-y border-transparent border-b-slate-200 dark:border-b-navy-500"
                             >
-                              <td class="whitespace-nowrap px-4 py-3 sm:px-5">{{$index + 1}}.{{$c_index + 1}}.{{$g_index + 1}}</td>
                               <td
-                                class="whitespace-nowrap px-4 py-3 font-medium text-slate-700 dark:text-navy-100 sm:px-5"
+                                class="font-mono text-slate-700 dark:text-navy-100 px-10"
                               >
                                 {{$gchild->title}}
                               </td>
 
-                              <td class="whitespace-nowrap px-4 py-3 sm:px-5">
+                              <td class="whitespace-nowrap sm:px-5">
                                 <div  style="width: 100px"
                                   x-tooltip.primary="'{{$gchild->progress}}% Completed'"
                                   class="progress h-2 {{$gchild->color}} dark:bg-navy-500"
@@ -371,18 +369,17 @@
                                   ></div>
                                 </div>
                               </td>
-                              <td class="whitespace-nowrap px-4 py-3 sm:px-5">
+                              <td class="whitespace-nowrap sm:px-5">
                                 <div
-                                  class="badge space-x-2.5 px-0 text-{{$gchild->taskStatus->color}}-700 dark:text-accent-light"
+                                  class="badge font-mono space-x-2.5 px-0 text-{{$gchild->taskStatus->color}}-700 dark:text-accent-light"
                                 >
-                                  <span>{{$task->taskStatus->value}}</span>
+                                  <span>{{$gchild->taskStatus->value}}</span>
                                 </div>
                               </td>
-                              <td class="whitespace-nowrap px-4 py-3 sm:px-5">
-                                {{$gchild->planned_end_date}}
+                              <td class="font-mono whitespace-nowrap sm:px-5">
+                                {{date('d-M-Y', strtotime($gchild->planned_end_date))}}
                               </td>
                             </tr>
-                          </div>
                         @endforeach
                     @endforeach
                   @endforeach

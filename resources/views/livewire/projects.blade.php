@@ -1,15 +1,15 @@
 <div>
-    <main class="main-content w-11/12 pr-10">
+    <main class="main-content todo-app">
         <livewire:project-modal />
            <!--header, title search, and filter block -->
         <div class="">
             
-            <div class="flex items-center justify-between">
+            <div class="flex justify-between space-x-2 px-2 py-2 transition-all duration-[.25s]">
                 <!--  title -->
                 <div>
                     <div class="flex space-x-2">
                         <p class="text-xl font-medium text-slate-800 dark:text-navy-50">
-                            Projects Board
+                            {{ __('Projects board') }}
                         </p>
                     </div>
                     <p class="mt-1 text-xs">List of your ongoing projects</p>
@@ -45,7 +45,7 @@
             </div>
         </div>
 
-        <div class="mt-8 w-full grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
+        <div class="mt-8 px-2 w-full grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
             @forelse($projects as $key=>$project)
                 <div class="card shadow-none">
                     <div class="flex flex-1 flex-col rounded-lg bg-{{ $colors[$key] }}/15 p-4 dark:bg-transparent sm:p-5">
@@ -79,5 +79,5 @@
                 </div>
             @endforelse
         </div>
-    </main>
+        </main>
 </div>

@@ -127,19 +127,19 @@
                                 class="group flex items-center space-x-3 py-2 px-4 tracking-wide outline-none transition-all hover:bg-slate-100 focus:bg-slate-100 dark:hover:bg-navy-600 dark:focus:bg-navy-600">
                                 <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-info text-white">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                     </svg>
                                 </div>
 
                                 <div>
                                     <h2
                                         class="font-medium text-slate-700 transition-colors group-hover:text-primary group-focus:text-primary dark:text-navy-100 dark:group-hover:text-accent-light dark:group-focus:text-accent-light">
-                                        Invited users
+                                        {{ __('Invited users') }}
                                     </h2>
                                     <div class="text-xs text-slate-400 line-clamp-1 dark:text-navy-300">
-                                        Invite potential users
+                                    {{ __('Invite potential users') }}
                                     </div>
                                 </div>
                             </a>
@@ -147,23 +147,44 @@
                             <a href="{{ route('users') }}"
                                 class="group flex items-center space-x-3 py-2 px-4 tracking-wide outline-none transition-all hover:bg-slate-100 focus:bg-slate-100 dark:hover:bg-navy-600 dark:focus:bg-navy-600">
                                 <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-error text-white">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people" 
+                                        viewBox="0 0 16 16"> 
+                                        <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/> 
                                     </svg>
                                 </div>
 
                                 <div>
                                     <h2
                                         class="font-medium text-slate-700 transition-colors group-hover:text-primary group-focus:text-primary dark:text-navy-100 dark:group-hover:text-accent-light dark:group-focus:text-accent-light">
-                                        Users
+                                        {{ __('Registered users') }}
                                     </h2>
                                     <div class="text-xs text-slate-400 line-clamp-1 dark:text-navy-300">
-                                        Manage registered users
+                                    {{ __('Manage registered users') }}
                                     </div>
                                 </div>
                             </a>
+                            
+
+                            <a href="{{ route('teams') }}"
+                                class="group flex items-center space-x-3 py-2 px-4 tracking-wide outline-none transition-all hover:bg-slate-100 focus:bg-slate-100 dark:hover:bg-navy-600 dark:focus:bg-navy-600">
+                                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-success text-white">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h2
+                                        class="font-medium text-slate-700 transition-colors group-hover:text-primary group-focus:text-primary dark:text-navy-100 dark:group-hover:text-accent-light dark:group-focus:text-accent-light">
+                                        {{ __('Teams') }}
+                                    </h2>
+                                    <div class="text-xs text-slate-400 line-clamp-1 dark:text-navy-300">
+                                    {{ __('Manage teams') }}
+                                    </div>
+                                </div>
+                            </a>
+
                         </div>
                     </div>
                 </div>
@@ -202,10 +223,10 @@
                                 <div>
                                     <h2
                                         class="font-medium text-slate-700 transition-colors group-hover:text-primary group-focus:text-primary dark:text-navy-100 dark:group-hover:text-accent-light dark:group-focus:text-accent-light">
-                                        Report configuration
+                                        {{ __('Report configuration') }}
                                     </h2>
                                     <div class="text-xs text-slate-400 line-clamp-1 dark:text-navy-300">
-                                        Manage report definition
+                                    {{ __('Manage report definition') }}
                                     </div>
                                 </div>
                             </a>
@@ -223,10 +244,10 @@
                                 <div>
                                     <h2
                                         class="font-medium text-slate-700 transition-colors group-hover:text-primary group-focus:text-primary dark:text-navy-100 dark:group-hover:text-accent-light dark:group-focus:text-accent-light">
-                                        Task priorities
+                                        {{ __('Task priorities') }}
                                     </h2>
                                     <div class="text-xs text-slate-400 line-clamp-1 dark:text-navy-300">
-                                        Task priority setting
+                                    {{ __('Task priority setting') }}
                                     </div>
                                 </div>
                             </a>
@@ -244,10 +265,10 @@
                                 <div>
                                     <h2
                                         class="font-medium text-slate-700 transition-colors group-hover:text-primary group-focus:text-primary dark:text-navy-100 dark:group-hover:text-accent-light dark:group-focus:text-accent-light">
-                                        Tags
+                                        {{ __('Tags') }}
                                     </h2>
                                     <div class="text-xs text-slate-400 line-clamp-1 dark:text-navy-300">
-                                        Tag settings
+                                    {{ __('Tag settings') }}
                                     </div>
                                 </div>
                             </a>
@@ -266,10 +287,10 @@
                                 <div>
                                     <h2
                                         class="font-medium text-slate-700 transition-colors group-hover:text-primary group-focus:text-primary dark:text-navy-100 dark:group-hover:text-accent-light dark:group-focus:text-accent-light">
-                                        Task statuses
+                                        {{ __('Task statuses') }}
                                     </h2>
                                     <div class="text-xs text-slate-400 line-clamp-1 dark:text-navy-300">
-                                        Task status settings
+                                    {{ __('Task status settings') }}
                                     </div>
                                 </div>
                             </a>
@@ -321,10 +342,10 @@
                                 <div>
                                     <h2
                                         class="font-medium text-slate-700 transition-colors group-hover:text-primary group-focus:text-primary dark:text-navy-100 dark:group-hover:text-accent-light dark:group-focus:text-accent-light">
-                                        Profile
+                                        {{ __('Profile') }}
                                     </h2>
                                     <div class="text-xs text-slate-400 line-clamp-1 dark:text-navy-300">
-                                        Your profile setting
+                                    {{ __('Your profile setting') }}
                                     </div>
                                 </div>
                             </a>
@@ -341,17 +362,16 @@
                                 <div>
                                     <h2
                                         class="font-medium text-slate-700 transition-colors group-hover:text-primary group-focus:text-primary dark:text-navy-100 dark:group-hover:text-accent-light dark:group-focus:text-accent-light">
-                                        Messages
+                                        {{ __('Messages') }}
                                     </h2>
                                     <div class="text-xs text-slate-400 line-clamp-1 dark:text-navy-300">
-                                        Your messages and tasks
+                                    {{ __('Your messages and tasks') }}
                                     </div>
                                 </div>
                             </a>
                             <a href="#"
                                 class="group flex items-center space-x-3 py-2 px-4 tracking-wide outline-none transition-all hover:bg-slate-100 focus:bg-slate-100 dark:hover:bg-navy-600 dark:focus:bg-navy-600">
-                                <div
-                                    class="flex h-8 w-8 items-center justify-center rounded-lg bg-white">
+                                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-error text-white">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -362,29 +382,29 @@
                                 <div>
                                     <h2
                                         class="font-medium text-slate-700 transition-colors group-hover:text-primary group-focus:text-primary dark:text-navy-100 dark:group-hover:text-accent-light dark:group-focus:text-accent-light">
-                                        Team
+                                        {{ __('My teams') }}
                                     </h2>
                                     <div class="text-xs text-slate-400 line-clamp-1 dark:text-navy-300">
-                                        Your team activity
+                                        {{ __('Teams which I belong to') }}
                                     </div>
                                 </div>
                             </a>
                             <a href="#"
                                 class="group flex items-center space-x-3 py-2 px-4 tracking-wide outline-none transition-all hover:bg-slate-100 focus:bg-slate-100 dark:hover:bg-navy-600 dark:focus:bg-navy-600">
                                 <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-error text-white">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people" 
-                                    viewBox="0 0 16 16"> 
-                                    <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/> 
-                                </svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people" 
+                                        viewBox="0 0 16 16"> 
+                                        <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/> 
+                                    </svg>
                                 </div>
 
                                 <div>
                                     <h2
                                         class="font-medium text-slate-700 transition-colors group-hover:text-primary group-focus:text-primary dark:text-navy-100 dark:group-hover:text-accent-light dark:group-focus:text-accent-light">
-                                        Activity
+                                        {{ __('Activity') }}
                                     </h2>
                                     <div class="text-xs text-slate-400 line-clamp-1 dark:text-navy-300">
-                                        Your activity and events
+                                        {{ __('Your activity and events') }}
                                     </div>
                                 </div>
                             </a>
@@ -403,10 +423,10 @@
                                 <div>
                                     <h2
                                         class="font-medium text-slate-700 transition-colors group-hover:text-primary group-focus:text-primary dark:text-navy-100 dark:group-hover:text-accent-light dark:group-focus:text-accent-light">
-                                        Settings
+                                        {{ __('Settings') }}
                                     </h2>
                                     <div class="text-xs text-slate-400 line-clamp-1 dark:text-navy-300">
-                                        Webapp settings
+                                        {{ __('Webapp settings') }}
                                     </div>
                                 </div>
                             </a>
@@ -420,7 +440,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                                 d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                                         </svg>
-                                        <span>Logout</span>
+                                        <span>{{ __('Logout') }}</span>
                                     </button>
                                 </form>
 

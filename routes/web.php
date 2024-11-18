@@ -59,10 +59,11 @@ Route::middleware('auth')->group(function () {
         Route::get('task-status', 'getStatuses')->name('task-status');
         Route::get('prioritys', 'getPrioritys')->name('prioritys');
         
-
         Route::get('users', 'getUsers')->name('users');
         Route::get('invitations', 'getInvitations')->name('invitations');
+        Route::get('teams', 'getTeams')->name('teams');
         Route::get('project-users/{project_id}', 'projectUsers')->name('project-users');
+        Route::get('team-members/{team_id}', 'teamMembers')->name('team-members');
        
     });
 

@@ -34,6 +34,10 @@ class AuthServiceProvider extends ServiceProvider
             return $user->hasRole(["Project Manager", "Super Admin"]);
         });
 
+        Gate::define('manage-teams', function(User $user){
+            return $user->hasRole(["Project Manager", "Super Admin"]);
+        });
+
         //
     }
 }

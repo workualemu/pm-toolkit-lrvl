@@ -1,4 +1,4 @@
-<div  class="board-draggable relative flex max-h-full w-72 shrink-0 flex-col">
+<div  class="board-draggable relative flex max-h-full w-72 shrink-0 flex-col ">
     <div class="bg-{{$taskStatus->color}}-600 text-white board-draggable-handler flex items-center justify-between px-0.5 pb-3">
         <div class="flex items-center space-x-2">
             <div class="text-white flex h-8 w-8 items-center justify-center rounded-lg bg-info/10 text-info">

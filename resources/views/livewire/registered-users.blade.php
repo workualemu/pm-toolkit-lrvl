@@ -22,10 +22,10 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                 @forelse($records as $record)
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-center">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-gray-800">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center text-sm text-gray-500">
                                 {{$record->name}}
-                            </span>
+                            </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center text-sm text-gray-500">

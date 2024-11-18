@@ -3,10 +3,10 @@
         <div class="px-2 flex items-center justify-between">
             
             <div>
-                <button wire:click="addNewInvitation()"
+                <button wire:click="addNewTeam()"
                     class="border-b border-dotted border-current pb-0.5 font-medium text-primary outline-none transition-colors duration-300 hover:text-primary/70 focus:text-primary/70 dark:text-accent-light dark:hover:text-accent-light/70 dark:focus:text-accent-light/70"
                 >
-                    Invite user
+                    {{ __('Add new team') }}
                 </button>
             </div>
 
@@ -21,12 +21,12 @@
                 <thead class="bg-gray-50">
                 <tr>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        {{ __('Email') }}
+                        {{ __('Name') }}
                     </th>
-                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         {{ __('Status') }}
                     </th>
-                    <th scope="col" class="relative px-6 py-3"></th>
+                    <th scope="col" class="relative px-6 py-3">{{ __('Action') }}</th>
                 </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -34,18 +34,20 @@
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center text-sm text-gray-500">
-                                {{$record->email}}
+                                {{$record->name}}
                             </div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-gray-800">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center text-sm text-gray-500">
                                 {{$record->status}}
-                            </span>
+                            </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium text-gray-400">
-                            <a class="text-indigo-600 hover:text-indigo-900 cursor-pointer" wire:click.prevent="showLink({{$record->id}})">{{ __('Edit') }}</a>
+                            <a class="text-indigo-600 hover:text-indigo-900 cursor-pointer" wire:click.prevent="editTeam({{$record->id}})">{{ __('Edit') }}</a>
                             |
-                            <a class="text-red-600 hover:text-red-800 cursor-pointer" wire:click.prevent="deleteInvitation({{$record->id}})">{{ __('Delete') }}</a>
+                            <a class="text-red-600 hover:text-red-800 cursor-pointer" wire:click.prevent="teamMembers({{$record->id}})">{{ __('Members') }}</a>
+                            |
+                            <a class="text-red-600 hover:text-red-800 cursor-pointer" wire:click.prevent="deleteTeam({{$record->id}})">{{ __('Delete') }}</a>
                         </td>
                     </tr>
                 @empty
