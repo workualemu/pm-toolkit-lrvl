@@ -18,7 +18,7 @@ class Task extends Model
     protected $fillable = ['project_id', 'title', 'start_date', 'planned_end_date',
         'description', 'status', 'user_id', 'text', 'type', 'parent', 'level', 'list_order'];
 
-    protected $casts = ['start_date'=>'datetime:d-m-Y'];
+    // protected $casts = ['start_date'=>'datetime:d-m-Y'];
 
 
     public function getOpenAttribute()
