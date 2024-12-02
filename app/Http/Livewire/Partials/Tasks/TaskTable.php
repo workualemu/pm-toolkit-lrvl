@@ -3,13 +3,11 @@
 namespace App\Http\Livewire\Partials\Tasks;
 
 use Livewire\Component;
-use App\Models\Task;
 
-class TaskList extends Component
+class TaskTable extends Component
 {
 
     public $tasks;
-    public $filterStatuses = [];
     public $filterParams = [];
     protected $hasGeneratedTasks = false;
 
@@ -33,7 +31,6 @@ class TaskList extends Component
     {
         $this->filterParams = $filterParams;
     }
-    
 
     public function getTasks()
     {
@@ -80,10 +77,6 @@ class TaskList extends Component
 
     public function render()
     {
-        if (!$this->hasGeneratedTasks) {
-            $this->tasks = $this->getTasks();
-            $this->hasGeneratedTasks = true;
-        }
-        return view('livewire.partials.tasks.task-list');
+        return view('livewire.partials.tasks.task-table');
     }
 }

@@ -27,17 +27,20 @@ class Header extends Component
     
 
     
-    // public function generateTasks()
-    // {
-    //     $query = Task::query();
-    //     if (!empty($this->filterClause)) {
-    //         foreach ($this->filterClause as $clause) {
-    //             $query->where($clause);
-    //         }
-    //     }
-    //     $this->tasks = $query->get();
-    //     $this->emitUp('task-list-updated', $this->tasks);
-    // }
+    protected $listeners = [
+        'resetParams' => 'onResetParams',
+    ];
+
+    public function onResetParams($filterParams)
+    {
+        $this->filterParams = $filterParams;
+        $this->searchTerm = '';
+        $this->fTitle = '';
+        $this->fPhase = '';
+        $this->fDateFrom = '';
+        $this->fDateTo = '';
+        $this->selectedStatuses = [];
+    }
 
     public function mount($filterParams)
     {

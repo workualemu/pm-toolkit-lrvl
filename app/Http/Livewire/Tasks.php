@@ -67,15 +67,15 @@ class Tasks extends Component
         $user =  Auth::user();
         $this->searchValue = array_merge([['project_id', $user->project_id]], $condition);
         $this->filterParams = [
-            'fTitle' => $this->fTitle,
-            'fPhase' => $this->fPhase,
-            'fDateFrom' => $this->fDateFrom,
-            'fDateTo' => $this->fDateTo,
-            'fStatus' => $this->selectedStatuses,
-            'searchTerm' => $this->searchTerm,
+            'fTitle' => '',
+            'fPhase' => '',
+            'fDateFrom' => '',
+            'fDateTo' => '',
+            'fStatus' => [],
+            'searchTerm' => '',
             'searchValue' => $this->searchValue,
         ];
-        $this->emit('taskListUpdated', $this->filterParams);
+        $this->emit('resetParams', $this->filterParams);
     }
 
     public function toggleRead($id)
@@ -94,13 +94,11 @@ class Tasks extends Component
 
     public function filterMyAssignedTasks()
     {
-        logger('filterMyAssignedTasks');
         $user =  Auth::user();
         $this->searchValue = [['assigned_to', $user->id]];
 
         $this->searchValue = array_merge([['project_id', $user->project_id]], $this->searchValue);
-
-        
+ 
     }
 
     public function allTasks()
@@ -109,12 +107,12 @@ class Tasks extends Component
         $this->searchValue = [['project_id', $user->project_id]];
 
         $this->filterParams = [
-            'fTitle' => $this->fTitle,
-            'fPhase' => $this->fPhase,
-            'fDateFrom' => $this->fDateFrom,
-            'fDateTo' => $this->fDateTo,
-            'fStatus' => $this->selectedStatuses,
-            'searchTerm' => $this->searchTerm,
+            'fTitle' => '',
+            'fPhase' => '',
+            'fDateFrom' => '',
+            'fDateTo' => '',
+            'fStatus' => '',
+            'searchTerm' => '',
             'searchValue' => $this->searchValue,
         ];
         $this->refresh();

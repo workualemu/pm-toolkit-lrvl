@@ -16,7 +16,7 @@ class Task extends Model
     use HasFactory, Commentable;
 
     protected $fillable = ['project_id', 'title', 'start_date', 'planned_end_date',
-        'description', 'status', 'user_id', 'text', 'type', 'parent', 'level', 'list_order'];
+        'description', 'status', 'user_id', 'text', 'type', 'parent', 'level', 'list_order', 'is_starred'];
 
     // protected $casts = ['start_date'=>'datetime:d-m-Y'];
 
