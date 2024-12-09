@@ -71,9 +71,12 @@ class Header extends Component
             'fStatus' => $this->selectedStatuses,
             'searchTerm' => $this->searchTerm,
             'sidebarFilter' => $this->sidebarFilter,
+            'fPriority' => null,
+            'fTaskIds' => null,
+            'fAssignee' => null,
         ];
 
-        $this->emit('taskListUpdated', $this->filterParams);
+        $this->emit('task-list-updated', $this->filterParams);
     }
 
     public function getTasks()

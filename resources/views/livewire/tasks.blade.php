@@ -6,7 +6,7 @@
     <!-- Tab def -->
     <div x-data="{ activeTab: 'tabList' }" class="tabs w-full flex flex-col">
       <div class="is-scrollbar-hidden overflow-x-auto">
-        <div class="border-b-2 border-slate-150 px-2 dark:border-navy-500">
+        <div class="border-b-2 border-slate-150 px-2 dark:border-navy-500 flex justify-between">
           <div class="tabs-list -mb-0.5 flex">
             <button @click="activeTab = 'tabList'"
                 :class="activeTab === 'tabList' ?
@@ -34,6 +34,21 @@
                 <span>Table</span>
             </button>
           </div>
+
+          <span>
+          <div class="mt-2 px-4">
+            <button 
+            wire:click="addNewPhase()"
+                class="btn w-full space-x-2 border border-slate-200 py-2 font-medium text-slate-800 hover:bg-slate-150 focus:bg-slate-150 active:bg-slate-150/80 dark:border-navy-500 dark:text-navy-50 dark:hover:bg-navy-500 dark:focus:bg-navy-500 dark:active:bg-navy-500/90">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+                <span> {{ __('New phase') }} </span>
+            </button>
+          </div>
+          </span>
+
         </div>
       </div>
       <div class="tab-content pt-4">

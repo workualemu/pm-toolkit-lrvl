@@ -204,7 +204,6 @@ class Task extends Model
             }
         }
         
-
         $baseQuery .= "
                 UNION ALL
                 SELECT t.*
@@ -214,7 +213,6 @@ class Task extends Model
             SELECT DISTINCT * FROM task_hierarchy
         ";
 
-        
         // Add ancestor filter if ancestorId is provided
         if ($ancestorId) {
             $task = Task::find($ancestorId);
@@ -232,11 +230,8 @@ class Task extends Model
 
         $baseQuery .= " ORDER BY $sortField $direction;";
 
-        logger($baseQuery);
-        // Execute the query and return a collection of Task models
         $tasksData = DB::select($baseQuery, $bindings);
 
-        
         $tasks = collect();
 
         foreach ($tasksData as $taskData) {

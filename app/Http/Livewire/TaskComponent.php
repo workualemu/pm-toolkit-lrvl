@@ -33,10 +33,6 @@ class TaskComponent extends Component
     {
         $this->task = $task;
         $this->isStarred = $task->is_starred;
-        // dd($task);
-        // $this->task_id = $task_id;
-        // $this->task = \App\Models\Task::find($task_id);
-        // dd($this->task);
     }
 
     public function setStarred()
@@ -48,6 +44,21 @@ class TaskComponent extends Component
     public function filterByStatus($status)
     {
         $this->emit('filter-by-status', $status);
+    }
+
+    public function filterByPriority($priority)
+    {
+        $this->emit('filter-by-priority', $priority);
+    }
+
+    public function filterByTag($tag)
+    {
+        $this->emit('filter-by-tag', $tag);
+    }
+
+    public function filterByAssignee($assignee)
+    {
+        $this->emit('filter-by-assignee', $assignee);
     }
 
     public function render()

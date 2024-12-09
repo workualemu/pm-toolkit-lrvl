@@ -77,6 +77,9 @@ class Tasks extends Component
             'fStatus' => [],
             'searchTerm' => null,
             'sidebarFilter' => $sidebarFilter,
+            'fPriority' => null,
+            'fTaskIds' => null,
+            'fAssignee' => null,
         ];
         $this->emit('resetParams', $this->filterParams);
     }
@@ -117,6 +120,9 @@ class Tasks extends Component
             'fStatus' => [],
             'searchTerm' => null,
             'sidebarFilter' => $sidebarFilter,
+            'fPriority' => null,
+            'fTaskIds' => null,
+            'fAssignee' => null,
         ];
         $this->refresh();
     }
@@ -145,6 +151,9 @@ class Tasks extends Component
             'fStatus' => $this->selectedStatuses,
             'searchTerm' => $this->searchTerm,
             'sidebarFilter' => $sidebarFilter,
+            'fPriority' => null,
+            'fTaskIds' => null,
+            'fAssignee' => null,
         ];
     }
 
