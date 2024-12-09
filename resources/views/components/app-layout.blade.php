@@ -53,7 +53,7 @@
     <x-app-preloader></x-app-preloader>
 
     <!-- Page Wrapper -->
-    <div id="root" class="min-h-100vh flex grow bg-slate-50 dark:bg-navy-900 h-full" x-cloak>
+    <div id="root" class="min-h-100vh flex grow bg-slate-50 dark:bg-navy-900 h-full overflow-y-scroll" x-cloak>
         <!-- Sidebar -->
         <div class="sidebar print:hidden">
             <!-- Main Sidebar -->

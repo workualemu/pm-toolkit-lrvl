@@ -97,6 +97,17 @@
                             </label>
 
                             <label class="block">
+                                <span>{{ __('Reported by') }}:</span>
+                                <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" placeholder="Select user"
+                                    wire:model.defer="task.report_by" 
+                                    autocomplete="off">
+                                    @foreach($users as $user)
+                                        <option value="{{$user->id}}">{{$user->name}}</option>
+                                    @endforeach
+                                </select>
+                            </label>
+
+                            <label class="block">
                                 <span>Description</span>
                                 <textarea wire:model.defer="task.description"
                                 class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"

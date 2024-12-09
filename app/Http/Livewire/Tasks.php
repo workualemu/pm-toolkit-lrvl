@@ -21,8 +21,8 @@ class Tasks extends Component
     public $tasks = null;
     public $statuses;
     public $phases;
-    public $searchTerm;
-    public $searchValue = [];
+    public $searchTerm = null;
+    public $sidebarFilter = [];
 
     public $fTitle = '';
     public $fPhase;
@@ -65,15 +65,18 @@ class Tasks extends Component
     public function filterTasks($condition)
     {
         $user =  Auth::user();
-        $this->searchValue = array_merge([['project_id', $user->project_id]], $condition);
+        $sidebarFilter = [['type'=>'where','column'=>'project_id', 'value'=>$user->project_id]];
+        if($condition != null){
+            array_push($sidebarFilter, $condition);
+        }
         $this->filterParams = [
-            'fTitle' => '',
-            'fPhase' => '',
-            'fDateFrom' => '',
-            'fDateTo' => '',
+            'fTitle' => null,
+            'fPhase' => null,
+            'fDateFrom' => null,
+            'fDateTo' => null,
             'fStatus' => [],
-            'searchTerm' => '',
-            'searchValue' => $this->searchValue,
+            'searchTerm' => null,
+            'sidebarFilter' => $sidebarFilter,
         ];
         $this->emit('resetParams', $this->filterParams);
     }
@@ -94,26 +97,26 @@ class Tasks extends Component
 
     public function filterMyAssignedTasks()
     {
-        $user =  Auth::user();
-        $this->searchValue = [['assigned_to', $user->id]];
+        // $user =  Auth::user();
+        // $this->sidebarFilter = [['assigned_to', $user->id]];
 
-        $this->searchValue = array_merge([['project_id', $user->project_id]], $this->searchValue);
+        // $this->sidebarFilter = array_merge([['project_id', $user->project_id]], $this->sidebarFilter);
  
     }
 
     public function allTasks()
     {
         $user =  Auth::user();
-        $this->searchValue = [['project_id', $user->project_id]];
+        $sidebarFilter = [['type'=>'where','column'=>'project_id', 'value'=>$user->project_id]];
 
         $this->filterParams = [
-            'fTitle' => '',
-            'fPhase' => '',
-            'fDateFrom' => '',
-            'fDateTo' => '',
-            'fStatus' => '',
-            'searchTerm' => '',
-            'searchValue' => $this->searchValue,
+            'fTitle' => null,
+            'fPhase' => null,
+            'fDateFrom' => null,
+            'fDateTo' => null,
+            'fStatus' => [],
+            'searchTerm' => null,
+            'sidebarFilter' => $sidebarFilter,
         ];
         $this->refresh();
     }
@@ -128,11 +131,11 @@ class Tasks extends Component
             $user->project_id = $project->id;
             $user->save();
         }
-        // dd($user->notifications);
         $projectId = $user->project_id;
         $this->project = Project::find($projectId);
 
-        $this->searchValue = array_merge([['project_id', $user->project_id]], $this->searchValue);
+        // $sidebarFilter = array_merge([['type'=>'where','column'=>'project_id', 'value'=>$user->project_id]], $this->sidebarFilter);
+        $sidebarFilter = [['type'=>'where','column'=>'project_id', 'value'=>$user->project_id]];
 
         $this->filterParams = [
             'fTitle' => $this->fTitle,
@@ -141,7 +144,7 @@ class Tasks extends Component
             'fDateTo' => $this->fDateTo,
             'fStatus' => $this->selectedStatuses,
             'searchTerm' => $this->searchTerm,
-            'searchValue' => $this->searchValue,
+            'sidebarFilter' => $sidebarFilter,
         ];
     }
 
@@ -152,84 +155,7 @@ class Tasks extends Component
 
     public function render()
     {
-        if($this->tasks == null || $this->tasks->count() == 0){
-            $clause = $this->searchValue;
-            $this->tasks = Task::whereNull('parent')
-            ->with([
-                'children' => function ($query) use ($clause){
-                    $query->whereHas('children', function ($q) use ($clause){
-                        $q->where($clause);
-                    });
-                    $query->orWhere($clause);                   
-                }, 
-                'children.children' => function ($query) use ($clause){
-                    $query->where($clause);
-                }
-            ])
-            ->orderBy('list_order')
-            ->get();
-        }
-        
-        
-
         return view('livewire.tasks');
     }
 
-
-    // public function render()
-    // {
-
-    //     $this->statuses = TaskStatus::all();
-    //     $this->phases = Task::where(array_merge([['parent', 0]], $this->searchValue))->get();
-
-    //     $qBuilder = Task::query();
-        
-    //     $qBuilder = $qBuilder->when(count($this->filterStatuses) > 0, function ($query) {
-    //         $query->whereIn('task_status_id', $this->filterStatuses);
-    //     });
-
-    //     $qBuilder = $qBuilder->when(!empty($this->searchTerm), function ($query) {
-    //         $query->where('title', 'Like', "%".$this->searchTerm."%");
-    //     });
-
-    //     $tasks1 = $qBuilder->where($this->searchValue)->paginate(10);
-        
-    //     foreach( $tasks1 as $task) {
-    //         $task->progress = number_format($task->progress * 100, 2);
-    //         if( $task->progress < 1){ 
-    //             $task->color = 'bg-slate-150';
-    //         } elseif($task->progress < 40){ 
-    //             $task->color = 'bg-red-500';
-    //         } elseif($task->progress < 90){ 
-    //             $task->color = 'bg-yellow-500';
-    //         } else{
-    //             $task->color = 'bg-green-500';
-    //         }  
-    //     } ;
-
-    //     $st = $this->searchTerm==null ? '%' : '%'.$this->searchTerm.'%';
-
-    //     $clause = [['title', 'Like', $st]];
-    //     $clause = array_merge($this->searchValue, $clause);
-
-    //     $tasks2 = Task::whereNull('parent')
-    //         ->with([
-    //             'children' => function ($query) use ($clause){
-    //                 $query->whereHas('children', function ($q) use ($clause){
-    //                     $q->where($clause);
-    //                 });
-    //                 $query->orWhere($clause);                   
-    //             }, 
-    //             'children.children' => function ($query) use ($clause){
-    //                 $query->where($clause);
-    //             }
-    //         ])
-    //         ->orderBy('list_order')
-    //         ->get();
-
-
-    //     return view('livewire.tasks', [
-    //         'tasks' =>  $tasks2,
-    //     ]);
-    // }
 }

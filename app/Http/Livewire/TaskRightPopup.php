@@ -45,6 +45,7 @@ class TaskRightPopup extends Component
         'tagTasks.tag_id'=>'',
         'task.description' => '',
         'task.assigned_to'=>'',
+        'task.report_by'=>'',
     ];
     protected $listeners = ['openTaskModal' => 'openModal',
                             'addFile' => 'addFile'];

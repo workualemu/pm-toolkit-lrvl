@@ -20,7 +20,7 @@ class Header extends Component
     public $fDateFrom;
     public $fDateTo;
     public $selectedStatuses = [];
-    public $searchValue = [];
+    public $sidebarFilter = [];
 
     public $filterParams = [];
     public $filterStatuses = [];
@@ -70,7 +70,7 @@ class Header extends Component
             'fDateTo' => $this->fDateTo,
             'fStatus' => $this->selectedStatuses,
             'searchTerm' => $this->searchTerm,
-            'searchValue' => $this->searchValue,
+            'sidebarFilter' => $this->sidebarFilter,
         ];
 
         $this->emit('taskListUpdated', $this->filterParams);
@@ -119,7 +119,7 @@ class Header extends Component
     public function getTasks2()
     {
         // $this->statuses = TaskStatus::all();
-        // $this->phases = Task::where(array_merge([['parent', 0]], $this->searchValue))->get();
+        // $this->phases = Task::where(array_merge([['parent', 0]], $this->sidebarFilter))->get();
 
         $qBuilder = Task::query();
         
@@ -131,7 +131,7 @@ class Header extends Component
         //     $query->where('title', 'Like', "%".$this->searchTerm."%");
         // });
 
-        // $tasks1 = $qBuilder->where($this->searchValue)->paginate(10);
+        // $tasks1 = $qBuilder->where($this->sidebarFilter)->paginate(10);
         
         // foreach( $tasks1 as $task) {
         //     $task->progress = number_format($task->progress * 100, 2);
@@ -152,7 +152,7 @@ class Header extends Component
         if (!empty($this->searchTerm)) {
             $clause = [['title', 'Like', '%'.$this->searchTerm.'%']];
         }
-        $clause = array_merge($this->searchValue, $clause);
+        $clause = array_merge($this->sidebarFilter, $clause);
 
         $qBuilder = Task::query();
 

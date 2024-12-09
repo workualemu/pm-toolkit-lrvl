@@ -16,7 +16,7 @@ class TasksSideBar extends Component
     public $bgMyAssigned = "";
     public $bgMyCommented = "";
     public $bgMyReporting = "";
-    public $bgDeleted = "";
+    public $bgStarred = "";
     public $taskPriorities = [];
 
     public $priorityCondition = [];
@@ -31,11 +31,11 @@ class TasksSideBar extends Component
         $this->bgMyAssigned = "";
         $this->bgMyCommented = "";
         $this->bgMyReporting = "";
-        $this->bgDeleted = "";
+        $this->bgStarred = "";
 
         $this->filterCondition = [];
         $this->priorityCondition = [];
-        $this->emit('filterTasks', []);
+        $this->emit('filterTasks', null);
 
     }
 
@@ -45,15 +45,11 @@ class TasksSideBar extends Component
         $this->bgMyAssigned = $this->highlight;
         $this->bgMyCommented = "";
         $this->bgMyReporting = "";
-        $this->bgDeleted = "";
+        $this->bgStarred = "";
 
-        $this->filterCondition = ['assigned_to',Auth::user()->id];
-        $searchCondition = [$this->filterCondition];
-        if(!empty($this->priorityCondition)) {
-            array_push($searchCondition, $this->priorityCondition);
-        }
-
-        $this->emit('filterTasks', $searchCondition);
+        $condition = ['type'=>'where','column'=>'assigned_to', 'value'=>Auth::user()->id] ;
+        
+        $this->emit('filterTasks', $condition);
     }
 
     public function filterTasksByPriority($priority_id)
@@ -62,7 +58,7 @@ class TasksSideBar extends Component
         $this->bgMyAssigned = $this->highlight;
         $this->bgMyCommented = "";
         $this->bgMyReporting = "";
-        $this->bgDeleted = "";
+        $this->bgStarred = "";
 
         $this->priorityCondition = ['task_priority_id', $priority_id];
         $searchCondition = [$this->priorityCondition];
@@ -79,15 +75,18 @@ class TasksSideBar extends Component
         $this->bgMyAssigned = "";
         $this->bgMyCommented = $this->highlight;
         $this->bgMyReporting = "";
-        $this->bgDeleted = "";
+        $this->bgStarred = "";
 
-        $this->filterCondition = ['assigned_to',Auth::user()->id];
-        $searchCondition = [$this->filterCondition];
-        if(!empty($this->priorityCondition)) {
-            array_push($searchCondition, $this->priorityCondition);
-        }
+        $tasks = \DB::table('comments')
+            ->where('commentable_type', '=', 'App\Models\Task')
+            ->where('user_id', '=', Auth::user()->id)
+            ->get();
+        $tasks = $tasks->pluck('commentable_id');
 
-        $this->emit('filterTasks', $searchCondition);
+        $condition = ['type'=>'whereIn','column'=>'id', 'values'=>$tasks] ;
+
+        $this->emit('filterTasks', $condition);
+
     }
 
     public function myReportingTasks()
@@ -96,27 +95,24 @@ class TasksSideBar extends Component
         $this->bgMyAssigned = "";
         $this->bgMyCommented = "";
         $this->bgMyReporting = $this->highlight;
-        $this->bgDeleted = "";
+        $this->bgStarred = "";
 
-        $this->filterCondition = ['assigned_to',Auth::user()->id];
-        $searchCondition = [$this->filterCondition];
-        if(!empty($this->priorityCondition)) {
-            array_push($searchCondition, $this->priorityCondition);
-        }
-
-        $this->emit('filterTasks', $searchCondition);
+        $condition = ['type'=>'where','column'=>'report_by', 'value'=>Auth::user()->id] ;
+        
+        $this->emit('filterTasks', $condition);
     }
 
-    public function deletedTasks()
+    public function starredTasks()
     {
         $this->bgAll = "";
         $this->bgMyAssigned = "";
         $this->bgMyCommented = "";
         $this->bgMyReporting = "";
-        $this->bgDeleted = $this->highlight;
+        $this->bgStarred = $this->highlight;
 
-        $this->filterCondition = ['assigned_to',Auth::user()->id];
-        $this->emit('showMyAssignedTasks', null);
+        $condition = ['type'=>'where','column'=>'is_starred', 'value'=>true] ;
+        
+        $this->emit('filterTasks', $condition);
     }
 
     public function addNewTask()
