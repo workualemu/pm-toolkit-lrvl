@@ -12,9 +12,9 @@ class TaskComponent extends Component
     public $task_id = 0;
     public $isStarred = false;
 
-    public function openModal($task_id)
+    public function openModal($task_id, $taskLevel)
     {
-        $this->emit('openTaskModal', $task_id);
+        $this->emit('openTaskModal', $task_id, $taskLevel);
         $this->showModal = true;
     }
 

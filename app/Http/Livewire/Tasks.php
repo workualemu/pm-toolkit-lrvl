@@ -47,18 +47,13 @@ class Tasks extends Component
 
     }
 
-    // public function onUpdateTaskList($taskIds)
-    // {
-    //     $this->tasks = Task::whereIn('id', $taskIds)->get();
-    // }
-
-    public function newTask()
+    public function addNewPhase()
     {
         $user =  Auth::user();
         $projectId = $user->project_id;
         $project = Project::find($projectId);
 
-        $this->emit('openTaskModal', 0);
+        $this->emit('openTaskModal', 0, 0);
         $this->showModal = true;
     }
 
@@ -84,8 +79,8 @@ class Tasks extends Component
         $this->emit('resetParams', $this->filterParams);
     }
 
-    public function toggleRead($id)
-    {
+    // public function toggleRead($id)
+    // {
         
         // $notification = $this->user->notifications()->where('id', $id)->first();
 
@@ -96,16 +91,7 @@ class Tasks extends Component
         //         $notification->markAsRead();
         //     }
         // }
-    }
-
-    public function filterMyAssignedTasks()
-    {
-        // $user =  Auth::user();
-        // $this->sidebarFilter = [['assigned_to', $user->id]];
-
-        // $this->sidebarFilter = array_merge([['project_id', $user->project_id]], $this->sidebarFilter);
- 
-    }
+    // }
 
     public function allTasks()
     {
@@ -140,7 +126,6 @@ class Tasks extends Component
         $projectId = $user->project_id;
         $this->project = Project::find($projectId);
 
-        // $sidebarFilter = array_merge([['type'=>'where','column'=>'project_id', 'value'=>$user->project_id]], $this->sidebarFilter);
         $sidebarFilter = [['type'=>'where','column'=>'project_id', 'value'=>$user->project_id]];
 
         $this->filterParams = [
@@ -155,11 +140,6 @@ class Tasks extends Component
             'fTaskIds' => null,
             'fAssignee' => null,
         ];
-    }
-
-    public function updatingSearch()
-    {
-        $this->resetPage();
     }
 
     public function render()

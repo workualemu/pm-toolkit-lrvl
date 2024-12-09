@@ -36,8 +36,8 @@
                                 </div>
                             </td>
                             <td class="whitespace-nowrap sm:px-5">
-                                <div class="badge space-x-2.5 px-0 text-{{$task->taskStatus->color}}-700 dark:text-accent-light">
-                                    <span>{{$task->taskStatus->value}}</span>
+                                <div class="badge space-x-2.5 px-0 text-{{$task->taskStatus?->color}}-700 dark:text-accent-light">
+                                    <span>{{$task->taskStatus?->value}}</span>
                                 </div>
                             </td>
                             <td class="whitespace-nowrap sm:px-5">

@@ -29,6 +29,7 @@ class TaskRightPopup extends Component
     public $tags = [];
     public $taskTags = [];
     public $users = [];
+    public $taskLevel = -1;
 
     public $files = [];
 
@@ -105,8 +106,11 @@ class TaskRightPopup extends Component
         }
     }
 
-    public function openModal($task_id)
+
+    public function openModal($task_id, $taskLevel)
     {
+        $this->taskLevel = $taskLevel;
+
         $attachments = File::filterByTask($task_id)->get();
 
         $this->files = TemporaryUploadedFile::serializeMultipleForLivewireResponse($attachments);
@@ -143,9 +147,8 @@ class TaskRightPopup extends Component
         $this->task->user_id = $user->id;
         $this->task->project_id = $user->project_id;
 
-        if($this->task->isDirty('assigned_to') ){
-            $assgnee = User::find($this->task->assigned_to);
-            Notification::send($assgnee, new TaskAssignment($this->task));
+        if($this->task->level < 0){
+            $this->task->level = $this->taskLevel;
         }
 
         $this->task->save();
@@ -155,9 +158,13 @@ class TaskRightPopup extends Component
 
         $this->task->refresh();
 
+        if($this->task->isDirty('assigned_to') ){
+            $assgnee = User::find($this->task->assigned_to);
+            Notification::send($assgnee, new TaskAssignment($this->task));
+        }
+
         $this->showModal = false;
         $this->emit('refreshTasks');
-
     }
 
     public function mount()

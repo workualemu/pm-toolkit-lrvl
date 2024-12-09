@@ -1,5 +1,5 @@
 <div class="{{ $task->padding }} {{ $task->bgColor }}">
-    <div class="border-b border-slate-150 py-3 dark:border-navy-500" wire:click="openModal({{ $task->id }})">
+    <div class="border-b border-slate-150 py-3 dark:border-navy-500" wire:click="openModal({{ $task->id }}, {{ $task->level }})">
         <div class="flex items-center space-x-2 sm:space-x-3">
             <h2 class="cursor-pointer text-slate-600 line-clamp-1 dark:text-navy-100">
                 {{$task->title}}
@@ -36,13 +36,13 @@
                     </a>
                 </span>
                 <div class="m-1.5 w-px self-stretch bg-slate-600 dark:bg-navy-500"></div>
-                <div class="badge space-x-2.5 px-1 text-{{$task->task_priority->color}}-700">
+                <div class="badge space-x-2.5 px-1 text-{{$task->task_priority?->color}}-700">
                     <a href="#"
                         x-data="{ }"
                         @click.stop="$wire.filterByPriority({{ $task->task_priority_id }});"
                     >
-                        <span class="flex items-center space-x-1 text-{{$task->task_priority->color}}-700">
-                            <span>{{$task->task_priority->value}}</span>
+                        <span class="flex items-center space-x-1 text-{{$task->task_priority?->color}}-700">
+                            <span>{{$task->task_priority?->value}}</span>
                         </span>
                     </a>
                 </div>
