@@ -30,6 +30,8 @@ class TaskRightPopup extends Component
     public $taskTags = [];
     public $users = [];
     public $taskLevel = -1;
+    public $taskParent = -1;
+    public $formTitle = '';
 
     public $files = [];
 
@@ -106,19 +108,34 @@ class TaskRightPopup extends Component
         }
     }
 
+    private function getFormTitle()
+    {
+        $titles = [
+            0 => ['edit' => 'Edit phase', 'new' => 'New phase'],
+            1 => ['edit' => 'Edit activity', 'new' => 'New activity'],
+            2 => ['edit' => 'Edit task', 'new' => 'New task'],
+        ];
+    
+        $isEditing = $this->task?->id > 0;
+        $level = $isEditing ? $this->task->level : $this->taskLevel;
+    
+        $this->formTitle = $titles[$level][$isEditing ? 'edit' : 'new'] ?? ($isEditing ? 'Edit ' : 'Add ');
+    }
 
-    public function openModal($task_id, $taskLevel)
+    public function openModal($parentId, $taskId, $taskLevel)
     {
         $this->taskLevel = $taskLevel;
+        $this->taskParent = $parentId;
 
-        $attachments = File::filterByTask($task_id)->get();
+        $attachments = File::filterByTask($taskId)->get();
 
         $this->files = TemporaryUploadedFile::serializeMultipleForLivewireResponse($attachments);
         // $this->files = TemporaryUploadedFile::unserializeFromLivewireRequest($files);
-
-        $this->task = new Task();
-        if($task_id > 0) {
-            $this->task = Task::find($task_id);
+        
+        if($taskId > 0) {
+            $this->task = Task::find($taskId);
+        } else {
+            $this->task = new Task();
         }
 
         $this->taskPriorities = TaskPriority::all();
@@ -129,10 +146,9 @@ class TaskRightPopup extends Component
         $this->taskTags = TagTask::where(['task_id'=>$this->task->id])->get();
         $this->taskTags = $this->taskTags->pluck('tag_id');
 
+        $this->getFormTitle();
         $this->showModal = true;
         $this->emit('taskModalOpenForCommentModel', $this->task);
-        
-
     }
 
     public function closeModal()
@@ -142,15 +158,18 @@ class TaskRightPopup extends Component
 
     public function store()
     {
-
         $user = Auth::user();
         $this->task->user_id = $user->id;
         $this->task->project_id = $user->project_id;
 
-        if($this->task->level < 0){
-            $this->task->level = $this->taskLevel;
-        }
+        $this->task->level = $this->taskLevel < 0 ? $this->task->level : $this->taskLevel;
+        $this->task->parent = $this->taskParent < 1 ? $this->task->parent : $this->taskParent;
 
+        $this->task->save();
+
+        $parentTask = $this->task->getParent()?->first();
+        $this->task->path = $parentTask != null ? $parentTask->path.'.'.$this->task->id : $this->task->id;
+        
         $this->task->save();
 
         $this->task->tags()->detach();    
@@ -172,6 +191,7 @@ class TaskRightPopup extends Component
         $this->modalTask = new Task();
         $this->task = new Task();
         $this->project = Project::find(Auth::user()->project_id);
+        $this->getFormTitle();
     }
 
     public function render()

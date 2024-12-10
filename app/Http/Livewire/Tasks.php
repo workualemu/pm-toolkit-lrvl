@@ -35,7 +35,7 @@ class Tasks extends Component
 
     public Illuminate\Database\Eloquent\Collection $result;
 
-    protected $listeners = ['refreshTasks' => '$refresh',
+    protected $listeners = ['refreshTasks' => 'onRefreshTasks',
                             'openNewTaskModal' => 'newTask',
                             'filterTasks' => 'filterTasks',
                             'showAllTasks' => 'allTasks',
@@ -46,6 +46,10 @@ class Tasks extends Component
     {
 
     }
+    public function onRefreshTasks()
+    {
+        $this->filterTasks(null);
+    }
 
     public function addNewPhase()
     {
@@ -53,7 +57,7 @@ class Tasks extends Component
         $projectId = $user->project_id;
         $project = Project::find($projectId);
 
-        $this->emit('openTaskModal', 0, 0);
+        $this->emit('openTaskModal', 0, 0, 0);
         $this->showModal = true;
     }
 
@@ -77,40 +81,6 @@ class Tasks extends Component
             'fAssignee' => null,
         ];
         $this->emit('resetParams', $this->filterParams);
-    }
-
-    // public function toggleRead($id)
-    // {
-        
-        // $notification = $this->user->notifications()->where('id', $id)->first();
-
-        // if(isset($notification)){
-        //     if($notification->read()){
-        //         $notification->markAsUnread();
-        //     } else {
-        //         $notification->markAsRead();
-        //     }
-        // }
-    // }
-
-    public function allTasks()
-    {
-        $user =  Auth::user();
-        $sidebarFilter = [['type'=>'where','column'=>'project_id', 'value'=>$user->project_id]];
-
-        $this->filterParams = [
-            'fTitle' => null,
-            'fPhase' => null,
-            'fDateFrom' => null,
-            'fDateTo' => null,
-            'fStatus' => [],
-            'searchTerm' => null,
-            'sidebarFilter' => $sidebarFilter,
-            'fPriority' => null,
-            'fTaskIds' => null,
-            'fAssignee' => null,
-        ];
-        $this->refresh();
     }
 
     public function mount($project)

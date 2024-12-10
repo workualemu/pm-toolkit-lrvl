@@ -1,5 +1,5 @@
 <div class="{{ $task->padding }} {{ $task->bgColor }}">
-    <div class="border-b border-slate-150 py-3 dark:border-navy-500" wire:click="openModal({{ $task->id }}, {{ $task->level }})">
+    <div class="border-b border-slate-150 py-3 dark:border-navy-500" wire:click="openModal(-1, {{ $task->id }}, -1)">
         <div class="flex items-center space-x-2 sm:space-x-3">
             <h2 class="cursor-pointer text-slate-600 line-clamp-1 dark:text-navy-100">
                 {{$task->title}}
@@ -69,19 +69,54 @@
                     @endforeach
                 </div>
             </div>
-            @if($task->level == 2)
+            @if($task->level == 0)
+            <div class="flex items-center space-x-1">
+                <button 
+                    x-data=""
+                    @click.stop="$wire.addNewTask({{$task->id }}, 1);"
+                    :aria-pressed="addNewTask"
+                    class="relative group  h-7 w-7 rounded-full p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                    <span class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 invisible opacity-0 group-hover:visible group-hover:opacity-100 bg-gray-800 text-white text-sm rounded py-1 px-2 transition-opacity duration-300 whitespace-nowrap">
+                        {{ __('Add new activity') }}
+                    </span>
+                </button>
+            </div>
+            @elseif($task->level == 1)
+            <div class="flex items-center space-x-1">
+                <button 
+                    x-data=""
+                    @click.stop="$wire.addNewTask({{$task->id }}, 2);"
+                    :aria-pressed="addNewTask"
+                    class="relative group h-7 w-7 rounded-full p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                    <span class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 invisible opacity-0 group-hover:visible group-hover:opacity-100 bg-gray-800 text-white text-sm rounded py-1 px-2 transition-opacity duration-300 whitespace-nowrap">
+                        {{ __('Add new task') }}
+                    </span>
+                </button>
+            </div>
+            @elseif($task->level == 2)
             <div class="flex items-center space-x-1">
                 <button 
                     x-data="{ isStarred: @entangle('isStarred') }"
                     @click.stop="isStarred =! isStarred; $wire.set('isStarred', isStarred); $wire.setStarred();"
                     :aria-pressed="isStarred"
-                    class="btn h-7 w-7 rounded-full p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
+                    class="relative group h-7 w-7 rounded-full p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5.5 w-5.5" fill="none" viewBox="0 0 24 24" :class="isStarred ? 'text-primary dark:text-accent' : 'text-current'" :fill="isStarred ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.5">
                         <path x-bind:d="isStarred ? 
                             'M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z' : 
                             'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z'" 
                         />
                     </svg>
+                    <span class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 invisible opacity-0 group-hover:visible group-hover:opacity-100 bg-gray-800 text-white text-sm rounded py-1 px-2 transition-opacity duration-300 whitespace-nowrap">
+                        {{ __('Toggle starred task') }}
+                    </span>
                 </button>
             </div>
             @endif

@@ -12,15 +12,24 @@ class TaskComponent extends Component
     public $task_id = 0;
     public $isStarred = false;
 
-    public function openModal($task_id, $taskLevel)
+    protected $listeners = ['refreshTasks' => '$refresh',
+                        ];
+                        
+    public function openModal($parentId, $taskId, $taskLevel)
     {
-        $this->emit('openTaskModal', $task_id, $taskLevel);
+        $this->emit('openTaskModal', $parentId, $taskId, $taskLevel);
         $this->showModal = true;
     }
 
     public function closeModal()
     {
         $this->showModal = false;
+    }
+
+
+    public function addNewTask($parentId, $taskLevel)
+    {
+        $this->openModal($parentId, 0, $taskLevel);
     }
 
     public function storeTask($task)
