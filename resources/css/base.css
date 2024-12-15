@@ -10,6 +10,13 @@
     xl:[--margin-x:4rem];
 }
 
+html, body{
+    margin:0px;
+    padding:0px;
+    height:100%; /*mandatory*/
+    overflow:hidden;
+}
+
 .has-min-sidebar {
     @apply xl:[--margin-x:2.5rem];
 }
@@ -32,9 +39,9 @@ html.dark {
     @apply !hidden;
 }
 
-body {
+/* body {
     @apply h-full overflow-hidden bg-slate-50 font-sans text-sm leading-5 text-slate-500 antialiased [text-rendering:optimizeLegibility] dark:bg-navy-900 dark:text-navy-200 dark:[color-scheme:dark];
-}
+} */
 
 body.is-monochrome::before {
     @apply pointer-events-none fixed inset-0 z-[999999] -m-[5rem] h-[calc(100%+10rem)] w-[calc(100%+10rem)] backdrop-grayscale backdrop-opacity-[.92] content-[''];

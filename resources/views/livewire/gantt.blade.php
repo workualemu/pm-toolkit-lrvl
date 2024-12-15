@@ -1,4 +1,4 @@
-<main style='width:100%; height:100%;' class="overflow-y-scroll px-2 pt-16 mb-[60px] md:ml-[var(--main-sidebar-width)] ">
+<main class="w-full px-2 pt-16 mb-[60px] md:ml-[var(--main-sidebar-width)] ">
     <div
         class="flex justify-between space-x-2 px-2 py-2 transition-all duration-[.25s]">
         <div class="flex items-center space-x-1">
@@ -57,7 +57,7 @@
         </div>
     </div>
     <div class="w-full h-full">
-        <div id="gantt_here"  class="w-full h-full" wire:ignore></div>
+        <div id="gantt_here"  class="w-full h-full"  style="width:100%; height:100%;" wire:ignore></div>
     </div>
     <script type="text/javascript">
         function toggleChart(){
@@ -139,55 +139,53 @@
         }
 
 
-        var resourceConfig = {
-            columns: [
-                {
-                    name: "name", label: "Name", tree: true, template: function (resource) {
-                        return resource.text;
-                    }
-                },
-                {
-                    name: "workload", label: "Workload", template: function (resource) {
-                        var tasks;
-                        var store = gantt.getDatastore(gantt.config.resource_store),
-                            field = gantt.config.resource_property;
+        // var resourceConfig = {
+        //     columns: [
+        //         {
+        //             name: "name", label: "Name", tree: true, template: function (resource) {
+        //                 return resource.text;
+        //             }
+        //         },
+        //         {
+        //             name: "workload", label: "Workload", template: function (resource) {
+        //                 var tasks;
+        //                 var store = gantt.getDatastore(gantt.config.resource_store),
+        //                     field = gantt.config.resource_property;
 
-                        if (store.hasChild(resource.id)) {
-                            tasks = gantt.getTaskBy(field, store.getChildren(resource.id));
-                        } else {
-                            tasks = gantt.getTaskBy(field, resource.id);
-                        }
+        //                 if (store.hasChild(resource.id)) {
+        //                     tasks = gantt.getTaskBy(field, store.getChildren(resource.id));
+        //                 } else {
+        //                     tasks = gantt.getTaskBy(field, resource.id);
+        //                 }
 
-                        var totalDuration = 0;
-                        for (var i = 0; i < tasks.length; i++) {
-                            totalDuration += tasks[i].duration;
-                        }
+        //                 var totalDuration = 0;
+        //                 for (var i = 0; i < tasks.length; i++) {
+        //                     totalDuration += tasks[i].duration;
+        //                 }
 
-                        return (totalDuration || 0) * 8 + "h";
-                    }
-                }
-            ],
-        };
+        //                 return (totalDuration || 0) * 8 + "h";
+        //             }
+        //         }
+        //     ],
+        // };
 
         gantt.config.columns = [
-            { name: "text", tree: true, width: 320, resize: true, sort: false },
-            { name: "start_date", align: "center", width: 80, resize: true, sort: false },
+            { name: "text", tree: true, width: 220, resize: true, sort: true },
+            { name: "start_date", align: "center", width: 150, resize: true, sort: true },
             { name: "duration", width: 60, align: "center", resize: true, sort: false },
             { name: "add", width: 44 }
         ];
-
-        // gantt.config.resource_store = "resource";
-        // gantt.config.resource_property = "owner";
-        
 
         gantt.config.layout = {
             css: "gantt_container",
             cols: [
                 {
                     width:400,
+                    minWidth: 200,
+                    maxWidth: 600,
                     rows:[
-                        {view: "grid", scrollX: "gridScroll", scrollable: true, scrollY: "scrollVer"},
-                        {view: "scrollbar", id: "gridScroll", group:"horizontal"}
+                        {view: "grid", scrollX: "gridScroll", scrollable: true, scrollY: "scrollVer"}, 
+                        {view: "scrollbar", id: "gridScroll"}  
                     ]
                 },
                 {resizer: true, width: 1},
@@ -212,7 +210,6 @@
             }
         });
         
-
         gantt.attachEvent("onAfterTaskAdd", function(id, task){
             Livewire.emit('gantt-task-added', task);
         });
@@ -268,8 +265,28 @@
         gantt.ext.zoom.setLevel("week");
         gantt.config.sort = false;
         gantt.config.order_branch = true;
-        gantt.config.open_tree_initially = true;
 
+        // gantt.config.resource_store = "resource";
+        // gantt.config.resource_property = "owner";
+        gantt.config.autofit = true;
+        gantt.config.grid_width = 500;
+
+        gantt.templates.drag_link = function(from, from_start, to, to_start) {
+            const sourceTask = gantt.getTask(from);
+        
+            let text = `From:<b> ${sourceTask.text}</b> ${(from_start?"Start":"End")}<br/>`;
+            if(to){
+                const targetTask = gantt.getTask(to);
+                text += `To:<b> ${targetTask.text}</b> ${(to_start?"Start":"End")}<br/>`;
+            }
+            return text;
+        };
+
+        gantt.templates.link_class = function(link){
+            return "dhx-gantt-link-background";
+        };
+
+        gantt.config.xml_date = "%Y-%m-%d %H:%i";
         gantt.init("gantt_here");
         gantt.load("/api/data");
     </script>

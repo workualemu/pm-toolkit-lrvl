@@ -57,13 +57,13 @@ class Gantt extends Component
 
     public function onTaskDragged($task_id, $mode, $task)
     {
-        $dt = $this->tasks->keyBy('id');
+        // $dt = $this->tasks->keyBy('id');
 
         $dTask = Task::find($task['id']);
         $dTask->start_date = $task['start_date'];
         $dTask->duration = $task['duration'];
         $dTask->progress = $task['progress'];
-        $dTask->planned_end_date = $dTask->start_date->addDays($dTask->duration);
+        $dTask->planned_end_date = \Carbon\Carbon::parse($dTask->start_date)->addDays($dTask->duration);
         $dTask->save();
         $parent_id = $dTask->parent;
         while($parent_id != null) {
@@ -176,21 +176,21 @@ class Gantt extends Component
 
     public function render()
     {
-        $tasks = Task::where($this->searchValue)->orderBy('list_order', 'asc')->get();
-        $links = new Link();
+        // $tasks = Task::where($this->searchValue)->orderBy('list_order', 'asc')->get();
+        // $links = new Link();
 
-        /**
-         * @TBD to be refactored for searching. Searching to be implemented from the API
-         */
+        // /**
+        //  * @TBD to be refactored for searching. Searching to be implemented from the API
+        //  */
 
-        $this->tasks = Task::where($this->searchValue)->get()->sortBy('list_sort');
+        // $this->tasks = Task::where($this->searchValue)->get()->sortBy('list_sort');
 
-        $ldata = response()->json([
-            "tasks" => $tasks->all(),
-            "links" => $links->all()
-        ]);
+        // $ldata = response()->json([
+        //     "tasks" => $tasks->all(),
+        //     "links" => $links->all()
+        // ]);
 
-        $this->data = $ldata->content();
+        // $this->data = $ldata->content();
         return view('livewire.gantt');
     }
 }
