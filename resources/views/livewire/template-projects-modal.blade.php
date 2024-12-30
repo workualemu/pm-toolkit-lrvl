@@ -1,4 +1,4 @@
-<div x-data="{ showModal: @entangle('showProjectModal') }">
+<div x-data="{ showModal: @entangle('showModal') }">
     <div class="fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden px-4 py-6 sm:px-5"
         x-show="showModal" role="dialog" @keydown.window.escape="showModal = false">
         <div class="absolute inset-0 bg-slate-900/60 transition-opacity duration-300"
@@ -16,7 +16,7 @@
             <div
                 class="flex justify-between rounded-t-lg bg-slate-200 px-4 py-3 dark:bg-navy-800 sm:px-5">
                 <h3 class="text-base font-medium text-slate-700 dark:text-navy-100">
-                    Project
+                    {{ __('Project Template') }}
                 </h3>
                 <button @click="showModal = !showModal"
                     class="btn -mr-1.5 h-7 w-7 rounded-full p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
@@ -31,51 +31,51 @@
             <div class="overflow-y-auto px-4 py-4 sm:px-5">
                 <div class="mt-4 space-y-4">
                     <label class="block">
-                        <span>Title:</span>
-                        <input {{$readOnly}} type="text" wire:model.lazy='project.title'
+                        <span>{{ __('Title') }}:</span>
+                        <input {{$readOnly}} type="text" wire:model.lazy='template.title'
                             class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                             placeholder="Enter title"/>
-                    </label>
-                </div>
-
-                <div class="mt-4 space-y-4">
-                    <label class="block">
-                        <span>Description:</span>
-                        <textarea {{$readOnly}} wire:model.lazy='project.description' 
-                            rows="4" placeholder="Enter description"
-                            class="form-textarea mt-1.5 w-full resize-none rounded-lg border border-slate-300 bg-transparent p-2.5 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"></textarea>
                     </label>
                 </div>
                 <div class="mt-4 space-y-4">
                     <div class="mt-4 space-y-4">
                         <label class="block">
-                            <span>{{ __('Create from template') }}?:</span>
-                            <select {{$readOnly}} x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" placeholder="Select template"
-                                wire:model.lazy="selectedTemplate" 
+                            <span>{{ __('Source project') }}:</span>
+                            <select {{$readOnly}} x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" placeholder="Select project status"
+                                wire:model.lazy="sourceProject" 
                                 autocomplete="off">
-                                <option value="0">{{ __('Select template') }}</option>
-                                @foreach($templates as $template)
-                                    <option value="{{$template->id}}">{{$template->title}}</option>
+                                <option value="0">{{ __('Select source project') }}</option>
+                                @foreach($projects as $project)
+                                    <option value="{{$project->id}}">{{$project->title}}</option>
                                 @endforeach
                             </select>
                         </label>
-                        @error('template')
+                        @error('sourceProject')
                             <span class="text-error">{{ $message }}</span>
                         @enderror
                     </div>
                 </div>
                 <div class="mt-4 space-y-4">
+                    <label class="block">
+                        <span>{{ __('Description') }}:</span>
+                        <textarea {{$readOnly}} wire:model.lazy='template.description' 
+                            rows="4" placeholder="Enter description"
+                            class="form-textarea mt-1.5 w-full resize-none rounded-lg border border-slate-300 bg-transparent p-2.5 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"></textarea>
+                    </label>
+                </div>
+
+                <div class="mt-4 space-y-4">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <label class="block">
-                            <span>Start date:</span>
-                            <input {{$readOnly}}  wire:model.lazy='project.start_date' 
+                            <span>{{ __('Start date') }}:</span>
+                            <input {{$readOnly}}  wire:model.lazy='template.start_date' 
                                 type="date"
                                 class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                 placeholder="Select start date"/>
                         </label>
                         <label class="block">
-                            <span>End date:</span>
-                            <input {{$readOnly}}  wire:model.lazy='project.end_date' 
+                            <span>{{ __('End date') }}:</span>
+                            <input {{$readOnly}}  wire:model.lazy='template.end_date' 
                                 type="date" 
                                 class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                 placeholder="Select end date"/>
@@ -86,13 +86,13 @@
                 <div class="mt-4 space-y-4">
                     <div class="mt-4 space-y-4">
                         <label class="block">
-                            <span>Status:</span>
+                            <span>{{ __('Status') }}:</span>
                             <select {{$readOnly}} x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" placeholder="Select project status"
-                                wire:model.lazy="project.status" 
+                                wire:model.lazy="template.status" 
                                 autocomplete="off">
-                                <option value="ACTIVE">Active</option>
-                                <option value="SUSPENDED">Suspended</option>
-                                <option value="CLOSED">Closed</option>
+                                <option value="ACTIVE">{{ __('Active') }}</option>
+                                <option value="SUSPENDED">{{ __('Suspended') }}</option>
+                                <option value="CLOSED">{{ __('Closed') }}</option>
                             </select>
                         </label>
                     </div>
@@ -101,7 +101,7 @@
                     <div class="flex justify-between space-x-2 text-right">
                         <button @click="showModal = false"
                             class="btn min-w-[7rem] border border-slate-300 font-medium text-slate-800 hover:bg-slate-150 focus:bg-slate-150 active:bg-slate-150/80 dark:border-navy-450 dark:text-navy-50 dark:hover:bg-navy-500 dark:focus:bg-navy-500 dark:active:bg-navy-500/90">
-                            <a href="{{ route('index') }}">
+                            <a href="{{ route('template-projects') }}">
                                 {{ __('Cancel') }}
                             </a>
                         </button>

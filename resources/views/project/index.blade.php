@@ -164,7 +164,6 @@
                                         {{date('d-M-Y', strtotime($record->start_date))}}
                                     @endif
                                 </p>
-                                
                                 <div x-data="usePopper({ placement: 'bottom-end', offset: 4 })" @click.outside="isShowPopper && (isShowPopper = false)"
                                     class="inline-flex">
                                     <button x-ref="popperRef" @click="isShowPopper = !isShowPopper"
@@ -175,7 +174,6 @@
                                                 d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
                                         </svg>
                                     </button>
-
                                     <div x-ref="popperRoot" class="popper-root" :class="isShowPopper && 'show'">
                                         <div
                                             class="popper-box rounded-md border border-slate-150 bg-white py-1.5 font-inter dark:border-navy-500 dark:bg-navy-700">

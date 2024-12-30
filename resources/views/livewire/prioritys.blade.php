@@ -6,7 +6,7 @@
                 <button wire:click="addNewPriority()"
                     class="border-b border-dotted border-current pb-0.5 font-medium text-primary outline-none transition-colors duration-300 hover:text-primary/70 focus:text-primary/70 dark:text-accent-light dark:hover:text-accent-light/70 dark:focus:text-accent-light/70"
                 >
-                    Add new priority
+                    {{ __('Add new priority') }}
                 </button>
             </div>
 
@@ -23,17 +23,17 @@
                             <th
                                 class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
                             >
-                                Priority
+                                {{ __('Priority') }}
                             </th>
                             <th
                                 class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
                             >
-                                Descripton
+                                {{ __('Descripton') }}
                             </th>
                             <th
                                 class="whitespace-nowrap rounded-tr-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
                             >
-                                Action
+                                {{ __('Action') }}
                             </th>
                         </tr>
                     </thead>

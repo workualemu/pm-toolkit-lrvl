@@ -4,7 +4,7 @@
     <div class="flex justify-between space-x-2 px-2 py-2 transition-all duration-[.25s]">
     <div class="flex items-center space-x-1">
         <h3 class="text-lg font-medium text-slate-700 line-clamp-1 dark:text-navy-50">
-        {{ __('My tasks') }} 
+        
         </h3>
     </div>
     <div class="relative hidden w-full max-w-[16rem] sm:flex">

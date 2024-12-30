@@ -1,7 +1,6 @@
 <div class="grid grid-cols-1 gap-4 sm:gap-5 lg:gap-6">
     <div>
         <div class="px-2 flex items-center justify-between">
-            
             <div>
                 <button wire:click="addNewTeam()"
                     class="border-b border-dotted border-current pb-0.5 font-medium text-primary outline-none transition-colors duration-300 hover:text-primary/70 focus:text-primary/70 dark:text-accent-light dark:hover:text-accent-light/70 dark:focus:text-accent-light/70"
@@ -9,9 +8,7 @@
                     {{ __('Add new team') }}
                 </button>
             </div>
-
         </div>
-
         <div class="card mt-3">
             <div
                 class="is-scrollbar-hidden min-w-full overflow-x-auto"

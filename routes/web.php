@@ -58,6 +58,7 @@ Route::middleware('auth')->group(function () {
         Route::get('tags', 'getTags')->name('tags');
         Route::get('task-status', 'getStatuses')->name('task-status');
         Route::get('prioritys', 'getPrioritys')->name('prioritys');
+        Route::get('template-projects', 'getTemplateProjects')->name('template-projects');
         
         Route::get('users', 'getUsers')->name('users');
         Route::get('invitations', 'getInvitations')->name('invitations');

@@ -44,7 +44,8 @@ class KanbanList extends Component
 
     public function render()
     {
-        $this->tasks = Task::filterByStatus($this->kanbanList->id)->get();
+        $user =  Auth::user();
+        $this->tasks = Task::filterByStatus($this->kanbanList->id, $user->project_id)->get();
         $this->taskStatus = TaskStatus::find($this->kanbanList->id);
         return view('livewire.kanban-list');
     }

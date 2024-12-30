@@ -408,7 +408,7 @@
                                     </div>
                                 </div>
                             </a>
-                            <a href="#"
+                            <a href="{{ route('template-projects') }}"
                                 class="group flex items-center space-x-3 py-2 px-4 tracking-wide outline-none transition-all hover:bg-slate-100 focus:bg-slate-100 dark:hover:bg-navy-600 dark:focus:bg-navy-600">
                                 <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-success text-white">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none"
@@ -423,10 +423,10 @@
                                 <div>
                                     <h2
                                         class="font-medium text-slate-700 transition-colors group-hover:text-primary group-focus:text-primary dark:text-navy-100 dark:group-hover:text-accent-light dark:group-focus:text-accent-light">
-                                        {{ __('Settings') }}
+                                        {{ __('Template projects') }}
                                     </h2>
                                     <div class="text-xs text-slate-400 line-clamp-1 dark:text-navy-300">
-                                        {{ __('Webapp settings') }}
+                                        {{ __('Manage template projects') }}
                                     </div>
                                 </div>
                             </a>

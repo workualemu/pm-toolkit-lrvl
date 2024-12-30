@@ -57,10 +57,10 @@ class Projects extends Component
     public function render()
     {
         if(Auth::user()->hasRole('Super Admin') ){
-            $this->projects = Project::all()->sortBy('status');
+            $this->projects = Project::where('is_template', false)->get()->sortBy('status');
         } else{
             $projects = UserProject::select('project_id')
-                ->where([['user_id', '=', Auth::user()->id], ['status', '=', 'GRANTED']])->get();
+                ->where([['user_id', '=', Auth::user()->id], ['status', '=', 'GRANTED'], ['is_template', '=', false]])->get();
             $this->projects = Project::whereIn('id', $projects)->get();
         }
         

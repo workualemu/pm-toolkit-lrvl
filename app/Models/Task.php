@@ -16,7 +16,7 @@ class Task extends Model
     use HasFactory, Commentable;
 
     protected $fillable = ['project_id', 'title', 'start_date', 'planned_end_date', 'report_by',
-        'description', 'status', 'user_id', 'text', 'type', 'parent', 'level', 'list_order', 'is_starred', 'path'];
+        'description', 'status', 'user_id', 'text', 'type', 'parent', 'level', 'list_order', 'is_starred', 'path', 'original_id'];
 
     // protected $casts = ['start_date'=>'datetime:d-m-Y'];
 
@@ -104,8 +104,13 @@ class Task extends Model
         return $this->belongsToMany(Tag::class, 'tag_tasks');
     }
 
-    public static function scopeFilterByStatus($query, $status_id)
+    public static function scopeFilterByStatus($query, $status_id, $project_id = null)
     {
+        if ($project_id) {
+            return $query->where('task_status_id', '=', $status_id)
+                ->where('project_id', '=', $project_id)
+                ->orderBy('kanban_list_rank', 'asc');
+        }
         return $query->where('task_status_id', '=', $status_id)->orderBy('kanban_list_rank', 'asc');
     }
 

@@ -1,12 +1,5 @@
-<x-app-layout title="Reports" is-header-blur="true" sidebarToggle="false">
+<x-app-layout title="Project template" is-header-blur="true" sidebarToggle="false">
     <!-- Main Content Wrapper -->
-    
-    <livewire:report-admin-modal />
-    <livewire:report-param-modal />
-    <livewire:report-column-modal />
-    <livewire:tag-modal />
-    <livewire:priority-modal />
-    <livewire:task-status-modal />
     <div class="sidebar print:hidden">
         <div class="sidebar-panel  ml-[-160px]">
             <div class="flex h-full grow flex-col bg-white pl-[var(--main-sidebar-width)] dark:bg-navy-750">
@@ -24,6 +17,6 @@
             </div>
         </div>
     </div>
-    @livewire('reports-page', ['project' => $project, 'title' => $page_title, 'type' => $page_type])
+    @livewire('template-projects')
 
 </x-app-layout>

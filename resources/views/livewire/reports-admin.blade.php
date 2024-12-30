@@ -6,7 +6,7 @@
                 <button wire:click="addNewReport()"
                     class="border-b border-dotted border-current pb-0.5 font-medium text-primary outline-none transition-colors duration-300 hover:text-primary/70 focus:text-primary/70 dark:text-accent-light dark:hover:text-accent-light/70 dark:focus:text-accent-light/70"
                 >
-                    Add new report
+                    {{ __('Add new report') }}
                 </button>
             </div>
 
@@ -23,22 +23,22 @@
                             <th
                                 class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
                             >
-                                Title
+                                {{ __('Title') }}
                             </th>
                             <th
                                 class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
                             >
-                                Sort by
+                                {{ __('Sort by') }}
                             </th>
                             <th
                                 class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
                             >
-                                Published
+                                {{ __('Published') }}
                             </th>
                             <th
                                 class="whitespace-nowrap rounded-tr-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
                             >
-                                Action
+                                {{ __('Action') }}
                             </th>
                         </tr>
                     </thead>
@@ -106,7 +106,7 @@
                             <option>50</option>
                         </select>
                     </label>
-                    <span>entries</span>
+                    <span>{{ __('entries') }}</span>
                 </div>
 
                 <ol class="pagination">
@@ -184,7 +184,7 @@
                         </a>
                     </li>
                 </ol>
-                <div class="text-xs+">1 - 10 of 10 entries</div>
+                <div class="text-xs+">1 - 10 {{ __('of') }} 10 {{ __('entries') }}</div>
             </div>
         </div>
     </div>
