@@ -13,8 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('tasks', function (Blueprint $table) {
-            $table->integer('kanban_list_rank')->default(1);
+        Schema::table('reports', function (Blueprint $table) {
+            $table->unsignedBigInteger('project_id')->nullable();
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
         });
     }
 
@@ -25,8 +26,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('tasks', function (Blueprint $table) {
-            $table->dropColumn('kanban_list_rank');
+        Schema::table('reports', function (Blueprint $table) {
+            $table->dropForeign(['project_id']);
         });
     }
 };

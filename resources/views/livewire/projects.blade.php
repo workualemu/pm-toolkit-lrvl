@@ -3,7 +3,6 @@
         <livewire:project-modal />
            <!--header, title search, and filter block -->
         <div class="">
-            
             <div class="flex justify-between space-x-2 px-2 py-2 transition-all duration-[.25s]">
                 <!--  title -->
                 <div>
@@ -12,7 +11,7 @@
                             {{ __('Projects board') }}
                         </p>
                     </div>
-                    <p class="mt-1 text-xs">List of your ongoing projects</p>
+                    <p class="mt-1 text-xs">{{ __('List of your ongoing projects') }}</p>
                 </div>
                 <!--  search bar -->
                 <div class="flex items-center space-x-2">
@@ -40,7 +39,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                     </svg>
-                    <span> New Project</span>
+                    <span> {{ __('New project') }}</span>
                 </button>
             </div>
         </div>
@@ -72,10 +71,11 @@
                     </div>
                 </div>
             @empty
-                <div>
-                    <div colspan="6" class="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400">
-                        {{ __('There are no records to display') }}
-                    </div>
+                <div class="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-600">
+                    {{ __('No projects found. Start by creating your first project!') }}
+                    <a href="#" wire:click="newProject" class="text-blue-500 hover:underline">
+                        {{ __('Create a Project') }}
+                    </a>
                 </div>
             @endforelse
         </div>

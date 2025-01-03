@@ -64,7 +64,7 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function getProject(): Project
+    public function getProject(): ?Project
     {
         return Project::find($this->project_id);
     }

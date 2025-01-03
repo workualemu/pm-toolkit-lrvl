@@ -200,6 +200,7 @@ return [
         App\Providers\JetstreamServiceProvider::class,
         App\Providers\ViewServiceProvider::class,
         App\Providers\CommentifyServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
     ],
 
     /*

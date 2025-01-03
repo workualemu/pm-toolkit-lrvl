@@ -17,6 +17,7 @@ class TaskPriority extends Model
     protected $fillable = [
         'value',
         'description',
+        'color', 
         'user_id'
     ];
 }

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('original_id')->nullable();
             $table->foreignId('user_id');
             $table->text('description')->nullable();
             $table->timestamps();
@@ -27,9 +28,9 @@ return new class extends Migration
             $table->foreignId('project_id');
             $table->foreignId('assigned_to')->nullable();
             $table->foreignId('report_by')->nullable();
-            $table->foreignId('task_type_id');
-            $table->foreignId('task_status_id');
-            $table->foreignId('task_priority_id');
+            $table->foreignId('task_type_id')->nullable();
+            $table->foreignId('task_status_id')->nullable();
+            $table->foreignId('task_priority_id')->nullable();
             $table->integer('duration')->default(1);
             $table->float('progress')->default(0);
             $table->integer('kanban_list_rank')->default(1);

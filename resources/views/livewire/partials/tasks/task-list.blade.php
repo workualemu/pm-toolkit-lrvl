@@ -7,7 +7,7 @@
                 </div>
             @empty
             <div>
-                <div colspan="6" class="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400">
+                <div colspan="6" class="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-600">
                     {{ __('There are no records to display') }}
                 </div>
             </div>

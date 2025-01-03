@@ -5,6 +5,12 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\Tag;
+use App\Models\TaskStatus;
+use App\Models\TaskPriority;
+use App\Models\Report;
+use App\Models\ReportParam;
+use App\Models\ReportColumn;
 use Illuminate\Support\Facades\Auth;
 
 class TemplateProjectsModal extends Component
@@ -60,7 +66,7 @@ class TemplateProjectsModal extends Component
         $this->template->save();
         $this->template->refresh();
 
-        $this->copyTemplateFromSource($sourceProject);
+        $this->duplicateTemplateFromSource($sourceProject);
 
         $this->emit('refreshTemplate');
         $this->showModal = false;
@@ -84,6 +90,27 @@ class TemplateProjectsModal extends Component
 
     //--------------------- private methods ---------------------
 
+    private function duplicateTemplateFromSource(Project $source) : bool
+    {
+        if(!copyTemplateFromSource($source) ){
+            return false;
+        }
+        if(!copyTagTemplateFromSource($source) ){
+            return false;
+        }
+        if(!copyTaskPriorityTemplateFromSource($source) ){
+            return false;
+        }
+        if(!copyTaskStatusTemplateFromSource($source) ){
+            return false;
+        }
+        if(!copyReportsTemplateFromSource($source) ){
+            return false;
+        }
+        
+        return true;
+    }
+       
     private function copyTemplateFromSource(Project $source) : bool
     {
         if($source == null){
@@ -133,4 +160,136 @@ class TemplateProjectsModal extends Component
 
         return true;
     }
+
+    private function copyTagTemplateFromSource(Project $source) : bool
+    {
+        if($source == null){
+            return false;
+        }
+        $user = Auth::user();
+        $items = $this->template->tags;
+        foreach($items as $item){
+            $item->delete();
+        }
+        // ---------copy all source project items to the template project---------------
+        $sourceItems = $source->tags;
+        foreach($sourceItems as $sourceItem){
+            $item = new Tag();
+            $item->project_id = $this->template->id;
+            $item->label = $sourceItem->label;
+            $item->color = $sourceItem->color;
+            $item->description = $sourceItem->description;
+            $item->user_id = $user->id;
+
+            $item->save();
+        }
+
+        return true;
+    }
+
+    private function copyTaskPriorityTemplateFromSource(Project $source) : bool
+    {
+        if($source == null){
+            return false;
+        }
+        $user = Auth::user();
+        $items = $this->template->getTaskPriorities();
+        foreach($items as $item){
+            $item->delete();
+        }
+        // ---------copy all source project items to the template project---------------
+        $sourceItems = $source->getTaskPriorities();
+        foreach($sourceItems as $sourceItem){
+            $item = new TaskPriority();
+            $item->project_id = $this->template->id;
+            $item->value = $sourceItem->value;
+            $item->description = $sourceItem->description;
+            $item->color = $sourceItem->color;
+            $item->user_id = $user->id;
+
+            $item->save();
+        }
+
+        return true;
+    }
+    
+    private function copyTaskStatusTemplateFromSource(Project $source) : bool
+    {
+        if($source == null){
+            return false;
+        }
+        $user = Auth::user();
+        $items = $this->template->getTaskStatus();
+        foreach($items as $item){
+            $item->delete();
+        }
+        // ---------copy all source project items to the template project---------------
+        $sourceItems = $source->getTaskStatus();
+        foreach($sourceItems as $sourceItem){
+            $item = new TaskStatus();
+            $item->project_id = $this->template->id;
+            $item->value = $sourceItem->value;
+            $item->description = $sourceItem->description;
+            $item->color = $sourceItem->color;
+            $item->kanban_list_id = $sourceItem->kanban_list_id;
+            $item->user_id = $user->id;
+
+            $item->save();
+        }
+
+        return true;
+    }
+    
+    private function copyReportsTemplateFromSource(Project $source) : bool
+    {
+        if($source == null){
+            return false;
+        }
+        $user = Auth::user();
+        $items = $this->template->reports();
+        foreach($items as $item){
+            $item->delete();
+        }
+        // ---------copy all source project items to the template project---------------
+        $sourceItems = $source->reports();
+        foreach($sourceItems as $sourceItem){
+            $item = new Report();
+            $item->project_id = $this->template->id;
+            $item->title = $sourceItem->title;
+            $item->db_table = $sourceItem->db_table;
+            $item->sort_by = $sourceItem->sort_by;
+            $item->description = $sourceItem->description;
+            $item->published = $sourceItem->published;
+            $item->user_id = $user->id;
+            $item->show_meta = $sourceItem->show_meta;
+            $item->show_print_user = $sourceItem->show_print_user;
+            $item->show_print_date = $sourceItem->show_print_date;
+            
+            $item->save();
+
+            $sourceColumns = $sourceItem->columns;
+            foreach($sourceColumns as $sourceColumn){
+                $column = new ReportColumn();
+                $column->report_id = $item->id;
+                $column->title = $sourceColumn->title;
+                $column->db_column = $sourceColumn->db_column;
+                $column->sort_order = $sourceColumn->sort_order;
+                $column->user_id = $user->id;
+                $column->save();
+            }
+
+            $sourceParams = $sourceItem->params;
+            foreach($sourceParams as $sourceParam){
+                $param = new ReportParam();
+                $param->report_id = $item->id;
+                $param->title = $sourceParam->title;
+                $param->db_column = $sourceParam->db_column;
+                $param->user_id = $user->id;
+                $param->save();
+            }
+        }
+
+        return true;
+    }
+
 }

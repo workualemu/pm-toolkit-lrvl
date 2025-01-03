@@ -42,7 +42,7 @@
                                 {{$record->status}}
                             </span>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium text-gray-400">
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium text-gray-600">
                             <a class="text-indigo-600 hover:text-indigo-900 cursor-pointer" wire:click.prevent="showLink({{$record->id}})">{{ __('Edit') }}</a>
                             |
                             <a class="text-red-600 hover:text-red-800 cursor-pointer" wire:click.prevent="deleteInvitation({{$record->id}})">{{ __('Delete') }}</a>

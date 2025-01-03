@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b0954c72a9bea925d971573481ca4abc",
+    "content-hash": "2856744b651331d0b73bd4098273aa04",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -5162,16 +5162,16 @@
         },
         {
             "name": "spatie/laravel-permission",
-            "version": "6.0.1",
+            "version": "6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-permission.git",
-                "reference": "9e83ebe5084689a31263581e1fa821270957b8e6"
+                "reference": "095821962f8f287f0ce1d6265fc7aa7070dacf12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/9e83ebe5084689a31263581e1fa821270957b8e6",
-                "reference": "9e83ebe5084689a31263581e1fa821270957b8e6",
+                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/095821962f8f287f0ce1d6265fc7aa7070dacf12",
+                "reference": "095821962f8f287f0ce1d6265fc7aa7070dacf12",
                 "shasum": ""
             },
             "require": {
@@ -5188,14 +5188,14 @@
             },
             "type": "library",
             "extra": {
-                "branch-alias": {
-                    "dev-main": "6.x-dev",
-                    "dev-master": "6.x-dev"
-                },
                 "laravel": {
                     "providers": [
                         "Spatie\\Permission\\PermissionServiceProvider"
                     ]
+                },
+                "branch-alias": {
+                    "dev-main": "6.x-dev",
+                    "dev-master": "6.x-dev"
                 }
             },
             "autoload": {
@@ -5232,7 +5232,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-permission/issues",
-                "source": "https://github.com/spatie/laravel-permission/tree/6.0.1"
+                "source": "https://github.com/spatie/laravel-permission/tree/6.0.0"
             },
             "funding": [
                 {
@@ -5240,7 +5240,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-11-06T19:27:13+00:00"
+            "time": "2023-10-25T05:25:50+00:00"
         },
         {
             "name": "staudenmeir/eloquent-has-many-deep-contracts",

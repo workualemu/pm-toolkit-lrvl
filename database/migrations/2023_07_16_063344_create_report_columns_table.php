@@ -17,13 +17,15 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignId('user_id');
-            $table->foreignId('report_id');
+            $table->unsignedBigInteger('report_id');
             $table->text('description')->nullable();
             $table->string('title');
             $table->string('db_column');
             $table->string('class')->nullable();
             $table->boolean('show_total')->default(0);
             $table->boolean('published')->default(1);
+
+            $table->foreign('report_id')->references('id')->on('reports')->onDelete('cascade');
         });
     }
 
