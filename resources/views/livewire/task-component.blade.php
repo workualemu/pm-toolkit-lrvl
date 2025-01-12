@@ -8,8 +8,14 @@
         <div class="mt-1 flex items-end justify-between">
             <div class="flex flex-wrap items-center font-inter text-xs">
                 <p>
-                    @if($task->planned_end_date)
-                        {{date('d-M-Y', strtotime($task->planned_end_date))}}
+                    @if($task->start_date)
+                        {{date('d-M-Y', strtotime($task->start_date))}}
+                    @endif
+                </p>
+                &nbsp;&nbsp;to&nbsp;&nbsp;
+                <p>
+                    @if($task->end_date)
+                        {{date('d-M-Y', strtotime($task->end_date))}}
                     @endif
                 </p>
                 <div class="m-1.5 w-px self-stretch bg-slate-600 dark:bg-navy-900"></div>
@@ -74,7 +80,6 @@
                 <button 
                     x-data=""
                     @click.stop="$wire.addNewTask({{$task->id }}, 1);"
-                    :aria-pressed="addNewTask"
                     class="relative group  h-7 w-7 rounded-full p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -90,7 +95,6 @@
                 <button 
                     x-data=""
                     @click.stop="$wire.addNewTask({{$task->id }}, 2);"
-                    :aria-pressed="addNewTask"
                     class="relative group h-7 w-7 rounded-full p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">

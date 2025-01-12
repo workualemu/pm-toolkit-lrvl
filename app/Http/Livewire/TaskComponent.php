@@ -18,6 +18,7 @@ class TaskComponent extends Component
     public function openModal($parentId, $taskId, $taskLevel)
     {
         $this->emit('openTaskModal', $parentId, $taskId, $taskLevel);
+        $this->emit('setTaskId', $taskId);
         $this->showModal = true;
     }
 
@@ -25,7 +26,6 @@ class TaskComponent extends Component
     {
         $this->showModal = false;
     }
-
 
     public function addNewTask($parentId, $taskLevel)
     {

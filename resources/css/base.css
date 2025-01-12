@@ -223,3 +223,7 @@ code.inline-code {
         @apply bg-slate-400 dark:bg-navy-300;
     }
 }
+
+.filepond--credits {
+    display: none !important;
+}

@@ -63,7 +63,7 @@ class Gantt extends Component
         $dTask->start_date = $task['start_date'];
         $dTask->duration = $task['duration'];
         $dTask->progress = $task['progress'];
-        $dTask->planned_end_date = \Carbon\Carbon::parse($dTask->start_date)->addDays($dTask->duration);
+        $dTask->end_date = \Carbon\Carbon::parse($dTask->start_date)->addDays($dTask->duration);
         $dTask->save();
         $parent_id = $dTask->parent;
         while($parent_id != null) {
@@ -71,10 +71,10 @@ class Gantt extends Component
             if($parent->start_date > $dTask->start_date) {
                 $parent->start_date = $dTask->start_date;
             }
-            if($parent->planned_end_date < $dTask->planned_end_date) {
-                $parent->planned_end_date = $dTask->planned_end_date;
+            if($parent->end_date < $dTask->end_date) {
+                $parent->end_date = $dTask->end_date;
             }
-            $to = \Carbon\Carbon::parse($parent->planned_end_date);
+            $to = \Carbon\Carbon::parse($parent->end_date);
             $from = \Carbon\Carbon::parse($parent->start_date);
             $parent->duration =$to->diffInDays($from);
             $parent->save();

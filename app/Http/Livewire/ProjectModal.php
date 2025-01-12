@@ -116,7 +116,7 @@ class ProjectModal extends Component
                 $task->title = $sourceTask->title;
                 $task->description = $sourceTask->description;
                 $task->start_date = Carbon::parse($sourceTask->start_date)->addDays($slackDays);
-                $task->planned_end_date = Carbon::parse($sourceTask->planned_end_date)->addDays($slackDays);
+                $task->end_date = Carbon::parse($sourceTask->end_date)->addDays($slackDays);
                 $task->user_id = $user->id;
                 $task->text = $sourceTask->text;
                 $task->task_type_id = $sourceTask->task_type_id;

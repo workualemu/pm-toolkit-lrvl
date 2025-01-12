@@ -115,10 +115,10 @@ class TasksSideBar extends Component
         $this->emit('filterTasks', $condition);
     }
 
-    public function addNewTask()
-    {
-        $this->emit('openTaskModal', null);
-    }
+    // public function addNewTask()
+    // {
+    //     $this->emit('openTaskModal', null);
+    // }
 
     public function mount()
     {

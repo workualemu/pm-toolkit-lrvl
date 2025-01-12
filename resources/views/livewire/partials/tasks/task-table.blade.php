@@ -41,7 +41,7 @@
                                 </div>
                             </td>
                             <td class="whitespace-nowrap sm:px-5">
-                                {{date('d-M-Y', strtotime($task->planned_end_date))}}
+                                {{date('d-M-Y', strtotime($task->end_date))}}
                             </td>
                         </tr>
                     @endforeach

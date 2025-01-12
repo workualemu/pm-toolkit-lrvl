@@ -60,7 +60,7 @@
                             <div>
                                 <span>Due date:</span>
                                 <label class="relative mt-1.5 flex">
-                                    <input id="end_date" wire:model.defer="task.planned_end_date" x-init="$el._x_flatpickr = flatpickr($el, { defaultDate: '2020-01-05' })"
+                                    <input id="end_date" wire:model.defer="task.end_date" x-init="$el._x_flatpickr = flatpickr($el, { defaultDate: '2020-01-05' })"
                                         class="form-input peer w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                         placeholder="Choose date..." type="text" />
                                     <span

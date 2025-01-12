@@ -1,13 +1,14 @@
 <div>
     <main class="main-content kanban-app w-full">
     @if($project == null)
-      <div class="text-center text-error">
-          <div class="mt-4">
-              <p class="text-error dark:text-navy-300">
-                  {{ __('Please select a project') }}
-              </p>
-          </div>
-      </div>
+        <div
+            class="flex items-center justify-between space-x-2 px-[var(--margin-x)] py-5 transition-all duration-[.25s]">
+            <div class="flex items-center space-x-1">
+                <h3 class="text-lg font-medium text-slate-700 line-clamp-1 dark:text-navy-50">
+                    {{ $page_title }}
+                </h3>
+            </div>
+        </div>
     @else
         <div
             class="flex items-center justify-between space-x-2 px-[var(--margin-x)] py-5 transition-all duration-[.25s]">

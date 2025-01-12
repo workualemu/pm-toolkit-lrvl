@@ -16,6 +16,7 @@ use Livewire\Component;
 use Livewire\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 use App\Notifications\TaskAssignment;
+use Carbon\Carbon;
 
 class TaskRightPopup extends Component
 {
@@ -42,7 +43,8 @@ class TaskRightPopup extends Component
     protected $rules = [
         'task.title' => 'required|min:2',
         'task.user_id' => 'required',
-        'task.planned_end_date'=>'',
+        'task.start_date'=>'',
+        'task.end_date'=>'',
         'task.task_priority_id'=>'required',
         'task.task_status_id'=>'required',
         'tagTasks.tag_id'=>'',
@@ -51,11 +53,12 @@ class TaskRightPopup extends Component
         'task.report_by'=>'',
     ];
     protected $listeners = ['openTaskModal' => 'openModal',
-                            'addFile' => 'addFile'];
+                            'addFile' => 'addFile',
+                            'fileDownloaded' => 'downloadFile',];
 
-    public function addFile($file)
+    public function downloadFile($file)
     {
-        
+        logger('downloadFile is captured');
     }
 
     public function finishUpload($name, $tmpPath, $isMultiple)
@@ -78,6 +81,8 @@ class TaskRightPopup extends Component
         }
 
     }
+
+   
 
     // public function downloadFile($file, $originalFileName)
     // {
@@ -143,7 +148,7 @@ class TaskRightPopup extends Component
         $this->tags = Tag::all();
         $this->users = User::all();
         
-        $this->taskTags = TagTask::where(['task_id'=>$this->task->id])->get();
+        $this->taskTags = TagTask::where('task_id', $this->task->id)->get();
         $this->taskTags = $this->taskTags->pluck('tag_id');
 
         $this->getFormTitle();
@@ -181,6 +186,8 @@ class TaskRightPopup extends Component
             $assgnee = User::find($this->task->assigned_to);
             Notification::send($assgnee, new TaskAssignment($this->task));
         }
+
+        $this->emit('saveUploads', $this->task->id);
 
         $this->showModal = false;
         $this->emit('refreshTasks');

@@ -19,12 +19,6 @@ class ReportsPage extends Component
 
     public function generateReport()
     {
-
-        // $columns = \DB::getSchemaBuilder()->getColumnListing('tasks');
-
-        // $fromDate = $request->input('from_date');
-        // $toDate = $request->input('to_date');
-        // $sortBy = $request->input('sort_by');
         $sortBy = 'title';
 
 
@@ -54,11 +48,6 @@ class ReportsPage extends Component
             null,
             $columns
         ), 'export.xlsx');
-        // return Excel::download($queryBuilder->get(), 'export.xlsx');
-
-        // ExcelReport::of($title, $meta, $queryBuilder, $columns)
-        //     ->simple()
-        //     ->download('report_test.xlsx');
     }
 
     public function mount($project, $title, $type)

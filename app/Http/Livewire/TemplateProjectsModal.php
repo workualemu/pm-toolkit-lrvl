@@ -134,7 +134,7 @@ class TemplateProjectsModal extends Component
                 $task->title = $sourceTask->title;
                 $task->description = $sourceTask->description;
                 $task->start_date = $sourceTask->start_date;
-                $task->planned_end_date = $sourceTask->planned_end_date;
+                $task->end_date = $sourceTask->end_date;
                 $task->user_id = $user->id;
                 $task->text = $sourceTask->text;
                 $task->task_type_id = $sourceTask->task_type_id;

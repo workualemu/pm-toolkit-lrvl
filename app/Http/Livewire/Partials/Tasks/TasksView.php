@@ -118,12 +118,12 @@ class TasksView extends Component
         }
         
         if ($this->filterParams['fDateFrom'] != null) {
-            array_push($criteria, ['type' => 'where', 'column' => 'planned_end_date', 'operator'=> '>=', 'value' => $this->filterParams['fDateFrom']]);
+            array_push($criteria, ['type' => 'where', 'column' => 'end_date', 'operator'=> '>=', 'value' => $this->filterParams['fDateFrom']]);
                 
         }
 
         if ($this->filterParams['fDateTo'] != null) {
-            array_push($criteria, ['type' => 'where', 'column' => 'planned_end_date', 'operator'=> '<=', 'value' => $this->filterParams['fDateTo']]);
+            array_push($criteria, ['type' => 'where', 'column' => 'end_date', 'operator'=> '<=', 'value' => $this->filterParams['fDateTo']]);
                 
         }
 
