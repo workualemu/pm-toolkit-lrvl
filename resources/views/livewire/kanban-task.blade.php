@@ -20,8 +20,8 @@
                     </span>
                 </div>
                 <div
-                    class="badge py-1 px-1.5 text-{{$task->task_priority->color}} dark:bg-secondary-light/15 dark:text-secondary-light">
-                    {{$task->task_priority->value}}
+                    class="badge py-1 px-1.5 text-{{$task->taskPriority?->color}} dark:bg-secondary-light/15 dark:text-secondary-light">
+                    {{$task->taskPriority?->value}}
                 </div>
             </div>
             <div class="flex items-end justify-between pt-1">

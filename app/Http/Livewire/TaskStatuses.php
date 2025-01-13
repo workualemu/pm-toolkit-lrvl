@@ -32,8 +32,10 @@ class TaskStatuses extends Component
 
     public function render()
     {
+        $user = \Auth::user();
+
         return view('livewire.task-statuses', [
-            'statuses' => TaskStatus::orderby('kanban_list_rank')->paginate(10),
+            'statuses' => TaskStatus::where('project_id', $user->project_id)->orderby('kanban_list_rank')->paginate(10),
         ]);
 
     }

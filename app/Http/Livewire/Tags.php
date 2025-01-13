@@ -34,8 +34,9 @@ class Tags extends Component
 
     public function render()
     {
+        $user = \Auth::user();
         return view('livewire.tags', [
-            'tags' => Tag::paginate(10),
+            'tags' => Tag::where('project_id', $user->project_id)->paginate(10),
         ]);
     }
 }

@@ -18,6 +18,7 @@ class TaskPriority extends Model
         'value',
         'description',
         'color', 
-        'user_id'
+        'user_id',
+        'project_id'
     ];
 }

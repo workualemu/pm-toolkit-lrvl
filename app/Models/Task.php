@@ -18,8 +18,8 @@ class Task extends Model
     protected $fillable = ['project_id', 'title', 'start_date', 'end_date', 'report_by',
         'description', 'status', 'user_id', 'text', 'type', 'parent', 'level', 'list_order', 'is_starred', 'path', 'original_id'];
 
-    protected $casts = ['start_date'=>'datetime:d-M-Y', 
-                        'end_date'=>'datetime:d-M-Y'];
+    // protected $casts = ['start_date'=>'datetime:d-M-Y', 
+    //                     'end_date'=>'datetime:d-M-Y'];
 
 
     public function getOpenAttribute()
@@ -62,7 +62,7 @@ class Task extends Model
         return $this->belongsTo(TaskStatus::class);
     }
 
-    public function task_priority(): BelongsTo
+    public function taskPriority(): BelongsTo
     {
         return $this->belongsTo(TaskPriority::class);
     }

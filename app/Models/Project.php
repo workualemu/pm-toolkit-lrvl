@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Project extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'start_date', 'end_date', 'description', 'status', 'user_id'];
+    protected $fillable = ['title', 'start_date', 'end_date', 'description', 'status', 'user_id', 'is_template'];
 
     public function reports(): HasMany
     {
@@ -23,9 +23,10 @@ class Project extends Model
             ->get();
     }
 
-    public function tags(): HasMany
+    public function getTags()
     {
-        return $this->hasMany(Tag::class, 'project_id', 'id');
+        return Tag::where('project_id', '=', $this->id)
+            ->get();
     }
 
     public function getTaskPriorities()
@@ -34,7 +35,7 @@ class Project extends Model
             ->get();
     }
 
-    public function getTaskStatus()
+    public function getTaskStatuses()
     {
         return TaskStatus::where('project_id', '=', $this->id)
             ->get();

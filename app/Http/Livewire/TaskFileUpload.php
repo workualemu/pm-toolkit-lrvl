@@ -22,7 +22,7 @@ class TaskFileUpload extends Component
     public function setTaskId($taskId)
     {
         $this->taskId = $taskId;
-        $this->loadSavedFiles($taskId);
+        // $this->loadSavedFiles($taskId);
     }
 
     public function loadSavedFiles($taskId)

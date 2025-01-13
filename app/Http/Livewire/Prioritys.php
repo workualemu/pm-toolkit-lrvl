@@ -31,7 +31,9 @@ class Prioritys extends Component
 
     public function render()
     {
-        $this->prioritys = TaskPriority::all();
+        $user = \Auth::user();
+
+        $this->prioritys = TaskPriority::where('project_id', $user->project_id)->get();
         return view('livewire.prioritys');
     }
 }

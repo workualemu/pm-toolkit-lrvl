@@ -7,6 +7,10 @@ use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Task;
+use App\Models\Tag;
+use App\Models\TaskStatus;
+use App\Models\TaskPriority;
+use Illuminate\Support\Facades\DB;
 
 class ProjectModal extends Component
 {
@@ -33,7 +37,7 @@ class ProjectModal extends Component
         if($project == null){
             $this->project = new Project();
         } else {
-            $this->project = Project::find($project['id']);
+            $this->project = Project::find($project['id']) ?? new Project();
         }
         
         $this->showProjectModal = true;
@@ -56,19 +60,35 @@ class ProjectModal extends Component
 
     public function store()
     {
+        
         $user = Auth::user();
         
-        $this->project->user_id = $user->id;
+        if ($user) {
+            $this->project->user_id = $user->id;
+        } else {
+            // Handle the case when the user is not authenticated
+            return;
+        }
         $this->project->status = $this->project->status == '' ? 'ACTIVE' : $this->project->status;
 
+        
+        DB::beginTransaction();
         $this->project->save();
-        $this->project->refresh();
 
         if($this->selectedTemplate > 0){
             $template = Project::find($this->selectedTemplate);
-            $this->copyProjectFromTemplate($template);
+            
+            if($this->copyProjectFromTemplate($template)){
+                logger("Transaction committed");
+                DB::commit();
+            } else {
+                logger("Transaction rollback");
+                DB::rollBack();
+            }
+        } else{
+            DB::commit();
         }
-
+        // $this->project->refresh();
         $this->emit('refreshProjects');
         $this->showProjectModal = false;
 
@@ -96,48 +116,95 @@ class ProjectModal extends Component
             return false;
         }
         $user = Auth::user();
-        //Assume there is only three levels of tasks with level value of 0, 1, 2
-        // ---------delete all existing tasks of the template project---------------
-        for ($i = 2; $i >= 0; $i--) {
-            $tasks = $this->project->getTasksByLevel($i);
-            foreach($tasks as $task){
-                $task->delete();
-            }
-        }
-        $projectDate = Carbon::parse($this->project->start_date);
-        $templateDate = Carbon::parse($source->start_date);
-        $slackDays = $projectDate->diffInDays($templateDate);
-        // ---------copy all source project tasks to the template project---------------
-        for ($i = 0; $i <= 2; $i++) {
-            $sourceTasks = $source->getTasksByLevel($i);
-            foreach($sourceTasks as $sourceTask){
-                $task = new Task();
-                $task->project_id = $this->project->id;
-                $task->title = $sourceTask->title;
-                $task->description = $sourceTask->description;
-                $task->start_date = Carbon::parse($sourceTask->start_date)->addDays($slackDays);
-                $task->end_date = Carbon::parse($sourceTask->end_date)->addDays($slackDays);
-                $task->user_id = $user->id;
-                $task->text = $sourceTask->text;
-                $task->task_type_id = $sourceTask->task_type_id;
-                $task->task_status_id = $sourceTask->task_status_id;
-                $task->task_priority_id = $sourceTask->task_priority_id;
-                $task->kanban_list_rank = $sourceTask->kanban_list_rank;
-                $task->duration = $sourceTask->duration;
-                $task->type = $sourceTask->type;
-                $task->level = $sourceTask->level;
-                $task->list_order = $sourceTask->list_order;
-                $task->is_starred = $sourceTask->is_starred;
-                $task->path = $sourceTask->path;
-                $task->original_id = $sourceTask->id;
 
-                if($sourceTask->parent != null){
-                    $parentTask = Task::where('original_id', $sourceTask->parent)->first();
-                    $task->parent = $parentTask->id;
+        try {       
+            //Assume there is only three levels of tasks with level value of 0, 1, 2
+            // ---------delete all existing tasks of the template project---------------
+            for ($i = 2; $i >= 0; $i--) {
+                $tasks = $this->project->getTasksByLevel($i);
+                foreach($tasks as $task){
+                    $task->delete();
                 }
-
-                $task->save();
             }
+            $projectDate = Carbon::parse($this->project->start_date);
+            $templateDate = Carbon::parse($source->start_date);
+            $slackDays = $projectDate->diffInDays($templateDate);
+            
+            $sourceTags = $source->getTags();
+            foreach($sourceTags as $sourceTag){
+                $tag = Tag::create([
+                    'label' => $sourceTag->label,
+                    'description' => $sourceTag->description,
+                    'color' => $sourceTag->color,
+                    'user_id' => $user->id,
+                    'project_id' => $this->project->id
+                ]);
+            }
+
+            $taskStatusMap = [];
+            $sourceStatuses = $source->getTaskStatuses();
+            foreach ($sourceStatuses as $status) {
+                $taskStatus = TaskStatus::create([
+                    'value' => $status->value,
+                    'description' => $status->description,
+                    'color' => $status->color,
+                    'kanban_list_rank' => $status->kanban_list_rank,
+                    'user_id' => $user->id,
+                    'project_id' => $this->project->id
+                ]);
+
+                $taskStatusMap[$status->value] = $taskStatus->id;
+            }
+
+            $taskPriorityMap = [];
+            $sourcePriorities = $source->getTaskPriorities();
+            foreach ($sourcePriorities as $priority) {
+                $taskPriority = TaskPriority::create([
+                    'value' => $priority->value,
+                    'description' => $priority->description,
+                    'color' => $priority->color,
+                    'user_id' => $user->id,
+                    'project_id' => $this->project->id
+                ]);
+
+                $taskPriorityMap[$priority->value] = $taskPriority->id;
+            }
+
+            for ($i = 0; $i <= 2; $i++) {
+                $sourceTasks = $source->getTasksByLevel($i);
+                foreach($sourceTasks as $sourceTask){
+                    $task = new Task();
+                    $task->project_id = $this->project->id;
+                    $task->title = $sourceTask->title;
+                    $task->description = $sourceTask->description;
+                    $task->start_date = Carbon::parse($sourceTask->start_date)->addDays($slackDays);
+                    $task->end_date = Carbon::parse($sourceTask->end_date)->addDays($slackDays);
+                    $task->user_id = $user->id;
+                    $task->text = $sourceTask->text;
+                    
+                    $task->kanban_list_rank = $sourceTask->kanban_list_rank;
+                    $task->duration = $sourceTask->duration;
+                    $task->type = $sourceTask->type;
+                    $task->level = $sourceTask->level;
+                    $task->list_order = $sourceTask->list_order;
+                    $task->is_starred = $sourceTask->is_starred;
+                    $task->path = $sourceTask->path;
+                    $task->original_id = $sourceTask->id;
+                    $task->task_priority_id = $taskPriorityMap[$sourceTask->taskPriority?->value] ?? null;
+                    $task->task_status_id = $taskStatusMap[$sourceTask->taskStatus?->value] ?? null;
+
+                    if($sourceTask->parent != null){
+                        $parentTask = Task::where('original_id', $sourceTask->parent)
+                                            ->where('project_id', $this->project->id)->first();
+                        $task->parent = $parentTask->id;
+                    }
+
+                    $task->save();
+                }
+            }
+        } catch (\Exception $e) {
+            logger($e->getMessage());
+            return false;
         }
 
         return true;

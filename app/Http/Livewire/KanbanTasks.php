@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\TaskStatus;
 use Illuminate\Support\Facades\Auth;
 
 class KanbanTasks extends Component
@@ -29,7 +30,7 @@ class KanbanTasks extends Component
     public function render()
     {
         $this->tasks = Task::where($this->searchValue)->get();
-        $this->kanbanLists = \App\Models\TaskStatus::orderBy('kanban_list_rank')->get();
+        $this->kanbanLists = TaskStatus::where("project_id", $this->project->id)->orderBy('kanban_list_rank')->get();
 
         return view('livewire.kanban-tasks');
     }

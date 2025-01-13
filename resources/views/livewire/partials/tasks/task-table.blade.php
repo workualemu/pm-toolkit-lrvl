@@ -27,7 +27,7 @@
                         @else
                             <tr class="px-4 border-y border-transparent border-b-slate-200 dark:border-b-navy-500">
                         @endif
-                            <td class="pl-2 {{$task->level == 1 ? 'pl-6' : ''}} {{$task->level == 2 ? 'pl-10' : ''}} font-medium text-slate-700 dark:text-navy-100">
+                            <td class="pl-2 {{$task->level == 1 ? 'pl-6' : ''}} {{$task->level == 2 ? 'pl-12' : ''}} font-medium text-slate-700 dark:text-navy-100">
                                 {{$task->title}}
                             </td>
                             <td class="whitespace-nowrap sm:px-5">

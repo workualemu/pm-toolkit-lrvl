@@ -42,13 +42,13 @@
                     </a>
                 </span>
                 <div class="m-1.5 w-px self-stretch bg-slate-600 dark:bg-navy-500"></div>
-                <div class="badge space-x-2.5 px-1 text-{{$task->task_priority?->color}}-700">
+                <div class="badge space-x-2.5 px-1 text-{{$task->taskPriority?->color}}-700">
                     <a href="#"
                         x-data="{ }"
                         @click.stop="$wire.filterByPriority({{ $task->task_priority_id }});"
                     >
-                        <span class="flex items-center space-x-1 text-{{$task->task_priority?->color}}-700">
-                            <span>{{$task->task_priority?->value}}</span>
+                        <span class="flex items-center space-x-1 text-{{$task->taskPriority?->color}}-700">
+                            <span>{{$task->taskPriority?->value}}</span>
                         </span>
                     </a>
                 </div>

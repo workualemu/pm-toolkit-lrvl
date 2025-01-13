@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Tag extends Model
 {
     use HasFactory;
-    protected $fillable = ['label', 'color', 'description', 'user_id'];
+    protected $fillable = ['label', 'color', 'description', 'user_id', 'project_id'];
 
     /**
      * The tags that belong to the task.

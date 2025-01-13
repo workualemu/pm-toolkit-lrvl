@@ -143,9 +143,9 @@ class TaskRightPopup extends Component
             $this->task = new Task();
         }
 
-        $this->taskPriorities = TaskPriority::all();
-        $this->taskStatuses = TaskStatus::all();
-        $this->tags = Tag::all();
+        $this->taskPriorities = TaskPriority::where('project_id', $this->project->id)->get();
+        $this->taskStatuses = TaskStatus::where('project_id', $this->project->id)->get();
+        $this->tags = Tag::where('project_id', $this->project->id)->get();
         $this->users = User::all();
         
         $this->taskTags = TagTask::where('task_id', $this->task->id)->get();
