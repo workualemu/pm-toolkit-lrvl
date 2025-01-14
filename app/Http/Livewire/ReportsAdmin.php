@@ -7,7 +7,7 @@ use App\Models\Report;
 
 class ReportsAdmin extends Component
 {
-    public $reports = [];
+    // public $reports = [];
     public $selectedReportId;
     public $showReportModal = false;
 
@@ -34,7 +34,9 @@ class ReportsAdmin extends Component
 
     public function render()
     {
-        $this->reports = Report::all();
-        return view('livewire.reports-admin');
+        $user = \Auth::user();
+        return view('livewire.reports-admin', [
+            'reports' => Report::where('project_id', $user->project_id)->paginate(10),
+        ]);
     }
 }

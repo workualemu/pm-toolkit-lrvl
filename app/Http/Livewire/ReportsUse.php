@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Report;
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
+use InvalidArgumentException;
 
 class ReportsUse extends Component
 {
@@ -25,14 +26,56 @@ class ReportsUse extends Component
     protected $listeners = ['showReportViewer' => 'showReportViewer',
                             'refreshReportUsePage' => '$refresh'];
 
-    public function showReportViewer($report_id, $results, $queryBuilder)
+    public function showReportViewer($report_id, $results)
     {
         $this->selectedReportID = $report_id;
         $this->results = $results;
         $this->showReportUse = false;
-        $this->queryBuilder = $queryBuilder;
+        // $this->queryBuilder = $queryBuilder;
         $this->emit('refreshReportUsePage');
 
+    }
+
+    public function generateReport($report_id)
+    {
+        $selectedReport = Report::find($report_id);
+        if(!$selectedReport){
+            return "Invalid report";
+        }
+
+        $this->validateInput(
+            $selectedReport->select_clause,
+            $selectedReport->from_clause,
+            $selectedReport->where_clause,
+            $selectedReport->groupby_clause,
+            $selectedReport->having_clause);
+        
+        $sql = "SELECT ";
+        $selectStmt = empty($selectedReport->select_clause)? '*' : $selectedReport->select_clause;
+        $sql .= $selectStmt;
+
+        if(empty($selectedReport->from_clause)){
+            return "Invalid FROM clause";
+        }
+        $sql .= " FROM " . $selectedReport->from_clause;
+
+        if(!empty($selectedReport->where_clause)){
+            $sql .= " WHERE " . $selectedReport->where_clause;
+        }
+
+        if(!empty($selectedReport->groupby_clause)){
+            $sql .= " GROUP BY " . $selectedReport->groupby_clause;
+        }
+
+        if(!empty($selectedReport->having_clause)){
+            $sql .= " HAVING " . $selectedReport->having_clause;
+        }
+
+        $this->results = \DB::select($sql);
+        $this->selectedReportID = $selectedReport->id;
+
+        $this->showReportViewer($selectedReport->id, $this->results);
+        // $this->emit('showReportViewer', $selectedReport->id, $this->results);
     }
 
     public function mount($project)
@@ -49,7 +92,36 @@ class ReportsUse extends Component
 
     public function render()
     {
-        $this->reports = Report::where('published', '=', 1)->get();
+        $user = \Auth::user();
+        $this->reports = Report::where('published', '=', 1)
+            ->where('project_id', $user->project_id)->get();
         return view('livewire.reports-use');
+    }
+
+    // -----------------------------Private methods------------------
+    private function validateInput($selectClause, $fromClause, $whereClause, 
+        $groupByClause, $havingClause, $orderByClause='') 
+    {
+        $forbiddenKeywords = ['DELETE', 'UPDATE', 'DROP', 'ALTER', 'INSERT', 'EXEC', '--', ';'];
+    
+        // --- Detect Forbidden Keywords ---
+        foreach ([$selectClause, $fromClause, $whereClause, 
+            $groupByClause, $havingClause, $orderByClause] as $input) {
+            foreach ($forbiddenKeywords as $keyword) {
+                if (stripos($input, $keyword) !== false) {
+                    throw new InvalidArgumentException("Forbidden keyword detected: $keyword");
+                }
+            }
+        }
+    
+        // --- Validate Conditions (WHERE and HAVING) ---
+        $conditionRegex = '/^[a-zA-Z_]+ *(>|<|=|>=|<=|<>|LIKE) *[\w\s]+$/';
+        if ($whereClause && !preg_match($conditionRegex, $whereClause)) {
+            throw new InvalidArgumentException("Invalid WHERE condition: $whereClause");
+        }
+        if ($havingClause && !preg_match($conditionRegex, $havingClause)) {
+            throw new InvalidArgumentException("Invalid HAVING condition: $havingClause");
+        }
+        return true;
     }
 }

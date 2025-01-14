@@ -11,8 +11,6 @@
                 </button>
             </div>
         </div>
-
-
         <div class="card mt-3">
             <div
                 class="min-w-full overflow-x-auto"
@@ -25,7 +23,7 @@
                             <th
                                 class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
                             >
-                                {{$item->title}}
+                                {{$item}}
                             </th>
                             @endforeach
                         </tr>
@@ -39,7 +37,7 @@
                                     <td
                                         class="whitespace-nowrap px-3 py-1 font-medium text-slate-700 dark:text-navy-100 lg:px-5"
                                     >
-                                        {{ $res[$col->db_column] }}
+                                        {{ $res->$col }}
                                     </td>
                                 @endforeach
                             </tr>

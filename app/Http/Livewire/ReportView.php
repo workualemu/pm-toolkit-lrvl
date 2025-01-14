@@ -27,10 +27,17 @@ class ReportView extends Component
     {
         $this->report_id = $report_id;
         $this->results = $results;
-        $this->columns = ReportColumn::getByReport($this->report_id)->get();
-        if($this->columns->count() <= 0) {
-            $this->columns = self::getAllColumns();
-        }
+        // $this->columns = ReportColumn::getByReport($this->report_id)->get();
+        // if($this->columns->count() <= 0) {
+        //     $this->columns = self::getAllColumns();
+        // }
+
+        $firstItem = $results[0];
+
+        if ($firstItem) {
+            $this->columns = array_keys(get_object_vars($firstItem));
+        } 
+
     }
 
     public static function getAllColumns()

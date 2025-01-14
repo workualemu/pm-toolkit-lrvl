@@ -51,7 +51,7 @@
                         </div>
                     </div>
 
-                    <div class="mt-3 grid grid-cols-12 gap-4 sm:gap-5 lg:gap-6">
+                    <div class="mt-3 grid grid-cols-12 gap-4 sm:gap-5 lg:gap-6 h-full overflow-y-scroll">
                         <div class="col-span-12 sm:col-span-6 lg:col-span-8">
                             <div class="is-scrollbar-hidden flex grow flex-col space-y-4 overflow-y-auto p-4">
                                 <label class="block">
@@ -67,10 +67,34 @@
                                         placeholder="Enter report rescription" type="text" />
                                 </label>
                                 <label class="block">
-                                    <span>Sort by</span>
-                                    <input id="sort_by" wire:model.defer="report.sort_by"
+                                    <span>Select clause</span>
+                                    <input id="select_clause" wire:model.defer="report.select_clause"
                                         class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                                        placeholder="Enter report title" type="text" />
+                                        placeholder="Enter select clause" type="text" rows="3"/>
+                                </label>
+                                <label class="block">
+                                    <span>From clause</span>
+                                    <input id="from_clause" wire:model.defer="report.from_clause"
+                                        class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                                        placeholder="Enter from clause" type="text" rows="3"/>
+                                </label>
+                                <label class="block">
+                                    <span>Where clause</span>
+                                    <input id="where_clause" wire:model.defer="report.where_clause"
+                                        class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                                        placeholder="Enter where clause" type="text" rows="3"/>
+                                </label>
+                                <label class="block">
+                                    <span>Group by clause</span>
+                                    <input id="groupby_clause" wire:model.defer="report.groupby_clause"
+                                        class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                                        placeholder="Enter group by clause" type="text" rows="3"/>
+                                </label>
+                                <label class="block">
+                                    <span>Having clause</span>
+                                    <input id="having clause" wire:model.defer="report.having_clause"
+                                        class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                                        placeholder="Enter having clause" type="text" rows="3"/>
                                 </label>
                                 <label class="inline-flex items-center space-x-2">
                                     <input wire:model.defer="report.published"

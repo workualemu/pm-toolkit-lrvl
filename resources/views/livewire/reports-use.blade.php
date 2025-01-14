@@ -32,13 +32,13 @@
             </label>         
         </div>
         @if($showReportUse)
-        <div class="w-10/12 grid grid-cols-2 gap-4">
+        <div class="w-full grid grid-cols-1 gap-4">
             <div class="col-span-1">
             <div
                     class="popper-box w-128 rounded-lg border border-slate-150 bg-white shadow-soft dark:border-navy-600 dark:bg-navy-700">
                     <div class="flex flex-col pt-2 pb-5">
                         @foreach($reports as $report)
-                            <a wire:click="renderUseParam({{$report->id}})"
+                            <a wire:click="generateReport({{$report->id}})"
                                 href="#"
                                 class="group flex items-center space-x-3 py-2 px-4 tracking-wide outline-none transition-all hover:bg-slate-100 focus:bg-slate-100 dark:hover:bg-navy-600 dark:focus:bg-navy-600">
                                 <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-info text-white">
@@ -61,9 +61,6 @@
                         @endforeach
                     </div>
                 </div>
-            </div>
-            <div class="col-span-1">
-                @livewire('report-use-param')
             </div>
         </div>
         @else

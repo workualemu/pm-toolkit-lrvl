@@ -20,7 +20,12 @@ class ReportAdminModal extends Component
         'report.sort_by' => '',
         'report.show_print_user' => '',
         'report.show_meta' => '',
-        'report.show_print_date'=>''
+        'report.show_print_date'=>'',
+        'report.select_clause'=>'',
+        'report.from_clause'=>'',
+        'report.where_clause'=>'',
+        'report.groupby_clause'=>'',
+        'report.having_clause'=>''
     ];
 
     protected $listeners = ['openReportModal' => 'openReportModal'];
@@ -57,12 +62,16 @@ class ReportAdminModal extends Component
         $this->report->user_id = $user->id;
 
         $this->report->db_table = 'tasks';
+        if(!$user?->project_id){
+            return "Invalid project";
+        }
+        
+        $this->report->project_id = $user->project_id;
         $this->report->save();
         $this->report->refresh();
 
         $this->emit('refreshReport');
         $this->showReportModal = false;
-
     }
 
     public function mount()

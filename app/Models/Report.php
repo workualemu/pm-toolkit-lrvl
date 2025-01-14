@@ -10,7 +10,8 @@ class Report extends Model
 {
     use HasFactory;
     protected $fillable = ['title', 'db_table', 'sort_by', 'description', 'published', 'user_id',
-        'show_meta', 'show_print_user', 'show_print_date'];
+        'show_meta', 'show_print_user', 'show_print_date', 'select_clause', 'from_clause', 
+        'where_clause', 'groupby_clause', 'having_clause'];
 
     public function columns(): HasMany
     {
