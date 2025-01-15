@@ -1,6 +1,6 @@
 <main class="w-full px-2 pt-16 mb-[60px] md:ml-[var(--main-sidebar-width)] ">
     <div
-        class="flex justify-between space-x-2 px-2 py-2 transition-all duration-[.25s]">
+        class="flex justify-between space-x-2 py-2 transition-all duration-[.25s]">
         <div class="flex items-center space-x-1">
             <h3 class="text-lg font-medium text-slate-700 line-clamp-1 dark:text-navy-50">
                 {{ __('Gantt chart') }}
@@ -42,19 +42,6 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" />
                 </svg>
             </button>
-        </div>
-
-        <div class="relative hidden w-full max-w-[12rem]  justify-end sm:flex">
-            @if($project != null)
-            <button x-tooltip="'Add user to project'"  onclick="{{ route('project-users', ['project_id' => $project->id]) }}"
-                class="btn h-6 w-6 rounded-full p-0 font-medium text-info hover:bg-info/20 focus:bg-info/20 active:bg-info/25 sm:h-8 sm:w-8">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20"
-                    fill="currentColor">
-                    <path
-                        d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
-                </svg>
-            </button>
-            @endif
         </div>
     </div>
     <div class="w-full h-full">
