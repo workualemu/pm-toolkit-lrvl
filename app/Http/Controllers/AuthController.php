@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -81,24 +82,32 @@ class AuthController extends Controller
 
         $validated = $validator->validated();
 
-        $user = User::create([
-            'name' => $validated["name"],
-            "email" => $validated["email"],
-            "password" => Hash::make($validated["password"])
-        ]);
+        DB::beginTransaction();
+        try {
+            $user = User::create([
+                'name' => $validated["name"],
+                "email" => $validated["email"],
+                "password" => Hash::make($validated["password"])
+            ]);
 
-        $invitation = Invitation::where('email', '=', $validated["email"])->get()->first();
+            $invitation = Invitation::where('email', '=', $validated["email"])->get()->first();
 
-        $invitation->update([
-            'status' => 'Registered',
-        ]);
-        $role = 'Project Officer';
+            $invitation->update([
+                'status' => 'Registered',
+            ]);
+            $role = 'Project Officer';
 
-        if(isSet($invitation->role) && $invitation->role != null){
-            $role =  $invitation->role;
+            if(isSet($invitation->role) && $invitation->role != null){
+                $role =  $invitation->role;
+            }
+            $user->assignRole($role);
+            auth()->login($user);
+            
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors($validator)->withInput();
         }
-        $user->assignRole($role);
-        auth()->login($user);
 
         return redirect()->route('index');
     }
