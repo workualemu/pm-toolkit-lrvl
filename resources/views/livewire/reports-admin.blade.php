@@ -12,7 +12,7 @@
 
         </div>
 
-        <div class="card mt-3">
+        <div class="w-full mt-4">
             <div
                 class="is-scrollbar-hidden min-w-full overflow-x-auto"
                 x-data="pages.tables.initExample1"
