@@ -276,6 +276,6 @@
 
         gantt.config.xml_date = "%Y-%m-%d %H:%i";
         gantt.init("gantt_here");
-        gantt.load("/api/data");
+        gantt.load("gantt/data/{{$project->id}}");
     </script>
 </main>

@@ -12,6 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Usamamuneerchaudhary\Commentify\Traits\HasUserAvatar;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -64,8 +65,15 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    public function projects(): BelongsToMany
+    {
+        return $this->belongsToMany(Project::class, 'user_projects', 'user_id', 'project_id');
+    }
+
     public function getProject(): ?Project
     {
         return Project::find($this->project_id);
     }
+
+    
 }
