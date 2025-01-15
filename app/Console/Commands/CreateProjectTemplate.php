@@ -42,20 +42,10 @@ class CreateProjectTemplate extends Command
             return Command::FAILURE;
         }
 
-        // if (!Storage::exists('template_project.json')) {
-        //     $this->error('File not found: template_project.json');
-        //     return Command::FAILURE;
-        // }
-        // $json = file_get_contents(base_path('storage/app/template_project.json'));
-        // // $json = Storage::get('template_project.json');
-        
-        // $data = json_decode($json, true);
-        // logger("json data is loaded");
         try {
             DB::beginTransaction();
             $json = file_get_contents(base_path('storage/app/template_project.json'));
             $data = json_decode($json, true);
-            logger($data);
             if (!$data) {
                 $this->error('Invalid JSON data. Please check the file.');
                 return Command::FAILURE;

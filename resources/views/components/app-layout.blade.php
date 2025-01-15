@@ -16,7 +16,7 @@
     </title>
 
     <!-- CSS & JS Assets -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/aggrid.js'])
 
     @livewireStyles
     <!-- Fonts -->

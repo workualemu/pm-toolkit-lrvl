@@ -80,7 +80,6 @@ class TaskFileUpload extends Component
 
     public function render()
     {
-        logger($this->savedFiles);
         return view('livewire.task-file-upload', [
             'savedFiles' => $this->savedFiles,
         ]);

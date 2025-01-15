@@ -1,4 +1,4 @@
-<div class="grid grid-cols-1 gap-4 sm:gap-5 lg:gap-6">
+<div class="gap-4 sm:gap-5 lg:gap-6">
     <div>
         <div class="flex items-center justify-between">
             <h2>
@@ -6,7 +6,7 @@
             </h2>
         </div>
 
-        <div class="card mt-3">
+        <div class="mt-3">
             <div
                 class="is-scrollbar-hidden min-w-full overflow-x-auto"
                 x-data="pages.tables.initExample1"
