@@ -19,8 +19,8 @@ class Task extends Model
         'task_type_id', 'kanban_list_rank', 'description', 'status', 'user_id', 'text', 'parent', 'level', 'list_order', 'is_starred', 
         'path', 'original_id'];
 
-    // protected $casts = ['start_date'=>'datetime:d-M-Y', 
-    //                     'end_date'=>'datetime:d-M-Y'];
+    protected $casts = ['start_date'=>'datetime:d-M-Y', 
+                        'end_date'=>'datetime:d-M-Y'];
 
 
     public function getOpenAttribute()

@@ -61,9 +61,6 @@ class Projects extends Component
         } else{
             $this->projects = Auth::user()->projects->where('is_template', false)
                 ->where('status', '=', 'GRANTED');
-            // $projects = UserProject::select('project_id')
-            //     ->where([['user_id', '=', Auth::user()->id], ['status', '=', 'GRANTED'], ['is_template', '=', false]])->get();
-            // $this->projects = Project::whereIn('id', $projects)->get();
         }
         
         

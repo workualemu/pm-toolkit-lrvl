@@ -61,3 +61,12 @@
 .top-sellers-analytics .apexcharts-canvas .apexcharts-heatmap-rect {
   @apply text-slate-100 dark:text-navy-700;
 }
+
+.custom-link .gantt_link_line {
+  stroke: #FFA500; /* Orange */
+  stroke-width: 2px;
+}
+
+.custom-link .gantt_link_arrow {
+  fill: #FFA500; /* Orange */
+}

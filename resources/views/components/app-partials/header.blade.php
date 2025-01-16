@@ -31,14 +31,168 @@
             <div class="-mr-1.5 flex items-center space-x-2">
                 <!-- Add user to project -->
                 @if($user->getProject() != null)
-                <button x-tooltip="'Add user to project'"  onclick="{{ route('project-users', ['project_id' => $user->getProject()->id]) }}"
-                    class="btn h-6 w-6 rounded-full p-0 font-medium text-info hover:bg-info/20 focus:bg-info/20 active:bg-info/25 sm:h-8 sm:w-8">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20"
-                        fill="currentColor">
-                        <path
-                            d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
-                    </svg>
-                </button>
+
+                <div x-effect="if($store.global.isSearchbarActive) isShowPopper = false" x-data="usePopper({ placement: 'bottom-end', offset: 12 })"
+                    @click.outside="if(isShowPopper) isShowPopper = false" class="flex">
+                    <button @click="isShowPopper = !isShowPopper" x-ref="popperRef"
+                        class="btn h-6 w-6 rounded-full p-0 font-medium text-info hover:bg-info/20 focus:bg-info/20 active:bg-info/25 sm:h-8 sm:w-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path
+                                d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
+                        </svg>
+                    </button>
+                    <div :class="isShowPopper && 'show'" class="popper-root" x-ref="popperRoot">
+                        <div x-data="{ activeTab: 'tabAlerts' }"
+                            class="popper-box mx-4 mt-1 flex max-h-[calc(100vh-6rem)] w-[calc(100vw-2rem)] flex-col rounded-lg border border-slate-150 bg-white shadow-soft dark:border-navy-800 dark:bg-navy-700 dark:shadow-soft-dark sm:m-0 sm:w-80">
+                            <div class="rounded-t-lg bg-slate-100 text-slate-600 dark:bg-navy-800 dark:text-navy-200">
+                                <div class="flex items-center justify-between px-4 pt-2">
+                                    <div class="flex items-center space-x-2">
+                                        <h3 class="font-medium text-slate-700 dark:text-navy-100">
+                                            {{ __('Registered users') }}
+                                        </h3>
+                                    </div>
+                                    <button @click="isShowPopper = !isShowPopper" x-ref="popperRef"
+                                        class="h-6 w-6 rounded-full p-0 bg-slate-50 font-medium text-black hover:bg-red-500 focus:bg-red-500 active:bg-red-500 dark:bg-accent dark:shadow-accent/50 dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 24 24" fill="currentColor">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M6.225 6.225a.75.75 0 011.06 0L12 10.94l4.715-4.715a.75.75 0 111.06 1.06L13.06 12l4.715 4.715a.75.75 0 11-1.06 1.06L12 13.06l-4.715 4.715a.75.75 0 11-1.06-1.06L10.94 12 6.225 7.285a.75.75 0 010-1.06z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="tab-content flex flex-col overflow-hidden">
+                                <div class="flex space-y-4 justify-between overflow-y-auto px-4 py-4">
+                                    <div class="flex items-center  space-x-3">
+                                        <div
+                                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-info/10 dark:bg-info/15">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                <path
+                                                    d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium text-slate-900 dark:text-navy-300">
+                                                Hellen Alba
+                                            </p>
+                                            <div class="mt-1 flex text-xs text-slate-400 dark:text-navy-100">
+                                                <span class="shrink-0">hellena@example.com</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex text-xs text-slate-400 dark:text-navy-300">
+                                        <input
+                                            class="form-switch h-5 w-10 rounded-full bg-slate-300 before:rounded-full before:bg-slate-50 checked:bg-primary checked:before:bg-white dark:bg-navy-900 dark:before:bg-navy-300 dark:checked:bg-accent dark:checked:before:bg-white"
+                                            type="checkbox"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="flex space-y-4 justify-between overflow-y-auto px-4 py-4">
+                                    <div class="flex items-center  space-x-3">
+                                        <div
+                                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-info/10 dark:bg-info/15">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                <path
+                                                    d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium text-slate-900 dark:text-navy-300">
+                                                John Doe
+                                            </p>
+                                            <div class="mt-1 flex text-xs text-slate-400 dark:text-navy-100">
+                                                <span class="shrink-0">john.doe@example.com</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex text-xs text-slate-400 dark:text-navy-300">
+                                        <input
+                                            class="form-switch h-5 w-10 rounded-full bg-slate-300 before:rounded-full before:bg-slate-50 checked:bg-primary checked:before:bg-white dark:bg-navy-900 dark:before:bg-navy-300 dark:checked:bg-accent dark:checked:before:bg-white"
+                                            type="checkbox"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="flex space-y-4 justify-between overflow-y-auto px-4 py-4">
+                                    <div class="flex items-center  space-x-3">
+                                        <div
+                                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-info/10 dark:bg-info/15">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                <path
+                                                    d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium text-slate-900 dark:text-navy-300">
+                                                Sam Smith
+                                            </p>
+                                            <div class="mt-1 flex text-xs text-slate-400 dark:text-navy-100">
+                                                <span class="shrink-0">sam@example.com</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex text-xs text-slate-400 dark:text-navy-300">
+                                        <input
+                                            class="form-switch h-5 w-10 rounded-full bg-slate-300 before:rounded-full before:bg-slate-50 checked:bg-primary checked:before:bg-white dark:bg-navy-900 dark:before:bg-navy-300 dark:checked:bg-accent dark:checked:before:bg-white"
+                                            type="checkbox"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="flex space-y-4 justify-between overflow-y-auto px-4 py-4">
+                                    <div class="flex items-center  space-x-3">
+                                        <div
+                                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-info/10 dark:bg-info/15">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                <path
+                                                    d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium text-slate-900 dark:text-navy-300">
+                                                Sasha Johnson
+                                            </p>
+                                            <div class="mt-1 flex text-xs text-slate-400 dark:text-navy-100">
+                                                <span class="shrink-0">sasha@example.com</span>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="flex text-xs text-slate-400 dark:text-navy-300">
+                                        <input
+                                            class="form-switch h-5 w-10 rounded-full bg-slate-300 before:rounded-full before:bg-slate-50 checked:bg-primary checked:before:bg-white dark:bg-navy-900 dark:before:bg-navy-300 dark:checked:bg-accent dark:checked:before:bg-white"
+                                            type="checkbox"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="flex space-y-4 justify-between overflow-y-auto px-4 py-4">
+                                    <div class="flex items-center  space-x-3">
+                                        <div
+                                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-info/10 dark:bg-info/15">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                <path
+                                                    d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium text-slate-900 dark:text-navy-300">
+                                                Worku Gelaw
+                                            </p>
+                                            <div class="mt-1 flex text-xs text-slate-400 dark:text-navy-100">
+                                                <span class="shrink-0">alemu.worku@gmail.com</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex text-xs text-slate-400 dark:text-navy-300">
+                                        <input
+                                            class="form-switch h-5 w-10 rounded-full bg-slate-300 before:rounded-full before:bg-slate-50 checked:bg-primary checked:before:bg-white dark:bg-navy-900 dark:before:bg-navy-300 dark:checked:bg-accent dark:checked:before:bg-white"
+                                            type="checkbox"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 @endif
                 <!-- Mobile Search Toggle -->
                 <button @click="$store.global.isSearchbarActive = !$store.global.isSearchbarActive"

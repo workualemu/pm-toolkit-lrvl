@@ -78,7 +78,7 @@
                                 var dateToStr = gantt.date.date_to_str("%d %M");
                                 var endDate = gantt.date.add(date, -6, "day");
                                 var weekNum = gantt.date.date_to_str("%W")(date);
-                                return "#" + weekNum + ", " + dateToStr(date) + " - " + dateToStr(endDate);
+                                return "#" + weekNum + ", " + dateToStr(endDate) + " - " + dateToStr(date);
                             }
                         },
                         { unit: "day", step: 1, format: "%j %D" }
@@ -254,10 +254,13 @@
         gantt.config.sort = false;
         gantt.config.order_branch = true;
 
-        // gantt.config.resource_store = "resource";
+        gantt.config.resource_store = "resource";
         // gantt.config.resource_property = "owner";
         gantt.config.autofit = true;
         gantt.config.grid_width = 500;
+        // gantt.config.autosize = "xy";
+        // gantt.config.scale_height = 30; // Ensure a consistent scale height
+        // gantt.render(); // Refresh Gantt
 
         gantt.templates.drag_link = function(from, from_start, to, to_start) {
             const sourceTask = gantt.getTask(from);
@@ -270,11 +273,11 @@
             return text;
         };
 
-        gantt.templates.link_class = function(link){
-            return "dhx-gantt-link-background";
+        gantt.templates.task_text = function (start, end, task) {
+            return ""; 
         };
 
-        gantt.config.xml_date = "%Y-%m-%d %H:%i";
+        gantt.config.xml_date = "%d-%M-%Y";
         gantt.init("gantt_here");
         gantt.load("gantt/data/{{$project->id}}");
     </script>

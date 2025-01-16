@@ -20,19 +20,20 @@
                     </span>
                 </div>
                 <div
-                    class="badge py-1 px-1.5 text-{{$task->taskPriority?->color}} dark:bg-secondary-light/15 dark:text-secondary-light">
+                    class="badge py-1 px-1.5 text-{{$task->taskPriority?->color}}-700 dark:bg-secondary-light/15 dark:text-secondary-light">
                     {{$task->taskPriority?->value}}
                 </div>
             </div>
             <div class="flex items-end justify-between pt-1">
-                <div class="flex flex-wrap -space-x-1.5">
-                    <div class="avatar h-5 w-5 hover:z-10">
-                        <div
-                            class="is-initial rounded-full bg-info text-tiny+ uppercase text-white ring-1 ring-white dark:ring-navy-700">
-                            wa
-                        </div>
-                    </div>
-                </div>
+                <span class="badge space-x-1 py-1 px-1.5 text-slate-800 dark:bg-navy-500 dark:text-navy-100">
+                    <a href="#"
+                    >
+                        <span class="flex items-center space-x-1 ">
+                            <span>{{ $task->assignedTo?->name }}</span>
+                        </span>
+                    </a>
+                </span>
+
                 <div
                     class="flex items-center space-x-2 text-xs text-slate-400 dark:text-navy-300">
                     <div class="flex items-center space-x-0.5">

@@ -24,9 +24,21 @@ class GanttController extends Controller
 
         $tasks = $tasks->map(function($task) {
             $task->text = $task->title;
+            if($task->level == 0) {
+                $task->color = "#87CEEB";
+            } elseif($task->level == 1){
+                $task->color = "#87CEEB";
+            } else{
+                $task->color = "#87CEEB";
+            }
+            $task->progressColor = "#4169E1";
+            
             return $task;
         });
-        $links = new Link();
+        $links = Link::all()->map(function($link) {
+            $link->color = "#FF8C00";
+            return $link;
+        });
 
         return response()->json([
             "tasks" =>$tasks,
