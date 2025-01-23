@@ -36,9 +36,13 @@ class Projects extends Component
         return redirect()->route('project-users', ['project_id'=>$project->id]);
     }
 
-    public function deleteProject(Project $project)
+    public function deleteProject($projectId)
     {
-        $project->delete();
+        $project = Project::find($projectId);
+        if ($project) {
+            $project->delete();
+            $this->emit('refreshProjects');
+        }
     }
 
     public function mount()
