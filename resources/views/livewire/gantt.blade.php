@@ -1,6 +1,6 @@
 <main class="w-full px-2 pt-16 mb-[60px] md:ml-[var(--main-sidebar-width)] ">
     <div
-        class="flex justify-between space-x-2 px-2 py-2 transition-all duration-[.25s]">
+        class="flex justify-between space-x-2 py-2 transition-all duration-[.25s]">
         <div class="flex items-center space-x-1">
             <h3 class="text-lg font-medium text-slate-700 line-clamp-1 dark:text-navy-50">
                 {{ __('Gantt chart') }}
@@ -43,19 +43,6 @@
                 </svg>
             </button>
         </div>
-
-        <div class="relative hidden w-full max-w-[12rem]  justify-end sm:flex">
-            @if($project != null)
-            <button x-tooltip="'Add user to project'"  onclick="{{ route('project-users', ['project_id' => $project->id]) }}"
-                class="btn h-6 w-6 rounded-full p-0 font-medium text-info hover:bg-info/20 focus:bg-info/20 active:bg-info/25 sm:h-8 sm:w-8">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20"
-                    fill="currentColor">
-                    <path
-                        d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
-                </svg>
-            </button>
-            @endif
-        </div>
     </div>
     <div class="w-full h-full">
         <div id="gantt_here"  class="w-full h-full"  style="width:100%; height:100%;" wire:ignore></div>
@@ -91,7 +78,7 @@
                                 var dateToStr = gantt.date.date_to_str("%d %M");
                                 var endDate = gantt.date.add(date, -6, "day");
                                 var weekNum = gantt.date.date_to_str("%W")(date);
-                                return "#" + weekNum + ", " + dateToStr(date) + " - " + dateToStr(endDate);
+                                return "#" + weekNum + ", " + dateToStr(endDate) + " - " + dateToStr(date);
                             }
                         },
                         { unit: "day", step: 1, format: "%j %D" }
@@ -267,10 +254,13 @@
         gantt.config.sort = false;
         gantt.config.order_branch = true;
 
-        // gantt.config.resource_store = "resource";
+        gantt.config.resource_store = "resource";
         // gantt.config.resource_property = "owner";
         gantt.config.autofit = true;
         gantt.config.grid_width = 500;
+        // gantt.config.autosize = "xy";
+        // gantt.config.scale_height = 30; // Ensure a consistent scale height
+        // gantt.render(); // Refresh Gantt
 
         gantt.templates.drag_link = function(from, from_start, to, to_start) {
             const sourceTask = gantt.getTask(from);
@@ -283,12 +273,12 @@
             return text;
         };
 
-        gantt.templates.link_class = function(link){
-            return "dhx-gantt-link-background";
+        gantt.templates.task_text = function (start, end, task) {
+            return ""; 
         };
 
-        gantt.config.xml_date = "%Y-%m-%d %H:%i";
+        gantt.config.xml_date = "%d-%M-%Y";
         gantt.init("gantt_here");
-        gantt.load("/api/data");
+        gantt.load("gantt/data/{{$project->id}}");
     </script>
 </main>

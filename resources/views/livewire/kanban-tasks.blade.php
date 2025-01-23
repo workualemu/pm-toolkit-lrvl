@@ -30,17 +30,6 @@
                     </svg>
                 </button>
             </div>
-            <div class="relative hidden w-full max-w-[12rem]  justify-end sm:flex">
-                <button
-                    class="btn h-6 w-6 rounded-full p-0 font-medium text-info hover:bg-info/20 focus:bg-info/20 active:bg-info/25 sm:h-8 sm:w-8">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20"
-                        fill="currentColor">
-                        <path
-                            d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
-                    </svg>
-                </button>
-                
-            </div>
         </div>
 
         <div class="flex h-[calc(100vh-8.5rem)] flex-grow flex-col  overflow-y-auto">

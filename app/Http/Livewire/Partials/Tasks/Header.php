@@ -204,8 +204,11 @@ class Header extends Component
 
     public function render()
     {
+        $user = \Auth::user();
         $this->statuses = TaskStatus::all();
-        $this->phases = Task::whereNull('parent')->get();
+        $this->phases = Task::whereNull('parent')
+            ->where('project_id', $user->project_id)
+            ->get();
         
         return view('livewire.partials.tasks.header');
     }

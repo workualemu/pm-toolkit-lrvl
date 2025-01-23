@@ -3,6 +3,7 @@
 use App\Http\Controllers\PagesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\GanttController;
 use App\Http\Controllers\UploadTemporaryFileController;
 use App\Http\Livewire\Tasks;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +33,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
     Route::any('/', [PagesController::class, 'index'])->name('index');
     Route::resource('project', ProjectController::class)->only(['index', 'create', 'update', 'store', 'edit', 'destroy']);
+
+    Route::get('gantt/data/{project_id}', [GanttController::class, 'get']);
 
     Route::get('tasks/{project_id}', [PagesController::class, 'getTasks'])->name('tasks');
     Route::post('upload-file', UploadTemporaryFileController::class);

@@ -87,6 +87,7 @@
                                     <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" placeholder="Select user"
                                         wire:model.defer="task.assigned_to" 
                                         autocomplete="off">
+                                        <option value="0">{{ __('Select assignee') }}</option>
                                         @foreach($users as $user)
                                         <option value="{{$user->id}}">{{$user->name}}</option>
                                         @endforeach
@@ -97,6 +98,7 @@
                                     <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" placeholder="Select user"
                                         wire:model.defer="task.report_by" 
                                         autocomplete="off">
+                                        <option value="0">{{ __('Select reporter') }}</option>
                                         @foreach($users as $user)
                                             <option value="{{$user->id}}">{{$user->name}}</option>
                                         @endforeach

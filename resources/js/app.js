@@ -97,6 +97,13 @@ FilePond.registerPlugin(FilePondPluginImagePreview);
 // Register plugin to download files from filepond
 FilePond.registerPlugin(FilePondPluginGetFile);
 
+import AgGridTable from "./AgGridTable";
+window.AgGridTable = AgGridTable;
+
+// import gantt from "dhtmlx-gantt";
+// import "dhtmlx-gantt/codebase/dhtmlxgantt.css";
+// console.log(gantt);
+
 window.hljs = hljs;
 window.dayjs = dayjs;
 window.SimpleBar = SimpleBar;

@@ -1,5 +1,7 @@
-<div>
-    <main class="main-content w-full">
+@assets
+    @vite(['resources/css/grid.css'])
+@endassets
+<main class="main-content w-full">
         <p class="mt-1 text-xs text-info">
           <span>{{ $project->title }}</span>
         </p>
@@ -104,8 +106,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-span-1">
+        <div class="w-full sm:gap-5 lg:gap-6">
             @livewire('report-view', ['report_id' => $report_id, 'params'=>$params])
         </div>
-    </main>
-</div>
+</main>

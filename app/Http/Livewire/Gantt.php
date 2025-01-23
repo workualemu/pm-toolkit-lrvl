@@ -58,14 +58,16 @@ class Gantt extends Component
     public function onTaskDragged($task_id, $mode, $task)
     {
         // $dt = $this->tasks->keyBy('id');
-
+        logger("onTaskDragged");
         $dTask = Task::find($task['id']);
         $dTask->start_date = $task['start_date'];
         $dTask->duration = $task['duration'];
         $dTask->progress = $task['progress'];
         $dTask->end_date = \Carbon\Carbon::parse($dTask->start_date)->addDays($dTask->duration);
         $dTask->save();
+
         $parent_id = $dTask->parent;
+        logger($parent_id);
         while($parent_id != null) {
             $parent = Task::find($parent_id);
             if($parent->start_date > $dTask->start_date) {
@@ -84,13 +86,14 @@ class Gantt extends Component
 
     public function onTaskUpdated($id, $task)
     {
+        $parent_id = $task['parent']==0?null:$task['parent'];
         $task = Task::updateOrCreate(
             ['id' => $task['id']],
             [
             'title' => $task['text'],
             'start_date' => $task['start_date'],
             'duration' => $task['duration'],
-            'parent' => $task['parent'],
+            'parent' => $task['parent']==0?null:$task['parent'],
             'task_status_id' => 1,
             'text' => $task['text'],
             'description' => $task['text'],
@@ -130,7 +133,7 @@ class Gantt extends Component
 
     public function onBeforeRowDraggedEnd($id, $parent, $tindex)
     {
-    
+        logger("onBeforeRowDraggedEnd");
         $tasks = Task::filterByParent($this->moveToParent);
 
         $rank = 0;

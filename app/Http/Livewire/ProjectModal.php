@@ -79,10 +79,8 @@ class ProjectModal extends Component
             $template = Project::find($this->selectedTemplate);
             
             if($this->copyProjectFromTemplate($template)){
-                logger("Transaction committed");
                 DB::commit();
             } else {
-                logger("Transaction rollback");
                 DB::rollBack();
             }
         } else{

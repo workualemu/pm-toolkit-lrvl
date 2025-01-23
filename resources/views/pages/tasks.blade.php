@@ -21,7 +21,7 @@
                         </div>
                         <div  class="flex block">
                             <p class="text-xl font-medium text-slate-800 dark:text-navy-50">
-                            <span>{{ __('Tasks') }}</span>
+                            <span>{{ __('Filter tasks') }}</span>
                             
                             </p>
                         </div>

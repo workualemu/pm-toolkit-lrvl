@@ -15,11 +15,12 @@ class Task extends Model
 {
     use HasFactory, Commentable;
 
-    protected $fillable = ['project_id', 'title', 'start_date', 'end_date', 'report_by',
-        'description', 'status', 'user_id', 'text', 'type', 'parent', 'level', 'list_order', 'is_starred', 'path', 'original_id'];
+    protected $fillable = ['project_id', 'title', 'start_date', 'end_date', 'report_by', 'assigned_to', 'task_status_id', 'task_priority_id', 
+        'task_type_id', 'kanban_list_rank', 'description', 'status', 'user_id', 'text', 'parent', 'level', 'list_order', 'is_starred', 
+        'path', 'original_id'];
 
-    // protected $casts = ['start_date'=>'datetime:d-M-Y', 
-    //                     'end_date'=>'datetime:d-M-Y'];
+    protected $casts = ['start_date'=>'datetime:d-M-Y', 
+                        'end_date'=>'datetime:d-M-Y'];
 
 
     public function getOpenAttribute()
