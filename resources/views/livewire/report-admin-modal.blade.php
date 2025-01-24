@@ -67,23 +67,31 @@
                                         placeholder="Enter report rescription" type="text" />
                                 </label>
                                 <label class="block">
-                                    <span>Select clause</span>
-                                    <input id="select_clause" wire:model.defer="report.select_clause"
-                                        class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                                        placeholder="Enter select clause" type="text" rows="3"/>
+                                    <span>{{ __('Select clause') }}</span>
+                                    <textarea rows="3" wire:model.defer="report.select_clause"
+                                    class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                                        name="select_clause"
+                                        id="select_clause">
+                                    </textarea>
                                 </label>
                                 <label class="block">
-                                    <span>From clause</span>
-                                    <input id="from_clause" wire:model.defer="report.from_clause"
-                                        class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                                        placeholder="Enter from clause" type="text" rows="3"/>
+                                    <span>{{ __('From clause') }}</span>
+                                    <textarea rows="3" wire:model.defer="report.from_clause"
+                                    class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                                        name="from_clause"
+                                        id="from_clause">
+                                    </textarea>
                                 </label>
                                 <label class="block">
-                                    <span>Where clause</span>
-                                    <input id="where_clause" wire:model.defer="report.where_clause"
-                                        class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                                        placeholder="Enter where clause" type="text" rows="3"/>
+                                    <span>{{ __('Where clause') }}</span>
+                                    <textarea rows="3" wire:model.defer="report.where_clause"
+                                    class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                                        name="where_clause"
+                                        id="where_clause">
+                                    </textarea>
                                 </label>
+                                
+                                
                                 <label class="block">
                                     <span>Group by clause</span>
                                     <input id="groupby_clause" wire:model.defer="report.groupby_clause"

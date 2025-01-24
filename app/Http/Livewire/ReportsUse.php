@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Report;
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 
 class ReportsUse extends Component
@@ -43,6 +44,8 @@ class ReportsUse extends Component
             return "Invalid report";
         }
 
+        $user =  Auth::user();
+
         $this->validateInput(
             $selectedReport->select_clause,
             $selectedReport->from_clause,
@@ -59,10 +62,18 @@ class ReportsUse extends Component
         }
         $sql .= " FROM " . $selectedReport->from_clause;
 
-        if(!empty($selectedReport->where_clause)){
-            $sql .= " WHERE " . $selectedReport->where_clause;
+        $projectTable = $this->findTableWithProjectId($selectedReport->from_clause);
+        if($projectTable != null){
+            $sql .= " WHERE " . $projectTable . ".project_id = " . $user->project_id;
+            if(!empty($selectedReport->where_clause)){
+                $sql .= " AND " . $selectedReport->where_clause;
+            }
+        } else {
+            if(!empty($selectedReport->where_clause)){
+                $sql .= " WHERE " . $selectedReport->where_clause;
+            }
         }
-
+        
         if(!empty($selectedReport->groupby_clause)){
             $sql .= " GROUP BY " . $selectedReport->groupby_clause;
         }
@@ -71,11 +82,10 @@ class ReportsUse extends Component
             $sql .= " HAVING " . $selectedReport->having_clause;
         }
 
-        $this->results = \DB::select($sql);
+        $this->results = DB::select($sql);
         $this->selectedReportID = $selectedReport->id;
 
         $this->showReportViewer($selectedReport->id, $this->results);
-        // $this->emit('showReportViewer', $selectedReport->id, $this->results);
     }
 
     public function mount($project)
@@ -123,5 +133,43 @@ class ReportsUse extends Component
             throw new InvalidArgumentException("Invalid HAVING condition: $havingClause");
         }
         return true;
+    }
+
+    function hasColumn($tableName, $columnName)
+    {
+        $result = DB::select("
+            SELECT column_name
+            FROM information_schema.columns
+            WHERE table_name = :table_name 
+            AND column_name = :column_name
+        ", [
+            'table_name' => $tableName,
+            'column_name' => $columnName,
+        ]);
+
+        return !empty($result);
+    }
+
+    function getTablesFromFromClause($fromClause)
+    {
+        $pattern = '/(?:FROM|JOIN)\s+([a-zA-Z0-9_\.]+)/i';
+        preg_match_all($pattern, $fromClause, $matches);
+
+        return array_unique($matches[1]); // Remove duplicates if any
+    }
+
+    function findTableWithProjectId($fromClause)
+    {
+        $tables = $this->getTablesFromFromClause($fromClause);
+
+        if (!empty($tables)) {
+            foreach ($tables as $table) {
+                if ($this->hasColumn($table, 'project_id')) {
+                    return $table; 
+                }
+            }
+        }
+
+        return null; 
     }
 }
