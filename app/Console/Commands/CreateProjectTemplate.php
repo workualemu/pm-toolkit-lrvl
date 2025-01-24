@@ -134,7 +134,6 @@ class CreateProjectTemplate extends Command
 
     private function createPriorities($priorities, $project_id, $user_id)
     {
-        $this->taskPriorityMap = [];
         foreach ($priorities as $priority) {
             $taskPriority = TaskPriority::create([
                 'value' => $priority['value'],
@@ -164,7 +163,7 @@ class CreateProjectTemplate extends Command
                 'user_id' => $user_id,
                 'project_id' => $project_id
             ]);
-            $report->save();
+            // $report->save();
         }
     }
 
@@ -180,8 +179,8 @@ class CreateProjectTemplate extends Command
                 'description' => $task['description'],
                 'start_date' => $task['start_date'],
                 'end_date' => $task['end_date'],
-                'task_status' => $taskStatusId,
-                'task_priority' => $taskPriorityId,
+                'task_status_id' => $taskStatusId,
+                'task_priority_id' => $taskPriorityId,
                 'level' => $level,
                 'user_id' => $user_id,
                 'project_id' => $project_id,

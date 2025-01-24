@@ -42,6 +42,11 @@
                     <span> {{ __('New project') }}</span>
                 </button>
             </div>
+            @if($errorMessage)
+                <div class="flex justify-between space-x-2 px-2 py-2 transition-all duration-[.25s]">
+                    <p class="text-red-500 text-sm font-medium">{{ $errorMessage }}</p>
+                </div>
+            @endif
         </div>
 
         <div class="mt-8 px-2 w-full grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
