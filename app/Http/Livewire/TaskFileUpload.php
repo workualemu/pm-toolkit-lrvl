@@ -22,25 +22,38 @@ class TaskFileUpload extends Component
     public function setTaskId($taskId)
     {
         $this->taskId = $taskId;
-        // $this->loadSavedFiles($taskId);
+        $this->loadSavedFiles($taskId);
     }
 
     public function loadSavedFiles($taskId)
     {
         // $this->savedFiles = TaskFile::where('task_id', $taskId)->get();
         $this->savedFiles = TaskFile::where('task_id', $taskId)->get()->map(function ($file) {
+            $filePath = 'public/' . $file->file_path;
+            $fileUrl = Storage::url($filePath);
+            $fileName = basename($file->file_path);
+            $fileSize = Storage::exists($filePath) ? Storage::size($filePath) : 0;
+
             return [
                 'id' => $file->id,
-                'file_path' => Storage::url($file->file_path),
-                'file_name' => basename($file->file_path),
-                'file_size' => Storage::size($file->file_path),
+                'file_path' => $fileUrl,
+                'file_name' => $fileName,
+                'file_size' => $fileSize,
             ];
+            // return [
+            //     'id' => $file->id,
+            //     'file_path' => Storage::url($file->file_path),
+            //     'file_name' => basename($file->file_path),
+            //     'file_size' => Storage::exists($file->file_path) ? Storage::size($file->file_path) : 0,
+            // ];
         })->toArray();
+
+        $this->emit('savedFilesUpdated', $this->savedFiles);
     }
 
     public function refreshFiles()
     {
-        // $this->loadSavedFiles(); 
+        $this->loadSavedFiles(); 
     }
 
     public function loadUploadedFiles()
@@ -76,6 +89,7 @@ class TaskFileUpload extends Component
     public function mount($taskId)
     {
         $this->taskId = $taskId;
+        $this->loadSavedFiles($taskId);
     }
 
     public function render()
