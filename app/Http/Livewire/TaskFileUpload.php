@@ -16,8 +16,13 @@ class TaskFileUpload extends Component
     public $taskId; 
     public $uploadedFiles = []; 
 
-    protected $listeners = ['setTaskId', 'refreshFiles',
-                            'saveUploads' => 'onSaveUploads'];
+    protected $listeners = [
+        'setTaskId', 
+        'refreshFiles',
+        'saveUploads' => 'onSaveUploads', 
+        'fileRemoved',
+        'fileDeleted' => 'deleteUploadedFile',
+    ];
 
     public function setTaskId($taskId)
     {
@@ -29,23 +34,12 @@ class TaskFileUpload extends Component
     {
         // $this->savedFiles = TaskFile::where('task_id', $taskId)->get();
         $this->savedFiles = TaskFile::where('task_id', $taskId)->get()->map(function ($file) {
-            $filePath = 'public/' . $file->file_path;
-            $fileUrl = Storage::url($filePath);
-            $fileName = basename($file->file_path);
-            $fileSize = Storage::exists($filePath) ? Storage::size($filePath) : 0;
-
             return [
                 'id' => $file->id,
-                'file_path' => $fileUrl,
-                'file_name' => $fileName,
-                'file_size' => $fileSize,
+                'file_path' => Storage::url($file->file_path),
+                'file_name' => basename($file->file_path),
+                'file_size' => Storage::exists('public/' . $file->file_path) ? Storage::size('public/' . $file->file_path) : 0,
             ];
-            // return [
-            //     'id' => $file->id,
-            //     'file_path' => Storage::url($file->file_path),
-            //     'file_name' => basename($file->file_path),
-            //     'file_size' => Storage::exists($file->file_path) ? Storage::size($file->file_path) : 0,
-            // ];
         })->toArray();
 
         $this->emit('savedFilesUpdated', $this->savedFiles);
@@ -53,6 +47,7 @@ class TaskFileUpload extends Component
 
     public function refreshFiles()
     {
+        $this->reset('files');
         $this->loadSavedFiles(); 
     }
 
@@ -77,14 +72,67 @@ class TaskFileUpload extends Component
             ]);
         }
 
-        // Reset the files property
-        $this->reset('files');
+        $this->files = [];
 
-        // Emit event to reset FilePond
-        $this->emit('resetFilePond');
+        $this->loadSavedFiles($taskId);
 
         session()->flash('message', 'Files uploaded successfully!');
     }
+    
+    public function fileRemoved($serverId)
+    {
+        // Temporary storage directory path (relative to the storage directory)
+        $tempDirectory = storage_path('app/task-files');  // Absolute path to 'storage/app/task-files'
+
+        // Loop through the files array and remove the file with the corresponding serverId
+        $this->files = array_filter($this->files, function ($file) use ($serverId, $tempDirectory) {
+            // Check if the filename matches the serverId (you can adjust this condition based on your file naming)
+            if ($file->getFilename() === $serverId) {
+                // Construct the full file path for temporary storage
+                $tempFilePath = $tempDirectory . DIRECTORY_SEPARATOR . $file->getFilename();
+        
+                // Check if the file exists before attempting to delete it
+                if (file_exists($tempFilePath)) {
+                    // Delete the file from the temporary storage
+                    unlink($tempFilePath);  // This deletes the file
+        
+                    // Optionally log or handle any errors if needed
+                    if (!file_exists($tempFilePath)) {
+                        // Success: file was deleted
+                    } else {
+                        // Handle failure, e.g., log the error
+                        error_log("Failed to delete file from temp storage: " . $tempFilePath);
+                    }
+                }
+            }
+        
+            // Return false to exclude the file from the array
+            return $file->getFilename() !== $serverId;
+        });
+    }
+
+
+    public function deleteUploadedFile($fileId)
+    {
+        // Find the file record by its ID
+        $file = TaskFile::find($fileId); // Use $fileId directly here
+
+        if ($file) {
+            $filePath = 'public/' . $file->file_path;
+
+            // Check if the file exists in storage
+            if (Storage::exists($filePath)) {
+                Storage::delete($filePath);
+            }
+
+            $file->delete(); // Delete the file record
+
+            $this->emit('fileDeleted', $fileId); // Emit the ID for frontend updates
+        } else {
+            session()->flash('error', 'File not found!');
+        }
+    }
+
 
     public function mount($taskId)
     {

@@ -1,4 +1,7 @@
-<div x-data="{ showModal: @entangle('showModal') }">
+<div 
+    x-data="{ showModal: @entangle('showModal') }" 
+    x-init="$watch('showModal', value => { if (!value) {@this.call('closeModal');} })"
+    >
     <div class="flex flex-col items-center justify-center h-screen bg-slate-200"
             x-on:drop="isDroppingFile = false"
             x-on:drop.prevent="handleFileDrop($event)"
