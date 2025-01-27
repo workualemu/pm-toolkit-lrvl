@@ -16,6 +16,9 @@ class Projects extends Component
     public $dropMenus = ['info', 'primary', 'secondary', 'success', 'error', 'warning'];
 
     public $searchTerm;
+    public $projectToDelete;
+    public $showProjectModal = false; // Define showProjectModal property
+    public $showDeleteModal = false; 
 
 
     protected $listeners = ['refreshProjects' => '$refresh'
@@ -36,12 +39,30 @@ class Projects extends Component
         return redirect()->route('project-users', ['project_id'=>$project->id]);
     }
 
-    public function deleteProject($projectId)
+    // public function deleteProject($projectId)
+    // {
+    //     $project = Project::find($projectId);
+    //     if ($project) {
+    //         $project->delete();
+    //         $this->emit('refreshProjects');
+    //     }
+    // }
+
+    public function showDeleteProjectModal($projectId)
+{
+    $this->projectToDelete = Project::find($projectId);
+
+    if ($this->projectToDelete) {
+        $this->showDeleteModal = true;
+    }
+}
+
+    public function deleteProject()
     {
-        $project = Project::find($projectId);
-        if ($project) {
-            $project->delete();
+        if ($this->projectToDelete) {
+            $this->projectToDelete->delete();
             $this->emit('refreshProjects');
+            $this->showDeleteModal = false;
         }
     }
 
