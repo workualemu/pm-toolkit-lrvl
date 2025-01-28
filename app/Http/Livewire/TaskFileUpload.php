@@ -76,7 +76,7 @@ class TaskFileUpload extends Component
             $this->fileRemoved($file->getFilename());
         }
 
-        // Clear the unsaved files array
+        // Clear the unsaved files array which deletes the saved files from database and storage
         foreach($this->unsavedFiles as $serverId) {
             $this->deleteUploadedFile($serverId);
         }

@@ -14,14 +14,11 @@
     document.addEventListener('livewire:load', function () {
         const inputElement = document.querySelector('#filepond');
         let filePondInstance = null;
-        const hostUrl = window.location.origin; // Dynamically get the host
         let temporaryFiles = [];
 
         function initializeFilePond(savedFiles) {
             if (!filePondInstance) {
-                console.log('hostUrl', hostUrl);
                 filePondInstance = FilePond.create(inputElement, {
-                    // url: hostUrl,
                     credits: false,
                     allowRevert: true, // Allow removing uploaded files from the list
                     server: {
@@ -41,8 +38,6 @@
                 });
             }
 
-
-            
             // Update files in FilePond instance
             filePondInstance.setOptions({
                 files: savedFiles.map(file => ({
@@ -67,13 +62,11 @@
             });
 
             filePondInstance.on('removefile', (error, file) => {
-                console.log('removefile event is called')
                 if (error) {
                     console.error('Error while removing file:', error);
                 } else {
                     // Emit a Livewire event to update the files array or delete from the database
                     const isSavedFile = savedFiles.some(savedFile => savedFile.file_path === file.serverId);
-                    console.log(isSavedFile, savedFiles, file.serverId);
                     if (isSavedFile) {
                         // Livewire.emit('fileDeleted', file.serverId);
                         Livewire.emit('trackUnsavedFiles', file.getMetadata('id'));
@@ -94,7 +87,6 @@
         }
 
         Livewire.on('savedFilesUpdated', savedFiles => {
-            console.log('Saved Files Updated', savedFiles);
             initializeFilePond(savedFiles);
         });
 
@@ -106,13 +98,12 @@
             clearFilePond();
         });
 
-        Livewire.on('fileDeleted', (fileId) => {
-            console.log(`File with ID ${fileId} was deleted.`);
-        });
+        // Livewire.on('fileDeleted', (fileId) => {
+        //     console.log(`File with ID ${fileId} was deleted.`);
+        // });
 
         // Initial load
         const initialSavedFiles = @json($savedFiles);
-        console.log('Saved Files', initialSavedFiles);
         initializeFilePond(initialSavedFiles);
     });
 </script>
