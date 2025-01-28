@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Report extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'db_table', 'sort_by', 'description', 'published', 'user_id',
+    protected $fillable = ['title', 'description', 'published', 'user_id',
         'show_meta', 'show_print_user', 'show_print_date', 'select_clause', 'from_clause', 
-        'where_clause', 'groupby_clause', 'having_clause'];
+        'where_clause', 'order_clause', 'groupby_clause', 'having_clause', 'project_id'];
 
     public function columns(): HasMany
     {

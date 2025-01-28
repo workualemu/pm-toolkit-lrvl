@@ -10,6 +10,7 @@ use App\Models\TaskStatus;
 use App\Models\Tag;
 use App\Models\TaskPriority;
 use App\Models\Task;
+use App\Models\Report;
 use Illuminate\Support\Facades\DB;
 
 class CreateProjectTemplate extends Command
@@ -27,6 +28,9 @@ class CreateProjectTemplate extends Command
      * @var string
      */
     protected $description = 'Create a template census project and associated tasks';
+
+    private $taskPriorityMap = [];
+    private $taskStatusMap = [];
 
     /**
      * Execute the console command.
@@ -61,147 +65,33 @@ class CreateProjectTemplate extends Command
                 'is_template' => true
             ]);
 
-            $this->info("Project template '{$project->title}' created successfully.");
+            $this->info("Project template '{$project->title}' has been created successfully.");
 
-            $taskStatusMap = [];
-            foreach ($data['task_statuses'] as $status) {
-                $taskStatus = TaskStatus::create([
-                    'value' => $status['value'],
-                    'description' => $status['description'],
-                    'color' => $status['color'],
-                    'kanban_list_rank' => $status['kanban_list_rank'],
-                    'user_id' => $user->id,
-                    'project_id' => $project->id
-                ]);
-
-                $taskStatusMap[$status['value']] = $taskStatus->id;
+            if (isset($data['task_statuses'])) {
+                $this->createStatuses($data['task_statuses'], $project->id, $user->id);
             }
 
-            foreach ($data['tags'] as $tag) {
-                $tag = Tag::create([
-                    'label' => $tag['label'],
-                    'description' => $tag['description'],
-                    'color' => $tag['color'],
-                    'user_id' => $user->id,
-                    'project_id' => $project->id
-                ]);
+            if (isset($data['tags'])) {
+                $this->createTags($data['tags'], $project->id, $user->id);
             }
 
-            $taskPriorityMap = [];
-            foreach ($data['task_priorities'] as $priority) {
-                $taskPriority = TaskPriority::create([
-                    'value' => $priority['value'],
-                    'description' => $priority['description'],
-                    'color' => $priority['color'],
-                    'user_id' => $user->id,
-                    'project_id' => $project->id
-                ]);
-
-                $taskPriorityMap[$priority['value']] = $taskPriority->id;
+            if (isset($data['task_priorities'])) {
+                $this->createPriorities($data['task_priorities'], $project->id, $user->id);
             }
 
+            $this->info("Statuses, tags, and priority labels have been created successfully for project '{$project->title}'.");
 
-            $this->info("Statuses, tags, and priority labels are created successfully for project {$project->id} - '{$project->title}'.");
-
-            foreach ($data['phases'] as $phase) {
-                $taskStatusId = $taskStatusMap[$phase['task_status']] ?? null;
-                $taskPriorityId = $taskPriorityMap[$phase['task_priority']] ?? null;
-
-                if (!$taskStatusId) {
-                    $this->error("Task status '{$phase['task_status']}' not found for task '{$phase['title']}'. Skipping task.");
-                    continue;
-                }
-
-                if (!$taskPriorityId) {
-                    $this->error("Task priority '{$phase['task_priority']}' not found for task '{$phase['title']}'. Skipping task.");
-                    continue;
-                }
-
-                $newPhase = Task::create([
-                    'title' => $phase['title'],
-                    'description' => $phase['description'],
-                    'start_date' => $phase['start_date'],
-                    'end_date' => $phase['end_date'],
-                    'task_status' => $taskStatusId,
-                    'task_priority' => $taskPriorityId,
-                    'level' => 0,
-                    'user_id' => $user->id,
-                    'project_id' => $project->id
-                ]);
-
-                $phasePath = $newPhase->id;
-                $newPhase->path = $phasePath;
-                $newPhase->original_id = $newPhase->id;
-                $newPhase->save();
-
-                foreach ($phase['activities'] as $activity) {
-                    $taskStatusId = $taskStatusMap[$activity['task_status']] ?? null;
-                    $taskPriorityId = $taskPriorityMap[$activity['task_priority']] ?? null;
-    
-                    if (!$taskStatusId) {
-                        $this->error("Task status '{$activity['task_status']}' not found for task '{$activity['title']}'. Skipping task.");
-                        continue;
-                    }
-    
-                    if (!$taskPriorityId) {
-                        $this->error("Task priority '{$activity['task_priority']}' not found for task '{$activity['title']}'. Skipping task.");
-                        continue;
-                    }
-
-                    $newActivity = Task::create([
-                        'title' => $activity['title'],
-                        'description' => $activity['description'],
-                        'start_date' => $activity['start_date'],
-                        'end_date' => $activity['end_date'],
-                        'task_status' => $taskStatusId,
-                        'task_priority' => $taskPriorityId,
-                        'level' => 1,
-                        'user_id' => $user->id,
-                        'project_id' => $project->id,
-                        'parent' => $newPhase->id
-                    ]);
-    
-                    $activityPath = "{$phasePath}.{$newActivity->id}";
-                    $newActivity->path = $activityPath;
-                    $newActivity->original_id = $newActivity->id;
-                    $newActivity->save();
-
-                    foreach ($activity['tasks'] as $task) {
-                        $taskStatusId = $taskStatusMap[$task['task_status']] ?? null;
-                        $taskPriorityId = $taskPriorityMap[$task['task_priority']] ?? null;
-        
-                        if (!$taskStatusId) {
-                            $this->error("Task status '{$task['task_status']}' not found for task '{$task['title']}'. Skipping task.");
-                            continue;
-                        }
-        
-                        if (!$taskPriorityId) {
-                            $this->error("Task priority '{$task['task_priority']}' not found for task '{$task['title']}'. Skipping task.");
-                            continue;
-                        }
-    
-                        $newTask = Task::create([
-                            'title' => $task['title'],
-                            'description' => $task['description'],
-                            'start_date' => $task['start_date'],
-                            'end_date' => $task['end_date'],
-                            'task_status' => $taskStatusId,
-                            'task_priority' => $taskPriorityId,
-                            'level' => 2,
-                            'user_id' => $user->id,
-                            'project_id' => $project->id,
-                            'parent' => $newActivity->id
-                        ]);
-        
-                        $taskPath = "{$activityPath}.{$newTask->id}";
-                        $newTask->path = $taskPath;
-                        $newTask->original_id = $newTask->id;
-                        $newTask->save();
-                    }
-                }
+            if (isset($data['phases'])) {
+                $this->createTasks($data['phases'], null, "", 0,
+                    $project->id, $user->id);
             }
 
-            $this->info("All tasks for project '{$project->name}' created successfully.");
+            $this->info("All tasks have been created successfully for project '{$project->title}'.");
+
+            if (isset($data['reports'])) {
+                $this->createReports($data['reports'], $project->id, $user->id);
+                $this->info("All reports have been created successfully for project '{$project->title}'.");
+            }
 
             DB::commit();
             return Command::SUCCESS;
@@ -210,6 +100,105 @@ class CreateProjectTemplate extends Command
             $this->error("An error occurred: {$e->getMessage()}");
             DB::rollBack();
             return Command::FAILURE;
+        }
+    }
+   
+    private function createStatuses($statuses, $project_id, $user_id)
+    {
+        foreach ($statuses as $status) {
+            $taskStatus = TaskStatus::create([
+                'value' => $status['value'],
+                'description' => $status['description'],
+                'color' => $status['color'],
+                'kanban_list_rank' => $status['kanban_list_rank'],
+                'user_id' => $user_id,
+                'project_id' => $project_id
+            ]);
+
+            $this->taskStatusMap[$status['value']] = $taskStatus->id;
+        }
+    }
+
+    private function createTags($tags, $project_id, $user_id)
+    {
+        foreach ($tags as $tag) {
+            $tag = Tag::create([
+                'label' => $tag['label'],
+                'description' => $tag['description'],
+                'color' => $tag['color'],
+                'user_id' => $user_id,
+                'project_id' => $project_id
+            ]);
+        }
+    }
+
+    private function createPriorities($priorities, $project_id, $user_id)
+    {
+        foreach ($priorities as $priority) {
+            $taskPriority = TaskPriority::create([
+                'value' => $priority['value'],
+                'description' => $priority['description'],
+                'color' => $priority['color'],
+                'user_id' => $user_id,
+                'project_id' => $project_id
+            ]);
+
+            $this->taskPriorityMap[$priority['value']] = $taskPriority->id;
+        }
+    }
+
+    private function createReports($reports, $project_id, $user_id)
+    {
+        foreach ($reports as $item) {
+            $report = Report::create([
+                'title' => $item['title'],
+                'description' => $item['description'],
+                'select_clause' => $item['select_clause'],
+                'from_clause' => $item['from_clause'],
+                'where_clause' => $item['where_clause'],
+                'order_clause' => $item['order_clause'],
+                'groupby_clause' => $item['groupby_clause'],
+                'having_clause' => $item['having_clause'],
+                'published' => $item['published'],
+                'user_id' => $user_id,
+                'project_id' => $project_id
+            ]);
+            // $report->save();
+        }
+    }
+
+    private function createTasks($tasks, $parent_id, $parentPath, $level, 
+        $project_id, $user_id)
+    {
+        foreach ($tasks as $task) {
+            $taskStatusId = $this->taskStatusMap[$task['task_status']] ?? null;
+            $taskPriorityId = $this->taskPriorityMap[$task['task_priority']] ?? null;
+    
+            $newTask = Task::create([
+                'title' => $task['title'],
+                'description' => $task['description'],
+                'start_date' => $task['start_date'],
+                'end_date' => $task['end_date'],
+                'task_status_id' => $taskStatusId,
+                'task_priority_id' => $taskPriorityId,
+                'level' => $level,
+                'user_id' => $user_id,
+                'project_id' => $project_id,
+                'parent' => $parent_id
+            ]);
+    
+            $taskPath = $level == 0 ? $newTask->id : "{$parentPath}.{$newTask->id}";
+            $newTask->path = $taskPath;
+            $newTask->original_id = $newTask->id;
+            $newTask->save();
+
+            if ($level==0 && isset($task['activities'])) {
+                $this->createTasks($task['activities'], $newTask->id, $taskPath, $level + 1,
+                    $project_id, $user_id);
+            } elseif ($level==1 && isset($task['tasks'])) {
+                $this->createTasks($task['tasks'], $newTask->id, $taskPath, $level + 1,
+                    $project_id, $user_id);
+            }
         }
     }
 }

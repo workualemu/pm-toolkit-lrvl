@@ -84,14 +84,6 @@
                     class="btn mt-10 h-10 w-full bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
                     Sign In
                 </button>
-                <div class="mt-4 text-center text-xs+">
-                    <p class="line-clamp-1">
-                        <span>Dont have Account?</span>
-
-                        <a class="text-primary transition-colors hover:text-primary-focus dark:text-accent-light dark:hover:text-accent"
-                            href="{{ route('registerView') }}">Create account</a>
-                    </p>
-                </div>
             </form>
         </div>
         <div class="my-5 flex justify-center text-xs text-slate-400 dark:text-navy-300">

@@ -15,9 +15,7 @@ class ReportAdminModal extends Component
         'report.title' => 'required|min:2',
         'report.user_id' => 'required',
         'report.description'=>'',
-        'report.db_table'=>'required',
         'report.published'=>'required',
-        'report.sort_by' => '',
         'report.show_print_user' => '',
         'report.show_meta' => '',
         'report.show_print_date'=>'',
@@ -25,6 +23,7 @@ class ReportAdminModal extends Component
         'report.from_clause'=>'',
         'report.where_clause'=>'',
         'report.groupby_clause'=>'',
+        'report.order_clause' => '',
         'report.having_clause'=>''
     ];
 
@@ -40,16 +39,6 @@ class ReportAdminModal extends Component
         $this->showReportModal = true;
     }
 
-    // public function openReportModal($report_id)
-    // {
-    //     $this->report = new Report();
-    //     if($report_id > 0){
-    //         $this->report = Report::find($report_id);
-    //     }
-
-    //     $this->showReportModal = true;
-    // }
-
     public function closeModal()
     {
         $this->showReportModal = false;
@@ -61,7 +50,6 @@ class ReportAdminModal extends Component
         $user = Auth::user();
         $this->report->user_id = $user->id;
 
-        $this->report->db_table = 'tasks';
         if(!$user?->project_id){
             return "Invalid project";
         }
