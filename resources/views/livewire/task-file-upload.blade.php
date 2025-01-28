@@ -14,11 +14,14 @@
     document.addEventListener('livewire:load', function () {
         const inputElement = document.querySelector('#filepond');
         let filePondInstance = null;
+        const hostUrl = window.location.origin; // Dynamically get the host
         let temporaryFiles = [];
 
         function initializeFilePond(savedFiles) {
             if (!filePondInstance) {
+                console.log('hostUrl', hostUrl);
                 filePondInstance = FilePond.create(inputElement, {
+                    // url: hostUrl,
                     credits: false,
                     allowRevert: true, // Allow removing uploaded files from the list
                     server: {
@@ -38,16 +41,16 @@
                 });
             }
 
+
+            
             // Update files in FilePond instance
             filePondInstance.setOptions({
                 files: savedFiles.map(file => ({
-                    source: file.id,
-                    // source: file.file_path, // Provide the correct URL
+                    source: file.file_path, 
                     options: {
                         type: 'local',
-                        file: {
-                            size: file.file_size,
-                            name: file.file_name,
+                        metadata: {
+                            id: file.id,
                         }
                     }
                 }))
@@ -69,9 +72,11 @@
                     console.error('Error while removing file:', error);
                 } else {
                     // Emit a Livewire event to update the files array or delete from the database
-                    const isSavedFile = savedFiles.some(savedFile => savedFile.id === file.serverId);
+                    const isSavedFile = savedFiles.some(savedFile => savedFile.file_path === file.serverId);
+                    console.log(isSavedFile, savedFiles, file.serverId);
                     if (isSavedFile) {
-                        Livewire.emit('fileDeleted', file.serverId);
+                        // Livewire.emit('fileDeleted', file.serverId);
+                        Livewire.emit('trackUnsavedFiles', file.getMetadata('id'));
                     } else {
                         Livewire.emit('fileRemoved', file.serverId);
                     }

@@ -13,6 +13,7 @@ class TaskFileUpload extends Component
 
     public $files = []; 
     public $savedFiles = []; 
+    public $unsavedFiles = [];
     public $taskId; 
     public $uploadedFiles = []; 
 
@@ -22,6 +23,7 @@ class TaskFileUpload extends Component
         'saveUploads' => 'onSaveUploads', 
         'fileRemoved',
         'fileDeleted' => 'deleteUploadedFile',
+        'trackUnsavedFiles' => 'trackUnsavedFiles',
     ];
 
     public function setTaskId($taskId)
@@ -70,6 +72,13 @@ class TaskFileUpload extends Component
                 'task_id' => $taskId, // Example Task ID
                 'file_path' => $path,
             ]);
+
+            $this->fileRemoved($file->getFilename());
+        }
+
+        // Clear the unsaved files array
+        foreach($this->unsavedFiles as $serverId) {
+            $this->deleteUploadedFile($serverId);
         }
 
         $this->files = [];
@@ -78,7 +87,7 @@ class TaskFileUpload extends Component
 
         session()->flash('message', 'Files uploaded successfully!');
     }
-    
+
     public function fileRemoved($serverId)
     {
         // Temporary storage directory path (relative to the storage directory)
@@ -131,6 +140,12 @@ class TaskFileUpload extends Component
         } else {
             session()->flash('error', 'File not found!');
         }
+    }
+
+    public function trackUnsavedFiles($serverId)
+    {
+        $this->unsavedFiles[] = $serverId;
+        $this->emit('unsavedFilesUpdated', $this->unsavedFiles);
     }
 
 
