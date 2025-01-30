@@ -12,7 +12,6 @@ export default class AgGridTable {
         this.id = htmlId
         this.rootElement = document.getElementById(htmlId)
         this.rootElement.classList.add(...['ag-theme-quartz', 'w-full', 'h-[calc(60vh)]']);
-        const vizId = this.rootElement.getAttribute('viz-id')
 
         
         this.options = JSON.parse(this.rootElement.dataset['options'])
@@ -21,41 +20,79 @@ export default class AgGridTable {
             this.table = createGrid(this.rootElement, this.options)
         }
 
-
-        console.log({htmlId, options: this.options})
-        this.registerLivewireEventListeners();
+        console.log(this.rootElement);
+        // this.registerLivewireEventListeners();
     }
 
     registerLivewireEventListeners() {
+        alert('1');
         Livewire.on(`updateTable.${this.id}`, (event) => {
-            let options
-            [options] = event
+            let options;
+            alert('2');
+            [options] = event;
             console.log('Table received data: ' + this.id, options);
-            this.rootElement.innerHTML = ''
-
-            options.columnDefs = options.columnDefs.map(colDef => {
-                /*if (colDef?.type === 'numericColumn') {
-                    colDef.valueFormatter = params => new Intl.NumberFormat().format(params.value)
-                }*/
-                if (colDef?.type === 'rangeColumn') {
-                    colDef.comparator = (valueA, valueB, nodeA, nodeB, isDescending) => parseInt(valueA) - parseInt(valueB)
+            this.rootElement.innerHTML = '';
+    
+            options.defaultColDef = {
+                sortable: true,
+                filter: true, // Enable filtering for all columns
+                floatingFilter: true, // Make filters visible in the header
+            };
+            
+            options.columnTypes = {
+                textColumn: {
+                    filter: "agTextColumnFilter",
+                    floatingFilter: true,
+                    sortable: true,
+                    width: 200
+                },
+                numericColumn: {
+                    filter: "agNumberColumnFilter",
+                    floatingFilter: true,
+                    sortable: true,
+                    width: 150,
+                    valueFormatter: params => params.value ? new Intl.NumberFormat().format(params.value) : ''
+                },
+                rangeColumn: {
+                    width: 150,
+                    filter: "agNumberColumnFilter",
+                    comparator: (valueA, valueB) => {
+                        const numA = parseFloat(valueA) || 0;
+                        const numB = parseFloat(valueB) || 0;
+                        return numA - numB;
+                    }
                 }
-                return colDef
-            })
+            };
+            
+            options.columnDefs = options.columnDefs.map(colDef => {
+                if (colDef?.type === 'numericColumn') {
+                    colDef.filter = "agNumberColumnFilter";  // Ensure numbers can be filtered
+                    colDef.valueFormatter = params => new Intl.NumberFormat().format(params.value);
+                }
+                if (colDef?.type === 'textColumn') {
+                    colDef.filter = "agTextColumnFilter";  // Ensure text columns have filters
+                }
+                if (colDef?.type === 'rangeColumn') {
+                    colDef.filter = "agNumberColumnFilter"; // Allow range filtering
+                    colDef.comparator = (valueA, valueB) => {
+                        const numA = parseFloat(valueA) || 0;
+                        const numB = parseFloat(valueB) || 0;
+                        return numA - numB;
+                    };
+                }
+                if (!colDef.type) {
+                    if (colDef.field === "title" || colDef.field === "status") {
+                        colDef.type = "textColumn";
+                    } else if (colDef.field === "Start Date" || colDef.field === "End Date") {
+                        colDef.type = "rangeColumn"; // Or use a date column type if preferred
+                    } else {
+                        colDef.type = "numericColumn";
+                    }
+                }
 
-            // options.getRowStyle = params => {
-            //     let path = params.api.getValue("path", params.node)
-            //     let matches = path.match(/\./g);
-            //     let numMatches = matches ? matches.length : 0;
-            //     if (numMatches == 0) {
-            //         return { background: 'rgb(56 189 248)' };
-            //     } else if (numMatches == 1) {
-            //         return { background: 'rgb(186 230 253)' };
-            //     }else {
-            //         return { background: 'rgb(240 249 255)' };
-            //     }
-            // },
-
+                return colDef;
+            });
+            
             this.table = createGrid(this.rootElement, options);
         });
     }

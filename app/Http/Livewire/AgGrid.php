@@ -14,10 +14,21 @@ class AgGrid extends Component
     public array $layout = [];
     public array $options = [];
 
+    // protected $listeners = ['changeOccurred' => 'reactToChanges'];
+
     public const DEFAULT_OPTIONS = [
         'columnTypes' => [
             'rangeColumn' => [
-                'width' => 150
+                'width' => 150,
+                'filter'=> "agNumberColumnFilter"
+            ],
+            'textColumn' => [
+                'width' => 200,
+                'filter'=> "agTextColumnFilter"
+            ],
+            'numericColumn' => [
+                'width' => 150,
+                'filter'=> "agNumberColumnFilter"
             ]
         ],
         'columnDefs' => ['filter'=>true, 'sortable'=>true,'floatingFilter'=>true,],
@@ -85,7 +96,6 @@ class AgGrid extends Component
                         //$colDef['sorter'] = 'number';
                         $colDef['type'] = 'dateColumn';
                     }
-                    logger($colDef);
                     return $colDef;
                 });
 
@@ -115,16 +125,15 @@ class AgGrid extends Component
         
     }
 
-    // #[On('changeOccurred')]
-    // public function reactToChanges(array $rawData, string $indicatorName, array $dataParams): void
+    
+    // public function reactToChanges($rawData): void
     // {
     //     $this->preparePayload($rawData);
-    //     $this->dispatch("updateTable.$this->htmlId", $this->options);
+    //     $this->emit("updateTable.$this->htmlId", $this->options);
     // }
 
     public function render()
     {
-        logger($this->rows);
         return view('livewire.ag-grid');
     }
 }

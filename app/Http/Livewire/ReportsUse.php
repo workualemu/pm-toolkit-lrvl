@@ -34,6 +34,11 @@ class ReportsUse extends Component
         $this->showReportUse = false;
         // $this->queryBuilder = $queryBuilder;
         $this->emit('refreshReportUsePage');
+        $this->emit(
+            "changeOccurred",
+            rawData: $this->results
+        );
+
 
     }
 
@@ -114,7 +119,6 @@ class ReportsUse extends Component
     {
         $forbiddenKeywords = ['DELETE', 'UPDATE', 'DROP', 'ALTER', 'INSERT', 'EXEC', '--', ';'];
     
-        // --- Detect Forbidden Keywords ---
         foreach ([$selectClause, $fromClause, $whereClause, 
             $groupByClause, $havingClause, $orderByClause] as $input) {
             foreach ($forbiddenKeywords as $keyword) {
@@ -124,8 +128,7 @@ class ReportsUse extends Component
             }
         }
     
-        // --- Validate Conditions (WHERE and HAVING) ---
-        $conditionRegex = '/^[a-zA-Z_]+ *(>|<|=|>=|<=|<>|LIKE) *[\w\s]+$/';
+        $conditionRegex = '/^[a-zA-Z_][a-zA-Z0-9_\.]*\s*(?:=|!=|<>|>=|<=|>|<|LIKE|IS(?:\s+NOT)?)\s*(\'[^\']*\'|\"[^\"]*\"|\d+|\w+|NULL)$/i';
         if ($whereClause && !preg_match($conditionRegex, $whereClause)) {
             throw new InvalidArgumentException("Invalid WHERE condition: $whereClause");
         }

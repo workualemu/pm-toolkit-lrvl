@@ -8,6 +8,7 @@ export function initializeAgGrid(gridElementId, columns, rows) {
         defaultColDef: {
             sortable: true,
             filter: true,
+            floatingFilter: true,
         },
     };
 

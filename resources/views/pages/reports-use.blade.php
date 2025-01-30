@@ -20,6 +20,9 @@
             </div>
         </div>
     </div>
-    @livewire('reports-use', ['project' => $project])
+    <div class="flex-grow flex flex-col">          
+        @livewire('reports-use', ['project' => $project])
+    </div>
+   
 
 </x-app-layout>

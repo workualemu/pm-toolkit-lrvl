@@ -4,7 +4,7 @@
         x-init="table = new AgGridTable('{{ $htmlId }}')"
         x-intersect="table.resize()"
         x-on:resize.window="table.resize()"
-        class="ag-theme-quartz w-full ag-theme-alpine"
+        class="ag-theme-quartz w-full h-[calc(60vh)]"
         data-options='@json($options)'
         wire:ignore
     >

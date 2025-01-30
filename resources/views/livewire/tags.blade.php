@@ -7,7 +7,7 @@
                 <button wire:click="addNewTag()"
                     class="border-b border-dotted border-current pb-0.5 font-medium text-primary outline-none transition-colors duration-300 hover:text-primary/70 focus:text-primary/70 dark:text-accent-light dark:hover:text-accent-light/70 dark:focus:text-accent-light/70"
                 >
-                    Add new tag
+                    {{ __('Add new tag') }}
                 </button>
             </div>
 
