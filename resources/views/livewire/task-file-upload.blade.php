@@ -3,9 +3,22 @@
         <input 
             type="file" 
             id="filepond" 
+            name="files"
+            wire:model="files"
             multiple 
-            x-init="
-                $el._x_filepond = FilePond.create($el, {
+        >
+    </div>
+</div>
+
+<script>
+    document.addEventListener('livewire:load', function () {
+        const inputElement = document.querySelector('#filepond');
+        let filePondInstance = null;
+        let temporaryFiles = [];
+
+        function initializeFilePond(savedFiles) {
+            if (!filePondInstance) {
+                filePondInstance = FilePond.create(inputElement, {
                     credits: false,
                     allowRevert: true, // Allow removing uploaded files from the list
                     server: {
@@ -21,74 +34,76 @@
                                 .then(load);
                         }
                     },
-                    files: [
-                        @foreach($savedFiles as $file)
-                            {
-                                source: '{{ $file['file_path'] }}',
-                                options: {
-                                    type: 'local',
-                                    file: {
-                                        size: {{ $file['file_size'] }},
-                                        name: '{{ $file['file_name'] }}',
-                                    }
-                                }
-                            },
-                        @endforeach
-                    ]
+                    
                 });
-            "
-        >
-    </div>
-    <!-- List saved files -->
-    <div class="mt-4">
-        <ul>
-            @foreach ($uploadedFiles as $file)
-                <li>
-                    <a href="{{ Storage::url($file->file_path) }}" target="_blank">
-                        {{ basename($file->file_path) }}
-                    </a>
-                </li>
-            @endforeach
-        </ul>
-    </div>
-    @if (session()->has('message'))
-        <div class="alert alert-success mt-3">
-            {{ session('message') }}
-        </div>
-    @endif
-</div>
+            }
 
-<script>
-    document.addEventListener('livewire:load', () => {
-        // Register FilePond plugins (optional)
-        
-
-        // Get the FilePond input element
-        const inputElement = document.querySelector('#filepond');
-
-        if (inputElement) {
-            // Create a FilePond instance
-            const pond = FilePond.create(inputElement, {
-                credits: false,
-                acceptedFileTypes: ['image/*', 'application/pdf'], // Restrict file types
-                maxFileSize: '10MB', // Restrict max file size
-                // Livewire integration
-                server: {
-                    process: (fieldName, file, metadata, load, error, progress, abort) => {
-                        // Livewire file upload handler
-                        @this.upload('files', file, load, error, progress);
-                    },
-                    revert: (filename, load) => {
-                        // Livewire file removal handler
-                        @this.removeUpload('files', filename, load);
-                    },
-                },
+            // Update files in FilePond instance
+            filePondInstance.setOptions({
+                files: savedFiles.map(file => ({
+                    source: file.file_path, 
+                    options: {
+                        type: 'local',
+                        metadata: {
+                            id: file.id,
+                        }
+                    }
+                }))
+            });
+            
+            filePondInstance.on('processfile', (error, file) => {
+                if (!error) {
+                    // Check if serverId already exists in the array
+                    if (!temporaryFiles.includes(file.serverId)) {
+                        // Add serverId to the array
+                        temporaryFiles.push(file.serverId);
+                    }
+                }
             });
 
-            // Reset FilePond instance when Livewire updates the DOM
-            // Livewire.on('resetFilePond', () => {
-            //     pond.removeFiles();
-            // });
+            filePondInstance.on('removefile', (error, file) => {
+                if (error) {
+                    console.error('Error while removing file:', error);
+                } else {
+                    // Emit a Livewire event to update the files array or delete from the database
+                    const isSavedFile = savedFiles.some(savedFile => savedFile.file_path === file.serverId);
+                    if (isSavedFile) {
+                        // Livewire.emit('fileDeleted', file.serverId);
+                        Livewire.emit('trackUnsavedFiles', file.getMetadata('id'));
+                    } else {
+                        Livewire.emit('fileRemoved', file.serverId);
+                    }
+                }
+            });
         }
+
+
+        function clearFilePond() {
+            temporaryFiles.forEach(serverId => {
+                filePondInstance.removeFile(serverId);
+            });
+
+            temporaryFiles = [];    
+        }
+
+        Livewire.on('savedFilesUpdated', savedFiles => {
+            initializeFilePond(savedFiles);
+        });
+
+        Livewire.on('clearFilePond', () => {
+            clearFilePond();
+        });
+        
+        Livewire.on('resetFilePond', () => {
+            clearFilePond();
+        });
+
+        // Livewire.on('fileDeleted', (fileId) => {
+        //     console.log(`File with ID ${fileId} was deleted.`);
+        // });
+
+        // Initial load
+        const initialSavedFiles = @json($savedFiles);
+        initializeFilePond(initialSavedFiles);
     });
 </script>

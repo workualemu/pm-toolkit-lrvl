@@ -54,7 +54,8 @@ class TaskRightPopup extends Component
     ];
     protected $listeners = ['openTaskModal' => 'openModal',
                             'addFile' => 'addFile',
-                            'fileDownloaded' => 'downloadFile',];
+                            'fileDownloaded' => 'downloadFile',
+                        ];
 
     public function downloadFile($file)
     {
@@ -159,6 +160,7 @@ class TaskRightPopup extends Component
     public function closeModal()
     {
         $this->showModal = false;
+        $this->emit('clearFilePond');
     }
 
     public function store()
