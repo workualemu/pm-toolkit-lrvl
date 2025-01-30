@@ -17,6 +17,9 @@ class Projects extends Component
     public $errorMessage='';
 
     public $searchTerm;
+    public $projectToDelete;
+    public $showProjectModal = false; // Define showProjectModal property
+    public $showDeleteModal = false; 
 
     protected $listeners = ['refreshProjects' => '$refresh',
                         'errorCreatingProjectFromTemplate' => 'onErrorCreatingProjectFromTemplate'];
@@ -41,9 +44,31 @@ class Projects extends Component
         return redirect()->route('project-users', ['project_id'=>$project->id]);
     }
 
-    public function deleteProject(Project $project)
+    // public function deleteProject($projectId)
+    // {
+    //     $project = Project::find($projectId);
+    //     if ($project) {
+    //         $project->delete();
+    //         $this->emit('refreshProjects');
+    //     }
+    // }
+
+    public function showDeleteProjectModal($projectId)
+{
+    $this->projectToDelete = Project::find($projectId);
+
+    if ($this->projectToDelete) {
+        $this->showDeleteModal = true;
+    }
+}
+
+    public function deleteProject()
     {
-        $project->delete();
+        if ($this->projectToDelete) {
+            $this->projectToDelete->delete();
+            $this->emit('refreshProjects');
+            $this->showDeleteModal = false;
+        }
     }
 
     public function render()
