@@ -1,7 +1,11 @@
 import { createGrid, ModuleRegistry } from 'ag-grid-community';
 import { ColumnAutoSizeModule } from 'ag-grid-community'; 
 import { ClientSideRowModelModule } from 'ag-grid-community';
-ModuleRegistry.registerModules([ClientSideRowModelModule, ColumnAutoSizeModule]);
+import { NumberFilterModule, TextFilterModule, DateFilterModule} from 'ag-grid-community';
+
+ModuleRegistry.registerModules([ClientSideRowModelModule, ColumnAutoSizeModule,
+    NumberFilterModule, TextFilterModule, DateFilterModule
+]);
 export default class AgGridTable {
     id;
     rootElement;
@@ -13,14 +17,46 @@ export default class AgGridTable {
         this.rootElement = document.getElementById(htmlId)
         this.rootElement.classList.add(...['ag-theme-quartz', 'w-full', 'h-[calc(60vh)]']);
 
-        
         this.options = JSON.parse(this.rootElement.dataset['options'])
+
+        this.options.columnTypes = {
+            textColumn: {
+                filter: "agTextColumnFilter",
+                floatingFilter: true,
+                sortable: true,
+                width: 200
+            },
+            numericColumn: {
+                filter: "agNumberColumnFilter",
+                floatingFilter: true,
+                sortable: true,
+                width: 150,
+                valueFormatter: params => params.value ? new Intl.NumberFormat().format(params.value) : ''
+            },
+            dateColumn: {
+                filter: "agDateColumnFilter",
+                floatingFilter: true,
+                sortable: true,
+                width: 15
+                
+            },
+            rangeColumn: {
+                width: 150,
+                filter: "agNumberColumnFilter",
+                comparator: (valueA, valueB) => {
+                    const numA = parseFloat(valueA) || 0;
+                    const numB = parseFloat(valueB) || 0;
+                    return numA - numB;
+                }
+            }
+        };
+
         if (this.options?.rowData?.length > 0) {
             this.rootElement.innerHTML = ''
             this.table = createGrid(this.rootElement, this.options)
         }
 
-        console.log(this.rootElement);
+        // console.log(this.options);
         // this.registerLivewireEventListeners();
     }
 
@@ -41,13 +77,20 @@ export default class AgGridTable {
             
             options.columnTypes = {
                 textColumn: {
-                    filter: "agTextColumnFilter",
+                    filter: "agDateColumnFilter",
                     floatingFilter: true,
                     sortable: true,
                     width: 200
                 },
                 numericColumn: {
                     filter: "agNumberColumnFilter",
+                    floatingFilter: true,
+                    sortable: true,
+                    width: 150,
+                    valueFormatter: params => params.value ? new Intl.NumberFormat().format(params.value) : ''
+                },
+                dateColumn: {
+                    filter: "agDateColumnFilter",
                     floatingFilter: true,
                     sortable: true,
                     width: 150,

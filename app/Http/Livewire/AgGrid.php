@@ -29,9 +29,13 @@ class AgGrid extends Component
             'numericColumn' => [
                 'width' => 150,
                 'filter'=> "agNumberColumnFilter"
+            ],
+            'dateColumn' => [
+                'width' => 150,
+                'filter'=> "agDateColumnFilter"
             ]
         ],
-        'columnDefs' => ['filter'=>true, 'sortable'=>true,'floatingFilter'=>true,],
+        'columnDefs' => ['filter'=>true, 'sortable'=>true,'floatingFilter'=>false,],
         'rowData' => [],
         'autoSizeStrategy' => [
             'type' => 'fitGridWidth'
@@ -75,7 +79,6 @@ class AgGrid extends Component
                     $colDef = [
                         'headerName' => str($column)->replace('_', ' ')->ucfirst()->toString(),
                         'field' => $column,
-                        'filter' => true,
                         'floatingFilter'=>true,
                         'sortable' => true,
                         "unSortIcon" => true
@@ -83,22 +86,31 @@ class AgGrid extends Component
                     if (str($column)->endsWith("num")){
                         $colDef['hozAlign'] = 'right';
                         $colDef['headerHozAlign'] = 'right';
-                        //$colDef['sorter'] = 'number';
-                        //$colDef['formatter'] = 'money';
-                        $colDef['type'] = 'numericColumn';
-                        unset($colDef['filter']);
-                    }
-                    if (str($column)->contains('age_group')){
-                        //$colDef['sorter'] = 'number';
-                        $colDef['type'] = 'rangeColumn';
-                    }
-                    if (str($column)->contains('date')){
-                        //$colDef['sorter'] = 'number';
-                        $colDef['type'] = 'dateColumn';
+                        $colDef['columnType'] = 'numericColumn';
+                        $colDef['filter'] = 'agNumberColumnFilter';
+                        // unset($colDef['filter']);
+                    } 
+                    elseif (str($column)->contains('age_group')){
+                        $colDef['columnType'] = 'rangeColumn';
+                        $colDef['filter'] = 'agTextColumnFilter';
+                    } elseif (str($column)->contains('age_group')){
+                        $colDef['columnType'] = 'rangeColumn';
+                        $colDef['filter'] = 'agTextColumnFilter';
+                    } elseif (str($column)->contains('Status')){
+                        $colDef['columnType'] = 'statusColumn';
+                        $colDef['filter'] = 'agSetColumnFilter';
+                    } 
+                    else {
+                        $colDef['columnType'] = 'textColumn';
+                        $colDef['filter'] = 'agTextColumnFilter';
                     }
                     return $colDef;
                 });
 
+                // logger($notNested
+                // ->map(fn ($header) => (object)$header)
+                // ->values()
+                // ->all());
             return $notNested
                 ->map(fn ($header) => (object)$header)
                 ->values()
