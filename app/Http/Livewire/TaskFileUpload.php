@@ -40,7 +40,7 @@ class TaskFileUpload extends Component
             return [
                 'id' => $file->id,
                 'file_path' => Storage::url($file->file_path),
-                'file_name' => basename($file->file_path),
+                'file_name' => $file->file_name,
                 'file_size' => Storage::exists('public/' . $file->file_path) ? Storage::size('public/' . $file->file_path) : 0,
             ];
         })->toArray();
@@ -72,6 +72,7 @@ class TaskFileUpload extends Component
             TaskFile::create([
                 'task_id' => $taskId, // Example Task ID
                 'file_path' => $path,
+                'file_name' => $file->getClientOriginalName(),
             ]);
 
             $this->fileRemoved($file->getFilename());
