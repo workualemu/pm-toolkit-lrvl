@@ -17,10 +17,12 @@ return new class extends Migration
             $table->string('file_name')->nullable();
         });
 
-        DB::table('task_files')->get()->each(function ($taskFile) {
-            $taskFile->update([
-                'file_name' => basename($taskFile->file_path),
-            ]);
+        DB::table('task_files')->update([
+            'file_name' => DB::raw('file_path') 
+        ]);
+
+        Schema::table('task_files', function (Blueprint $table) {
+            $table->string('file_name')->nullable(false)->change();
         });
     }
 

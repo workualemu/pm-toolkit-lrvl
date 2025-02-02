@@ -66,13 +66,13 @@ class TaskFileUpload extends Component
         ]);
 
         foreach ($this->files as $file) {
-            $path = $file->store('task-files', 'public'); 
-
+            $path = $file->store('task-files', 'public');
+            
             // Save file information to the database
             TaskFile::create([
                 'task_id' => $taskId, // Example Task ID
                 'file_path' => $path,
-                'file_name' => $file->getClientOriginalName(),
+                'file_name' => basename($file->getClientOriginalName()),
             ]);
 
             $this->fileRemoved($file->getFilename());
