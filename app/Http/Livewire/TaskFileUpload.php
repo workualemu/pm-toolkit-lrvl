@@ -24,6 +24,7 @@ class TaskFileUpload extends Component
         'fileRemoved',
         'fileDeleted' => 'deleteUploadedFile',
         'trackUnsavedFiles' => 'trackUnsavedFiles',
+        'resetTrackingUnsavedFiles' => 'resetTrackingUnsavedFiles',
     ];
 
     public function setTaskId($taskId)
@@ -136,6 +137,7 @@ class TaskFileUpload extends Component
 
             $file->delete(); // Delete the file record
 
+            $this->removeUnsavedFiles($fileId); // Remove the file from the unsaved files array
             $this->emit('fileDeleted', $fileId); // Emit the ID for frontend updates
         } else {
             session()->flash('error', 'File not found!');
@@ -144,8 +146,25 @@ class TaskFileUpload extends Component
 
     public function trackUnsavedFiles($serverId)
     {
-        $this->unsavedFiles[] = $serverId;
-        $this->emit('unsavedFilesUpdated', $this->unsavedFiles);
+        // add if the serverId is not in the array
+        if(!in_array($serverId, $this->unsavedFiles))
+        {
+            $this->unsavedFiles[] = $serverId;
+            $this->emit('unsavedFilesUpdated', $this->unsavedFiles);
+        }
+
+    }
+
+    public function removeUnsavedFiles($serverId) 
+    {
+        $this->unsavedFiles = array_filter($this->unsavedFiles, function ($id) use ($serverId) {
+            return $id !== $serverId;
+        });
+    }
+
+    public function resetTrackingUnsavedFiles() 
+    {
+        $this->unsavedFiles = [];
     }
 
 

@@ -83,7 +83,9 @@
                 filePondInstance.removeFile(serverId);
             });
 
-            temporaryFiles = [];    
+            temporaryFiles = [];
+            
+            Livewire.emit('resetTrackingUnsavedFiles')
         }
 
         Livewire.on('savedFilesUpdated', savedFiles => {
