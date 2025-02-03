@@ -21,10 +21,10 @@
                 <img class="mx-auto h-16 w-16 lg:hidden" src="{{ asset('images/app-logo.svg') }}" alt="logo" />
                 <div class="mt-4">
                     <h2 class="text-2xl font-semibold text-slate-600 dark:text-navy-100">
-                        Welcome Back
+                        {{ __('Welcome Back') }}
                     </h2>
-                    <p class="text-slate-400 dark:text-navy-300">
-                        Please sign in to continue
+                    <p class="text-slate-600 dark:text-navy-300">
+                        {{ __('Please sign in to continue') }}
                     </p>
                 </div>
             </div>
@@ -34,8 +34,8 @@
                     <label class="relative flex">
                         <input
                             class="form-input peer w-full rounded-lg bg-slate-150 px-3 py-2 pl-9 ring-primary/50 placeholder:text-slate-400 hover:bg-slate-200 focus:ring dark:bg-navy-900/90 dark:ring-accent/50 dark:placeholder:text-navy-300 dark:hover:bg-navy-900 dark:focus:bg-navy-900"
-                            placeholder="Username or email" type="text" name="email"
-                            value="{{ old('email') ?? 'help@piniastudio.com' }}" />
+                            placeholder="Email" type="text" name="email"
+                            value="{{ old('email') ?? '' }}" />
                         <span
                             class="pointer-events-none absolute flex h-full w-10 items-center justify-center text-slate-400 peer-focus:text-primary dark:text-navy-300 dark:peer-focus:text-accent">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-colors duration-200"
@@ -76,7 +76,7 @@
                             type="checkbox" />
                         <span class="line-clamp-1">Remember me</span>
                     </label>
-                    <a href="#"
+                    <a href="{{ route('password.request') }} "
                         class="text-xs text-slate-400 transition-colors line-clamp-1 hover:text-slate-800 focus:text-slate-800 dark:text-navy-300 dark:hover:text-navy-100 dark:focus:text-navy-100">Forgot
                         Password?</a>
                 </div>
