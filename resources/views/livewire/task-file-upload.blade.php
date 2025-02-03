@@ -34,21 +34,35 @@
                                 .then(load);
                         }
                     },
-                    
                 });
             }
 
             // Update files in FilePond instance
             filePondInstance.setOptions({
                 files: savedFiles.map(file => ({
-                    source: file.file_path, 
+                    source: file.file_path,
                     options: {
                         type: 'local',
+                        filename: file.file_name,
                         metadata: {
                             id: file.id,
-                        }
+                            name: file.file_name,
+                        },
                     }
                 }))
+            });
+
+            filePondInstance.on('addfile', (error, file) => {
+                if (!error) {
+                    const metadata = file.getMetadata();
+                    if (metadata && metadata.name) {
+                        console.log('Before:', file.filename); // Check before renaming
+                        // Update FilePond's internal metadata
+                        file.setMetadata('file_name', metadata.name, true);
+                        console.log('file', file);
+                        console.log('After:', file.getMetadata('file_name'), file.filename); 
+                    }
+                }
             });
             
             filePondInstance.on('processfile', (error, file) => {
@@ -83,7 +97,9 @@
                 filePondInstance.removeFile(serverId);
             });
 
-            temporaryFiles = [];    
+            temporaryFiles = [];
+            
+            Livewire.emit('resetTrackingUnsavedFiles')
         }
 
         Livewire.on('savedFilesUpdated', savedFiles => {
