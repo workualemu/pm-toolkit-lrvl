@@ -15,6 +15,7 @@ use PDF;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Spatie\SimpleExcel\SimpleExcelWriter;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ReportView extends Component
 {
@@ -55,6 +56,14 @@ class ReportView extends Component
         });
 
         return $cols;
+    }
+
+    public function download(): StreamedResponse
+    {
+        $report = Report::find($this->report_id);
+        $filename = str($report->title)->slug('-')->append('.xlsx')->toString();
+        $writer = SimpleExcelWriter::streamDownload($filename)->addRows($this->data);
+        return response()->streamDownload(fn() => $writer->close(), $filename);
     }
 
     public function exportToExcel()

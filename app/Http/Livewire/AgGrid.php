@@ -93,9 +93,9 @@ class AgGrid extends Component
                     elseif (str($column)->contains('age_group')){
                         $colDef['columnType'] = 'rangeColumn';
                         $colDef['filter'] = 'agTextColumnFilter';
-                    } elseif (str($column)->contains('age_group')){
-                        $colDef['columnType'] = 'rangeColumn';
-                        $colDef['filter'] = 'agTextColumnFilter';
+                    } elseif (str($column)->contains('Date')){
+                        $colDef['columnType'] = 'dateColumn';
+                        $colDef['filter'] = 'agDateColumnFilter';
                     } elseif (str($column)->contains('Status')){
                         $colDef['columnType'] = 'statusColumn';
                         $colDef['filter'] = 'agSetColumnFilter';

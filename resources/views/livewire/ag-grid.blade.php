@@ -1,4 +1,9 @@
 <div>
+    <div class="mb-4">
+        <button x-on:click="table.exportToExcel()" class="px-4 py-2 bg-blue-600 text-white rounded">
+            Export to Excel
+        </button>
+    </div>
     <div
         id="{{ $htmlId }}"
         x-init="table = new AgGridTable('{{ $htmlId }}')"

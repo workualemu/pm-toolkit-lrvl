@@ -14,6 +14,8 @@ export default class AgGridTable {
 
     constructor(htmlId) {
         this.id = htmlId
+        this.api = null;
+        this.gridReady = false;
         this.rootElement = document.getElementById(htmlId)
         this.rootElement.classList.add(...['ag-theme-quartz', 'w-full', 'h-[calc(60vh)]']);
 
@@ -38,7 +40,6 @@ export default class AgGridTable {
                 floatingFilter: true,
                 sortable: true,
                 width: 15
-                
             },
             rangeColumn: {
                 width: 150,
@@ -51,6 +52,12 @@ export default class AgGridTable {
             }
         };
 
+        this.options.onGridReady = params => {
+            this.api = params.api;
+            this.columnApi = params.columnApi;
+            this.gridReady = true;
+        };
+        
         if (this.options?.rowData?.length > 0) {
             this.rootElement.innerHTML = ''
             this.table = createGrid(this.rootElement, this.options)
@@ -144,6 +151,15 @@ export default class AgGridTable {
         const table = Alpine.raw(this.table)
         if (table) {
             table.sizeColumnsToFit()
+        }
+    }
+
+    exportToExcel() {
+        alert(1);
+        if (this.api) {
+            this.api.exportDataAsExcel();
+        } else {
+            console.warn('Grid API is not available yet.');
         }
     }
 }
