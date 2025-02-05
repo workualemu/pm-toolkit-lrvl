@@ -9,6 +9,7 @@ use App\Http\Livewire\Tasks;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\RolePermissionController;
 
 use App\Http\Livewire\TaskRightPopup;
 
@@ -58,6 +59,14 @@ Route::middleware('auth')->group(function () {
         }
         return redirect()->back();
     })->name('toggle-read');
+
+    Route::get('/roles', [RolePermissionController::class, 'index'])->name('roles.index');
+    Route::post('/roles', [RolePermissionController::class, 'storeRole'])->name('roles.store');
+    Route::post('/permissions', [RolePermissionController::class, 'storePermission'])->name('permissions.store');
+    Route::post('/assign-permission', [RolePermissionController::class, 'assignPermission'])->name('assign.permission');
+    Route::post('/assign-role', [RolePermissionController::class, 'assignRole'])->name('assign.role');
+    Route::delete('/roles/{id}', [RolePermissionController::class, 'destroyRole'])->name('roles.destroy');
+    Route::delete('/permissions/{id}', [RolePermissionController::class, 'destroyPermission'])->name('permissions.destroy');
 
     Route::controller(PagesController::class)->group(function(){
         Route::get('kanban', 'getKanban')->name('kanban');

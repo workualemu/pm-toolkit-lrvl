@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 use Livewire\Component;
 use App\Models\User;
 
-class Comment extends Component
+class Comment_depr extends Component
 {
     use AuthorizesRequests;
 
