@@ -36,10 +36,9 @@ class RoleModal extends Component
     {
         $this->validate();
         try {
-            $role = Role::create([
-                'name' => $this->role->name,
-                'guard_name' => 'web',
-            ]);
+            $role = Role::updateOrCreate(
+                ['id' => $this->role->id],
+                ['name' => $this->role->name, 'guard_name'=>'web']);
 
         } catch (Exception $exception) {
             $this->addError('Role', $exception->getMessage());
