@@ -24,6 +24,7 @@ class TaskFileUpload extends Component
         'fileRemoved',
         'fileDeleted' => 'deleteUploadedFile',
         'trackUnsavedFiles' => 'trackUnsavedFiles',
+        'resetTrackingUnsavedFiles' => 'resetTrackingUnsavedFiles',
     ];
 
     public function setTaskId($taskId)
@@ -39,7 +40,7 @@ class TaskFileUpload extends Component
             return [
                 'id' => $file->id,
                 'file_path' => Storage::url($file->file_path),
-                'file_name' => basename($file->file_path),
+                'file_name' => $file->file_name,
                 'file_size' => Storage::exists('public/' . $file->file_path) ? Storage::size('public/' . $file->file_path) : 0,
             ];
         })->toArray();
@@ -65,12 +66,13 @@ class TaskFileUpload extends Component
         ]);
 
         foreach ($this->files as $file) {
-            $path = $file->store('task-files', 'public'); 
-
+            $path = $file->store('task-files', 'public');
+            
             // Save file information to the database
             TaskFile::create([
                 'task_id' => $taskId, // Example Task ID
                 'file_path' => $path,
+                'file_name' => basename($file->getClientOriginalName()),
             ]);
 
             $this->fileRemoved($file->getFilename());
@@ -136,6 +138,7 @@ class TaskFileUpload extends Component
 
             $file->delete(); // Delete the file record
 
+            $this->removeUnsavedFiles($fileId); // Remove the file from the unsaved files array
             $this->emit('fileDeleted', $fileId); // Emit the ID for frontend updates
         } else {
             session()->flash('error', 'File not found!');
@@ -144,8 +147,25 @@ class TaskFileUpload extends Component
 
     public function trackUnsavedFiles($serverId)
     {
-        $this->unsavedFiles[] = $serverId;
-        $this->emit('unsavedFilesUpdated', $this->unsavedFiles);
+        // add if the serverId is not in the array
+        if(!in_array($serverId, $this->unsavedFiles))
+        {
+            $this->unsavedFiles[] = $serverId;
+            $this->emit('unsavedFilesUpdated', $this->unsavedFiles);
+        }
+
+    }
+
+    public function removeUnsavedFiles($serverId) 
+    {
+        $this->unsavedFiles = array_filter($this->unsavedFiles, function ($id) use ($serverId) {
+            return $id !== $serverId;
+        });
+    }
+
+    public function resetTrackingUnsavedFiles() 
+    {
+        $this->unsavedFiles = [];
     }
 
 
