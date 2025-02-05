@@ -11,8 +11,8 @@ class Role extends \Spatie\Permission\Models\Role
 {
     use HasPermissions;
 
-    public function permissions()
-    {
-        return $this->belongsToMany(Permission::class);
-    }
+    // public function permissions()
+    // {
+    //     return $this->belongsToMany(Permission::class);
+    // }
 }

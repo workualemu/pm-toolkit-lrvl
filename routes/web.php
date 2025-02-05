@@ -68,6 +68,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/roles/{id}', [RolePermissionController::class, 'destroyRole'])->name('roles.destroy');
     Route::delete('/permissions/{id}', [RolePermissionController::class, 'destroyPermission'])->name('permissions.destroy');
 
+    Route::get('role-permissions/{role_id}', [RolePermissionController::class, 'manageRolePermission'])->name('role-permissions');
+
     Route::controller(PagesController::class)->group(function(){
         Route::get('kanban', 'getKanban')->name('kanban');
         Route::get('gantt', 'getGantt')->name('gantt');

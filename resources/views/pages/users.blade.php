@@ -21,6 +21,8 @@
             </div>
         </div>
     </div>
-    @livewire('users-page', ['title' => $page_title, 'type' => $page_type])
+    <div class="flex-grow flex flex-col">          
+        @livewire('users-page', ['title' => $page_title, 'type' => $page_type])
+    </div>
 
 </x-app-layout>
