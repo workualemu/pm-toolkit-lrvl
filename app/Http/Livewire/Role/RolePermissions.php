@@ -11,6 +11,7 @@ class RolePermissions extends Component
     public $role;
     public $grantedPermissions = [];
     public $permissions;
+    public $searchTerm;
 
 
     public function mount($role_id)
@@ -25,6 +26,11 @@ class RolePermissions extends Component
         }
         $this->permissions = Permission::all();
         
+    }
+
+    public function filterPermissions()
+    {
+        $this->permissions = Permission::where('name','LIKE','%'.$this->searchTerm.'%')->get(); 
     }
 
     public function grantPermissions($isSave)

@@ -1,4 +1,4 @@
-<main class="main-content kanban-app w-full">
+<main class="main-content">
     <!--header, title search, and filter block -->
     <div class="" >
         <!-- My task and search bar -->
@@ -9,11 +9,12 @@
                         {{ __('Permissions') }}
                     </p>
                 </div>
-                <p class="mt-1 text-xs">{{ $role->name }}</p>
+                <p class="mt-1 text-xs">{{ __('For role: ') }} {{ $role->name }}</p>
             </div>
             <div class="flex items-center space-x-2">
                 <label class="relative hidden sm:flex">
                     <input wire:model = "searchTerm"
+                        wire:keydown.enter="filterPermissions()"
                         class="form-input peer h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:z-10 hover:border-slate-400 focus:z-10 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                         placeholder="Search permissions..." type="text" />
                     <span
@@ -28,33 +29,34 @@
             </div>
         </div>
 
+        <div class="flex space-x-2 py-4"></div>
         <!-- Filter block -->
-                <div class="grid grid-cols-4 gap-4 sm:grid-cols-2 sm:gap-5 lg:gap-6">
-                    <div class="sm:col-span-2">
-                        <div class="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-4 sm:gap-5 lg:gap-6">
-                            @foreach($permissions as $permission)
-                                <label class="inline-flex items-center space-x-2">
-                                    <input wire:model="grantedPermissions.{{$permission->id}}"
-                                        class="form-switch h-5 w-10 rounded-full bg-slate-300 before:rounded-full before:bg-slate-50 checked:!bg-info checked:before:bg-white dark:bg-navy-900 dark:before:bg-navy-300 dark:checked:before:bg-white"
-                                        type="checkbox"
-                                    />
-                                    <p>{{$permission->name}}</p>
-                                </label>
-                            @endforeach
-                        </div>
-                    </div>
+        <div class="grid grid-cols-4 gap-4 sm:grid-cols-2 sm:gap-5 lg:gap-6">
+            <div class="sm:col-span-2">
+                <div class="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-4 sm:gap-5 lg:gap-6">
+                    @foreach($permissions as $permission)
+                        <label class="inline-flex items-center space-x-2">
+                            <input wire:model="grantedPermissions.{{$permission->id}}"
+                                class="form-switch h-5 w-10 rounded-full bg-slate-300 before:rounded-full before:bg-slate-50 checked:!bg-info checked:before:bg-white dark:bg-navy-900 dark:before:bg-navy-300 dark:checked:before:bg-white"
+                                type="checkbox"
+                            />
+                            <p>{{$permission->name}}</p>
+                        </label>
+                    @endforeach
                 </div>
-                <div class="mt-4 space-x-1 text-right">
-                    <button
-                        wire:click="grantPermissions(false)"
-                        class="btn font-medium text-slate-700 hover:bg-slate-300/20 active:bg-slate-300/25 dark:text-navy-100 dark:hover:bg-navy-300/20 dark:active:bg-navy-300/25">
-                        {{ __('Cancel') }}
-                    </button>
-                    <button
-                        wire:click="grantPermissions(true)"
-                        class="btn bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
-                        {{ __('Submit') }}
-                    </button>
-                </div>
+            </div>
+        </div>
+        <div class="mt-4 space-x-1 text-right">
+            <button
+                wire:click="grantPermissions(false)"
+                class="btn font-medium text-slate-700 hover:bg-slate-300/20 active:bg-slate-300/25 dark:text-navy-100 dark:hover:bg-navy-300/20 dark:active:bg-navy-300/25">
+                {{ __('Cancel') }}
+            </button>
+            <button
+                wire:click="grantPermissions(true)"
+                class="btn bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
+                {{ __('Submit') }}
+            </button>
+        </div>
     </div>
 </main>
