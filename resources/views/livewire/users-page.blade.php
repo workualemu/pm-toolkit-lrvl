@@ -1,5 +1,5 @@
 <div>
-    <main class="main-content kanban-app w-full">
+    <main class="main-content">
         <div
             class="flex justify-between space-x-2 px-2 py-2 transition-all duration-[.25s]">
             <div class="flex">

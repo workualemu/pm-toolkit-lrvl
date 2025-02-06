@@ -30,7 +30,10 @@ class RolePermissions extends Component
 
     public function filterPermissions()
     {
-        $this->permissions = Permission::where('name','LIKE','%'.$this->searchTerm.'%')->get(); 
+        $searchTerm = strtolower($this->searchTerm);
+        $this->permissions = Permission::whereRaw('LOWER(name) LIKE ?', ['%' . $searchTerm . '%'])
+                        ->get();
+
     }
 
     public function grantPermissions($isSave)

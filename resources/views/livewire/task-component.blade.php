@@ -75,7 +75,7 @@
                     @endforeach
                 </div>
             </div>
-            @if($task->level == 0)
+            @if($task->level == 0 && ($user->hasRole('admin') || $user->can('create activity')))
             <div class="flex items-center space-x-1">
                 <button 
                     x-data=""
@@ -90,7 +90,7 @@
                     </span>
                 </button>
             </div>
-            @elseif($task->level == 1)
+            @elseif($task->level == 1 && ($user->hasRole('admin') || $user->can('create task')))
             <div class="flex items-center space-x-1">
                 <button 
                     x-data=""

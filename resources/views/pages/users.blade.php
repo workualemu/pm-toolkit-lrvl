@@ -22,7 +22,17 @@
         </div>
     </div>
     <div class="flex-grow flex flex-col">          
-        @livewire('users-page', ['title' => $page_title, 'type' => $page_type])
+        
+
+        @if($page_type == 'USER')
+            <div class="col-span-1">
+                @livewire('registered-users')
+            </div>
+        @elseif($page_type == 'TEAM')
+            <div class="col-span-1">
+            @livewire('users-page', ['title' => $page_title, 'type' => $page_type])
+            </div>
+        @endif
     </div>
 
 </x-app-layout>

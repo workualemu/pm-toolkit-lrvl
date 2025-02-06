@@ -35,6 +35,7 @@
             </button>
           </div>
 
+          @if($user->hasRole('admin') || $user->can('create phase'))
           <span>
             <div class="mt-2 px-4 ml-auto">
               <button 
@@ -48,6 +49,7 @@
               </button>
             </div>
           </span>
+          @endif
 
         </div>
       </div>
