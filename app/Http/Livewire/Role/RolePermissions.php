@@ -10,8 +10,8 @@ class RolePermissions extends Component
 {
     public $role;
     public $grantedPermissions = [];
-    public $permissions;
-    public $searchTerm;
+    // public $permissions;
+    public $searchTerm = '';
 
 
     public function mount($role_id)
@@ -24,35 +24,64 @@ class RolePermissions extends Component
                 $this->grantedPermissions[$pm->id]=true;
             }
         }
-        $this->permissions = Permission::all();
         
-    }
-
-    public function filterPermissions()
-    {
-        $searchTerm = strtolower($this->searchTerm);
-        $this->permissions = Permission::whereRaw('LOWER(name) LIKE ?', ['%' . $searchTerm . '%'])
-                        ->get();
-
     }
 
     public function grantPermissions($isSave)
     {
-        if($isSave){
-            foreach($this->grantedPermissions as $key=>$value){
-                $permission = Permission::find($key);
-                if($value){
-                    $this->role->givePermissionTo($permission->name);
-                } else {
-                    $this->role->revokePermissionTo($permission->name);
-                }
+        if ($isSave) {
+            if (!$this->role) {
+                $errorMessage = "Invalid role selection.";
+                $this->emit('closeRolePermissions', -1, $errorMessage);
+                return;
             }
+
+            // Ensure grantedPermissions is an array before processing
+            if (!is_array($this->grantedPermissions)) {
+                $errorMessage = "Invalid permissions data.";
+                $this->emit('closeRolePermissions', -1, $errorMessage);
+                return;
+            }
+
+            try {
+                // Fetch all permissions in one query to avoid multiple DB calls
+                $permissionIds = array_keys($this->grantedPermissions);
+                $permissions = Permission::whereIn('id', $permissionIds)->get()->keyBy('id');
+
+                foreach ($this->grantedPermissions as $key => $value) {
+                    if (!isset($permissions[$key])) {
+                        continue; // Skip if permission not found
+                    }
+
+                    $permissionName = $permissions[$key]->name;
+
+                    if ($value) {
+                        $this->role->givePermissionTo($permissionName);
+                    } else {
+                        $this->role->revokePermissionTo($permissionName);
+                    }
+                }
+
+                $this->emit('closeRolePermissions', 1, null);
+            } catch (\Exception $e) {
+                $errorMessage = "An error occurred while updating permissions.";
+                $this->emit('closeRolePermissions', -1, $errorMessage);
+            }
+        } else {
+            $this->emit('closeRolePermissions', 0, null);
         }
-        $this->emit('closeRolePermissions');
     }
 
     public function render()
     {
-        return view('livewire.role.role-permissions');
+        $searchTerm = strtolower($this->searchTerm);
+        $permissions = Permission::when($this->searchTerm, function ($query) {
+            $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($this->searchTerm) . '%']);
+        })->get();
+
+        return view('livewire.role.role-permissions', [
+            'permissions' => $permissions,
+        ]);
+
     }
 }

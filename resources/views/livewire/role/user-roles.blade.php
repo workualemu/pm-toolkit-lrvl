@@ -6,10 +6,10 @@
             <div>
                 <div class="flex space-x-2">
                     <p class="text-xl font-medium text-slate-800 dark:text-navy-50">
-                        {{ __('Permissions') }}
+                        {{ __('Roles') }}
                     </p>
                 </div>
-                <p class="mt-1 text-xs">{{ __('For role: ') }} {{ $role->name }}</p>
+                <p class="mt-1 text-xs">{{ __('For user: ') }} {{ $selectedUser->name }}</p>
             </div>
             <div class="flex items-center space-x-2">
                 <label class="relative hidden sm:flex">
@@ -33,13 +33,13 @@
         <div class="grid grid-cols-4 gap-4 sm:grid-cols-2 sm:gap-5 lg:gap-6">
             <div class="sm:col-span-2">
                 <div class="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-4 sm:gap-5 lg:gap-6">
-                    @foreach($permissions as $permission)
+                    @foreach($roles as $role)
                         <label class="inline-flex items-center space-x-2">
-                            <input wire:model="grantedPermissions.{{$permission->id}}"
+                            <input wire:model="assignedRoles.{{$role->id}}"
                                 class="form-switch h-5 w-10 rounded-full bg-slate-300 before:rounded-full before:bg-slate-50 checked:!bg-info checked:before:bg-white dark:bg-navy-900 dark:before:bg-navy-300 dark:checked:before:bg-white"
                                 type="checkbox"
                             />
-                            <p>{{$permission->name}}</p>
+                            <p>{{$role->name}}</p>
                         </label>
                     @endforeach
                 </div>
@@ -47,12 +47,12 @@
         </div>
         <div class="mt-4 space-x-1 text-right">
             <button
-                wire:click="grantPermissions(false)"
+                wire:click="assignRoles(false)"
                 class="btn font-medium text-slate-700 hover:bg-slate-300/20 active:bg-slate-300/25 dark:text-navy-100 dark:hover:bg-navy-300/20 dark:active:bg-navy-300/25">
                 {{ __('Cancel') }}
             </button>
             <button
-                wire:click="grantPermissions(true)"
+                wire:click="assignRoles(true)"
                 class="btn bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
                 {{ __('Submit') }}
             </button>
