@@ -58,9 +58,9 @@
 -->
     <div id="x-teleport-target"></div>
 
-    <script>
-        window.addEventListener("DOMContentLoaded", () => Alpine.start());
-    </script>
+  
+    <!-- Load Alpine.js without Livewire -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     @isset($script)
         {{ $script }}

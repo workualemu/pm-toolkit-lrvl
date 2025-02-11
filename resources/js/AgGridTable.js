@@ -154,12 +154,23 @@ export default class AgGridTable {
         }
     }
 
+    // onBtExportCSV() {
+    //     gridOptions.api.exportDataAsCsv({
+    //         fileName: 'my_grid_data.csv'
+    //     });
+    // }
+
     exportToExcel() {
-        alert(1);
-        if (this.api) {
-            this.api.exportDataAsExcel();
-        } else {
-            console.warn('Grid API is not available yet.');
+        alert('1');
+
+        if (!gridOptions.api) {
+            alert('Grid API not initialized!');
+            return;
         }
+        
+        gridOptions.api.exportDataAsCsv({
+            fileName: 'my_grid_data.csv'
+        });
+        alert('2');
     }
 }

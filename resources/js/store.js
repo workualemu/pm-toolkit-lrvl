@@ -8,7 +8,12 @@ export default {
   init() {
     let firstTime = true;
 
-    this.isDarkModeEnabled = Alpine.$persist(false).as("_x_darkMode_on");
+    document.addEventListener("alpine:init", () => {
+      Alpine.store("darkMode", {
+          isEnabled: Alpine.$persist(false).as("_x_darkMode_on"),
+      });
+  });
+    // this.isDarkModeEnabled = Alpine.$persist(false).as("_x_darkMode_on");
 
     this.isSidebarExpanded =
       document.querySelector(".sidebar") &&

@@ -17,9 +17,9 @@ class Roles extends Component
     public $errorMessage = null;
     public $success = 0;
 
-    protected $rules = [
-        'role.name' => 'required|min:2',
-    ];
+    // protected $rules = [
+    //     'role.name' => 'required|min:2',
+    // ];
 
     protected $listeners = ['refreshRoles' => '$refresh',
                             'closeRolePermissions' => 'onCloseRolePermissions'

@@ -30,18 +30,18 @@ class PagesController extends Controller
         $this->showModal = true;
     }
 
-    public function getTasks(int $project_id)
-    {
-        $user =  Auth::user();
-        if($project_id > 0) {
-            $user->project_id = $project_id;
-            $user->save();
-        }
-        $projectId = $user->project_id;
-        $project = Project::find($projectId);
+    // public function getTasks(int $project_id)
+    // {
+    //     $user =  Auth::user();
+    //     if($project_id > 0) {
+    //         $user->project_id = $project_id;
+    //         $user->save();
+    //     }
+    //     $projectId = $user->project_id;
+    //     $project = Project::find($projectId);
 
-        return view('pages/tasks', compact('project'));
-    }
+    //     return view('pages/tasks-frame', compact('project'));
+    // }
 
     public function getKanban()
     {

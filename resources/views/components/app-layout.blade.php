@@ -30,24 +30,24 @@
     <script src="{{ asset('vendor/dhtmlx-gantt/codebase/dhtmlxgantt.js') }}"></script>
 
     <script>
-        
-     
         /**
          * THIS SCRIPT REQUIRED FOR PREVENT FLICKERING IN SOME BROWSERS
          */
         localStorage.getItem("_x_darkMode_on") === "true" &&
             document.documentElement.classList.add("dark");
     </script>
-    @livewireScripts
+    
     @isset($head)
         {{ $head }}
     @endisset
-    
 
 </head>
 
 <body x-data x-bind="$store.global.documentBody"
-    class="@isset($isSidebarOpen) {{ $isSidebarOpen === 'true' ? 'is-sidebar-open' : '' }} @endisset @isset($isHeaderBlur) {{ $isHeaderBlur === 'true' ? 'is-header-blur' : '' }} @endisset @isset($hasMinSidebar) {{ $hasMinSidebar === 'true' ? 'has-min-sidebar' : '' }} @endisset  @isset($headerSticky) {{ $headerSticky === 'false' ? 'is-header-not-sticky' : '' }} @endisset">
+    class="@isset($isSidebarOpen) {{ $isSidebarOpen === 'true' ? 'is-sidebar-open' : '' }} @endisset 
+        @isset($isHeaderBlur) {{ $isHeaderBlur === 'true' ? 'is-header-blur' : '' }} @endisset 
+        @isset($hasMinSidebar) {{ $hasMinSidebar === 'true' ? 'has-min-sidebar' : '' }} @endisset  
+        @isset($headerSticky) {{ $headerSticky === 'false' ? 'is-header-not-sticky' : '' }} @endisset">
 
     <!-- App preloader-->
     <x-app-preloader></x-app-preloader>
@@ -66,7 +66,6 @@
         <x-app-partials.header
                 sidebarToggle='{{ $sidebarToggle}}'
         ></x-app-partials.header>
-
     
         <!-- Mobile Searchbar -->
         <x-app-partials.mobile-searchbar></x-app-partials.mobile-searchbar>
@@ -82,12 +81,20 @@
   This is a place for Alpine.js Teleport feature
   @see https://alpinejs.dev/directives/teleport
 -->
-    <div id="x-teleport-target"></div>
+    <!-- <div id="x-teleport-target"></div> -->
 
     <script>
-        window.addEventListener("DOMContentLoaded", () => Alpine.start());
+        // document.addEventListener("DOMContentLoaded", () => Alpine.start());
     </script>
 
+
+
+    <!-- <script>
+        window.addEventListener("load", () => {
+            document.querySelector(".app-preloader").style.display = "none";
+        });
+    </script> -->
+    @livewireScripts
     @isset($script)
         {{ $script }}
     @endisset

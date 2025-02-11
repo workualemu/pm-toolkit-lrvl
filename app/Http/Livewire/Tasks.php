@@ -7,18 +7,20 @@ use App\Models\Project;
 use App\Models\Task;
 use App\Models\TaskStatus;
 use Illuminate\Support\Facades\Auth;
-use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Livewire\Attributes\On;
 
 class Tasks extends Component
 {
-    use WithPagination;
+    public $tasks = [];
 
     public $showModal = false;
     public $project;
-    public $tasks = null;
+
+    public $reloadKey = 0; 
+
     public $statuses;
     public $phases;
     public $searchTerm = null;
@@ -33,19 +35,24 @@ class Tasks extends Component
 
     public $filterParams = [];
 
+    protected $hasGeneratedTasks = false;
+
     public Illuminate\Database\Eloquent\Collection $result;
 
-    protected $listeners = ['refreshTasks' => 'onRefreshTasks',
-                            'openNewTaskModal' => 'newTask',
-                            'filterTasks' => 'filterTasks',
-                            'showAllTasks' => 'allTasks',
-                            'gantt-task-dragged' => 'onGanttTaskDrag',
-                        ];
+    // protected $listeners = [
+    //     'refreshTasks' => 'onRefreshTasks',
+    //     'openNewTaskModal' => 'newTask',
+    //     'filterTasks' => 'filterTasks',
+    //     'showAllTasks' => 'allTasks',
+    //     'gantt-task-dragged' => 'onGanttTaskDrag',
+    // ];
 
     public function onGanttTaskDrag($taskId, $mode, $task, $original)
     {
-
+        // TODO
     }
+    
+
     public function onRefreshTasks()
     {
         $this->filterTasks(null);
@@ -57,11 +64,18 @@ class Tasks extends Component
         $projectId = $user->project_id;
         $project = Project::find($projectId);
 
-        $this->emit('openTaskModal', 0, 0, 0);
+        $this->dispatch('openTaskRightPopup', 0, 0, 0);
         $this->showModal = true;
     }
 
-    public function filterTasks($condition)
+    // #[On('openTaskRightPopup')]
+    public function openTaskModal($parentId, $taskId, $taskLevel)
+    {
+        // $this->dispatch('openTaskRightPopup', $parentId, $taskId, $taskLevel);
+    }
+
+    #[On('filterTasksWithSidebar')]
+    public function filterTasksWithSidebar($condition)
     {
         $user =  Auth::user();
         $sidebarFilter = [['type'=>'where','column'=>'project_id', 'value'=>$user->project_id]];
@@ -80,14 +94,30 @@ class Tasks extends Component
             'fTaskIds' => null,
             'fAssignee' => null,
         ];
-        $this->emit('resetParams', $this->filterParams);
+
+        $this->getTasks();
+        
+        // logger($this->tasks);
+        // $existingTaskIds = collect($this->tasks)->pluck('id');
+
+        // foreach ($newTasks as $newTask) {
+        //     if (!$existingTaskIds->contains($newTask->id)) {
+        //         $this->tasks[] = $newTask;
+        //     }
+        // }
+        // $this->tasks = collect($this->tasks)
+        //     ->whereIn('id', $newTasks->pluck('id')) 
+        //     ->values() 
+        //     ->all();
+
+        // $this->dispatch('refresh');
     }
 
-    public function mount($project)
+    public function mount($tasks, $project)
     {
-        if($this->tasks == null){
-            $this->tasks = collect();
-        }
+
+        // $this->dispatch('listenForOpenTaskRightPopup');
+        
         $user =  Auth::user();
         if($project != null) {
             $user->project_id = $project->id;
@@ -96,15 +126,84 @@ class Tasks extends Component
         $projectId = $user->project_id;
         $this->project = Project::find($projectId);
 
+        $this->resetParams();
+        $condition = ['type'=>'where','column'=>'assigned_to', 'value'=>Auth::user()->id] ;
+        $this->filterTasksWithSidebar([]);
+
+        // if($this->tasks == null){
+        //     $this->tasks = collect();
+        // }
+
+        // $sidebarFilter = [['type'=>'where','column'=>'project_id', 'value'=>$user->project_id]];
+
+        // $this->filterParams = [
+        //     'fTitle' => $this->fTitle,
+        //     'fPhase' => $this->fPhase,
+        //     'fDateFrom' => $this->fDateFrom,
+        //     'fDateTo' => $this->fDateTo,
+        //     'fStatus' => $this->selectedStatuses,
+        //     'searchTerm' => $this->searchTerm,
+        //     'sidebarFilter' => $sidebarFilter,
+        //     'fPriority' => null,
+        //     'fTaskIds' => null,
+        //     'fAssignee' => null,
+        // ];
+    }
+
+    #[On('filterByAssignee')]
+    public function onFilterByAssignee($assignedTo)
+    {
+        $this->resetParams();
+        $this->filterParams['fAssignee'] = $assignedTo;
+
+        $this->getTasks();
+
+    }
+
+    #[On('filterByStatus')]
+    public function onFilterByStatus($statusId)
+    {
+        
+        $this->resetParams();
+        $this->filterParams['fStatus'] = [$statusId=>true];
+
+        $this->getTasks();
+
+    }
+
+    #[On('filterByPriority')]
+    public function onFilterByPriority($priorityId)
+    {
+        $this->resetParams();
+        $this->filterParams['fPriority'] = $priorityId;
+        $this->getTasks();
+    }
+
+    #[On('filterByTag')]
+    public function onFilterByTag($tagId)
+    {
+        $this->resetParams();
+        $tasks = \DB::table('tag_tasks')
+            ->where('tag_id', '=', $tagId)
+            ->get();
+
+        $taggedTasks = $tasks->pluck('task_id')->toArray();
+        $this->filterParams['fTaskIds'] = $taggedTasks;
+        $this->getTasks();
+    }
+
+    public function resetParams()
+    {
+        $user =  \Auth::user();
         $sidebarFilter = [['type'=>'where','column'=>'project_id', 'value'=>$user->project_id]];
 
         $this->filterParams = [
-            'fTitle' => $this->fTitle,
-            'fPhase' => $this->fPhase,
-            'fDateFrom' => $this->fDateFrom,
-            'fDateTo' => $this->fDateTo,
-            'fStatus' => $this->selectedStatuses,
-            'searchTerm' => $this->searchTerm,
+            'fTitle' => null,
+            'fPhase' => null,
+            'fDateFrom' => null,
+            'fDateTo' => null,
+            'fStatus' => [],
+            'searchTerm' => null,
             'sidebarFilter' => $sidebarFilter,
             'fPriority' => null,
             'fTaskIds' => null,
@@ -112,9 +211,99 @@ class Tasks extends Component
         ];
     }
 
+    public function executeQuery()
+    {
+        $criteria = [];
+
+        if ($this->filterParams['sidebarFilter'] != null) {
+            foreach ($this->filterParams['sidebarFilter'] as  $condition) {
+                    array_push($criteria, $condition);
+            }
+        }
+
+        if ($this->filterParams['searchTerm'] != null) {
+            array_push($criteria, ['type' => 'whereRaw', 'column' => 'LOWER(tasks.title) LIKE ? OR LOWER(tasks.description) LIKE ?', 
+                'values' => ['%' . strtolower($this->filterParams['searchTerm']) . '%',
+                             '%' . strtolower($this->filterParams['searchTerm']) . '%'
+                        ]]);
+        }
+
+        if ($this->filterParams['fTitle'] != null) {
+            array_push($criteria, ['type' => 'whereRaw', 'column' => 'LOWER(tasks.title) LIKE ?', 
+                'values' => ['%' . strtolower($this->filterParams['fTitle']) . '%']]);
+        }
+        
+        $fStatus = array_filter(
+            $this->filterParams['fStatus'],
+            fn($value, $key) => $value, 
+            ARRAY_FILTER_USE_BOTH
+        );
+        
+        if (!empty($fStatus)) {
+            array_push($criteria, ['type' => 'whereIn', 'column' => 'task_status_id', 'values' => array_keys($fStatus)]);
+        }
+        
+        if ($this->filterParams['fDateFrom'] != null) {
+            array_push($criteria, ['type' => 'where', 'column' => 'end_date', 'operator'=> '>=', 'value' => $this->filterParams['fDateFrom']]);
+                
+        }
+
+        if ($this->filterParams['fDateTo'] != null) {
+            array_push($criteria, ['type' => 'where', 'column' => 'end_date', 'operator'=> '<=', 'value' => $this->filterParams['fDateTo']]);
+                
+        }
+
+        if ($this->filterParams['fPriority'] != null) {
+            array_push($criteria, ['type' => 'where', 'column' => 'task_priority_id', 'value' => $this->filterParams['fPriority']]);  
+        }
+
+        if ($this->filterParams['fAssignee'] != null) {
+            array_push($criteria, ['type' => 'where', 'column' => 'assigned_to', 'value' => $this->filterParams['fAssignee']]);  
+        }
+
+        if ($this->filterParams['fTaskIds'] != null) {
+            array_push($criteria, ['type' => 'whereIn', 'column' => 'id', 'values' => $this->filterParams['fTaskIds']]);  
+        }
+        
+        return Task::sortedTasks($criteria, 'path', 'asc', $this->filterParams['fPhase']);   
+    }
+
     public function render()
     {
-        return view('livewire.tasks');
+        // $this->tasks = collect($this->tasks);
+        return view('livewire.tasks', [
+            'taskIds' => collect($this->tasks)->pluck('id')->join('-')
+        ]);
+    }
+
+    //-------------------------Private ------------------
+
+    private function getTasks()
+    {
+        // $this->tasks = $this->executeQuery();
+        // $existingTaskIds = collect($this->tasks)->pluck('id');
+
+        // foreach ($newTasks as $newTask) {
+        //     if (!$existingTaskIds->contains($newTask->id)) {
+        //         $this->tasks[] = $newTask; 
+        //     }
+        // }
+
+        // $this->tasks = collect($this->tasks)->whereIn('id', $newTasks->pluck('id'))->values()->all(); 
+
+
+        // $existingTaskIds = collect($this->tasks)->pluck('id');
+        // foreach ($newTasks as $newTask) {
+        //     if (!$existingTaskIds->contains($newTask->id)) {
+        //         $this->tasks[] = $newTask;
+        //     }
+        // }
+        // $this->tasks = collect($this->tasks)
+        //     ->whereIn('id', $newTasks->pluck('id')) 
+        //     ->values() 
+        //     ->all();
+
+        // $this->dispatch('$refresh'); 
     }
 
 }

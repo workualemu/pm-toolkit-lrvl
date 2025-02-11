@@ -43,7 +43,7 @@
                                 class="is-scrollbar-hidden min-w-full overflow-x-auto"
                                 x-data="pages.tables.initExample1"
                             >
-                                <table class="min-w-full divide-y divide-gray-200" wire:model="records">
+                                <table class="min-w-full divide-y divide-gray-200">
                                     <thead class="bg-gray-50">
                                     <tr>
                                         <th scope="col" class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -58,7 +58,7 @@
                                         <tr>
                                             <td class="px-2 py-4 whitespace-nowrap">
                                                 <div class="flex items-center text-sm text-gray-500">
-                                                    {{$record->name}}
+                                                    {{$record?->name}}
                                                 </div>
                                             </td>
                                             <td class="px-2 py-4 whitespace-nowrap">
@@ -66,7 +66,7 @@
                                                     {{$record->updated_at}}
                                                 </div>
                                             </td>
-                                            @if($record->name != "Super Admin")
+                                            @if($record?->name != "Super Admin")
                                             <td class="px-2 py-4 whitespace-nowrap text-right text-sm font-medium text-gray-600">
                                                 <a class="text-indigo-600 hover:text-indigo-900 cursor-pointer" wire:click.prevent="editRole({{$record->id}})">{{ __('Edit') }}</a>
                                                 |

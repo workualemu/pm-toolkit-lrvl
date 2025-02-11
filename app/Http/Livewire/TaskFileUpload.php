@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\TaskFile;
 use Illuminate\Support\Facades\Storage;
+// use Livewire\WithEvents;
 
 class TaskFileUpload extends Component
 {
@@ -17,16 +18,17 @@ class TaskFileUpload extends Component
     public $taskId; 
     public $uploadedFiles = []; 
 
-    protected $listeners = [
-        'setTaskId', 
-        'refreshFiles',
-        'saveUploads' => 'onSaveUploads', 
-        'fileRemoved',
-        'fileDeleted' => 'deleteUploadedFile',
-        'trackUnsavedFiles' => 'trackUnsavedFiles',
-        'resetTrackingUnsavedFiles' => 'resetTrackingUnsavedFiles',
-    ];
+    // protected $listeners = [
+    //     'setTaskId', 
+    //     'refreshFiles',
+    //     'saveUploads' => 'onSaveUploads', 
+    //     'fileRemoved',
+    //     'fileDeleted' => 'deleteUploadedFile',
+    //     'trackUnsavedFiles' => 'trackUnsavedFiles',
+    //     'resetTrackingUnsavedFiles' => 'resetTrackingUnsavedFiles',
+    // ];
 
+    #[On('setTaskId')]
     public function setTaskId($taskId)
     {
         $this->taskId = $taskId;
@@ -45,9 +47,10 @@ class TaskFileUpload extends Component
             ];
         })->toArray();
 
-        $this->emit('savedFilesUpdated', $this->savedFiles);
+        $this->dispatch('savedFilesUpdated', $this->savedFiles);
     }
 
+    #[On('refreshFiles')]
     public function refreshFiles()
     {
         $this->reset('files');
@@ -59,6 +62,7 @@ class TaskFileUpload extends Component
         $this->$files = TaskFile::where('task_id', $this->taskId)->get();
     }
 
+    #[On('saveUploads')]
     public function onSaveUploads($taskId)
     {
         $this->validate([
@@ -90,6 +94,7 @@ class TaskFileUpload extends Component
         session()->flash('message', 'Files uploaded successfully!');
     }
 
+    #[On('fileRemoved')]
     public function fileRemoved($serverId)
     {
         // Temporary storage directory path (relative to the storage directory)
@@ -122,7 +127,7 @@ class TaskFileUpload extends Component
         });
     }
 
-
+    #[On('fileDeleted')]
     public function deleteUploadedFile($fileId)
     {
         // Find the file record by its ID
@@ -138,20 +143,21 @@ class TaskFileUpload extends Component
 
             $file->delete(); // Delete the file record
 
-            $this->removeUnsavedFiles($fileId); // Remove the file from the unsaved files array
-            $this->emit('fileDeleted', $fileId); // Emit the ID for frontend updates
+            $this->removeUnsavedFiles($fileId); 
+            $this->dispatch('fileDeleted', $fileId); 
         } else {
             session()->flash('error', 'File not found!');
         }
     }
 
+    #[On('trackUnsavedFiles')]
     public function trackUnsavedFiles($serverId)
     {
         // add if the serverId is not in the array
         if(!in_array($serverId, $this->unsavedFiles))
         {
             $this->unsavedFiles[] = $serverId;
-            $this->emit('unsavedFilesUpdated', $this->unsavedFiles);
+            $this->dispatch('unsavedFilesUpdated', $this->unsavedFiles);
         }
 
     }
@@ -163,6 +169,7 @@ class TaskFileUpload extends Component
         });
     }
 
+    #[On('resetTrackingUnsavedFiles')]
     public function resetTrackingUnsavedFiles() 
     {
         $this->unsavedFiles = [];

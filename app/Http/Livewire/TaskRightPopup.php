@@ -17,6 +17,7 @@ use Livewire\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 use App\Notifications\TaskAssignment;
 use Carbon\Carbon;
+use Livewire\Attributes\On;
 
 class TaskRightPopup extends Component
 {
@@ -24,7 +25,7 @@ class TaskRightPopup extends Component
 
     public $project;
     public $showModal = false;
-    public Task $task;
+    public $task;
     public $taskPriorities = [];
     public $taskStatuses = [];
     public $tags = [];
@@ -38,7 +39,19 @@ class TaskRightPopup extends Component
 
     public $file = 's9fwyeVg3ZO1j1V2vyNILxYD0PqqAl-metaZXhwb3J0ICg0KS54bHN4-.xlsx';
 
-    public $title;
+
+    #[Validate('required|min:5')]
+    public $title = '';
+
+    public $start_date = '';
+    public $end_date = '';
+    public $assigned_to = -1;
+    public $report_by = -1;
+    public $description = '';
+    public $task_priority_id = -1;
+    public $task_status_id = -1;
+    
+
 
     protected $rules = [
         'task.title' => 'required|min:2',
@@ -52,11 +65,11 @@ class TaskRightPopup extends Component
         'task.assigned_to'=>'',
         'task.report_by'=>'',
     ];
-    protected $listeners = ['openTaskModal' => 'openModal',
-                            'addFile' => 'addFile',
-                            'fileDownloaded' => 'downloadFile',
-                        ];
+    // protected $listeners = ['openTaskModal' => 'openModal',
+    //                         'fileDownloaded' => 'downloadFile',
+    //                     ];
 
+    #[On('downloadFile')]
     public function downloadFile($file)
     {
         logger('downloadFile is captured');
@@ -82,8 +95,6 @@ class TaskRightPopup extends Component
         }
 
     }
-
-   
 
     // public function downloadFile($file, $originalFileName)
     // {
@@ -128,18 +139,20 @@ class TaskRightPopup extends Component
         $this->formTitle = $titles[$level][$isEditing ? 'edit' : 'new'] ?? ($isEditing ? 'Edit ' : 'Add ');
     }
 
-    public function openModal($parentId, $taskId, $taskLevel)
+
+    #[On('openTaskRightPopup')]
+    public function openTaskRightPopup($parentId, $taskId, $taskLevel)
     {
         $this->taskLevel = $taskLevel;
         $this->taskParent = $parentId;
 
         $attachments = File::filterByTask($taskId)->get();
 
-        $this->files = TemporaryUploadedFile::serializeMultipleForLivewireResponse($attachments);
-        // $this->files = TemporaryUploadedFile::unserializeFromLivewireRequest($files);
+        // $this->files = TemporaryUploadedFile::serializeMultipleForLivewireResponse($attachments);
         
         if($taskId > 0) {
             $this->task = Task::find($taskId);
+            $this->hidrate();
         } else {
             $this->task = new Task();
         }
@@ -154,13 +167,13 @@ class TaskRightPopup extends Component
 
         $this->getFormTitle();
         $this->showModal = true;
-        $this->emit('taskModalOpenForCommentModel', $this->task);
+        // $this->emit('taskModalOpenForCommentModel', $this->task);
     }
 
     public function closeModal()
     {
         $this->showModal = false;
-        $this->emit('clearFilePond');
+        // $this->emit('clearFilePond');
     }
 
     public function store()
@@ -171,6 +184,7 @@ class TaskRightPopup extends Component
 
         $this->task->level = $this->taskLevel < 0 ? $this->task->level : $this->taskLevel;
         $this->task->parent = $this->taskParent < 1 ? $this->task->parent : $this->taskParent;
+        $this->dehidrate();
 
         $this->task->save();
 
@@ -182,30 +196,59 @@ class TaskRightPopup extends Component
         $this->task->tags()->detach();    
         $this->task->tags()->attach($this->taskTags);   
 
-        $this->task->refresh();
+        // $this->task->refresh();
 
         if($this->task->isDirty('assigned_to') ){
             $assgnee = User::find($this->task->assigned_to);
             Notification::send($assgnee, new TaskAssignment($this->task));
         }
 
-        $this->emit('saveUploads', $this->task->id);
+        // $this->emit('saveUploads', $this->task->id);
 
+        $this->dispatch('refreshSingleTask', $this->task->id);
+        // $this->emitTo('task-component', 'refreshSingleTask', $this->task->id);
         $this->showModal = false;
-        $this->emit('refreshTasks');
     }
 
-    public function mount()
+    public function mount($taskId = null)
     {
+        $this->task = $taskId ? Task::find($taskId) : new Task();
+
         $this->modalTask = new Task();
-        $this->task = new Task();
+        // $this->task = new Task();
         $this->project = Project::find(Auth::user()->project_id);
         $this->getFormTitle();
     }
 
     public function render()
     {
-        return view('livewire.task-right-popup');
+        return view('livewire.task-right-popup', ['task' => $this->task]);
+    }
+
+
+    //-------------------------------Private Functions--------------------------------
+    private function hidrate()
+    {
+        $this->title = $this->task->title;
+        $this->start_date = $this->task->start_date ? Carbon::parse($this->task->start_date)->format('M-d-Y') : null;
+        $this->end_date = $this->task->end_date ? Carbon::parse($this->task->end_date)->format('M-d-Y') : null;
+        $this->assigned_to = $this->task->assigned_to;
+        $this->report_by = $this->task->report_by;
+        $this->description = $this->task->description;
+        $this->task_priority_id = $this->task->task_priority_id;
+        $this->task_status_id = $this->task->task_status_id;
+    }
+
+    private function dehidrate()
+    {
+        $this->task->title = $this->title;
+        $this->task->start_date = Carbon::parse($this->start_date);
+        $this->task->end_date = Carbon::parse($this->end_date);
+        $this->task->assigned_to = $this->assigned_to ? $this->assigned_to : 0;
+        $this->task->report_by = $this->report_by ? $this->report_by : 0;
+        $this->task->description = $this->description;
+        $this->task->task_priority_id = $this->task_priority_id;
+        $this->task->task_status_id = $this->task_status_id;
     }
 
 }

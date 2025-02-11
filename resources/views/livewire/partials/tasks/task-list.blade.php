@@ -1,16 +1,17 @@
 <div class="w-12/12 flex flex-col  p-10">
     <div class="card px-4">
-        <div>
+        <div wire:key="tasks-container">
+            <template wire:loading>
+                <p class="text-gray-600">Loading tasks...</p>
+            </template>
             @forelse($tasks as $task)
-                <div>
-                    @livewire('task-component', ['task' => $task], key(crc32($task->id)))
+                <div wire:key="task-wrapper-{{ $task->id }}">
+                    <livewire:task-component :$task :key="$task->id" />
                 </div>
             @empty
-            <div>
-                <div colspan="6" class="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-600">
-                    {{ __('There are no records to display') }}
+                <div wire:key="empty-task-message">
+                    <p class="text-gray-600">{{ __('No records found') }}</p>
                 </div>
-            </div>
             @endforelse
         </div>
     </div>

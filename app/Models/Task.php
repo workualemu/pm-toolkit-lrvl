@@ -48,6 +48,13 @@ class Task extends Model
         return $this->belongsTo(User::class, 'assigned_to');
     }
 
+    public function getAssignedTo()
+    {
+        return DB::table('users')
+                ->where('id', '=', $this->assigned_to)
+                ->first();
+    }
+
     public function reportedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'report_by');
@@ -63,11 +70,25 @@ class Task extends Model
         return $this->belongsTo(TaskStatus::class);
     }
 
+    public function getTaskStatus()
+    {
+        return DB::table('task_statuses')
+                ->where('id', '=', $this->task_status_id)
+                ->first();
+    }
+
     public function taskPriority(): BelongsTo
     {
         return $this->belongsTo(TaskPriority::class);
     }
 
+    public function getTaskPriority()
+    {
+        return DB::table('task_priorities')
+            ->where('id', '=', $this->task_priority_id)
+            ->first();
+    }
+    
     public function children(): HasMany
     {
         return $this->hasMany(Task::class, 'parent');
@@ -104,6 +125,15 @@ class Task extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'tag_tasks');
+    }
+
+    public function getTaskTags()
+    {
+        return DB::table('tags')
+            ->join('tag_tasks', 'tags.id', '=', 'tag_tasks.tag_id')
+            ->where('tag_tasks.task_id', $this->id)
+            ->select('tags.*')
+            ->get();
     }
 
     public static function scopeFilterByStatus($query, $status_id, $project_id = null)
@@ -216,10 +246,11 @@ class Task extends Model
                 SELECT t.*
                 FROM tasks t
                 INNER JOIN task_hierarchy th ON t.id = th.parent
+                
             )
             SELECT DISTINCT * FROM task_hierarchy
         ";
-
+        
         // Add ancestor filter if ancestorId is provided
         if ($ancestorId) {
             $task = Task::find($ancestorId);
@@ -233,21 +264,24 @@ class Task extends Model
                     $bindings = array_merge($bindings, $ancestorDescendants);
                 }
             }
-        }
+        } 
 
         $baseQuery .= " ORDER BY $sortField $direction;";
 
         $tasksData = DB::select($baseQuery, $bindings);
+        $taskIds = array_map(fn($task) => $task->id, $tasksData);
+        
+        $tasks =  Task::whereIn('id', $taskIds)->get();
 
-        $tasks = collect();
+        // $tasks = collect();
 
-        foreach ($tasksData as $taskData) {
-            $attributes = (array) $taskData;
-            $task = new Task();
-            $task->forceFill($attributes);
-            $task->exists = true;
-            $tasks->push($task);
-        }
+        // foreach ($tasksData as $taskData) {
+        //     $attributes = (array) $taskData;
+        //     $task = new Task();
+        //     $task->forceFill($attributes);
+        //     $task->exists = true;
+        //     $tasks->push($task);
+        // }
         return $tasks;
     }
 

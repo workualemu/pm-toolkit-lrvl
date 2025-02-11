@@ -35,7 +35,8 @@ class TasksSideBar extends Component
 
         $this->filterCondition = [];
         $this->priorityCondition = [];
-        $this->emit('filterTasks', null);
+        // return redirect()->route('sidebar-filter', []);
+        $this->dispatch('filterTasksWithSidebar', []);
 
     }
 
@@ -48,8 +49,9 @@ class TasksSideBar extends Component
         $this->bgStarred = "";
 
         $condition = ['type'=>'where','column'=>'assigned_to', 'value'=>Auth::user()->id] ;
-        
-        $this->emit('filterTasks', $condition);
+
+        // return redirect()->route('sidebar-filter', $condition);
+        $this->dispatch('filterTasksWithSidebar', $condition);
     }
 
     public function filterTasksByPriority($priority_id)
@@ -66,7 +68,7 @@ class TasksSideBar extends Component
             array_push($searchCondition, $this->filterCondition);
         }
 
-        $this->emit('filterTasks', $searchCondition);
+        $this->dispatch('filterTasks', $searchCondition);
     }
 
     public function myCommentedTasks()
@@ -85,21 +87,22 @@ class TasksSideBar extends Component
 
         $condition = ['type'=>'whereIn','column'=>'id', 'values'=>$tasks] ;
 
-        $this->emit('filterTasks', $condition);
+        $this->dispatch('filterTasksWithSidebar', $condition);
 
     }
 
     public function myReportingTasks()
     {
+        
         $this->bgAll = "";
         $this->bgMyAssigned = "";
         $this->bgMyCommented = "";
         $this->bgMyReporting = $this->highlight;
         $this->bgStarred = "";
 
-        $condition = ['type'=>'where','column'=>'report_by', 'value'=>Auth::user()->id] ;
+        $condition = ['type'=>'where', 'column'=>'report_by', 'value'=>Auth::user()->id] ;
         
-        $this->emit('filterTasks', $condition);
+        return redirect()->route('sidebar-filter', $condition);
     }
 
     public function starredTasks()
@@ -110,14 +113,14 @@ class TasksSideBar extends Component
         $this->bgMyReporting = "";
         $this->bgStarred = $this->highlight;
 
-        $condition = ['type'=>'where','column'=>'is_starred', 'value'=>true] ;
+        $condition = ['type'=>'where', 'column'=>'is_starred', 'value'=>true] ;
         
-        $this->emit('filterTasks', $condition);
+        $this->dispatch('filterTasksWithSidebar', $condition);
     }
 
     // public function addNewTask()
     // {
-    //     $this->emit('openTaskModal', null);
+    //     $this->dispatch('openTaskModal', null);
     // }
 
     public function mount()

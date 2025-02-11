@@ -92,4 +92,9 @@
             <a href="#">Term of service</a>
         </div>
     </main>
+    <script>
+        window.addEventListener("load", () => {
+            document.querySelector(".app-preloader").style.display = "none";
+        });
+    </script>
 </x-base-layout>

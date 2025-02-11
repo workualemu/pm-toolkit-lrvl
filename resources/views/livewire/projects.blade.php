@@ -1,10 +1,8 @@
 <div>
     <main class="main-content todo-app">
         <livewire:project-modal />
-           <!--header, title search, and filter block -->
         <div class="">
             <div class="flex justify-between space-x-2 px-2 py-2 transition-all duration-[.25s]">
-                <!--  title -->
                 <div>
                     <div class="flex space-x-2">
                         <p class="text-xl font-medium text-slate-800 dark:text-navy-50">

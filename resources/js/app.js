@@ -1,9 +1,25 @@
-import Alpine from "alpinejs";
+// import Alpine from "alpinejs";
 
 // AlpineJS Plugins
-import persist from "@alpinejs/persist"; // @see https://alpinejs.dev/plugins/persist
+// import persist from "@alpinejs/persist"; // @see https://alpinejs.dev/plugins/persist
 import collapse from "@alpinejs/collapse"; // @see https://alpinejs.dev/plugins/collapse
 import intersect from "@alpinejs/intersect"; // @see https://alpinejs.dev/plugins/intersect
+
+// Alpine Components
+import usePopper from "./components/usePopper";
+import accordionItem from "./components/accordionItem";
+
+// Alpine Directives
+import tooltip from "./directives/tooltip";
+import inputMask from "./directives/inputMask";
+
+// Alpine Magic Functions
+import notification from "./magics/notification";
+import clipboard from "./magics/clipboard";
+
+// import mask from '@alpinejs/mask';
+// import '@popperjs/core';
+
 
 // Third Party Libraries
 
@@ -69,23 +85,12 @@ import * as helpers from "./utils/helpers";
 // Pages Scripts
 import * as pages from "./pages";
 
+// Breakpoints Store
+import breakpoints from "./utils/breakpoints";
 // Global Store
 import store from "./store";
 
-// Breakpoints Store
-import breakpoints from "./utils/breakpoints";
 
-// Alpine Components
-import usePopper from "./components/usePopper";
-import accordionItem from "./components/accordionItem";
-
-// Alpine Directives
-import tooltip from "./directives/tooltip";
-import inputMask from "./directives/inputMask";
-
-// Alpine Magic Functions
-import notification from "./magics/notification";
-import clipboard from "./magics/clipboard";
 
 // Register HTML, XML language for highlight.js
 // Just for demo purpose only for highlighting code
@@ -98,6 +103,8 @@ FilePond.registerPlugin(FilePondPluginImagePreview);
 FilePond.registerPlugin(FilePondPluginGetFile);
 
 import AgGridTable from "./AgGridTable";
+
+
 window.AgGridTable = AgGridTable;
 
 // import gantt from "dhtmlx-gantt";
@@ -116,11 +123,10 @@ window.flatpickr = flatpickr;
 window.Quill = Quill;
 window.Tom = Tom;
 
-window.Alpine = Alpine;
+// window.Alpine = Alpine;
 window.helpers = helpers;
 window.pages = pages;
-
-Alpine.plugin(persist);
+// Alpine.plugin(persist);
 Alpine.plugin(collapse);
 Alpine.plugin(intersect);
 

@@ -1,89 +1,40 @@
 <?php
 
-namespace App\Http\Livewire\Partials\Tasks;
+namespace App\Http\Controllers;
 
-use Livewire\Component;
+use Illuminate\Http\Request;
+use App\Models\Project;
+use App\Models\User;
 use App\Models\Task;
-use Livewire\Attributes\On;
+use Illuminate\Support\Facades\Auth;
+use Config;
+use Illuminate\Notifications\DatabaseNotification;
 
-class TasksView extends Component
+class TaskFrame extends Controller
 {
-
-    
-    public $tasks;
-
-    public $filterParams = [];
-
-    protected $hasGeneratedTasks = false;
-
-    // protected $listeners = [
-    //     'task-list-updated' => 'onUpdateTaskList',
-    //     'resetParams' => 'onResetParams',
-    //     'filter-by-status' => 'onFilterByStatus',
-    //     'filter-by-tag' => 'onFilterByTag',
-    //     'filter-by-priority' => 'onFilterByPriority',
-    //     'filter-by-assignee' => 'onFilterByAssignee',
-    // ];
-
-    #[On('task-list-updated')]
-    public function onUpdateTaskList($filterParams)
+    public function getTasks(int $project_id)
     {
-        $this->filterParams = $filterParams;
-        $this->tasks = $this->getTasks();
+        $user =  Auth::user();
+        if($project_id > 0) {
+            $user->project_id = $project_id;
+            $user->save();
+        }
+        $project = Project::find($project_id);
+
+        $tasks = Task::all();
+
+
+        return view('pages/task-frame', compact('tasks', 'project'));
     }
 
-    #[On('resetParams')]
-    public function onResetParams($filterParams)
+    public function filterTasksWithSidebar()
     {
-        $this->onUpdateTaskList($filterParams);
-    }
-
-    // #[On('filter-by-status')]
-    // public function onFilterByStatus($filterValue)
-    // {
-    //     $this->resetParams();
-    //     $this->filterParams['fStatus'] = [$filterValue=>true];
-    //     $this->tasks = $this->getTasks();
-    // }
-
-    // #[On('filter-by-priority')]
-    // public function onFilterByPriority($filterValue)
-    // {
-    //     $this->resetParams();
-    //     $this->filterParams['fPriority'] = $filterValue;
-    //     $this->tasks = $this->getTasks();
-    // }
-
-    // #[On('filter-by-assigneetempo')]
-    // public function onFilterByAssignee($filterValue)
-    // {
-    //     logger('filtertempo');
-    //     $this->resetParams();
-    //     $this->tasks = [];
-    //     usleep(100000); 
-    //     $this->filterParams['fAssignee'] = $filterValue;
-    //     $filteredTasks = $this->getTasks();
-    //     $this->tasks = $filteredTasks->isEmpty() ? [] : $filteredTasks->toArray();
-    // }
-
-    // #[On('filter-by-tag')]
-    // public function onFilterByTag($filterValue)
-    // {
-    //     $this->resetParams();
-    //     $tasks = \DB::table('tag_tasks')
-    //         ->where('tag_id', '=', $filterValue)
-    //         ->get();
-
-    //     $taggedTasks = $tasks->pluck('task_id')->toArray();
-    //     $this->filterParams['fTaskIds'] = $taggedTasks;
-    //     $this->tasks = $this->getTasks();
-    // }
-
-    public function resetParams()
-    {
-        $user =  \Auth::user();
+        $condition = request()->query();
+        $user =  Auth::user();
         $sidebarFilter = [['type'=>'where','column'=>'project_id', 'value'=>$user->project_id]];
-
+        if($condition != null){
+            array_push($sidebarFilter, $condition);
+        }
         $this->filterParams = [
             'fTitle' => null,
             'fPhase' => null,
@@ -96,9 +47,14 @@ class TasksView extends Component
             'fTaskIds' => null,
             'fAssignee' => null,
         ];
+
+        $user =  Auth::user();
+        $project = Project::find($user->project_id);
+        $tasks = $this->executeQuery();
+        return view('pages/task-frame', compact('tasks', 'project'));
     }
-    
-    public function getTasks()
+
+    public function executeQuery()
     {
         $criteria = [];
 
@@ -151,7 +107,7 @@ class TasksView extends Component
         if ($this->filterParams['fTaskIds'] != null) {
             array_push($criteria, ['type' => 'whereIn', 'column' => 'id', 'values' => $this->filterParams['fTaskIds']]);  
         }
-
+        
         return Task::sortedTasks($criteria, 'path', 'asc', $this->filterParams['fPhase']);   
     }
 }

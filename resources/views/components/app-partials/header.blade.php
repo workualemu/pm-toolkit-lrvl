@@ -282,39 +282,10 @@
                                         </svg>
                                     </button>
                                 </div>
-
-                                <div class="is-scrollbar-hidden flex shrink-0 overflow-x-auto px-3">
-                                    <button @click="activeTab = 'tabAlerts'"
-                                        :class="activeTab === 'tabAlerts' ?
-                                            'border-primary dark:border-accent text-primary dark:text-accent-light' :
-                                            'border-transparent hover:text-slate-800 focus:text-slate-800 dark:hover:text-navy-100 dark:focus:text-navy-100'"
-                                        class="btn shrink-0 rounded-none border-b-2 px-3.5 py-2.5">
-                                        <span>Alerts</span>
-                                    </button>
-                                    <button @click="activeTab = 'tabEvents'"
-                                        :class="activeTab === 'tabEvents' ?
-                                            'border-primary dark:border-accent text-primary dark:text-accent-light' :
-                                            'border-transparent hover:text-slate-800 focus:text-slate-800 dark:hover:text-navy-100 dark:focus:text-navy-100'"
-                                        class="btn shrink-0 rounded-none border-b-2 px-3.5 py-2.5">
-                                        <span>Events</span>
-                                    </button>
-                                    <button @click="activeTab = 'tabLogs'"
-                                        :class="activeTab === 'tabLogs' ?
-                                            'border-primary dark:border-accent text-primary dark:text-accent-light' :
-                                            'border-transparent hover:text-slate-800 focus:text-slate-800 dark:hover:text-navy-100 dark:focus:text-navy-100'"
-                                        class="btn shrink-0 rounded-none border-b-2 px-3.5 py-2.5">
-                                        <span>Logs</span>
-                                    </button>
-                                </div>
                             </div>
-
                             <div class="tab-content flex flex-col overflow-hidden">
-                                <div x-show="activeTab === 'tabAlerts'"
-                                    x-transition:enter="transition-all duration-300 easy-in-out"
-                                    x-transition:enter-start="opacity-0 [transform:translate3d(1rem,0,0)]"
-                                    x-transition:enter-end="opacity-100 [transform:translate3d(0,0,0)]"
-                                    class="is-scrollbar-hidden space-y-4 overflow-y-auto px-4 py-4">
-                                    
+                                @livewire('notifications')
+
                                     @foreach($user->notifications as $notify)
                                     <div class="flex items-center space-x-3">
                                         <a href="{{ route('toggle-read', ['id'=>$notify['id']])}}">
@@ -344,142 +315,8 @@
                                         </div>
                                     </div>
                                     @endforeach
-                                </div>
-                                <div x-show="activeTab === 'tabEvents'"
-                                    x-transition:enter="transition-all duration-300 easy-in-out"
-                                    x-transition:enter-start="opacity-0 [transform:translate3d(1rem,0,0)]"
-                                    x-transition:enter-end="opacity-100 [transform:translate3d(0,0,0)]"
-                                    class="is-scrollbar-hidden space-y-4 overflow-y-auto px-4 py-4">
-                                    <div class="flex items-center space-x-3">
-                                        <div
-                                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-info/10 dark:bg-info/15">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-info"
-                                                fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                                stroke-width="1.5">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <p class="font-medium text-slate-600 dark:text-navy-100">
-                                                Mon, June 14, 2021
-                                            </p>
-                                            <div class="mt-1 flex text-xs text-slate-400 dark:text-navy-300">
-                                                <span class="shrink-0">08:00 - 09:00</span>
-                                                <div class="mx-2 my-1 w-px bg-slate-200 dark:bg-navy-500"></div>
 
-                                                <span class="line-clamp-1">Frontend Conf</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center space-x-3">
-                                        <div
-                                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-info/10 dark:bg-info/15">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-info"
-                                                fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                                stroke-width="1.5">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <p class="font-medium text-slate-600 dark:text-navy-100">
-                                                Wed, June 21, 2021
-                                            </p>
-                                            <div class="mt-1 flex text-xs text-slate-400 dark:text-navy-300">
-                                                <span class="shrink-0">16:00 - 20:00</span>
-                                                <div class="mx-2 my-1 w-px bg-slate-200 dark:bg-navy-500"></div>
-
-                                                <span class="line-clamp-1">UI/UX Conf</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center space-x-3">
-                                        <div
-                                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-warning/10 dark:bg-warning/15">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-warning"
-                                                fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                                stroke-width="1.5">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <p class="font-medium text-slate-600 dark:text-navy-100">
-                                                THU, May 11, 2021
-                                            </p>
-                                            <div class="mt-1 flex text-xs text-slate-400 dark:text-navy-300">
-                                                <span class="shrink-0">10:00 - 11:30</span>
-                                                <div class="mx-2 my-1 w-px bg-slate-200 dark:bg-navy-500"></div>
-                                                <span class="line-clamp-1">Interview, Konnor Guzman
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center space-x-3">
-                                        <div
-                                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-info/10 dark:bg-info/15">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-info"
-                                                fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                                stroke-width="1.5">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <p class="font-medium text-slate-600 dark:text-navy-100">
-                                                Mon, Jul 16, 2021
-                                            </p>
-                                            <div class="mt-1 flex text-xs text-slate-400 dark:text-navy-300">
-                                                <span class="shrink-0">06:00 - 16:00</span>
-                                                <div class="mx-2 my-1 w-px bg-slate-200 dark:bg-navy-500"></div>
-
-                                                <span class="line-clamp-1">Laravel Conf</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center space-x-3">
-                                        <div
-                                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-warning/10 dark:bg-warning/15">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-warning"
-                                                fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                                stroke-width="1.5">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <p class="font-medium text-slate-600 dark:text-navy-100">
-                                                Wed, Jun 16, 2021
-                                            </p>
-                                            <div class="mt-1 flex text-xs text-slate-400 dark:text-navy-300">
-                                                <span class="shrink-0">15:30 - 11:30</span>
-                                                <div class="mx-2 my-1 w-px bg-slate-200 dark:bg-navy-500"></div>
-                                                <span class="line-clamp-1">Interview, Jonh Doe
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div x-show="activeTab === 'tabLogs'"
-                                    x-transition:enter="transition-all duration-300 easy-in-out"
-                                    x-transition:enter-start="opacity-0 [transform:translate3d(1rem,0,0)]"
-                                    x-transition:enter-end="opacity-100 [transform:translate3d(0,0,0)]"
-                                    class="is-scrollbar-hidden overflow-y-auto px-4">
-                                    <div class="mt-8 pb-8 text-center">
-                                        <img class="mx-auto w-36"
-                                            src="{{ asset('images/illustrations/empty-girl-box.svg') }}"
-                                            alt="image" />
-                                        <div class="mt-5">
-                                            <p class="text-base font-semibold text-slate-700 dark:text-navy-100">
-                                                No any logs
-                                            </p>
-                                            <p class="text-slate-400 dark:text-navy-300">
-                                                There are no unread logs yet
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\PagesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TaskFrame;
 use App\Http\Controllers\GanttController;
 use App\Http\Controllers\UploadTemporaryFileController;
 use App\Http\Livewire\Tasks;
@@ -44,7 +45,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('gantt/data/{project_id}', [GanttController::class, 'get']);
 
-    Route::get('tasks/{project_id}', [PagesController::class, 'getTasks'])->name('tasks');
+    
     Route::post('upload-file', UploadTemporaryFileController::class);
     // Route::get('newtask', [Tasks::class, 'newTask'])->name('newtask');
     Route::get('toggle-notification/{id}', function($id) {
@@ -59,6 +60,11 @@ Route::middleware('auth')->group(function () {
         }
         return redirect()->back();
     })->name('toggle-read');
+
+
+    
+    Route::get('tasks/{project_id}', [TaskFrame::class, 'getTasks'])->name('tasks');
+    Route::get('/sidebar-filter', [TaskFrame::class, 'filterTasksWithSidebar'])->name('sidebar-filter');
 
     Route::get('/roles', [RolePermissionController::class, 'index'])->name('roles.index');
     Route::post('/roles', [RolePermissionController::class, 'storeRole'])->name('roles.store');

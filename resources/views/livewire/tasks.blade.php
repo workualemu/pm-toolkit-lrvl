@@ -55,13 +55,15 @@
       </div>
       <div class="tab-content pt-4">
         <div x-show="activeTab === 'tabList'"
-            wire:ignore
-            x-transition:enter="transition-all duration-500 easy-in-out"
-            x-transition:enter-start="opacity-0 [transform:translate3d(1rem,0,0)]"
-            x-transition:enter-end="opacity-100 [transform:translate3d(0,0,0)]">
-            @livewire('partials.tasks.task-list', ['filterParams' => $filterParams])
-        </div>
+          x-transition:enter="transition-all duration-500 easy-in-out"
+          x-transition:enter-start="opacity-0 [transform:translate3d(1rem,0,0)]"
+          x-transition:enter-end="opacity-100 [transform:translate3d(0,0,0)]"
+          class="w-full" >
+  <div>
+      @livewire('partials.tasks.task-list', ['tasks' => $tasks])
 
+  </div>
+        </div>
         <div x-show="activeTab === 'tabTable'"
           x-transition:enter="transition-all duration-500 easy-in-out"
           x-transition:enter-start="opacity-0 [transform:translate3d(1rem,0,0)]"

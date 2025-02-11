@@ -43,7 +43,7 @@
                                 class="is-scrollbar-hidden min-w-full overflow-x-auto"
                                 x-data="pages.tables.initExample1"
                             >
-                            <table class="min-w-full divide-y divide-gray-200" wire:model="records">
+                            <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                 <tr>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -70,7 +70,7 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex text-left text-sm text-gray-500">
-                                                {{$record->email}}
+                                                {{$record?->email}}
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">

@@ -1,5 +1,13 @@
+<div>
 <div 
-    x-data="{ showModal: @entangle('showModal') }" 
+    x-data="{ 
+        showModal: @entangle('showModal'),
+        refreshTaskComponent(taskId) 
+        {
+            window.Livewire.dispatch('refreshTaskComponent.'+taskId);
+        } 
+    }
+    " 
     x-init="$watch('showModal', value => { if (!value) {@this.call('closeModal');} })"
     >
     <div class="flex flex-col items-center justify-center h-screen bg-slate-200"
@@ -44,19 +52,21 @@
                         </div>
                     </div>
                     @else
+                    @if(isset($task))
                     <div class="w-full h-full outline-none overflow-x-hidden overflow-y-auto mt-3 grid grid-cols-12 gap-4 sm:gap-5 lg:gap-6">
                         <div class="col-span-12 sm:col-span-6 lg:col-span-8">
                             <div class="is-scrollbar-hidden flex grow flex-col space-y-4 overflow-y-auto p-4">
                                 <label class="block">
                                     <span>{{ __('Task title') }}</span>
-                                    <input id="title" wire:model.defer="task.title"
+                                    <input id="title" wire:model="title"
+                                        wire:key="task-title-{{ $task->id ?? 'new' }}"
                                         class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                         placeholder="Enter task name" type="text" />
                                 </label>
                                 <div>
                                     <span>{{ __('Start date') }}:</span>
                                     <label class="relative mt-1.5 flex">
-                                        <input id="start_date" wire:model.defer="task.start_date" x-init="$el._x_flatpickr = flatpickr($el, { enableTime: false, time_24hr: false, dateFormat: 'd-M-Y' })"
+                                        <input id="start_date" wire:model="start_date" x-init="$el._x_flatpickr = flatpickr($el, { enableTime: false, time_24hr: false, dateFormat: 'd-M-Y' })"
                                             class="form-input peer w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                             placeholder="Choose start date..." type="text" />
                                         <span
@@ -72,7 +82,7 @@
                                 <div>
                                     <span>{{ __('Due date') }}:</span>
                                     <label class="relative mt-1.5 flex">
-                                        <input id="end_date" wire:model.defer="task.end_date" x-init="$el._x_flatpickr = flatpickr($el, { enableTime: false, time_24hr: false, dateFormat: 'd-M-Y' })"
+                                        <input id="end_date" wire:model.defer="end_date" x-init="$el._x_flatpickr = flatpickr($el, { enableTime: false, time_24hr: false, dateFormat: 'd-M-Y' })"
                                             class="form-input peer w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                             placeholder="Choose due date..." type="text" />
                                         <span
@@ -87,8 +97,8 @@
                                 </div>
                                 <label class="block">
                                     <span>{{ __('Assigned to') }}:</span>
-                                    <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" placeholder="Select user"
-                                        wire:model.defer="task.assigned_to" 
+                                    <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" placeholder="Select assignee"
+                                        wire:model.defer="assigned_to" 
                                         autocomplete="off">
                                         <option value="0">{{ __('Select assignee') }}</option>
                                         @foreach($users as $user)
@@ -99,7 +109,7 @@
                                 <label class="block">
                                     <span>{{ __('Reported by') }}:</span>
                                     <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" placeholder="Select user"
-                                        wire:model.defer="task.report_by" 
+                                        wire:model.defer="report_by" 
                                         autocomplete="off">
                                         <option value="0">{{ __('Select reporter') }}</option>
                                         @foreach($users as $user)
@@ -107,10 +117,9 @@
                                         @endforeach
                                     </select>
                                 </label>
-
                                 <label class="block">
                                     <span>{{ __('Description') }}</span>
-                                    <textarea rows="3" wire:model.defer="task.description"
+                                    <textarea rows="3" wire:model="description"
                                     class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                         name="description"
                                         id="description">
@@ -145,24 +154,26 @@
                                         </select>
                                     </label>
                                     <label class="block">
-                                        <span>Priority:</span>
-                                        <select class="mt-1.5 w-full" placeholder="Select priority"
-                                            wire:model.defer="task.task_priority_id" 
+                                        <span>{{ __('Priority') }}:</span>
+                                        <select 
+                                            class="form-select mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent"
+                                            wire:model.defer="task_priority_id" 
                                             autocomplete="off">
                                             <option value="">Select priority</option>
                                             @foreach($taskPriorities as $taskPriority)
-                                            <option value="{{$taskPriority->id}}">{{$taskPriority->value}}</option>
+                                                <option value="{{$taskPriority->id}}">{{$taskPriority->value}}</option>
                                             @endforeach
                                         </select>
                                     </label>
                                     <label class="block">
                                         <span>{{ __('Status') }}:</span>
-                                        <select class="mt-1.5 w-full" placeholder="Select status"
-                                            wire:model.defer="task.task_status_id" 
+                                        <select 
+                                            class="form-select mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent"
+                                            wire:model.defer="task_status_id" 
                                             autocomplete="off">
-                                            <option value="">Select status</option>
+                                            <option value="0">{{ __('Select status') }}</option>
                                             @foreach($taskStatuses as $taskStatus)
-                                            <option value="{{$taskStatus->id}}">{{$taskStatus->value}}</option>
+                                                <option value="{{$taskStatus->id}}">{{$taskStatus->value}}</option>
                                             @endforeach
                                         </select>
                                     </label>
@@ -170,6 +181,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                     @endif
                     <div
                         class="flex items-center justify-between border-t border-slate-150 py-3 px-4 dark:border-navy-600">
@@ -185,6 +197,7 @@
                             </button>
                         </div>
                         <button wire:click="store()"
+                            @click="refreshTaskComponent({{ $task->id }})"
                             class="btn min-w-[7rem] bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
                             {{ __('Save') }}
                         </button>
@@ -198,4 +211,5 @@
             </div>
         </div>
     </div>
+</div>
 </div>

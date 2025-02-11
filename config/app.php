@@ -197,10 +197,11 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\FortifyServiceProvider::class,
-        App\Providers\JetstreamServiceProvider::class,
+        // App\Providers\JetstreamServiceProvider::class,
         App\Providers\ViewServiceProvider::class,
-        App\Providers\CommentifyServiceProvider::class,
-        Spatie\Permission\PermissionServiceProvider::class,
+        // App\Providers\CommentifyServiceProvider::class,
+        Usamamuneerchaudhary\Commentify\Providers\CommentifyServiceProvider::class,
+        // Spatie\Permission\PermissionServiceProvider::class,
     ],
 
     /*
