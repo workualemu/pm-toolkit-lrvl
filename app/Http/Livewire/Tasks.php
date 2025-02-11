@@ -113,7 +113,7 @@ class Tasks extends Component
         // $this->dispatch('refresh');
     }
 
-    public function mount($tasks, $project)
+    public function mount($project)
     {
 
         // $this->dispatch('listenForOpenTaskRightPopup');
@@ -128,7 +128,9 @@ class Tasks extends Component
 
         $this->resetParams();
         $condition = ['type'=>'where','column'=>'assigned_to', 'value'=>Auth::user()->id] ;
-        $this->filterTasksWithSidebar([]);
+        $this->filterTasksWithSidebar($condition);
+
+        logger(count($this->tasks));
 
         // if($this->tasks == null){
         //     $this->tasks = collect();
@@ -270,7 +272,7 @@ class Tasks extends Component
 
     public function render()
     {
-        // $this->tasks = collect($this->tasks);
+        logger(count($this->tasks));
         return view('livewire.tasks', [
             'taskIds' => collect($this->tasks)->pluck('id')->join('-')
         ]);
@@ -280,16 +282,16 @@ class Tasks extends Component
 
     private function getTasks()
     {
-        // $this->tasks = $this->executeQuery();
-        // $existingTaskIds = collect($this->tasks)->pluck('id');
+        $newTasks = $this->executeQuery();
+        $existingTaskIds = collect($this->tasks)->pluck('id');
 
-        // foreach ($newTasks as $newTask) {
-        //     if (!$existingTaskIds->contains($newTask->id)) {
-        //         $this->tasks[] = $newTask; 
-        //     }
-        // }
+        foreach ($newTasks as $newTask) {
+            if (!$existingTaskIds->contains($newTask->id)) {
+                $this->tasks[] = $newTask; 
+            }
+        }
 
-        // $this->tasks = collect($this->tasks)->whereIn('id', $newTasks->pluck('id'))->values()->all(); 
+        $this->tasks = collect($this->tasks)->whereIn('id', $newTasks->pluck('id'))->values()->all(); 
 
 
         // $existingTaskIds = collect($this->tasks)->pluck('id');

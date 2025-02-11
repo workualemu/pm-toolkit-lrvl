@@ -21,10 +21,10 @@ class TaskFrame extends Controller
         }
         $project = Project::find($project_id);
 
-        $tasks = Task::all();
+        // $tasks = Task::all();
 
 
-        return view('pages/task-frame', compact('tasks', 'project'));
+        return view('pages/task-frame', compact('project'));
     }
 
     public function filterTasksWithSidebar()

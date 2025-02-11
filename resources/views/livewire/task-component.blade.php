@@ -1,5 +1,4 @@
 <div 
-    wire:key="task-comp-{{$task->id}}"
     class="{{ $styles['padding'] }} {{ $styles['bgColor'] }}">
     <div class="border-b border-slate-150 py-3 dark:border-navy-500" 
         @click="openTaskRightModal(-1, {{ $task->id }}, -1)">

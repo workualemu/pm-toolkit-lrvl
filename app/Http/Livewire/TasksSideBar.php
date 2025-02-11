@@ -50,7 +50,6 @@ class TasksSideBar extends Component
 
         $condition = ['type'=>'where','column'=>'assigned_to', 'value'=>Auth::user()->id] ;
 
-        // return redirect()->route('sidebar-filter', $condition);
         $this->dispatch('filterTasksWithSidebar', $condition);
     }
 
@@ -102,7 +101,7 @@ class TasksSideBar extends Component
 
         $condition = ['type'=>'where', 'column'=>'report_by', 'value'=>Auth::user()->id] ;
         
-        return redirect()->route('sidebar-filter', $condition);
+        $this->dispatch('filterTasksWithSidebar', $condition);
     }
 
     public function starredTasks()
