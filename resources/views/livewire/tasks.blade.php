@@ -1,10 +1,10 @@
-<div>
+<div x-data="{ activeTab: 'tabList' }">
   <!-- Main Content Wrapper -->
   <main class="main-content todo-app w-full px-[2 * var(--margin-x)] pb-6">
     <!--header, title search, and filter block -->
     @livewire('partials.tasks.header', ['filterParams' => $filterParams])
     <!-- Tab def -->
-    <div x-data="{ activeTab: 'tabList' }" class="tabs w-full flex flex-col">
+    <div class="tabs w-full flex flex-col">
       <div class="is-scrollbar-hidden overflow-x-auto">
         <div class="border-b-2 border-slate-150 px-2 dark:border-navy-500 flex justify-between">
           <div class="tabs-list -mb-0.5 flex">
@@ -53,11 +53,8 @@
 
         </div>
       </div>
-      <div class="tab-content pt-4">
-        <div wire:key="tlist"
-          class="w-full" >
+      <div class="tab-content w-full pt-2">
               @livewire('partials.tasks.task-list', ['tasks' => $tasks])
-        </div>
         
       </div>
     </div>

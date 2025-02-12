@@ -24,8 +24,8 @@ class TaskRightPopup extends Component
     use WithFileUploads;
 
     public $project;
-    public $showModal = false;
-    public $task;
+    public $showTaskRightPopup = false;
+    public Task $task;
     public $taskPriorities = [];
     public $taskStatuses = [];
     public $tags = [];
@@ -39,7 +39,6 @@ class TaskRightPopup extends Component
 
     public $file = 's9fwyeVg3ZO1j1V2vyNILxYD0PqqAl-metaZXhwb3J0ICg0KS54bHN4-.xlsx';
 
-
     #[Validate('required|min:5')]
     public $title = '';
 
@@ -50,8 +49,6 @@ class TaskRightPopup extends Component
     public $description = '';
     public $task_priority_id = -1;
     public $task_status_id = -1;
-    
-
 
     protected $rules = [
         'task.title' => 'required|min:2',
@@ -164,15 +161,13 @@ class TaskRightPopup extends Component
         
         $this->taskTags = TagTask::where('task_id', $this->task->id)->get();
         $this->taskTags = $this->taskTags->pluck('tag_id');
-
         $this->getFormTitle();
-        $this->showModal = true;
-        // $this->emit('taskModalOpenForCommentModel', $this->task);
+        $this->showTaskRightPopup = true;
     }
 
     public function closeModal()
     {
-        $this->showModal = false;
+        $this->showTaskRightPopup = false;
         // $this->emit('clearFilePond');
     }
 
@@ -207,7 +202,7 @@ class TaskRightPopup extends Component
 
         $this->dispatch('refreshSingleTask', $this->task->id);
         // $this->emitTo('task-component', 'refreshSingleTask', $this->task->id);
-        $this->showModal = false;
+        $this->showTaskRightPopup = false;
     }
 
     public function mount($taskId = null)
@@ -222,7 +217,7 @@ class TaskRightPopup extends Component
 
     public function render()
     {
-        return view('livewire.task-right-popup', ['task' => $this->task]);
+        return view('livewire.task-right-popup');
     }
 
 

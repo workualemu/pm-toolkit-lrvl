@@ -3,7 +3,6 @@
     <div class="sidebar print:hidden">
         <!-- Main Sidebar -->
         <x-app-partials.main-sidebar></x-app-partials.main-sidebar>
-        <livewire:task-right-popup />
         <!-- Sidebar Panel -->
         <div class="sidebar-panel">
             <div class="flex h-full grow flex-col bg-white pl-[var(--main-sidebar-width)] dark:bg-navy-750">
@@ -42,10 +41,10 @@
     </div>
 
   <!-- Right Sidebar -->
-  <x-app-partials.right-sidebar></x-app-partials.right-sidebar>
+  
 
   <!-- Main Content Wrapper -->
-  @livewire('tasks', ['tasks' => $tasks, 'project' => $project], key('task-frame'))
+  @livewire('tasks', ['project' => $project], key('task-frame'))
   <div class="fixed right-3 bottom-3 rounded-full bg-white dark:bg-navy-700">
       <button
           class="btn h-14 w-14 rounded-full bg-info p-0 font-medium text-white hover:bg-info-focus focus:bg-info-focus active:bg-info-focus/90 sm:hidden">

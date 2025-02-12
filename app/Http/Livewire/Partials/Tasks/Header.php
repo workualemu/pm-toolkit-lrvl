@@ -24,9 +24,7 @@ class Header extends Component
 
     public $filterParams = [];
     public $filterStatuses = [];
-    
 
-    
     protected $listeners = [
         'resetParams' => 'onResetParams',
     ];
@@ -205,7 +203,7 @@ class Header extends Component
     public function render()
     {
         $user = \Auth::user();
-        $this->statuses = TaskStatus::all();
+        $this->statuses = TaskStatus::where('project_id', $user->project_id)->get();
         $this->phases = Task::whereNull('parent')
             ->where('project_id', $user->project_id)
             ->get();

@@ -12,15 +12,8 @@ class TaskList extends Component
     #[Reactive]
     public $tasks;
 
-    // public $filterParams = [];
-
-
     public function render()
     {
-        // if (!$this->hasGeneratedTasks) {
-        //     $this->tasks = $this->getTasks();
-        //     $this->hasGeneratedTasks = true;
-        // }
         return view('livewire.partials.tasks.task-list');
     }
 }

@@ -1,14 +1,12 @@
-<div>
 <div 
     x-data="{ 
-        showModal: @entangle('showModal'),
-        refreshTaskComponent(taskId) 
-        {
-            window.Livewire.dispatch('refreshTaskComponent.'+taskId);
-        } 
-    }
-    " 
-    x-init="$watch('showModal', value => { if (!value) {@this.call('closeModal');} })"
+            showTaskRightPopup: $wire.entangle('showTaskRightPopup'),
+            refreshTaskComponent(taskId) {
+                window.Livewire.dispatch('refreshTaskComponent.' + taskId);
+            }
+        }"
+        x-init="$watch('showTaskRightPopup', value => { if (!value) { @this.call('closeModal'); } })"
+        x-show="showTaskRightPopup" @click.away="showTaskRightPopup = false">
     >
     <div class="flex flex-col items-center justify-center h-screen bg-slate-200"
             x-on:drop="isDroppingFile = false"
@@ -16,15 +14,15 @@
             x-on:dragover.prevent="isDroppingFile = true"
             x-on:dragleave.prevent="isDroppingFile = false"
         >
-        <div x-show="showModal" @click.away="showModal = false">
-            <div class="fixed inset-0 z-[100] bg-slate-900/60 transition-opacity duration-200" @click="showModal = false"
-                x-show="showModal" x-transition:enter="ease-out" x-transition:enter-start="opacity-0"
+        <div x-show="showTaskRightPopup" @click.away="showTaskRightPopup = false">
+            <div class="fixed inset-0 z-[100] bg-slate-900/60 transition-opacity duration-200" @click="showTaskRightPopup = false"
+                x-show="showTaskRightPopup" x-transition:enter="ease-out" x-transition:enter-start="opacity-0"
                 x-transition:enter-end="opacity-100" x-transition:leave="ease-in" x-transition:leave-start="opacity-100"
                 x-transition:leave-end="opacity-0">
             </div>
             <div class="fixed right-0 top-0 z-[101] h-full w-5/12">
                 <div class="flex h-full w-full transform-gpu flex-col bg-white transition-transform duration-200 dark:bg-navy-700"
-                    x-show="showModal" x-transition:enter="ease-out" x-transition:enter-start="translate-x-full"
+                    x-show="showTaskRightPopup" x-transition:enter="ease-out" x-transition:enter-start="translate-x-full"
                     x-transition:enter-end="translate-x-0" x-transition:leave="ease-in"
                     x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full">
                     <div class="flex h-14 items-center justify-between bg-slate-150 p-4 dark:bg-navy-800">
@@ -33,7 +31,7 @@
                         </h3>
                         <div class="-mr-1.5 flex items-center space-x-2.5">
                             <div class="flex">
-                                <button @click="showModal=false"
+                                <button @click="showTaskRightPopup=false"
                                     class="btn h-7 w-7 rounded-full p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -59,7 +57,6 @@
                                 <label class="block">
                                     <span>{{ __('Task title') }}</span>
                                     <input id="title" wire:model="title"
-                                        wire:key="task-title-{{ $task->id ?? 'new' }}"
                                         class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                         placeholder="Enter task name" type="text" />
                                 </label>
@@ -202,7 +199,7 @@
                             {{ __('Save') }}
                         </button>
                         @endif
-                        <button @click="showModal=false"
+                        <button @click="showTaskRightPopup=false"
                             class="btn min-w-[7rem] bg-error font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
                             {{ __('Close') }}
                         </button>
@@ -211,5 +208,4 @@
             </div>
         </div>
     </div>
-</div>
 </div>

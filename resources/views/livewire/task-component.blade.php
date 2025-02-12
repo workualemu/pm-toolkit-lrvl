@@ -1,7 +1,11 @@
-<div 
+<div
     class="{{ $styles['padding'] }} {{ $styles['bgColor'] }}">
     <div class="border-b border-slate-150 py-3 dark:border-navy-500" 
-        @click="openTaskRightModal(-1, {{ $task->id }}, -1)">
+        wire:click="$dispatch('openTaskRightPopup', {
+            parentId: '-1',
+            taskId: '{{ $task->id }}',
+            taskLevel: '-1'
+        })">
         <div class="flex items-center space-x-2 sm:space-x-3">
             <h2 class="cursor-pointer text-slate-600 line-clamp-1 dark:text-navy-100">
             <div wire:key="task-{{ $task->id }}">

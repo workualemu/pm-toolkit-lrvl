@@ -11,9 +11,9 @@ class TasksSideBar extends Component
     // public $queryItem = [
     //     'allTasks'=> ['method'=>'showAllTasks', ]
     // ]
-    public $highlight = "bg-primary/10";
-    public $bgAll = "bg-primary/10";
-    public $bgMyAssigned = "";
+    public $highlight = "bg-blue-300";
+    public $bgAll = "";
+    public $bgMyAssigned = "bg-blue-300";
     public $bgMyCommented = "";
     public $bgMyReporting = "";
     public $bgStarred = "";
@@ -116,11 +116,6 @@ class TasksSideBar extends Component
         
         $this->dispatch('filterTasksWithSidebar', $condition);
     }
-
-    // public function addNewTask()
-    // {
-    //     $this->dispatch('openTaskModal', null);
-    // }
 
     public function mount()
     {

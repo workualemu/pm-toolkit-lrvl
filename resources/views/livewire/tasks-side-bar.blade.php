@@ -5,7 +5,7 @@
         </div>
         <ul class="mt-5 space-y-1.5 px-2 font-inter text-xs+ font-medium">
             <li>
-                <a class="group flex {{ $bgMyAssigned }} space-x-2 rounded-lg p-2 tracking-wide text-slate-800 outline-none transition-all hover:bg-blue-200 focus:bg-blue-200 dark:text-navy-100 dark:hover:bg-navy-600 dark:focus:bg-navy-600"
+                <a class="cursor-pointer group flex {{ $bgMyAssigned }} space-x-2 rounded-lg p-2 tracking-wide text-slate-800 outline-none transition-all hover:bg-blue-200 focus:bg-blue-200 dark:text-navy-100 dark:hover:bg-navy-600 dark:focus:bg-navy-600"
                     wire:click="myAssignedTasks()">
                     <svg width="28" height="24.5" viewBox="0 0 56 49" fill="none" xmlns="http://www.w3.org/2000/svg"
                         class="h-4.5 w-4.5 text-slate-400 transition-colors group-hover:text-slate-500 group-focus:text-slate-500 dark:text-navy-300 dark:group-hover:text-navy-200 dark:group-focus:text-navy-200">
@@ -17,7 +17,7 @@
                 </a>
             </li>
             <li>
-                <a class="group flex {{ $bgMyCommented }} space-x-2 rounded-lg p-2 tracking-wide text-slate-800 outline-none transition-all hover:bg-blue-200 focus:bg-blue-200 dark:text-navy-100 dark:hover:bg-navy-600 dark:focus:bg-navy-600"
+                <a class="cursor-pointer group flex {{ $bgMyCommented }} space-x-2 rounded-lg p-2 tracking-wide text-slate-800 outline-none transition-all hover:bg-blue-200 focus:bg-blue-200 dark:text-navy-100 dark:hover:bg-navy-600 dark:focus:bg-navy-600"
                     wire:click="myCommentedTasks()">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                     class="h-4.5 w-4.5 text-slate-400 transition-colors group-hover:text-slate-500 group-focus:text-slate-500 dark:text-navy-300 dark:group-hover:text-navy-200 dark:group-focus:text-navy-200">
@@ -28,7 +28,7 @@
                 </a>
             </li>
             <li>
-                <a class="group flex {{ $bgMyReporting }} space-x-2 rounded-lg p-2 tracking-wide text-slate-800 outline-none transition-all hover:bg-blue-200 focus:bg-blue-200 dark:text-navy-100 dark:hover:bg-navy-600 dark:focus:bg-navy-600"
+                <a class="cursor-pointer group flex {{ $bgMyReporting }} space-x-2 rounded-lg p-2 tracking-wide text-slate-800 outline-none transition-all hover:bg-blue-200 focus:bg-blue-200 dark:text-navy-100 dark:hover:bg-navy-600 dark:focus:bg-navy-600"
                     wire:click="myReportingTasks()">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
                         class="h-4.5 w-4.5 text-slate-400 transition-colors group-hover:text-slate-500 group-focus:text-slate-500 dark:text-navy-300 dark:group-hover:text-navy-200 dark:group-focus:text-navy-200" >
@@ -39,7 +39,7 @@
                 </a>
             </li>
             <li>
-                <a class="group flex {{ $bgStarred }} space-x-2 rounded-lg p-2 tracking-wide text-slate-800 outline-none transition-all hover:bg-blue-200 focus:bg-blue-200 dark:text-navy-100 dark:hover:bg-navy-600 dark:focus:bg-navy-600"
+                <a class="cursor-pointer group flex {{ $bgStarred }} space-x-2 rounded-lg p-2 tracking-wide text-slate-800 outline-none transition-all hover:bg-blue-200 focus:bg-blue-200 dark:text-navy-100 dark:hover:bg-navy-600 dark:focus:bg-navy-600"
                     wire:click="starredTasks()">
                     <svg xmlns="http://www.w3.org/2000/svg"
                         fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -51,7 +51,7 @@
                 </a>
             </li>
             <li>
-                <a class="group flex space-x-2 rounded-lg {{ $bgAll }} p-2 tracking-wide text-slate-800 outline-none transition-all hover:bg-blue-200 focus:bg-blue-200 dark:text-navy-100 dark:hover:bg-navy-600 dark:focus:bg-navy-600"
+                <a class="cursor-pointer group flex space-x-2 rounded-lg {{ $bgAll }} p-2 tracking-wide text-slate-800 outline-none transition-all hover:bg-blue-200 focus:bg-blue-200 dark:text-navy-100 dark:hover:bg-navy-600 dark:focus:bg-navy-600"
                     wire:click="allTasks()">
                     <svg xmlns="http://www.w3.org/2000/svg" 
                         class="h-4.5 w-4.5 text-slate-400 transition-colors group-hover:text-slate-500 group-focus:bg-warning/20 dark:text-navy-300 dark:group-hover:text-navy-200 dark:group-focus:text-navy-200"
