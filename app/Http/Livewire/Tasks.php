@@ -52,7 +52,6 @@ class Tasks extends Component
         // TODO
     }
     
-
     public function onRefreshTasks()
     {
         $this->filterTasks(null);
@@ -226,9 +225,8 @@ class Tasks extends Component
 
     public function render()
     {
-        logger(count($this->tasks));
         return view('livewire.tasks', [
-            'taskIds' => collect($this->tasks)->pluck('id')->join('-')
+            'taskIds' => collect($this->tasks)->pluck('id')->join('-'),
         ]);
     }
 

@@ -5,7 +5,9 @@
             <p class="text-gray-600">Loading tasks...</p>
         </template>
         @forelse($tasks as $task)
-            <livewire:task-component :task="$task" :key="'task-component-'.$task->id.now()" />
+            <div wire:key="task-{{ $task->id }}">
+                <livewire:task-component :task="$task" :key="'task-component-'.$task->id" />
+            </div>
         @empty
             <div wire:key="empty-task-message">
                 <p class="text-gray-600">{{ __('No records found') }}</p>

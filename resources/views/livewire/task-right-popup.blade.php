@@ -95,7 +95,7 @@
                                 <label class="block">
                                     <span>{{ __('Assigned to') }}:</span>
                                     <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" placeholder="Select assignee"
-                                        wire:model.defer="assigned_to" 
+                                        wire:model="assigned_to" 
                                         autocomplete="off">
                                         <option value="0">{{ __('Select assignee') }}</option>
                                         @foreach($users as $user)
@@ -106,7 +106,7 @@
                                 <label class="block">
                                     <span>{{ __('Reported by') }}:</span>
                                     <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" placeholder="Select user"
-                                        wire:model.defer="report_by" 
+                                        wire:model="report_by" 
                                         autocomplete="off">
                                         <option value="0">{{ __('Select reporter') }}</option>
                                         @foreach($users as $user)
@@ -132,14 +132,14 @@
                                 </div>
                                 @if($task->id > 0)
                                     <label class="block">
-                                        @livewire('comments', ['model' => $task])
+                                        <livewire:comments :model="$task"/>
                                     </label>
                                 @endif
                             </div>
                         </div>
                         <div class="hidden sm:col-span-6 sm:block lg:col-span-4 border bg-slate-50">
                             <div class="col-span-12 sm:col-span-6 lg:col-span-8">
-                                <div class="is-scrollbar-hidden flex grow flex-col space-y-4 overflow-y-auto p-4">
+                                <div class="is-scrollbar-hidden flex grow flex-col space-y-4 p-4">
                                     <label class="block">
                                         <span>{{ __('Tag') }}:</span>
                                         <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" multiple placeholder="Select the tags"
@@ -152,9 +152,9 @@
                                     </label>
                                     <label class="block">
                                         <span>{{ __('Priority') }}:</span>
-                                        <select 
-                                            class="form-select mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent"
-                                            wire:model.defer="task_priority_id" 
+                                        
+                                        <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" placeholder="Select priority" 
+                                            wire:model="task_priority_id" 
                                             autocomplete="off">
                                             <option value="">Select priority</option>
                                             @foreach($taskPriorities as $taskPriority)
@@ -164,13 +164,11 @@
                                     </label>
                                     <label class="block">
                                         <span>{{ __('Status') }}:</span>
-                                        <select 
-                                            class="form-select mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent"
-                                            wire:model.defer="task_status_id" 
-                                            autocomplete="off">
+                                        <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" placeholder="Select status"
+                                            wire:model.defer="task_status_id">
                                             <option value="0">{{ __('Select status') }}</option>
                                             @foreach($taskStatuses as $taskStatus)
-                                                <option value="{{$taskStatus->id}}">{{$taskStatus->value}}</option>
+                                                <option value="{{ $taskStatus->id }}">{{$taskStatus->value}}</option>
                                             @endforeach
                                         </select>
                                     </label>

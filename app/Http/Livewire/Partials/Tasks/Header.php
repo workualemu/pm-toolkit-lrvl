@@ -74,7 +74,7 @@ class Header extends Component
             'fAssignee' => null,
         ];
 
-        $this->emit('task-list-updated', $this->filterParams);
+        $this->dispatch('task-list-updated', $this->filterParams);
     }
 
     public function getTasks()

@@ -17,7 +17,7 @@ const navyColor = {
 };
 
 const customColors = {
-  navy: navyColor,
+  navy: { ...navyColor },
   "slate-150": "#E9EEF5",
   primary: colors.indigo["600"],
   "primary-focus": colors.indigo["700"],
@@ -41,25 +41,26 @@ module.exports = {
   content: [
     "./src/**/*.{php,html,js,jsx,ts,tsx,vue}",
     "./resources/**/*.{php,html,js,jsx,ts,tsx,vue}",
-    "./storage/framework/views/*.php",
-    './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
+    "./storage/framework/views/**/*.php",
+    "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/**/*.blade.php",
   ],
   darkMode: "class",
   theme: {
     extend: {
       colors: {
         primary: {
-            "50": "#eff6ff",
-            "100": "#dbeafe",
-            "200": "#bfdbfe",
-            "300": "#93c5fd",
-            "400": "#60a5fa",
-            "500": "#3b82f6",
-            "600": "#2563eb",
-            "700": "#1d4ed8",
-            "800": "#1e40af",
-            "900": "#1e3a8a"
-        }
+          50: "#eff6ff",
+          100: "#dbeafe",
+          200: "#bfdbfe",
+          300: "#93c5fd",
+          400: "#60a5fa",
+          500: "#3b82f6",
+          600: "#2563eb",
+          700: "#1d4ed8",
+          800: "#1e40af",
+          900: "#1e3a8a",
+        },
+        ...customColors,
       },
       fontFamily: {
         sans: ["Poppins", ...defaultTheme.fontFamily.sans],
@@ -71,7 +72,6 @@ module.exports = {
         "xs+": ["0.8125rem", "1.125rem"],
         "sm+": ["0.9375rem", "1.375rem"],
       },
-      colors: { ...customColors },
       opacity: {
         15: ".15",
       },

@@ -4,10 +4,9 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\Task;
+use App\Models\TaskPriority;
 use Livewire\Livewire;
 use Livewire\Attributes\On;
-
-use Livewire\Attributes\Reactive;
 
 class TaskComponent extends Component
 {
@@ -28,7 +27,17 @@ class TaskComponent extends Component
     #[On('refreshTaskComponent.{task.id}')] 
     public function onRefreshThisTask()
     {
-        $this->task->refresh();
+        
+        if ($this->task) {
+            $this->task->refresh(); // Ensures Livewire tracks changes
+            $this->taskStatus = $this->task->getTaskStatus();
+            $this->assignedTo = $this->task->getAssignedTo();
+            $this->taskPriority = $this->task->getTaskPriority();
+            $this->taskTags = $this->task->getTaskTags();
+            $this->isStarred = $this->task->is_starred;
+
+            $this->dispatch('$refresh'); 
+        }
     }
 
     public function openModal($parentId, $taskId, $taskLevel)
@@ -48,12 +57,6 @@ class TaskComponent extends Component
         $this->openModal($parentId, 0, $taskLevel);
     }
 
-    // public function storeTask($task)
-    // {
-    //     // $this->reset(['title']);
-    //     $this->showModal = false;
-    // }
-
     public function mount($task)
     {
         $this->task = $task ? $task : new Task();
@@ -70,25 +73,10 @@ class TaskComponent extends Component
         $this->task->save();
     }
 
-    // public function filterByStatus($status_id)
-    // {
-    //     $this->dispatch('filterByStatus', $status_id);
-    // }
-
-    // public function filterByPriority($priority)
-    // {
-    //     $this->dispatch('filter-by-priority', $priority);
-    // }
-
     public function filterByTag($tag)
     {
         $this->dispatch('filterByTag', $tag);
     }
-
-    // public function filterByAssignee($assignee)
-    // {
-    //     $this->dispatch('filter-by-assignee', $assignee);
-    // }
 
     public function getTaskStyles(): array
     {
@@ -105,8 +93,6 @@ class TaskComponent extends Component
 
     public function render()
     {
-        
-        // return view('livewire.task-component');
         return view('livewire.task-component')->with([
             'styles' => $this->getTaskStyles(),
         ]);

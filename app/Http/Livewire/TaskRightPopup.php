@@ -44,11 +44,11 @@ class TaskRightPopup extends Component
 
     public $start_date = '';
     public $end_date = '';
-    public $assigned_to = -1;
-    public $report_by = -1;
+    public $assigned_to = 0;
+    public $report_by = 0;
     public $description = '';
-    public $task_priority_id = -1;
-    public $task_status_id = -1;
+    public $task_priority_id = 0;
+    public $task_status_id = 0;
 
     protected $rules = [
         'task.title' => 'required|min:2',
@@ -163,6 +163,12 @@ class TaskRightPopup extends Component
         $this->taskTags = $this->taskTags->pluck('tag_id');
         $this->getFormTitle();
         $this->showTaskRightPopup = true;
+        
+        $this->dispatch('$refresh');
+        // $this->js("window.dispatchEvent(new CustomEvent('taskModalOpenForCommentModel', { detail: " . json_encode($this->task->toArray()) . " }));");
+        // $this->dispatchBrowserEvent('taskModalOpenForCommentModel', ['task' => $this->task->toArray()]);
+        // Livewire.dispatch('taskModalOpenForCommentModel', $this->task);
+        // $this->dispatch('taskModalOpenForCommentModel', $this->task);
     }
 
     public function closeModal()
@@ -200,19 +206,17 @@ class TaskRightPopup extends Component
 
         // $this->emit('saveUploads', $this->task->id);
 
-        $this->dispatch('refreshSingleTask', $this->task->id);
+        // $this->dispatch("refreshTaskComponent.{$this->task->id}");
+
+        // $this->dispatch('refreshSingleTask', $this->task->id);
         // $this->emitTo('task-component', 'refreshSingleTask', $this->task->id);
         $this->showTaskRightPopup = false;
     }
 
-    public function mount($taskId = null)
+    public function mount()
     {
-        $this->task = $taskId ? Task::find($taskId) : new Task();
-
-        $this->modalTask = new Task();
-        // $this->task = new Task();
+        $this->task = new Task();
         $this->project = Project::find(Auth::user()->project_id);
-        $this->getFormTitle();
     }
 
     public function render()

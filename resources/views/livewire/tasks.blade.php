@@ -54,8 +54,7 @@
         </div>
       </div>
       <div class="tab-content w-full pt-2">
-              @livewire('partials.tasks.task-list', ['tasks' => $tasks])
-        
+        <livewire:partials.tasks.task-list :tasks="$tasks" :key="$taskIds" />
       </div>
     </div>
   </main>

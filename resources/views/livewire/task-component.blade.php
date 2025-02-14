@@ -5,7 +5,7 @@
             parentId: '-1',
             taskId: '{{ $task->id }}',
             taskLevel: '-1'
-        })">
+        }); ">
         <div class="flex items-center space-x-2 sm:space-x-3">
             <h2 class="cursor-pointer text-slate-600 line-clamp-1 dark:text-navy-100">
             <div wire:key="task-{{ $task->id }}">
