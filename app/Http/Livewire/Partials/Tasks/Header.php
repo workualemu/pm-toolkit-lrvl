@@ -5,13 +5,13 @@ namespace App\Http\Livewire\Partials\Tasks;
 use Livewire\Component;
 use App\Models\TaskStatus;
 use App\Models\Task;
+use Livewire\Attributes\On;
 
 class Header extends Component
 {
 
     public $phases =[];
     public $statuses =[];
-    public $tasks = [];
     public $filterClause = [];
 
     public $searchTerm;
@@ -22,27 +22,35 @@ class Header extends Component
     public $selectedStatuses = [];
     public $sidebarFilter = [];
 
-    public $filterParams = [];
     public $filterStatuses = [];
 
-    protected $listeners = [
-        'resetParams' => 'onResetParams',
-    ];
-
-    public function onResetParams($filterParams)
+    #[On('resetHeaderCriteria')]
+    public function onResetHeaderCriteria()
     {
-        $this->filterParams = $filterParams;
         $this->searchTerm = '';
         $this->fTitle = '';
-        $this->fPhase = '';
-        $this->fDateFrom = '';
-        $this->fDateTo = '';
+        $this->fPhase ='';
+        $this->fDateFrom = null;
+        $this->fDateTo = null;
         $this->selectedStatuses = [];
     }
 
-    public function mount($filterParams)
+    public function updatedSearchTerm()
     {
-        $this->filterParams = $filterParams;
+        $filterParams = [
+            'fTitle' => null,
+            'fPhase' => null,
+            'fDateFrom' => null,
+            'fDateTo' => null,
+            'fStatus' => [],
+            'searchTerm' => $this->searchTerm,
+            'sidebarFilter' => null,
+            'fPriority' => null,
+            'fTaskIds' => null,
+            'fAssignee' => null,
+        ];
+
+        $this->dispatch('filterTasksWithHeader', $filterParams);
     }
 
     /**
@@ -59,146 +67,146 @@ class Header extends Component
      *
      * @return tasks
      */
-    public function applyFilter()
+    public function applyFilter($filterParams)
     {
-        $this->filterParams = [
-            'fTitle' => $this->fTitle,
-            'fPhase' => $this->fPhase,
-            'fDateFrom' => $this->fDateFrom,
-            'fDateTo' => $this->fDateTo,
-            'fStatus' => $this->selectedStatuses,
-            'searchTerm' => $this->searchTerm,
-            'sidebarFilter' => $this->sidebarFilter,
-            'fPriority' => null,
-            'fTaskIds' => null,
-            'fAssignee' => null,
-        ];
+        // $this->filterParams = [
+        //     'fTitle' => $this->fTitle,
+        //     'fPhase' => $this->fPhase,
+        //     'fDateFrom' => $this->fDateFrom,
+        //     'fDateTo' => $this->fDateTo,
+        //     'fStatus' => $this->selectedStatuses,
+        //     'searchTerm' => $this->searchTerm,
+        //     'sidebarFilter' => $this->sidebarFilter,
+        //     'fPriority' => null,
+        //     'fTaskIds' => null,
+        //     'fAssignee' => null,
+        // ];
 
-        $this->dispatch('task-list-updated', $this->filterParams);
+        $this->dispatch('filterTasksWithHeader', $filterParams);
     }
 
-    public function getTasks()
-    {
-        $query = Task::query();
+    // public function getTasks()
+    // {
+    //     $query = Task::query();
 
-        if (!empty($this->searchTerm)) {
-            $query->where(function ($q) {
-            $q->where('title', 'like', '%' . $this->searchTerm . '%')
-              ->orWhere('description', 'like', '%' . $this->searchTerm . '%');
-            });
-        }
+    //     if (!empty($this->searchTerm)) {
+    //         $query->where(function ($q) {
+    //         $q->where('title', 'like', '%' . $this->searchTerm . '%')
+    //           ->orWhere('description', 'like', '%' . $this->searchTerm . '%');
+    //         });
+    //     }
 
-        if (!empty($this->fTitle)) {
-            $query->where('title', 'like', '%' . $this->fTitle . '%');
-        }
+    //     if (!empty($this->fTitle)) {
+    //         $query->where('title', 'like', '%' . $this->fTitle . '%');
+    //     }
 
-        if (!empty($this->fPhase)) {
-            $query->where('parent', $this->fPhase);
-        }
+    //     if (!empty($this->fPhase)) {
+    //         $query->where('parent', $this->fPhase);
+    //     }
 
-        if (!empty($this->fDateFrom)) {
-            $query->whereDate('created_at', '>=', $this->fDateFrom);
-        }
+    //     if (!empty($this->fDateFrom)) {
+    //         $query->whereDate('created_at', '>=', $this->fDateFrom);
+    //     }
 
-        if (!empty($this->fDateTo)) {
-            $query->whereDate('created_at', '<=', $this->fDateTo);
-        }
+    //     if (!empty($this->fDateTo)) {
+    //         $query->whereDate('created_at', '<=', $this->fDateTo);
+    //     }
 
-        if (!empty($this->selectedStatuses)) {
-            $query->whereIn('task_status_id', $this->selectedStatuses);
-        }
+    //     if (!empty($this->selectedStatuses)) {
+    //         $query->whereIn('task_status_id', $this->selectedStatuses);
+    //     }
 
-        if (!empty($this->filterClause)) {
-            foreach ($this->filterClause as $clause) {
-                $query->where($clause);
-            }
-        }
+    //     if (!empty($this->filterClause)) {
+    //         foreach ($this->filterClause as $clause) {
+    //             $query->where($clause);
+    //         }
+    //     }
 
-        return $query->orderBy('list_order')->get();
-    }
+    //     return $query->orderBy('list_order')->get();
+    // }
 
-    public function getTasks2()
-    {
-        // $this->statuses = TaskStatus::all();
-        // $this->phases = Task::where(array_merge([['parent', 0]], $this->sidebarFilter))->get();
+    // public function getTasks2()
+    // {
+    //     // $this->statuses = TaskStatus::all();
+    //     // $this->phases = Task::where(array_merge([['parent', 0]], $this->sidebarFilter))->get();
 
-        $qBuilder = Task::query();
+    //     $qBuilder = Task::query();
         
-        $qBuilder = $qBuilder->when(count($this->filterStatuses) > 0, function ($query) {
-            $query->whereIn('task_status_id', $this->filterStatuses);
-        });
+    //     $qBuilder = $qBuilder->when(count($this->filterStatuses) > 0, function ($query) {
+    //         $query->whereIn('task_status_id', $this->filterStatuses);
+    //     });
 
-        // $qBuilder = $qBuilder->when(!empty($this->searchTerm), function ($query) {
-        //     $query->where('title', 'Like', "%".$this->searchTerm."%");
-        // });
+    //     // $qBuilder = $qBuilder->when(!empty($this->searchTerm), function ($query) {
+    //     //     $query->where('title', 'Like', "%".$this->searchTerm."%");
+    //     // });
 
-        // $tasks1 = $qBuilder->where($this->sidebarFilter)->paginate(10);
+    //     // $tasks1 = $qBuilder->where($this->sidebarFilter)->paginate(10);
         
-        // foreach( $tasks1 as $task) {
-        //     $task->progress = number_format($task->progress * 100, 2);
-        //     if( $task->progress < 1){ 
-        //         $task->color = 'bg-slate-150';
-        //     } elseif($task->progress < 40){ 
-        //         $task->color = 'bg-red-500';
-        //     } elseif($task->progress < 90){ 
-        //         $task->color = 'bg-yellow-500';
-        //     } else{
-        //         $task->color = 'bg-green-500';
-        //     }  
-        // } ;
+    //     // foreach( $tasks1 as $task) {
+    //     //     $task->progress = number_format($task->progress * 100, 2);
+    //     //     if( $task->progress < 1){ 
+    //     //         $task->color = 'bg-slate-150';
+    //     //     } elseif($task->progress < 40){ 
+    //     //         $task->color = 'bg-red-500';
+    //     //     } elseif($task->progress < 90){ 
+    //     //         $task->color = 'bg-yellow-500';
+    //     //     } else{
+    //     //         $task->color = 'bg-green-500';
+    //     //     }  
+    //     // } ;
 
-        // $st = $this->searchTerm==null ? '%' : '%'.$this->searchTerm.'%';
+    //     // $st = $this->searchTerm==null ? '%' : '%'.$this->searchTerm.'%';
 
-        $clause = [];
-        if (!empty($this->searchTerm)) {
-            $clause = [['title', 'Like', '%'.$this->searchTerm.'%']];
-        }
-        $clause = array_merge($this->sidebarFilter, $clause);
+    //     $clause = [];
+    //     if (!empty($this->searchTerm)) {
+    //         $clause = [['title', 'Like', '%'.$this->searchTerm.'%']];
+    //     }
+    //     $clause = array_merge($this->sidebarFilter, $clause);
 
-        $qBuilder = Task::query();
+    //     $qBuilder = Task::query();
 
-        if (empty($this->fPhase)) {
-            $qBuilder = $qBuilder->whereNull('parent');
-        } else {
-            $qBuilder = $qBuilder->where('parent', $this->fPhase);
-        }
+    //     if (empty($this->fPhase)) {
+    //         $qBuilder = $qBuilder->whereNull('parent');
+    //     } else {
+    //         $qBuilder = $qBuilder->where('parent', $this->fPhase);
+    //     }
 
-        // dd($qBuilder->toSql());
-        // if(count($this->filterStatuses) > 0){
-        //     $qBuilder->whereIn('task_status_id', $this->filterStatuses);
-        // }
-        // $qBuilder = $qBuilder->when(count($this->filterStatuses) > 0, function ($query) {
-        //     $query->whereIn('task_status_id', $this->filterStatuses);
-        // });
+    //     // dd($qBuilder->toSql());
+    //     // if(count($this->filterStatuses) > 0){
+    //     //     $qBuilder->whereIn('task_status_id', $this->filterStatuses);
+    //     // }
+    //     // $qBuilder = $qBuilder->when(count($this->filterStatuses) > 0, function ($query) {
+    //     //     $query->whereIn('task_status_id', $this->filterStatuses);
+    //     // });
 
-        // $tasks = \DB::select("
-        //     WITH RECURSIVE task_hierarchy AS (
-        //         SELECT id, list_order, parent 
-        //         FROM tasks WHERE parent = ?
-        //         UNION ALL
-        //         SELECT t.id, t.list_order, t.parent FROM tasks t
-        //         INNER JOIN task_hierarchy th ON t.parent = th.id
-        //     )
-        //     SELECT * FROM task_hierarchy
-        //     ORDER BY list_order
-        // ", [$this->fPhase]);
+    //     // $tasks = \DB::select("
+    //     //     WITH RECURSIVE task_hierarchy AS (
+    //     //         SELECT id, list_order, parent 
+    //     //         FROM tasks WHERE parent = ?
+    //     //         UNION ALL
+    //     //         SELECT t.id, t.list_order, t.parent FROM tasks t
+    //     //         INNER JOIN task_hierarchy th ON t.parent = th.id
+    //     //     )
+    //     //     SELECT * FROM task_hierarchy
+    //     //     ORDER BY list_order
+    //     // ", [$this->fPhase]);
 
-        // return collect($tasks);
-        return Task::where('parent', $this->fPhase)
-            ->with([
-                'children' => function ($query) use ($clause){
-                    $query->whereHas('children', function ($q) use ($clause){
-                        $q->where($clause);
-                    });
-                    $query->orWhere($clause);                   
-                }, 
-                'children.children' => function ($query) use ($clause){
-                    $query->where($clause);
-                }
-            ])
-            ->orderBy('list_order')
-            ->get();
-    }
+    //     // return collect($tasks);
+    //     return Task::where('parent', $this->fPhase)
+    //         ->with([
+    //             'children' => function ($query) use ($clause){
+    //                 $query->whereHas('children', function ($q) use ($clause){
+    //                     $q->where($clause);
+    //                 });
+    //                 $query->orWhere($clause);                   
+    //             }, 
+    //             'children.children' => function ($query) use ($clause){
+    //                 $query->where($clause);
+    //             }
+    //         ])
+    //         ->orderBy('list_order')
+    //         ->get();
+    // }
 
     public function render()
     {

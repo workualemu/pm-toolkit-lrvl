@@ -35,28 +35,11 @@ class Tasks extends Component
 
     public $filterParams = [];
 
-    protected $hasGeneratedTasks = false;
-
-    public Illuminate\Database\Eloquent\Collection $result;
-
-    // protected $listeners = [
-    //     'refreshTasks' => 'onRefreshTasks',
-    //     'openNewTaskModal' => 'newTask',
-    //     'filterTasks' => 'filterTasks',
-    //     'showAllTasks' => 'allTasks',
-    //     'gantt-task-dragged' => 'onGanttTaskDrag',
-    // ];
-
     public function onGanttTaskDrag($taskId, $mode, $task, $original)
     {
         // TODO
     }
-    
-    public function onRefreshTasks()
-    {
-        $this->filterTasks(null);
-    }
-
+   
     public function addNewPhase()
     {
         $user =  Auth::user();
@@ -67,9 +50,23 @@ class Tasks extends Component
         $this->showTaskRightPopup = true;
     }
 
+    #[On('filterTasksWithHeader')]
+    public function filterTasksWithHeader($filterParams)
+    {
+        $this->removeSidebarFilters();
+        $user =  Auth::user();
+        $sidebarFilter = [['type'=>'where','column'=>'project_id', 'value'=>$user->project_id]];
+
+        $this->filterParams = $filterParams; 
+        $this->filterParams['sidebarFilter'] = $sidebarFilter;
+
+        $this->getTasks();
+    }
+
     #[On('filterTasksWithSidebar')]
     public function filterTasksWithSidebar($condition)
     {
+        $this->dispatch('resetHeaderCriteria');
         $user =  Auth::user();
         $sidebarFilter = [['type'=>'where','column'=>'project_id', 'value'=>$user->project_id]];
         if($condition != null){
@@ -89,21 +86,6 @@ class Tasks extends Component
         ];
 
         $this->getTasks();
-    }
-
-    public function mount($project)
-    {
-        $user =  Auth::user();
-        if($project != null) {
-            $user->project_id = $project->id;
-            $user->save();
-        }
-        $projectId = $user->project_id;
-        $this->project = Project::find($projectId);
-
-        $this->resetParams();
-        $condition = ['type'=>'where','column'=>'assigned_to', 'value'=>Auth::user()->id] ;
-        $this->filterTasksWithSidebar($condition);
     }
 
     #[On('filterByAssignee')]
@@ -166,7 +148,50 @@ class Tasks extends Component
         ];
     }
 
-    public function executeQuery()
+    public function removeSidebarFilters()
+    {
+        $this->dispatch('removeSidebarFilters');
+    }
+
+    public function mount($project)
+    {
+        $user =  Auth::user();
+        if($project != null) {
+            $user->project_id = $project->id;
+            $user->save();
+        }
+        $projectId = $user->project_id;
+        $this->project = Project::find($projectId);
+
+        $this->resetParams();
+        $condition = ['type'=>'where','column'=>'assigned_to', 'value'=>Auth::user()->id] ;
+        $this->filterTasksWithSidebar($condition);
+    }
+
+    public function render()
+    {
+        return view('livewire.tasks', [
+            'taskIds' => collect($this->tasks)->pluck('id')->join('-'),
+        ]);
+    }
+
+    //-------------------------Private ------------------
+
+    private function getTasks()
+    {
+        $newTasks = $this->executeQuery();
+        $existingTaskIds = collect($this->tasks)->pluck('id');
+
+        foreach ($newTasks as $newTask) {
+            if (!$existingTaskIds->contains($newTask->id)) {
+                $this->tasks[] = $newTask; 
+            }
+        }
+
+        $this->tasks = collect($this->tasks)->whereIn('id', $newTasks->pluck('id'))->values()->all();  
+    }
+
+    private function executeQuery()
     {
         $criteria = [];
 
@@ -221,29 +246,6 @@ class Tasks extends Component
         }
         
         return Task::sortedTasks($criteria, 'path', 'asc', $this->filterParams['fPhase']);   
-    }
-
-    public function render()
-    {
-        return view('livewire.tasks', [
-            'taskIds' => collect($this->tasks)->pluck('id')->join('-'),
-        ]);
-    }
-
-    //-------------------------Private ------------------
-
-    private function getTasks()
-    {
-        $newTasks = $this->executeQuery();
-        $existingTaskIds = collect($this->tasks)->pluck('id');
-
-        foreach ($newTasks as $newTask) {
-            if (!$existingTaskIds->contains($newTask->id)) {
-                $this->tasks[] = $newTask; 
-            }
-        }
-
-        $this->tasks = collect($this->tasks)->whereIn('id', $newTasks->pluck('id'))->values()->all();  
     }
 
 }

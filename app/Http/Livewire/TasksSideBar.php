@@ -5,12 +5,10 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\TaskPriority;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
 
 class TasksSideBar extends Component
 {
-    // public $queryItem = [
-    //     'allTasks'=> ['method'=>'showAllTasks', ]
-    // ]
     public $highlight = "bg-blue-300";
     public $bgAll = "";
     public $bgMyAssigned = "bg-blue-300";
@@ -19,11 +17,17 @@ class TasksSideBar extends Component
     public $bgStarred = "";
     public $taskPriorities = [];
 
-    public $priorityCondition = [];
-    public $filterCondition = [];
+    #[On('removeSidebarFilters')]
+    public function onRemoveSidebarFilters()
+    {
+        $this->bgAll = $this->highlight;
+        $this->bgMyAssigned = "";
+        $this->bgMyCommented = "";
+        $this->bgMyReporting = "";
+        $this->bgStarred = "";
 
-
-
+        $this->dispatch('$refresh');
+    }
     public function allTasks()
     {
 
@@ -33,11 +37,7 @@ class TasksSideBar extends Component
         $this->bgMyReporting = "";
         $this->bgStarred = "";
 
-        $this->filterCondition = [];
-        $this->priorityCondition = [];
-        // return redirect()->route('sidebar-filter', []);
         $this->dispatch('filterTasksWithSidebar', []);
-
     }
 
     public function myAssignedTasks()
@@ -51,23 +51,6 @@ class TasksSideBar extends Component
         $condition = ['type'=>'where','column'=>'assigned_to', 'value'=>Auth::user()->id] ;
 
         $this->dispatch('filterTasksWithSidebar', $condition);
-    }
-
-    public function filterTasksByPriority($priority_id)
-    {
-        $this->bgAll = "";
-        $this->bgMyAssigned = $this->highlight;
-        $this->bgMyCommented = "";
-        $this->bgMyReporting = "";
-        $this->bgStarred = "";
-
-        $this->priorityCondition = ['task_priority_id', $priority_id];
-        $searchCondition = [$this->priorityCondition];
-        if(!empty($this->filterCondition)) {
-            array_push($searchCondition, $this->filterCondition);
-        }
-
-        $this->dispatch('filterTasks', $searchCondition);
     }
 
     public function myCommentedTasks()
