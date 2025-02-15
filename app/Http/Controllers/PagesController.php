@@ -53,7 +53,7 @@ class PagesController extends Controller
         // $searchValue = [['project_id', $user->project_id]];
 
         // $tasks = Task::where($searchValue )->get();
-        return view('pages/kanban', compact('project'));
+        return view('pages/kanban-frame', compact('project'));
     }
 
     public function getGantt()

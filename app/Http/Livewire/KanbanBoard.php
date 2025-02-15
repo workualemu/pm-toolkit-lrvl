@@ -8,7 +8,7 @@ use App\Models\Task;
 use App\Models\TaskStatus;
 use Illuminate\Support\Facades\Auth;
 
-class KanbanTasks extends Component
+class KanbanBoard extends Component
 {
     public $project;
     public $searchValue = [];
@@ -32,6 +32,6 @@ class KanbanTasks extends Component
         $this->tasks = Task::where($this->searchValue)->get();
         $this->kanbanLists = TaskStatus::where("project_id", $this->project->id)->orderBy('kanban_list_rank')->get();
 
-        return view('livewire.kanban-tasks');
+        return view('livewire.kanban-board');
     }
 }

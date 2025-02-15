@@ -20,6 +20,6 @@
             </div>
         </div>
     </div>
-    @livewire('kanban-tasks', ['project' => $project])
+    @livewire('kanban-board', ['project' => $project])
 
 </x-app-layout>
