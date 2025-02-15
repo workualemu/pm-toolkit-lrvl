@@ -266,12 +266,12 @@ class Task extends Model
             }
         } 
 
-        $baseQuery .= " ORDER BY $sortField $direction;";
+        // $baseQuery .= " ORDER BY $sortField $direction;";
 
         $tasksData = DB::select($baseQuery, $bindings);
         $taskIds = array_map(fn($task) => $task->id, $tasksData);
         
-        $tasks =  Task::whereIn('id', $taskIds)->get();
+        $tasks =  Task::whereIn('id', $taskIds)->orderBy($sortField, $direction)->get();
 
         // $tasks = collect();
 

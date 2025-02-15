@@ -40,22 +40,19 @@ class TaskComponent extends Component
         }
     }
 
-    public function openModal($parentId, $taskId, $taskLevel)
-    {
-        $this->dispatch('openTaskModal', $parentId, $taskId, $taskLevel);
-        $this->dispatch('setTaskId', $taskId);
-        $this->showModal = true;
-    }
-
-    public function closeModal()
-    {
-        $this->showModal = false;
-    }
-
     public function addNewTask($parentId, $taskLevel)
     {
         $this->openModal($parentId, 0, $taskLevel);
     }
+
+    public function openModal($parentId, $taskId, $taskLevel)
+    {
+        $this->dispatch('openTaskRightPopup', $parentId, $taskId, $taskLevel);
+        $this->dispatch('setTaskId', $taskId);
+        // $this->showModal = true;
+    }
+
+
 
     public function mount($task)
     {
