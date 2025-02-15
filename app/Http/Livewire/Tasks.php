@@ -16,22 +16,22 @@ class Tasks extends Component
 {
     public $tasks = [];
 
-    public $showTaskRightPopup = false;
+    // public $showTaskRightPopup = false;
     public $project;
 
-    public $reloadKey = 0; 
+    // public $reloadKey = 0; 
 
-    public $statuses;
-    public $phases;
-    public $searchTerm = null;
+    // public $statuses;
+    // public $phases;
+    // public $searchTerm = null;
     public $sidebarFilter = [];
 
-    public $fTitle = '';
-    public $fPhase;
-    public $fDateFrom;
-    public $fDateTo;
-    public $selectedStatuses = [];
-    public $filterStatuses = [];
+    // public $fTitle = '';
+    // public $fPhase;
+    // public $fDateFrom;
+    // public $fDateTo;
+    // public $selectedStatuses = [];
+    // public $filterStatuses = [];
 
     public $filterParams = [];
 
@@ -47,7 +47,7 @@ class Tasks extends Component
         $project = Project::find($projectId);
 
         $this->dispatch('openTaskRightPopup', 0, 0, 0);
-        $this->showTaskRightPopup = true;
+        // $this->showTaskRightPopup = true;
     }
 
     #[On('filterTasksWithHeader')]
@@ -193,6 +193,7 @@ class Tasks extends Component
 
     private function executeQuery()
     {
+        logger($this->filterParams);
         $criteria = [];
 
         if ($this->filterParams['sidebarFilter'] != null) {
