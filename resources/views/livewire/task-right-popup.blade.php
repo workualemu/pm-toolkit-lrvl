@@ -6,7 +6,7 @@
             }
         }"
         x-init="$watch('showTaskRightPopup', value => { if (!value) { @this.call('closeModal'); } })"
-        x-show="showTaskRightPopup" @click.away="showTaskRightPopup = false">
+        x-show="showTaskRightPopup" @click.away="showTaskRightPopup = true">
     >
     <div class="flex flex-col items-center justify-center h-screen bg-slate-200"
             x-on:drop="isDroppingFile = false"
@@ -14,7 +14,7 @@
             x-on:dragover.prevent="isDroppingFile = true"
             x-on:dragleave.prevent="isDroppingFile = false"
         >
-        <div x-show="showTaskRightPopup" @click.away="showTaskRightPopup = false">
+        <div x-show="showTaskRightPopup" @click.away="showTaskRightPopup = true">
             <div class="fixed inset-0 z-[100] bg-slate-900/60 transition-opacity duration-200" @click="showTaskRightPopup = false"
                 x-show="showTaskRightPopup" x-transition:enter="ease-out" x-transition:enter-start="opacity-0"
                 x-transition:enter-end="opacity-100" x-transition:leave="ease-in" x-transition:leave-start="opacity-100"
@@ -63,7 +63,7 @@
                                 <div>
                                     <span>{{ __('Start date') }}:</span>
                                     <label class="relative mt-1.5 flex">
-                                        <input id="start_date" wire:model="start_date" x-init="$el._x_flatpickr = flatpickr($el, { enableTime: false, time_24hr: false, dateFormat: 'd-M-Y' })"
+                                        <input id="start_date" {{ $dateReadOnly }} wire:model="start_date" x-init="$el._x_flatpickr = flatpickr($el, { enableTime: false, time_24hr: false, dateFormat: 'd-M-Y' })"
                                             class="form-input peer w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                             placeholder="Choose start date..." type="text" />
                                         <span
@@ -79,7 +79,7 @@
                                 <div>
                                     <span>{{ __('Due date') }}:</span>
                                     <label class="relative mt-1.5 flex">
-                                        <input id="end_date" wire:model.defer="end_date" x-init="$el._x_flatpickr = flatpickr($el, { enableTime: false, time_24hr: false, dateFormat: 'd-M-Y' })"
+                                        <input id="end_date" {{ $dateReadOnly }} wire:model.defer="end_date" x-init="$el._x_flatpickr = flatpickr($el, { enableTime: false, time_24hr: false, dateFormat: 'd-M-Y' })"
                                             class="form-input peer w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                             placeholder="Choose due date..." type="text" />
                                         <span

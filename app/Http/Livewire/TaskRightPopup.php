@@ -36,6 +36,7 @@ class TaskRightPopup extends Component
     public $formTitle = '';
 
     public $files = [];
+    public $dateReadOnly = '';
 
     public $file = 's9fwyeVg3ZO1j1V2vyNILxYD0PqqAl-metaZXhwb3J0ICg0KS54bHN4-.xlsx';
 
@@ -221,6 +222,7 @@ class TaskRightPopup extends Component
 
     public function render()
     {
+        $this->dateReadOnly = $this->task->id > 0 && $this->task->level != 2 ? "readonly" : '';
         return view('livewire.task-right-popup');
     }
 

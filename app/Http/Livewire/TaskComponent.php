@@ -38,6 +38,10 @@ class TaskComponent extends Component
 
             $this->dispatch('$refresh'); 
         }
+
+        if($this->task->getParent){
+            $this->dispatch('refreshTaskComponent.'.$this->task->getParent->id);
+        }
     }
 
     public function addNewTask($parentId, $taskLevel)

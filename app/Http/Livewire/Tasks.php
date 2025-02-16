@@ -175,7 +175,8 @@ class Tasks extends Component
             }
         }
 
-        $this->tasks = collect($this->tasks)->whereIn('id', $newTasks->pluck('id'))->values()->all();  
+        $this->tasks = collect($this->tasks)->whereIn('id', $newTasks->pluck('id'))->values()->sortBy('path')->all(); 
+        // $this->tasks = collect($this->tasks)->orderBy('path'); 
     }
 
     private function executeQuery()

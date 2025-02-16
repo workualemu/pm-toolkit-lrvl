@@ -120,6 +120,36 @@ class Task extends Model
     }
 
     /**
+     * Get the siblings - does NOT include this task
+     */
+    public function siblings()
+    {
+        if($this->parent == null){
+            return $this->where('project_id', $this->project_id)
+                    ->where('parent', null)
+                    ->where('id', '!=', $this->id);
+        }
+        return $this->where('parent', $this->parent)
+            ->where('id', '!=', $this->id);
+    }
+
+    /**
+     * Get the earliest start date among siblings
+     */
+    public function earliestSiblingStartDate()
+    {
+        return $this->siblings()->min('start_date');
+    }
+
+    /**
+     * Get the latest end date among siblings
+     */
+    public function latestSiblingEndDate()
+    {
+        return $this->siblings()->max('end_date');
+    }
+
+    /**
      * The tags that belong to the task.
      */
     public function tags()

@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
+use App\Observers\TaskDateObserver;
+use App\Models\Task;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -35,6 +37,8 @@ class AppServiceProvider extends ServiceProvider
             return Auth::check() 
                 && in_array(Auth::user()->role, $roles, true); 
         });
+
+        Task::observe(TaskDateObserver::class);
     }
 
 }
