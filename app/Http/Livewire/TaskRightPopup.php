@@ -36,7 +36,7 @@ class TaskRightPopup extends Component
     public $formTitle = '';
 
     public $files = [];
-    public $dateReadOnly = '';
+    public $datePickerDisabled = '';
 
     public $file = 's9fwyeVg3ZO1j1V2vyNILxYD0PqqAl-metaZXhwb3J0ICg0KS54bHN4-.xlsx';
 
@@ -222,17 +222,16 @@ class TaskRightPopup extends Component
 
     public function render()
     {
-        $this->dateReadOnly = $this->task->id > 0 && $this->task->level != 2 ? "readonly" : '';
+        $this->datePickerDisabled = $this->task->id > 0 && $this->task->level != 2 ? "disabled" : '';
         return view('livewire.task-right-popup');
     }
-
 
     //-------------------------------Private Functions--------------------------------
     private function hidrate()
     {
         $this->title = $this->task->title;
-        $this->start_date = $this->task->start_date ? Carbon::parse($this->task->start_date)->format('M-d-Y') : null;
-        $this->end_date = $this->task->end_date ? Carbon::parse($this->task->end_date)->format('M-d-Y') : null;
+        $this->start_date = $this->task->start_date ? Carbon::parse($this->task->start_date)->format('d-M-Y') : null;
+        $this->end_date = $this->task->end_date ? Carbon::parse($this->task->end_date)->format('d-M-Y') : null;
         $this->assigned_to = $this->task->assigned_to;
         $this->report_by = $this->task->report_by;
         $this->description = $this->task->description;

@@ -63,7 +63,14 @@
                                 <div>
                                     <span>{{ __('Start date') }}:</span>
                                     <label class="relative mt-1.5 flex">
-                                        <input id="start_date" {{ $dateReadOnly }} wire:model="start_date" x-init="$el._x_flatpickr = flatpickr($el, { enableTime: false, time_24hr: false, dateFormat: 'd-M-Y' })"
+                                        <input id="start_date" name="start_date"  wire:model="start_date" 
+                                            x-init="$el._x_flatpickr = flatpickr($el, { 
+                                                enableTime: false, 
+                                                time_24hr: false, 
+                                                dateFormat: 'd-M-Y',
+                                                defaultDate: '{{$start_date}}' 
+                                            })"
+                                            {{ $datePickerDisabled }}
                                             class="form-input peer w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                             placeholder="Choose start date..." type="text" />
                                         <span
@@ -79,7 +86,15 @@
                                 <div>
                                     <span>{{ __('Due date') }}:</span>
                                     <label class="relative mt-1.5 flex">
-                                        <input id="end_date" {{ $dateReadOnly }} wire:model.defer="end_date" x-init="$el._x_flatpickr = flatpickr($el, { enableTime: false, time_24hr: false, dateFormat: 'd-M-Y' })"
+                                        <input id="end_date" 
+                                            wire:model.defer="end_date" 
+                                            x-init="$el._x_flatpickr = flatpickr($el, { 
+                                                enableTime: false, 
+                                                time_24hr: false, 
+                                                dateFormat: 'd-M-Y',
+                                                defaultDate: '{{$end_date}}' 
+                                            })"
+                                            {{ $datePickerDisabled }}
                                             class="form-input peer w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                             placeholder="Choose due date..." type="text" />
                                         <span
