@@ -7,6 +7,8 @@ use App\Models\Project;
 use App\Models\Task;
 use App\Models\Link;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
+use App\Traits\TaskTrait;
 
 class Gantt extends Component
 {
@@ -18,16 +20,17 @@ class Gantt extends Component
     public $moveToIndex = -1;
     public $moveToParent = -1;
 
-    protected $listeners = ['gantt-task-added' => 'onTaskAdd',
-                            'gantt-task-dragged' => 'onTaskDragged',
-                            'gantt-task-deleted' => 'onTaskDeleted',
-                            'gantt-task-updated' => 'onTaskUpdated',
-                            'gantt-link-added' => 'onLinkAdd',
-                            'gantt-link-deleted' => 'onLinkDeleted',
-                            'gantt-task-vertical_moved' => 'onAfterTaskMove',
-                            'gantt-before-row-drag-end' => 'onBeforeRowDraggedEnd'
-                            ];
+    // protected $listeners = ['ganttTaskAdded' => 'onTaskAdd',
+    //                         'ganttTaskDragged' => 'onTaskDragged',
+    //                         'gantt-task-deleted' => 'onTaskDeleted',
+    //                         'ganttTaskUpdated' => 'onTaskUpdated',
+    //                         'ganttLinkAdded' => 'onLinkAdd',
+    //                         'gantt-link-deleted' => 'onLinkDeleted',
+    //                         'ganttTaskVerticalMoved' => 'onAfterTaskMove',
+    //                         'gantt-before-row-drag-end' => 'onBeforeRowDraggedEnd'
+                            // ];
 
+    #[On('ganttTaskAdded')]
     public function onTaskAdd($task)
     {
         $user =  Auth::user();
@@ -55,10 +58,10 @@ class Gantt extends Component
 
     }
 
+    #[On('ganttTaskDragged')]
     public function onTaskDragged($task_id, $mode, $task)
     {
         // $dt = $this->tasks->keyBy('id');
-        logger("onTaskDragged");
         $dTask = Task::find($task['id']);
         $dTask->start_date = $task['start_date'];
         $dTask->duration = $task['duration'];
@@ -67,7 +70,6 @@ class Gantt extends Component
         $dTask->save();
 
         $parent_id = $dTask->parent;
-        logger($parent_id);
         while($parent_id != null) {
             $parent = Task::find($parent_id);
             if($parent->start_date > $dTask->start_date) {
@@ -84,6 +86,7 @@ class Gantt extends Component
         }
     }
 
+    #[On('ganttTaskUpdated')]
     public function onTaskUpdated($id, $task)
     {
         $parent_id = $task['parent']==0?null:$task['parent'];
@@ -105,24 +108,29 @@ class Gantt extends Component
 
     }
 
+    #[On('ganttTaskDeleted')]
     public function onTaskDeleted($id)
     {
         $res=Task::where('id', $id)->delete();
     }
 
+    #[On('ganttLinkAdded')]
     public function onLinkAdd($id, $item)
     {
+        logger('onLinkAdd');
         Link::updateOrCreate(
             ['source' => $item['source'], 'target' => $item['target']],
             ['type' => $item['type']]
         );
     }
 
+    #[On('ganttLinkDeleted')]
     public function onLinkDeleted($id, $item)
     {
         $res=Link::where('id', $id)->delete();
     }
 
+    #[On('ganttTaskVerticalMoved')]
     public function onAfterTaskMove($id, $parent, $tindex)
     {
         // these variables are used to avoid repetitive calls during mouse drag.
@@ -131,9 +139,9 @@ class Gantt extends Component
         $this->moveToParent = $parent;
     }
 
+    #[On('ganttBeforeRowDragEnd')]
     public function onBeforeRowDraggedEnd($id, $parent, $tindex)
     {
-        logger("onBeforeRowDraggedEnd");
         $tasks = Task::filterByParent($this->moveToParent);
 
         $rank = 0;

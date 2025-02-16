@@ -199,40 +199,48 @@
         });
         
         gantt.attachEvent("onAfterTaskAdd", function(id, task){
-            Livewire.emit('gantt-task-added', task);
+            window.Livewire.dispatch('ganttTaskAdded', { task });
         });
 
         gantt.attachEvent("onAfterTaskDrag", function(id, mode, e){
             task = gantt.getTask(id);
-            Livewire.emit('gantt-task-dragged', id, mode, task);
+            window.Livewire.dispatch('ganttTaskDragged', {id, mode, task});
         });
         
         gantt.attachEvent("onAfterTaskUpdate", function(id, task){
-            Livewire.emit('gantt-task-updated', id, task);
+            window.Livewire.dispatch('ganttTaskUpdated', {id, task});
         });
 
         gantt.attachEvent("onAfterTaskDelete", function(id, task){
-            Livewire.emit('gantt-task-deleted', id);
+            window.Livewire.dispatch('ganttTaskDeleted', {id});
         });
 
         gantt.attachEvent("onAfterLinkAdd", function(id, item){
-            Livewire.emit('gantt-link-added', id, item);
+            if (window.Livewire && typeof window.Livewire.dispatch === "function") {
+                window.Livewire.dispatch('ganttLinkAdded', { id, item });
+            } else {
+                console.error("Livewire is not loaded or dispatch() is unavailable.");
+            }
         });
 
+        // gantt.attachEvent("onAfterLinkAdd", function(id, item){
+        //     $wire.dispatch()('ganttLinkAdded', id, item);
+        // });
+
         gantt.attachEvent("onAfterLinkDelete", function(id, item){
-            Livewire.emit('gantt-link-deleted', id, item);
+            window.Livewire.dispatch('ganttLinkDeleted', { id, item });
         });
 
         gantt.attachEvent("onAfterTaskMove", function(id, parent, tindex){
-            Livewire.emit('gantt-task-vertical_moved', id, parent, tindex);
+            window.Livewire.dispatch('ganttTaskVerticalMoved', {id, parent, tindex});
         });
 
         gantt.attachEvent("onBeforeRowDragMove", function(id, parent, tindex){
-            Livewire.emit('gantt-before-row-drag-move', id, parent, tindex);
+            window.Livewire.dispatch('ganttBeforeRowDragMove', {id, parent, tindex});
         });
 
         gantt.attachEvent("onBeforeRowDragEnd", function(id, parent, tindex){
-            Livewire.emit('gantt-before-row-drag-end', id, parent, tindex);
+            window.Livewire.dispatch('ganttBeforeRowDragEnd', {id, parent, tindex});
         });
 
         resourcesStore.attachEvent("onParse", function () {
