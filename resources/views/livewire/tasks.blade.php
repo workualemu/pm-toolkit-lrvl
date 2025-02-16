@@ -2,7 +2,7 @@
   <!-- Main Content Wrapper -->
   <main class="main-content todo-app w-full px-[2 * var(--margin-x)] pb-6">
     <!--header, title search, and filter block -->
-    @livewire('partials.tasks.header')
+    @livewire('partials.tasks.header', ['title'=>'Tasks', 'showStatusFilter'=>true])
     <!-- Tab def -->
     <div class="tabs w-full flex flex-col">
       <div class="is-scrollbar-hidden overflow-x-auto">

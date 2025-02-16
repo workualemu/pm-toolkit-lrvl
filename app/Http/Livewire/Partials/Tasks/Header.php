@@ -12,6 +12,8 @@ class Header extends Component
     public $phases =[];
     public $statuses =[];
     public $filterClause = [];
+    public $title;
+    public $showStatusFilter;
 
     public $searchTerm;
     public $fTitle = '';
@@ -55,7 +57,7 @@ class Header extends Component
             'fDateFrom' => null,
             'fDateTo' => null,
             'fStatus' => [],
-            'searchTerm' => $this->searchTerm,
+            'searchTerm' => $this->searchTerm ?? null,
             'sidebarFilter' => null,
             'fPriority' => null,
             'fTaskIds' => null,

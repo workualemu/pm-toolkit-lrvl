@@ -12,7 +12,7 @@ class KanbanTask extends Component
 
     public function openModal($task_id)
     {
-        $this->emit('openTaskModal', $this->task->parent, $this->task->id, $this->task->level);
+        $this->dispatch('openTaskModal', $this->task->parent, $this->task->id, $this->task->level);
         $this->showModal = true;
     }
 

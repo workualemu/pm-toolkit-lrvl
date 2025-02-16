@@ -16,22 +16,9 @@ class Tasks extends Component
 {
     public $tasks = [];
 
-    // public $showTaskRightPopup = false;
     public $project;
 
-    // public $reloadKey = 0; 
-
-    // public $statuses;
-    // public $phases;
-    // public $searchTerm = null;
     public $sidebarFilter = [];
-
-    // public $fTitle = '';
-    // public $fPhase;
-    // public $fDateFrom;
-    // public $fDateTo;
-    // public $selectedStatuses = [];
-    // public $filterStatuses = [];
 
     public $filterParams = [];
 
@@ -193,7 +180,6 @@ class Tasks extends Component
 
     private function executeQuery()
     {
-        logger($this->filterParams);
         $criteria = [];
 
         if ($this->filterParams['sidebarFilter'] != null) {

@@ -4,7 +4,7 @@
     <div class="flex justify-between space-x-2 px-2 py-2 transition-all duration-[.25s]">
     <div class="flex items-center space-x-1">
         <h3 class="text-lg font-medium text-slate-700 line-clamp-1 dark:text-navy-50">
-            {{ __('Tasks') }}
+            {{ $title }}
         </h3>
     </div>
     <div class="relative hidden w-full max-w-[16rem] sm:flex">
@@ -144,20 +144,22 @@
             </div>
             </div>
         </label>
-        <div class="sm:col-span-2">
-            <span>Task Status:</span>
-            <div class="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-4 sm:gap-5 lg:gap-6">
-            @foreach($statuses as $key => $status)
-                <label class="inline-flex items-center space-x-2">
-                <input wire:model="selectedStatuses.{{$status->id}}"
-                    class="form-checkbox bg-{{$status->color}}-500 is-basic h-5 w-5 rounded border-{{$status->color}}-200 checked:border-{{$status->color}}-900 checked:{{$status->color}} hover:border-{{$status->color}}-900 focus:border-{{$status->color}}-900 dark:border-navy-400 dark:checked:border-secondary-light dark:checked:bg-secondary-light dark:hover:border-secondary-light dark:focus:border-secondary-light"
-                    type="checkbox"
-                />
-                <span>{{$status->value}}</span>
-                </label>
-            @endforeach
+        @if($showStatusFilter)
+            <div class="sm:col-span-2">
+                <span>Task Status:</span>
+                <div class="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-4 sm:gap-5 lg:gap-6">
+                    @foreach($statuses as $key => $status)
+                        <label class="inline-flex items-center space-x-2">
+                        <input wire:model="selectedStatuses.{{$status->id}}"
+                            class="form-checkbox bg-{{$status->color}}-500 is-basic h-5 w-5 rounded border-{{$status->color}}-200 checked:border-{{$status->color}}-900 checked:{{$status->color}} hover:border-{{$status->color}}-900 focus:border-{{$status->color}}-900 dark:border-navy-400 dark:checked:border-secondary-light dark:checked:bg-secondary-light dark:hover:border-secondary-light dark:focus:border-secondary-light"
+                            type="checkbox"
+                        />
+                        <span>{{$status->value}}</span>
+                        </label>
+                    @endforeach
+                </div>
             </div>
-        </div>
+        @endif
         </div>
         <div class="mt-4 space-x-1 text-right">
         <button
