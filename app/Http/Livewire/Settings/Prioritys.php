@@ -30,15 +30,8 @@ class Prioritys extends Component
     #[On('deleteConfirmed')] 
     public function deleteConfirmed($id)
     {
-        logger('deleteConfirmed');
         TaskPriority::findOrFail($id)->delete();
         session()->flash('message', 'Priority deleted successfully.');
-    }
-
-    public function deletePriority($priority_id)
-    {
-        $res=TaskPriority::where('id', $priority_id)->delete();
-        $this->dispatch('$refresh');
     }
 
     public function render()

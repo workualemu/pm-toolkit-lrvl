@@ -58,7 +58,7 @@
                                         </button>
                                         <button @click="
                                             window.customConfirm({
-                                                title: 'Delete Priority?',
+                                                title: 'Delete priority',
                                                 message: 'Are you sure you want to delete this priority? This action cannot be undone.',
                                                 color: 'red',
                                                 okText: 'Delete',

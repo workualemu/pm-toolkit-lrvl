@@ -1,5 +1,6 @@
 
 <div class="grid grid-cols-1 gap-4 sm:gap-5 lg:gap-6">
+    <x-app-partials.delete-confirmation />
     <div>
         <div class="flex items-center justify-between">
             
@@ -24,17 +25,17 @@
                             <th
                                 class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
                             >
-                                Tag
+                                {{ __('Tag') }}
                             </th>
                             <th
                                 class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
                             >
-                                Descripton
+                                {{ __('Descripton') }}
                             </th>
                             <th
                                 class="whitespace-nowrap rounded-tr-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
                             >
-                                Action
+                                {{ __('Action') }}
                             </th>
                         </tr>
                     </thead>
@@ -57,7 +58,19 @@
                                             class="btn h-8 w-8 p-0 text-info hover:bg-info/20 focus:bg-info/20 active:bg-info/25">
                                             <i class="fa fa-edit"></i>
                                         </button>
-                                        <button wire:click="deleteTag({{$tag->id}})" class="btn h-8 w-8 p-0 text-error hover:bg-error/20 focus:bg-error/20 active:bg-error/25">
+                                        <button @click="
+                                            window.customConfirm({
+                                                title: 'Delete tag',
+                                                message: 'Are you sure you want to delete this tag? This action cannot be undone.',
+                                                color: 'red',
+                                                okText: 'Delete',
+                                            }).then(confirmed => {
+                                                if (confirmed) {
+                                                    $dispatch('deleteConfirmed', { id: {{ $tag->id }} });
+                                                }
+                                            })
+                                        " 
+                                        class="btn h-8 w-8 p-0 text-error hover:bg-error/20 focus:bg-error/20 active:bg-error/25">
                                             <i class="fa fa-trash-alt"></i>
                                         </button>
                                     </div>

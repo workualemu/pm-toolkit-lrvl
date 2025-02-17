@@ -29,11 +29,11 @@ class Tags extends Component
         $this->dispatch('openTagModal', $tag_id);
     }
 
-    public function deleteTag($tag_id)
+    #[On('deleteConfirmed')] 
+    public function deleteConfirmed($id)
     {
-        $res=Tag::where('id', $tag_id)->delete();
-        $this->dispatch('openTagModal', $tag_id);
-        $this->dispatch('$refresh');
+        Tag::findOrFail($id)->delete();
+        session()->flash('message', 'Tag deleted successfully.');
     }
 
     public function render()

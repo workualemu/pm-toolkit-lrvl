@@ -29,7 +29,8 @@ class TagModal extends Component
         if($tag_id > 0) {
             $this->tag = Tag::find($tag_id);
         }
-        $this->currentColor =  $this->status->color ?? 'blue';
+        $this->hidrate();
+        $this->currentColor =  $this->tag->color ?? 'blue';
         $this->showModal = true;
     }
 
@@ -45,6 +46,7 @@ class TagModal extends Component
 
         $this->tag->save();
         $this->tag->refresh();
+        $this->dehidrate();
         $this->tag->color =  $this->currentColor;
         $this->tag->save();
         $this->tag->refresh();
@@ -62,5 +64,20 @@ class TagModal extends Component
     public function render()
     {
         return view('livewire.settings.tag-modal');
+    }
+
+    //------------------------------------------Private Methods ------------------------------------
+    private function hidrate()
+    {
+        $this->label = $this->tag->label;
+        $this->description = $this->tag->description;
+        $this->color = $this->tag->color;
+    }
+
+    private function dehidrate()
+    {
+        $this->tag->label = $this->label;
+        $this->tag->description = $this->description;
+        $this->tag->color = $this->color;
     }
 }

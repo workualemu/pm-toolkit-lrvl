@@ -29,10 +29,11 @@ class TaskStatuses extends Component
         $this->dispatch('openStatusModal', $status_id);
     }
 
-    public function deleteStatus($status_id)
+    #[On('deleteConfirmed')] 
+    public function deleteConfirmed($id)
     {
-        $res=TaskStatus::where('id', $status_id)->delete();
-        $this->dispatch('$refresh');
+        TaskStatus::findOrFail($id)->delete();
+        session()->flash('message', 'Status deleted successfully.');
     }
 
     public function render()

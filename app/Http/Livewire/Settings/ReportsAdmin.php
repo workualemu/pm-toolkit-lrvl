@@ -35,6 +35,12 @@ class ReportsAdmin extends Component
         $this->dispatch('renderReportColumn', $report_id);
     }
 
+    #[On('deleteConfirmed')] 
+    public function deleteConfirmed($id)
+    {
+        Report::findOrFail($id)->delete();
+        session()->flash('message', 'Report deleted successfully.');
+    }
 
     public function render()
     {
