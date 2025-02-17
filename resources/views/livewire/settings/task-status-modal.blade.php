@@ -18,7 +18,7 @@
                 <div class="flex w-full flex-col bg-white dark:bg-navy-700">
                     <div class="flex h-14 items-center justify-between bg-slate-150 p-4 dark:bg-navy-800">
                         <h3 class="text-base font-medium text-slate-700 dark:text-navy-100">
-                            Status
+                            {{ __('Status') }}
                         </h3>
                     </div>
 
@@ -26,25 +26,25 @@
                         <div class="col-span-12 sm:col-span-6 lg:col-span-8">
                             <div class="is-scrollbar-hidden flex grow flex-col space-y-4 overflow-y-auto p-4">
                                 <label class="block">
-                                    <span>Status</span>
-                                    <input id="value" wire:model.defer="status.value"
+                                    <span>{{ __('Status') }}</span>
+                                    <input id="value" wire:model.defer="value"
                                         class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                         placeholder="Enter status title" type="text" />
                                 </label>
                                 <label class="block">
-                                    <span>Description</span>
-                                    <input id="description" wire:model.defer="status.description"
+                                    <span>{{ __('Description') }}</span>
+                                    <input id="description" wire:model.defer="description"
                                         class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                         placeholder="Enter report rescription" type="text" />
                                 </label>
                                 <label class="block">
-                                    <span>Kanban list rank {{$status->color}}</span>
-                                    <input id="rank" wire:model.defer="status.kanban_list_rank"
+                                    <span>{{ __('Kanban list rank') }}</span>
+                                    <input id="rank" wire:model.defer="kanban_list_rank"
                                         class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                         placeholder="Enter rank to order status in kanban board" type="text" />
                                 </label>
                                 <label class="block">
-                                    <span>Color</span>
+                                    <span>{{ __('Color') }}</span>
                                     <div>
                                     <div class="flex flex-row relative">
                                       <input id="color-picker" class="border border-gray-400 p-2 rounded-lg" x-model="currentColor">
@@ -116,11 +116,11 @@
                         </div>
                         <button wire:click="store()"
                             class="btn min-w-[7rem] bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
-                            Save
+                            {{ __('Save') }}
                         </button>
                         <button @click="showModal=false"
                             class="btn min-w-[7rem] bg-error font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
-                            Close
+                            {{ __('Close') }}
                         </button>
                     </div>
                 </div>

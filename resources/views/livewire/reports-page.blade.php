@@ -21,19 +21,19 @@
         <div class="flex items-center justify-between space-x-2 pl-2 pr-12 py-5 transition-all duration-[.25s]">
             @if($page_type == 'REPORT')
                 <div class="w-full">
-                    @livewire('reports-admin')
+                    @livewire('settings.reports-admin')
                 </div>
             @elseif($page_type == 'TAG')
                 <div class="w-full">
-                    @livewire('tags')
+                    @livewire('settings.tags')
                 </div>
             @elseif($page_type == 'PRIORITY')
                 <div class="w-full">
-                    @livewire('prioritys')
+                    @livewire('settings.prioritys')
                 </div>
             @elseif($page_type == 'STATUS')
                 <div class="w-full">
-                    @livewire('task-statuses')
+                    @livewire('settings.task-statuses')
                 </div>
             @else
                 

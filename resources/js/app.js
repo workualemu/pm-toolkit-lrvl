@@ -89,6 +89,7 @@ import * as pages from "./pages";
 import breakpoints from "./utils/breakpoints";
 // Global Store
 import store from "./store";
+import './confirm-modal.js';
 
 
 

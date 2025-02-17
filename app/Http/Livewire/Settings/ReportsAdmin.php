@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Settings;
 
 use Livewire\Component;
 use App\Models\Report;
+use Livewire\Attributes\On;
 
 class ReportsAdmin extends Component
 {
@@ -11,31 +12,34 @@ class ReportsAdmin extends Component
     public $selectedReportId;
     public $showReportModal = false;
 
-    protected $listeners = ['refreshReport' => '$refresh'
-    ];
+    #[On('refreshReport')]
+    public function refreshReport()
+    {
+        $this->dispatch('$refresh');
+    }
 
     public function addNewReport()
     {
-        $this->emit('openReportModal', null);
+        $this->dispatch('openReportModal', null);
     }
 
     public function editReport($report_id)
     {
-        $this->emit('openReportModal', $report_id);
+        $this->dispatch('openReportModal', $report_id);
     }
 
     public function updateParamColumn($report_id)
     {
         $this->selectedReportId = $report_id;
-        $this->emit('renderReportParam', $report_id);
-        $this->emit('renderReportColumn', $report_id);
+        $this->dispatch('renderReportParam', $report_id);
+        $this->dispatch('renderReportColumn', $report_id);
     }
 
 
     public function render()
     {
         $user = \Auth::user();
-        return view('livewire.reports-admin', [
+        return view('livewire.settings.reports-admin', [
             'reports' => Report::where('project_id', $user->project_id)->paginate(10),
         ]);
     }

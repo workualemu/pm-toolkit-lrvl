@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Settings;
 
 use Livewire\Component;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
+use Livewire\Attributes\Rule as LivewireRule;
 
 class TagModal extends Component
 {
@@ -13,12 +15,11 @@ class TagModal extends Component
     public $colorSelected = 'success';
     public $currentColor;
 
-    protected $rules = [
-        'tag.label' => 'required|min:2',
-        'tag.user_id' => 'required',
-        'tag.description'=>'',
-        'tag.color' => ''
-    ];
+    #[LivewireRule('required|string|min:2')] 
+    public $label;
+    public $user_id;
+    public $description;
+    public $color;
 
     protected $listeners = ['openTagModal' => 'openTagModal'];
 
@@ -48,7 +49,7 @@ class TagModal extends Component
         $this->tag->save();
         $this->tag->refresh();
 
-        $this->emit('refreshTag');
+        $this->dispatch('refreshTag');
         $this->showModal = false;
 
     }
@@ -60,6 +61,6 @@ class TagModal extends Component
 
     public function render()
     {
-        return view('livewire.tag-modal');
+        return view('livewire.settings.tag-modal');
     }
 }

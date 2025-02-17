@@ -18,7 +18,7 @@
                     x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full">
                     <div class="flex h-14 items-center justify-between bg-slate-150 p-4 dark:bg-navy-800">
                         <h3 class="text-base font-medium text-slate-700 dark:text-navy-100">
-                            Report
+                            {{ __('Report') }}
                         </h3>
                         <div class="-mr-1.5 flex items-center space-x-2.5">
                             <input x-tooltip.primary="'Mark as Completed'"
@@ -55,20 +55,20 @@
                         <div class="col-span-12 sm:col-span-6 lg:col-span-8">
                             <div class="is-scrollbar-hidden flex grow flex-col space-y-4 overflow-y-auto p-4">
                                 <label class="block">
-                                    <span>Report title</span>
-                                    <input id="title" wire:model.defer="report.title"
+                                    <span>{{ __('Report title') }}</span>
+                                    <input id="title" wire:model.defer="title"
                                         class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                         placeholder="Enter report title" type="text" />
                                 </label>
                                 <label class="block">
-                                    <span>Description</span>
-                                    <input id="description" wire:model.defer="report.description"
+                                    <span>{{ __('Description') }}</span>
+                                    <input id="description" wire:model.defer="description"
                                         class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                         placeholder="Enter report rescription" type="text" />
                                 </label>
                                 <label class="block">
                                     <span>{{ __('Select clause') }}</span>
-                                    <textarea rows="3" wire:model.defer="report.select_clause"
+                                    <textarea rows="3" wire:model.defer="select_clause"
                                     class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                         name="select_clause"
                                         id="select_clause">
@@ -76,7 +76,7 @@
                                 </label>
                                 <label class="block">
                                     <span>{{ __('From clause') }}</span>
-                                    <textarea rows="3" wire:model.defer="report.from_clause"
+                                    <textarea rows="3" wire:model.defer="from_clause"
                                     class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                         name="from_clause"
                                         id="from_clause">
@@ -84,7 +84,7 @@
                                 </label>
                                 <label class="block">
                                     <span>{{ __('Where clause') }}</span>
-                                    <textarea rows="3" wire:model.defer="report.where_clause"
+                                    <textarea rows="3" wire:model.defer="where_clause"
                                     class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                         name="where_clause"
                                         id="where_clause">
@@ -93,44 +93,44 @@
                                 
                                 
                                 <label class="block">
-                                    <span>Group by clause</span>
-                                    <input id="groupby_clause" wire:model.defer="report.groupby_clause"
+                                    <span>{{ __('Group by clause') }}</span>
+                                    <input id="groupby_clause" wire:model.defer="groupby_clause"
                                         class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                         placeholder="Enter group by clause" type="text" rows="3"/>
                                 </label>
                                 <label class="block">
-                                    <span>Having clause</span>
-                                    <input id="having clause" wire:model.defer="report.having_clause"
+                                    <span>{{ __('Having clause') }}</span>
+                                    <input id="having clause" wire:model.defer="having_clause"
                                         class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                         placeholder="Enter having clause" type="text" rows="3"/>
                                 </label>
                                 <label class="inline-flex items-center space-x-2">
-                                    <input wire:model.defer="report.published"
+                                    <input wire:model.defer="published"
                                         class="form-switch h-5 w-10 rounded-lg bg-slate-300 before:rounded-md before:bg-slate-50 checked:!bg-info checked:before:bg-white dark:bg-navy-900 dark:before:bg-navy-300 dark:checked:before:bg-white"
                                         type="checkbox"
                                     />
-                                    <span>Published</span>
+                                    <span>{{ __('Published') }}</span>
                                 </label>
                                 <label class="inline-flex items-center space-x-2">
-                                    <input wire:model.defer="report.show_meta"
+                                    <input wire:model.defer="show_meta"
                                         class="form-switch h-5 w-10 rounded-lg bg-slate-300 before:rounded-md before:bg-slate-50 checked:!bg-info checked:before:bg-white dark:bg-navy-900 dark:before:bg-navy-300 dark:checked:before:bg-white"
                                         type="checkbox"
                                     />
-                                    <span>Show meta</span>
+                                    <span>{{ __('Show meta') }}</span>
                                 </label>
                                 <label class="inline-flex items-center space-x-2">
-                                    <input wire:model.defer="report.show_print_date"
+                                    <input wire:model.defer="show_print_date"
                                         class="form-switch h-5 w-10 rounded-lg bg-slate-300 before:rounded-md before:bg-slate-50 checked:!bg-info checked:before:bg-white dark:bg-navy-900 dark:before:bg-navy-300 dark:checked:before:bg-white"
                                         type="checkbox"
                                     />
-                                    <span>Show print date</span>
+                                    <span>{{ __('Show print date') }}</span>
                                 </label>
                                 <label class="inline-flex items-center space-x-2">
-                                    <input wire:model.defer="report.show_print_user"
+                                    <input wire:model.defer="show_print_user"
                                         class="form-switch h-5 w-10 rounded-lg bg-slate-300 before:rounded-md before:bg-slate-50 checked:!bg-info checked:before:bg-white dark:bg-navy-900 dark:before:bg-navy-300 dark:checked:before:bg-white"
                                         type="checkbox"
                                     />
-                                    <span>Show user</span>
+                                    <span>{{ __('Show user') }}</span>
                                 </label>
                             </div>
                         </div>
@@ -149,11 +149,11 @@
                         </div>
                         <button wire:click="store()"
                             class="btn min-w-[7rem] bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
-                            Save
+                            {{ __('Save') }}
                         </button>
                         <button @click="showReportModal=false"
                             class="btn min-w-[7rem] bg-error font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
-                            Close
+                            {{ __('Close') }}
                         </button>
                     </div>
                 </div>

@@ -1,34 +1,40 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Settings;
 
 use Livewire\Component;
 use App\Models\Report;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
+use Livewire\Attributes\Rule as LivewireRule;
 
 class ReportAdminModal extends Component
 {
     public $report;
     public $showReportModal = false;
 
-    protected $rules = [
-        'report.title' => 'required|min:2',
-        'report.user_id' => 'required',
-        'report.description'=>'',
-        'report.published'=>'required',
-        'report.show_print_user' => '',
-        'report.show_meta' => '',
-        'report.show_print_date'=>'',
-        'report.select_clause'=>'',
-        'report.from_clause'=>'',
-        'report.where_clause'=>'',
-        'report.groupby_clause'=>'',
-        'report.order_clause' => '',
-        'report.having_clause'=>''
-    ];
+    #[LivewireRule('required|string|min:5')] 
+    public $title;
 
-    protected $listeners = ['openReportModal' => 'openReportModal'];
+    public $user_id;
+    public $description;
+    public $published;
+    public $show_print_user;
+    public $show_meta;
+    public $show_print_date;
 
+    #[LivewireRule('required')]
+    public $select_clause;
+
+    #[LivewireRule('required')]
+    public $from_clause;
+
+    public $where_clause;
+    public $groupby_clause;
+    public $order_clause;
+    public $having_clause;
+
+    #[On('openReportModal')]
     public function openReportModal($report_id)
     {
         $this->report = new Report();
@@ -58,7 +64,7 @@ class ReportAdminModal extends Component
         $this->report->save();
         $this->report->refresh();
 
-        $this->emit('refreshReport');
+        $this->dispatch('refreshReport');
         $this->showReportModal = false;
     }
 
@@ -69,6 +75,6 @@ class ReportAdminModal extends Component
 
     public function render()
     {
-        return view('livewire.report-admin-modal');
+        return view('livewire.settings.report-admin-modal');
     }
 }

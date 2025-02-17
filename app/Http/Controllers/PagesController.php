@@ -109,7 +109,6 @@ class PagesController extends Controller
     public function getPrioritys()
     {
         $user =  Auth::user();
-
         $projectId = $user->project_id;
         $project = Project::find($projectId);
         $page_title = "Priorities";

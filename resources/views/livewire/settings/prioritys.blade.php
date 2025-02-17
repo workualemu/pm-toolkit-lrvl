@@ -1,4 +1,6 @@
-<div class="grid grid-cols-1 gap-4 sm:gap-5 lg:gap-6">
+<div x-data="" 
+    class="grid grid-cols-1 gap-4 sm:gap-5 lg:gap-6">
+    <x-app-partials.delete-confirmation />
     <div>
         <div class="flex items-center justify-between">
             
@@ -9,9 +11,7 @@
                     {{ __('Add new priority') }}
                 </button>
             </div>
-
         </div>
-
         <div class="card mt-3">
             <div
                 class="is-scrollbar-hidden min-w-full overflow-x-auto"
@@ -56,9 +56,22 @@
                                             class="btn h-8 w-8 p-0 text-info hover:bg-info/20 focus:bg-info/20 active:bg-info/25">
                                             <i class="fa fa-edit"></i>
                                         </button>
-                                        <button wire:click="deletePriority({{$priority->id}})" class="btn h-8 w-8 p-0 text-error hover:bg-error/20 focus:bg-error/20 active:bg-error/25">
+                                        <button @click="
+                                            window.customConfirm({
+                                                title: 'Delete Priority?',
+                                                message: 'Are you sure you want to delete this priority? This action cannot be undone.',
+                                                color: 'red',
+                                                okText: 'Delete',
+                                            }).then(confirmed => {
+                                                if (confirmed) {
+                                                    $dispatch('deleteConfirmed', { id: {{ $priority->id }} });
+                                                }
+                                            })
+                                        " 
+                                        class="btn h-8 w-8 p-0 text-error hover:bg-error/20 focus:bg-error/20 active:bg-error/25">
                                             <i class="fa fa-trash-alt"></i>
                                         </button>
+                                        
                                     </div>
                                 </td>
                             </tr>

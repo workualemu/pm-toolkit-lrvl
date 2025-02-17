@@ -1,41 +1,45 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Settings;
 
 use Livewire\Component;
 use App\Models\Tag;
 use Livewire\WithPagination;
+use Livewire\Attributes\On;
 
 class Tags extends Component
 {
     use WithPagination;
 
-    // public $tags = [];
     public $showTagModal = false;
 
-    protected $listeners = ['refreshTag' => '$refresh'
-    ];
+    #[On('refreshTag')]
+    public function refreshTag()
+    {
+        $this->dispatch('$refresh');
+    }
 
     public function addNewTag()
     {
-        $this->emit('openTagModal', null);
+        $this->dispatch('openTagModal', null);
     }
 
     public function editTag($tag_id)
     {
-        $this->emit('openTagModal', $tag_id);
+        $this->dispatch('openTagModal', $tag_id);
     }
 
     public function deleteTag($tag_id)
     {
         $res=Tag::where('id', $tag_id)->delete();
-        $this->emit('openTagModal', $tag_id);
+        $this->dispatch('openTagModal', $tag_id);
+        $this->dispatch('$refresh');
     }
 
     public function render()
     {
         $user = \Auth::user();
-        return view('livewire.tags', [
+        return view('livewire.settings.tags', [
             'tags' => Tag::where('project_id', $user->project_id)->paginate(10),
         ]);
     }
