@@ -9,9 +9,10 @@ use App\Models\Tag;
 use App\Models\TaskStatus;
 use App\Models\TaskPriority;
 use App\Models\Report;
-use App\Models\ReportParam;
-use App\Models\ReportColumn;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
+use Carbon\Carbon;
 
 class TemplateProjectsModal extends Component
 {
@@ -22,14 +23,16 @@ class TemplateProjectsModal extends Component
     public $sourceProject = 0;
 
     public $title;
-    public $user_id;
     public $description;
     public $start_date;
     public $end_date;
     public $status;
 
-    protected $listeners = ['openTemplateModal' => 'openTemplateModal'];
+    private $taskPriorityMap = [];
+    private $taskStatusMap = [];
+    private $tagMap = [];
 
+    #[On('openTemplateModal')]
     public function openTemplateModal($template_id)
     {
         if($template_id == null){
@@ -37,7 +40,8 @@ class TemplateProjectsModal extends Component
         } else {
             $this->template = Project::find($template_id);
         }
-        
+
+        $this->hidrate();
         $this->showModal = true;
     }
 
@@ -50,6 +54,8 @@ class TemplateProjectsModal extends Component
     {
         $user = Auth::user();
         
+        $this->dehidrate();
+
         $this->template->user_id = $user->id;
 
         $sourceProject = Project::find($this->sourceProject);
@@ -61,13 +67,29 @@ class TemplateProjectsModal extends Component
         $this->template->end_date = $sourceProject->end_date;
         $this->template->is_template = true;
         $this->template->status = $this->template->status == '' ? 'ACTIVE' : $this->template->status;
-        $this->template->save();
-        $this->template->refresh();
+        $taskPriorityMap = [];
+        $taskStatusMap = [];
+        $tagMap = [];
+        try{
+            DB::beginTransaction();
+            $this->template->save();
+            $this->template->refresh();
+    
+            if(!$this->createTemplateFromSource($sourceProject, $user->id)){
+                $this->error("Unexpected error happened");
+                DB::rollBack();
+                return;
+            }
+    
+            $this->dispatch('refreshTemplate');
+            $this->showModal = false;
 
-        $this->duplicateTemplateFromSource($sourceProject);
-
-        $this->dispatch('refreshTemplate');
-        $this->showModal = false;
+            DB::commit();
+        } catch (\Exception $e) {
+            $this->error("An error occurred: {$e->getMessage()}");
+            DB::rollBack();
+        }
+        
     }
 
     public function mount()
@@ -88,206 +110,207 @@ class TemplateProjectsModal extends Component
 
     //--------------------- private methods ---------------------
 
-    private function duplicateTemplateFromSource(Project $source) : bool
+    private function createTemplateFromSource(Project $source, $user_id) : bool
     {
-        if(!copyTemplateFromSource($source) ){
+        
+        if(!$this->copyTagTemplateFromSource($source, $user_id) ){
             return false;
         }
-        if(!copyTagTemplateFromSource($source) ){
+
+        if(!$this->copyTaskPriorityTemplateFromSource($source, $user_id) ){
             return false;
         }
-        if(!copyTaskPriorityTemplateFromSource($source) ){
+        if(!$this->copyTaskStatusTemplateFromSource($source, $user_id) ){
             return false;
         }
-        if(!copyTaskStatusTemplateFromSource($source) ){
+        if(!$this->copyReportsTemplateFromSource($source, $user_id) ){
             return false;
         }
-        if(!copyReportsTemplateFromSource($source) ){
+
+       $phases = $source->getTasksByLevel(0);
+       Task::where('project_id', $this->template->id)->delete();
+       if(!$this->copyTemplateFromSource($phases, null, "", 0, $source, $user_id)){
             return false;
-        }
+       }
         
         return true;
     }
-       
-    private function copyTemplateFromSource(Project $source) : bool
+    
+    private function copyTemplateFromSource($tasks, $parent_id, $parentPath, $level, Project $source, $user_id): bool
     {
         if($source == null){
             return false;
         }
-        $user = Auth::user();
-        //Assume there is only three levels of tasks with level value of 0, 1, 2
-        // ---------delete all existing tasks of the template project---------------
-        for ($i = 2; $i >= 0; $i--) {
-            $templateTasks = $this->template->getTasksByLevel($i);
-            foreach($templateTasks as $task){
-                $task->delete();
-            }
-        }
-        // ---------copy all source project tasks to the template project---------------
-        for ($i = 0; $i <= 2; $i++) {
-            $sourceTasks = $source->getTasksByLevel($i);
-            foreach($sourceTasks as $sourceTask){
-                $task = new Task();
-                $task->project_id = $this->template->id;
-                $task->title = $sourceTask->title;
-                $task->description = $sourceTask->description;
-                $task->start_date = $sourceTask->start_date;
-                $task->end_date = $sourceTask->end_date;
-                $task->user_id = $user->id;
-                $task->text = $sourceTask->text;
-                $task->task_type_id = $sourceTask->task_type_id;
-                $task->task_status_id = $sourceTask->task_status_id;
-                $task->task_priority_id = $sourceTask->task_priority_id;
-                $task->kanban_list_rank = $sourceTask->kanban_list_rank;
-                $task->duration = $sourceTask->duration;
-                $task->type = $sourceTask->type;
-                $task->level = $sourceTask->level;
-                $task->list_order = $sourceTask->list_order;
-                $task->is_starred = $sourceTask->is_starred;
-                $task->path = $sourceTask->path;
-                $task->original_id = $sourceTask->id;
+        
+        foreach ($tasks as $task) {
+            
+            $statusValue = $task->getTaskStatus()?->value;
+            $taskStatusId = $this->taskStatusMap[$statusValue] ?? null;
+            $priorityValue = $task->getTaskPriority()?->value;
+            $taskPriorityId = $this->taskPriorityMap[$priorityValue] ?? null;
+            
+            // $newTask = $task->replicate();
+            
+            $newTask = $task->replicate(); 
+            $newTask->start_date = Carbon::parse($task->start_date)->format('Y-m-d H:i:s');
+            $newTask->end_date = Carbon::parse($task->end_date)->format('Y-m-d H:i:s');
+            logger($newTask);
+            $newTask->task_status_id = $taskStatusId;
+            $newTask->task_priority_id = $taskPriorityId;
+            $newTask->user_id = $user_id;
+            $newTask->project_id = $this->template->id;
+            $newTask->parent = $parent_id;
+            if(!$newTask->save()){
+                return false;
+            } 
+            $newTask->refresh();
 
-                if($sourceTask->parent != null){
-                    $parentTask = Task::where('original_id', $sourceTask->parent)->first();
-                    $task->parent = $parentTask->id;
+            $tagMap = $this->tagMap;
+            $modifiedTagIds = $task->getTaskTags()->map(function ($tag) use ($tagMap) {
+                $tag->newId = $tagMap[$tag->label];
+                return $tag;
+            });
+            $savedTags = Tag::whereIn('id', $modifiedTagIds->pluck('newId'))->get();
+            $newTask->tags()->sync($savedTags);
+            $taskPath = $level == 0 ? $newTask->id : "{$parentPath}.{$newTask->id}";
+            $newTask->path = $taskPath;
+    
+            if(!$newTask->save()){
+                return false;
+            } 
+            $newTask->refresh();
+
+            $children = $task->children;
+            if($children){
+                if(!$this->copyTemplateFromSource($children, $newTask->id, $taskPath, $level + 1, $source, $user_id)){
+                    return false;
                 }
-
-                $task->save();
             }
         }
 
         return true;
     }
 
-    private function copyTagTemplateFromSource(Project $source) : bool
+    private function copyTagTemplateFromSource(Project $source, $user_id) : bool
     {
+        logger("---------- Copying tags ---------------");
         if($source == null){
             return false;
         }
-        $user = Auth::user();
-        $items = $this->template->tags;
-        foreach($items as $item){
-            $item->delete();
-        }
+        Tag::where('project_id', $this->template->id)->delete();
+        $sourceItems = $source->getTags();
         // ---------copy all source project items to the template project---------------
-        $sourceItems = $source->tags;
-        foreach($sourceItems as $sourceItem){
-            $item = new Tag();
-            $item->project_id = $this->template->id;
-            $item->label = $sourceItem->label;
-            $item->color = $sourceItem->color;
-            $item->description = $sourceItem->description;
-            $item->user_id = $user->id;
-
-            $item->save();
+        foreach ($sourceItems as $tag) {
+            $newTag = Tag::create([
+                'label' => $tag->label,
+                'description' => $tag->description,
+                'color' => $tag->color,
+                'user_id' => $user_id,
+                'project_id' => $this->template->id
+            ]);
+            $this->tagMap[$tag->label] = $newTag->id;
         }
 
         return true;
     }
 
-    private function copyTaskPriorityTemplateFromSource(Project $source) : bool
+    private function copyTaskPriorityTemplateFromSource(Project $source, $user_id) : bool
     {
+        logger("---------- Copying task priorities ---------------");
         if($source == null){
             return false;
         }
-        $user = Auth::user();
-        $items = $this->template->getTaskPriorities();
-        foreach($items as $item){
-            $item->delete();
-        }
+        TaskPriority::where('project_id', $this->template->id)->delete();
         // ---------copy all source project items to the template project---------------
         $sourceItems = $source->getTaskPriorities();
-        foreach($sourceItems as $sourceItem){
-            $item = new TaskPriority();
-            $item->project_id = $this->template->id;
-            $item->value = $sourceItem->value;
-            $item->description = $sourceItem->description;
-            $item->color = $sourceItem->color;
-            $item->user_id = $user->id;
+        foreach ($sourceItems as $priority) {
+            $taskPriority = TaskPriority::create([
+                'value' => $priority->value,
+                'description' => $priority->description,
+                'color' => $priority->color,
+                'user_id' => $user_id,
+                'project_id' => $this->template->id
+            ]);
 
-            $item->save();
+            $this->taskPriorityMap[$priority->value] = $taskPriority->id;
         }
 
         return true;
     }
     
-    private function copyTaskStatusTemplateFromSource(Project $source) : bool
+    private function copyTaskStatusTemplateFromSource(Project $source, $user_id) : bool
     {
+        logger("---------- Copying task statuses ---------------");
         if($source == null){
             return false;
         }
-        $user = Auth::user();
-        $items = $this->template->getTaskStatus();
-        foreach($items as $item){
-            $item->delete();
-        }
-        // ---------copy all source project items to the template project---------------
-        $sourceItems = $source->getTaskStatus();
-        foreach($sourceItems as $sourceItem){
-            $item = new TaskStatus();
-            $item->project_id = $this->template->id;
-            $item->value = $sourceItem->value;
-            $item->description = $sourceItem->description;
-            $item->color = $sourceItem->color;
-            $item->kanban_list_id = $sourceItem->kanban_list_id;
-            $item->user_id = $user->id;
+        
+        TaskStatus::where('project_id', $this->template->id)->delete();
+        $statuses = $source->getTaskStatuses();
+        foreach ($statuses as $status) {
+            $taskStatus = TaskStatus::create([
+                'value' => $status->value,
+                'description' => $status->description,
+                'color' => $status->color,
+                'kanban_list_rank' => $status->kanban_list_rank,
+                'is_completing'=>$status->is_completing,
+                'user_id' => $user_id,
+                'project_id' => $this->template->id
+            ]);
 
-            $item->save();
+            $this->taskStatusMap[$status->value] = $taskStatus->id;
         }
-
         return true;
     }
     
-    private function copyReportsTemplateFromSource(Project $source) : bool
+    private function copyReportsTemplateFromSource(Project $source, $user_id) : bool
     {
+        logger("---------- Copying reports ---------------");
         if($source == null){
             return false;
         }
-        $user = Auth::user();
-        $items = $this->template->reports();
-        foreach($items as $item){
-            $item->delete();
-        }
+        
+        Report::where('project_id', $this->template->id)->delete();
         // ---------copy all source project items to the template project---------------
-        $sourceItems = $source->reports();
-        foreach($sourceItems as $sourceItem){
-            $item = new Report();
-            $item->project_id = $this->template->id;
-            $item->title = $sourceItem->title;
-            $item->db_table = $sourceItem->db_table;
-            $item->sort_by = $sourceItem->sort_by;
-            $item->description = $sourceItem->description;
-            $item->published = $sourceItem->published;
-            $item->user_id = $user->id;
-            $item->show_meta = $sourceItem->show_meta;
-            $item->show_print_user = $sourceItem->show_print_user;
-            $item->show_print_date = $sourceItem->show_print_date;
-            
-            $item->save();
-
-            $sourceColumns = $sourceItem->columns;
-            foreach($sourceColumns as $sourceColumn){
-                $column = new ReportColumn();
-                $column->report_id = $item->id;
-                $column->title = $sourceColumn->title;
-                $column->db_column = $sourceColumn->db_column;
-                $column->sort_order = $sourceColumn->sort_order;
-                $column->user_id = $user->id;
-                $column->save();
-            }
-
-            $sourceParams = $sourceItem->params;
-            foreach($sourceParams as $sourceParam){
-                $param = new ReportParam();
-                $param->report_id = $item->id;
-                $param->title = $sourceParam->title;
-                $param->db_column = $sourceParam->db_column;
-                $param->user_id = $user->id;
-                $param->save();
-            }
+        $sourceItems = $source->reports;
+        foreach ($sourceItems as $item) {
+            $report = Report::create([
+                'title' => $item->title,
+                'description' => $item->description,
+                'select_clause' => $item->select_clause,
+                'from_clause' => $item->from_clause,
+                'where_clause' => $item->where_clause,
+                'order_clause' => $item->order_clause,
+                'groupby_clause' => $item->groupby_clause,
+                'having_clause' => $item->having_clause,
+                'published' => $item->published,
+                'show_meta' => $item->show_meta,
+                'show_print_user' => $item->show_print_user,
+                'show_print_date' => $item->show_print_date,
+                'user_id' => $user_id,
+                'project_id' => $this->template->id
+            ]);
         }
-
+        logger("---------- reports done ---------------");
         return true;
+    }
+
+    private function hidrate()
+    {
+        $this->title = $this->template->title;
+        $this->description = $this->template->description;
+        $this->start_date = $this->template->start_date;
+        $this->end_date = $this->template->end_date;
+        $this->status = $this->template->status;
+    }
+
+    private function dehidrate()
+    {
+        $this->template->title = $this->title;
+        $this->template->description = $this->description;
+        $this->template->start_date = $this->start_date;
+        $this->template->end_date = $this->end_date;
+        $this->template->status = $this->status;
     }
 
 }

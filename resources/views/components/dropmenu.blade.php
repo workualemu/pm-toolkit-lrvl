@@ -59,25 +59,13 @@
                     @role('Super Admin')
                     <li>
                         <a x-on:click="$wire.showDeleteProjectModal({{ $record }}); close($refs.button)"
-
                             class="flex h-8 items-center px-3 pr-8 font-medium tracking-wide outline-none transition-all hover:bg-slate-100 hover:text-slate-800 focus:bg-slate-100 focus:text-slate-800 dark:hover:bg-navy-600 dark:hover:text-navy-100 dark:focus:bg-navy-600 dark:focus:text-navy-100">
                             Delete project
                         </a>    
                     </li>
                     @endrole
                 </ul>
-                @role('Project Manager')
-                <div class="my-1 h-px bg-slate-150 dark:bg-navy-500"></div>
-                <ul>
-                    <li>
-                        <a wire:click="manageProjectUsers({{$record}})"
-                            x-on:click="close($refs.button)"
-                            class="flex h-8 items-center px-3 pr-8 font-medium tracking-wide outline-none transition-all hover:bg-slate-100 hover:text-slate-800 focus:bg-slate-100 focus:text-slate-800 dark:hover:bg-navy-600 dark:focus:bg-navy-600 dark:focus:text-navy-100">
-                            Manage project users</a>
-                    </li>
-                </ul>
-                @endrole
-                @role('Super Admin')
+                @role(['Project Manager', 'Super Admin'])
                 <div class="my-1 h-px bg-slate-150 dark:bg-navy-500"></div>
                 <ul>
                     <li>

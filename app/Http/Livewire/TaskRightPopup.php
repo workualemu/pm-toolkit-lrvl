@@ -195,10 +195,9 @@ class TaskRightPopup extends Component
         
         $this->task->save();
 
-        $this->task->tags()->detach();    
-        $this->task->tags()->attach($this->taskTags);   
-
-        // $this->task->refresh();
+        $this->task->tags()->sync($this->taskTags);
+        // $this->task->tags()->detach();    
+        // $this->task->tags()->attach($this->taskTags);   
 
         if($this->task->isDirty('assigned_to') ){
             $assgnee = User::find($this->task->assigned_to);

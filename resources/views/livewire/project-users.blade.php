@@ -8,9 +8,6 @@
             </div>
         </div>
     @else
-        <p class="mt-1 text-xs text-info">
-            <span>{{ $project->title }}</span>
-        </p>
 
         <!--header, title search, and filter block -->
         <div class="" >

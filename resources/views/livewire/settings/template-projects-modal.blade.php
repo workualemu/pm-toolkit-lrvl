@@ -32,7 +32,7 @@
                 <div class="mt-4 space-y-4">
                     <label class="block">
                         <span>{{ __('Title') }}:</span>
-                        <input {{$readOnly}} type="text" wire:model.lazy='title'
+                        <input {{$readOnly}} type="text" wire:model='title'
                             class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                             placeholder="Enter title"/>
                     </label>
@@ -70,14 +70,14 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <label class="block">
                             <span>{{ __('Start date') }}:</span>
-                            <input {{$readOnly}}  wire:model.lazy='start_date' 
+                            <input {{$readOnly}}  wire:model='start_date' 
                                 type="date"
                                 class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                 placeholder="Select start date"/>
                         </label>
                         <label class="block">
                             <span>{{ __('End date') }}:</span>
-                            <input {{$readOnly}}  wire:model.lazy='end_date' 
+                            <input {{$readOnly}}  wire:model='end_date' 
                                 type="date" 
                                 class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                 placeholder="Select end date"/>
@@ -90,7 +90,7 @@
                         <label class="block">
                             <span>{{ __('Status') }}:</span>
                             <select {{$readOnly}} x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" placeholder="Select project status"
-                                wire:model.lazy="status" 
+                                wire:model="status" 
                                 autocomplete="off">
                                 <option value="ACTIVE">{{ __('Active') }}</option>
                                 <option value="SUSPENDED">{{ __('Suspended') }}</option>

@@ -163,7 +163,7 @@ class CreateProjectTemplate extends Command
                 'user_id' => $user_id,
                 'project_id' => $project_id
             ]);
-            // $report->save();
+            
         }
     }
 

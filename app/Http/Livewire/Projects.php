@@ -8,6 +8,7 @@ use App\Models\UserProject;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\On;
 
 class Projects extends Component
 {
@@ -21,9 +22,13 @@ class Projects extends Component
     public $showProjectModal = false; // Define showProjectModal property
     public $showDeleteModal = false; 
 
-    protected $listeners = ['refreshProjects' => '$refresh',
-                        'errorCreatingProjectFromTemplate' => 'onErrorCreatingProjectFromTemplate'];
+    #[On('refreshProjects')]
+    public function onRefreshProjects()
+    {
+        $this->dispatch('$refresh');
+    }
 
+    #[On('errorCreatingProjectFromTemplate')]
     public function onErrorCreatingProjectFromTemplate($errorMessage)
     {
         $this->errorMessage = $errorMessage;
@@ -31,12 +36,12 @@ class Projects extends Component
 
     public function newProject()
     {
-        $this->emit('openProjectModal',null);
+        $this->dispatch('openProjectModal',null);
     }
 
     public function editProject(Project $project)
     {
-        $this->emit('openProjectModal', $project);
+        $this->dispatch('openProjectModal', $project);
     }
 
     public function manageProjectUsers(Project $project)
@@ -49,24 +54,24 @@ class Projects extends Component
     //     $project = Project::find($projectId);
     //     if ($project) {
     //         $project->delete();
-    //         $this->emit('refreshProjects');
+    //         $this->dispatch('refreshProjects');
     //     }
     // }
 
     public function showDeleteProjectModal($projectId)
-{
-    $this->projectToDelete = Project::find($projectId);
+    {
+        $this->projectToDelete = Project::find($projectId);
 
-    if ($this->projectToDelete) {
-        $this->showDeleteModal = true;
+        if ($this->projectToDelete) {
+            $this->showDeleteModal = true;
+        }
     }
-}
 
     public function deleteProject()
     {
         if ($this->projectToDelete) {
             $this->projectToDelete->delete();
-            $this->emit('refreshProjects');
+            $this->dispatch('refreshProjects');
             $this->showDeleteModal = false;
         }
     }

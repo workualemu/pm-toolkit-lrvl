@@ -12,6 +12,8 @@ use App\Models\Report;
 use App\Models\TaskStatus;
 use App\Models\TaskPriority;
 use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\On;
+use Livewire\Attributes\Rule as LivewireRule;
 
 class ProjectModal extends Component
 {
@@ -20,20 +22,30 @@ class ProjectModal extends Component
     public $readOnly = '';
     public $templates = [];
     public $selectedTemplate = 0;
+
+    #[LivewireRule('required|string|min:2')]
+    public $title;
+    public $description;
+    public $start_date;
+    public $end_date;
+    public $status;
+
     private $taskStatusMap = [];
     private $taskPriorityMap = [];
+    private $tagMap = [];
 
-    protected $rules = [
-        'project.title' => 'required|min:2',
-        'project.user_id' => 'required',
-        'project.description'=>'',
-        'project.start_date'=>'',
-        'project.end_date'=>'',
-        'project.status' => 'required'
-    ];
+    // protected $rules = [
+    //     'title' => 'required|min:2',
+    //     'user_id' => 'required',
+    //     'description'=>'',
+    //     'start_date'=>'',
+    //     'end_date'=>'',
+    //     'status' => 'required'
+    // ];
 
-    protected $listeners = ['openProjectModal' => 'openProjectModal'];
+    // protected $listeners = ['openProjectModal' => 'openProjectModal'];
 
+    #[On('openProjectModal')]
     public function openProjectModal($project)
     {
         $this->templates = Project::where('is_template', true)->get();
@@ -42,7 +54,7 @@ class ProjectModal extends Component
         } else {
             $this->project = Project::find($project['id']) ?? new Project();
         }
-        
+        $this->hidrate();
         $this->showProjectModal = true;
     }
 
@@ -65,11 +77,10 @@ class ProjectModal extends Component
     {
         $user = Auth::user();
         $is_new = $this->project->id == null;
-        
+        $this->dehidrate();
         if ($user) {
             $this->project->user_id = $user->id;
         } else {
-            // Handle the case when the user is not authenticated
             return;
         }
         $this->project->status = $this->project->status == '' ? 'ACTIVE' : $this->project->status;
@@ -88,10 +99,9 @@ class ProjectModal extends Component
         } else{
             DB::commit();
         }
-        // $this->project->refresh();
-        $this->emit('refreshProjects');
+        
+        $this->dispatch('refreshProjects');
         $this->showProjectModal = false;
-
     }
 
     public function mount()
@@ -117,99 +127,19 @@ class ProjectModal extends Component
         }
         $user = Auth::user();
 
-
         try {  
-            //Assume there is only three levels of tasks with level value of 0, 1, 2
-            // ---------delete all existing tasks of the template project---------------
-            // for ($i = 2; $i >= 0; $i--) {
-            //     $tasks = $this->project->getTasksByLevel($i);
-            //     foreach($tasks as $task){
-            //         $task->delete();
-            //     }
-            // }
+            
             $projectDate = Carbon::parse($this->project->start_date);
             $templateDate = Carbon::parse($source->start_date);
-            $slackDays = $projectDate->diffInDays($templateDate);
+            $slackDays = $templateDate->diffInDays($projectDate);
             $this->createTags($source->getTags(), $user->id);
-            // $sourceTags = $source->getTags();
-            // foreach($sourceTags as $sourceTag){
-            //     $tag = Tag::create([
-            //         'label' => $sourceTag->label,
-            //         'description' => $sourceTag->description,
-            //         'color' => $sourceTag->color,
-            //         'user_id' => $user->id,
-            //         'project_id' => $this->project->id
-            //     ]);
-            // }
             $this->createStatuses($source->getTaskStatuses(), $user->id);
-            // $sourceStatuses = $source->getTaskStatuses();
-            
-
-            // foreach ($sourceStatuses as $status) {
-            //     $taskStatus = TaskStatus::create([
-            //         'value' => $status->value,
-            //         'description' => $status->description,
-            //         'color' => $status->color,
-            //         'kanban_list_rank' => $status->kanban_list_rank,
-            //         'user_id' => $user->id,
-            //         'project_id' => $this->project->id
-            //     ]);
-
-            //     $this->taskStatusMap[$status->value] = $taskStatus->id;
-            // }
-
             $this->createPriorities($source->getTaskPriorities(), $user->id);
-            // $sourcePriorities = $source->getTaskPriorities();
-            // foreach ($sourcePriorities as $priority) {
-            //     $taskPriority = TaskPriority::create([
-            //         'value' => $priority->value,
-            //         'description' => $priority->description,
-            //         'color' => $priority->color,
-            //         'user_id' => $user->id,
-            //         'project_id' => $this->project->id
-            //     ]);
-
-            //     $this->taskPriorityMap[$priority->value] = $taskPriority->id;
-            // }
-
             $this->createReports($source->getReports(), $user->id);
             $this->copyTasks($source->getTasksByLevel(0), null, "", $user->id, 0, $slackDays);
-
-            // for ($i = 0; $i <= 2; $i++) {
-            //     $sourceTasks = $source->getTasksByLevel($i);
-            //     foreach($sourceTasks as $sourceTask){
-            //         $task = new Task();
-            //         $task->project_id = $this->project->id;
-            //         $task->title = $sourceTask->title;
-            //         $task->description = $sourceTask->description;
-            //         $task->start_date = Carbon::parse($sourceTask->start_date)->addDays($slackDays);
-            //         $task->end_date = Carbon::parse($sourceTask->end_date)->addDays($slackDays);
-            //         $task->user_id = $user->id;
-            //         $task->text = $sourceTask->text;
-                    
-            //         $task->kanban_list_rank = $sourceTask->kanban_list_rank;
-            //         $task->duration = $sourceTask->duration;
-            //         $task->type = $sourceTask->type;
-            //         $task->level = $sourceTask->level;
-            //         $task->list_order = $sourceTask->list_order;
-            //         $task->is_starred = $sourceTask->is_starred;
-            //         $task->path = $sourceTask->path;
-            //         $task->original_id = $sourceTask->id;
-            //         $task->task_priority_id = $taskPriorityMap[$sourceTask->taskPriority?->value] ?? null;
-            //         $task->task_status_id = $taskStatusMap[$sourceTask->taskStatus?->value] ?? null;
-
-            //         if($sourceTask->parent != null){
-            //             $parentTask = Task::where('original_id', $sourceTask->parent)
-            //                                 ->where('project_id', $this->project->id)->first();
-            //             $task->parent = $parentTask->id;
-            //         }
-
-            //         $task->save();
-            //     }
-            // }
         } catch (\Exception $e) {
             logger($e->getMessage());
-            $this->emit('errorCreatingProjectFromTemplate', 'Error creating project from template');
+            $this->dispatch('errorCreatingProjectFromTemplate', 'Error creating project from template');
             return false;
         }
 
@@ -242,6 +172,7 @@ class ProjectModal extends Component
                 'user_id' => $user_id,
                 'project_id' => $this->project->id
             ]);
+            $this->tagMap[$tag->label] = $tag->id;
         }
     }
 
@@ -303,6 +234,15 @@ class ProjectModal extends Component
             
             $task->parent = $parent_id;
             $task->save();
+            $task->refresh();
+
+            $tagMap = $this->tagMap;
+            $modifiedTagIds = $sourceTask->getTaskTags()->map(function ($tag) use ($tagMap) {
+                $tag->newId = $tagMap[$tag->label];
+                return $tag;
+            });
+            $savedTags = Tag::whereIn('id', $modifiedTagIds->pluck('newId'))->get();
+            $task->tags()->sync($savedTags);
 
             $taskPath = $level == 0 ? $task->id : "{$parentPath}.{$task->id}";
             $task->path = $taskPath;
@@ -313,5 +253,23 @@ class ProjectModal extends Component
                     $level + 1, $slackDays);
             }
         }
+    }
+
+    private function hidrate()
+    {
+        $this->title = $this->project->title;
+        $this->description = $this->project->description;
+        $this->start_date = $this->project->start_date;
+        $this->end_date = $this->project->end_date;
+        $this->status = $this->project->status;
+    }
+
+    private function dehidrate()
+    {
+        $this->project->title = $this->title;
+        $this->project->description = $this->description;
+        $this->project->start_date = $this->start_date;
+        $this->project->end_date = $this->end_date;
+        $this->project->status = $this->status;
     }
 }
