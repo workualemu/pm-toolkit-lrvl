@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('task_statuses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->foreignId('kanban_list_id')->nullable();
+            $table->integer('user_id');
             $table->text('description');
             $table->timestamps();
             $table->string('value');
             $table->integer('kanban_list_rank')->default(1);
             $table->string('color')->nullable();
+            $table->boolean('is_completing')->default(false);
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('NO ACTION');
         });
     }
 

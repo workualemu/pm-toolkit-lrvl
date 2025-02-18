@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class ReportView extends Component
 {
     public $report_id;
-    public $params;
     public $columns;
     public $results;
 
@@ -28,10 +27,6 @@ class ReportView extends Component
     {
         $this->report_id = $report_id;
         $this->results = $results;
-        // $this->columns = ReportColumn::getByReport($this->report_id)->get();
-        // if($this->columns->count() <= 0) {
-        //     $this->columns = self::getAllColumns();
-        // }
 
         $firstItem = $results[0];
 

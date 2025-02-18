@@ -8,6 +8,7 @@ use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
+use Livewire\Attributes\On;
 
 class ReportsUse extends Component
 {
@@ -24,22 +25,18 @@ class ReportsUse extends Component
 
     public $showReportModal = false;
 
-    protected $listeners = ['showReportViewer' => 'showReportViewer',
-                            'refreshReportUsePage' => '$refresh'];
-
+    #[On('showReportViewer')]
     public function showReportViewer($report_id, $results)
     {
         $this->selectedReportID = $report_id;
         $this->results = $results;
         $this->showReportUse = false;
         // $this->queryBuilder = $queryBuilder;
-        $this->emit('refreshReportUsePage');
-        $this->emit(
+        $this->dispatch('$refresh');
+        $this->dispatch(
             "changeOccurred",
             rawData: $this->results
         );
-
-
     }
 
     public function generateReport($report_id)
@@ -87,6 +84,11 @@ class ReportsUse extends Component
             $sql .= " HAVING " . $selectedReport->having_clause;
         }
 
+        if(!empty($selectedReport->order_clause)){
+            $sql .= " ORDER BY " . $selectedReport->order_clause;
+        }
+
+        logger($sql);
         $this->results = DB::select($sql);
         $this->selectedReportID = $selectedReport->id;
 
@@ -102,7 +104,7 @@ class ReportsUse extends Component
     public function renderUseParam($report_id)
     {
         $this->selectedReportId = $report_id;
-        $this->emit('renderUseParam', $report_id);
+        $this->dispatch('renderUseParam', $report_id);
     }
 
     public function render()
@@ -167,6 +169,10 @@ class ReportsUse extends Component
 
         if (!empty($tables)) {
             foreach ($tables as $table) {
+                if(strtoupper($table) == 'USERS'){
+                    continue;
+                }
+
                 if ($this->hasColumn($table, 'project_id')) {
                     return $table; 
                 }

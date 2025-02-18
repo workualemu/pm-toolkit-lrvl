@@ -41,7 +41,7 @@ class ReportAdminModal extends Component
         if($report_id > 0) {
             $this->report = Report::find($report_id);
         }
-
+        $this->hidrate();
         $this->showReportModal = true;
     }
 
