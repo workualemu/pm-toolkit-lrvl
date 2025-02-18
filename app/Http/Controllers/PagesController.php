@@ -118,12 +118,14 @@ class PagesController extends Controller
 
     public function getTemplateProjects()
     {
-        $templates[] = Project::where('is_template', true)->get();
-        $user =  Auth::user();
+        // $templates[] = Project::where('is_template', true)->get();
 
-        $projectId = $user->project_id;
-        $project = Project::find($projectId);
-        return view('pages/template-projects-page', compact('templates', 'project'));
+        $project = Project::find(Auth::user()->project_id);
+
+        $page_title = "Project templates";
+        $page_type = "TEMPLATE";
+        return view('pages/reports', compact('project', 'page_title', 'page_type' ));
+        
     }
 
     public function getUsers()

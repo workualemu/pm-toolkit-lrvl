@@ -15,43 +15,33 @@
         <div class="card mt-3">
             <div
                 class="is-scrollbar-hidden min-w-full overflow-x-auto"
-                x-data="pages.tables.initExample1"
+                x-data=""
             >
                 <table class="is-hoverable w-full text-left">
-                    <thead>
+                    <thead class="bg-blue-200">
                         <tr>
-                            <th
-                                class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
-                            >
+                            <th scope="col" class="px-6 py-2 text-left text-slate-800 uppercase font-montserrat">
                                 {{ __('Priority') }}
                             </th>
-                            <th
-                                class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
-                            >
+                            <th scope="col" class="px-6 py-2 text-left text-slate-800 uppercase font-montserrat">
                                 {{ __('Descripton') }}
                             </th>
-                            <th
-                                class="whitespace-nowrap rounded-tr-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5"
-                            >
+                            <th scope="col" class="px-6 py-2 text-left text-slate-800 uppercase font-montserrat">
                                 {{ __('Action') }}
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="bg-white divide-y divide-gray-200">
                         @foreach($prioritys AS $index=>$priority)
                             <tr>
-                                <td
-                                    class="whitespace-nowrap px-3 py-3 font-medium text-{{$priority->color}}-700 dark:text-navy-100 lg:px-5"
-                                >
+                                <td class="px-6 py-3 text-[15px] font-medium text-{{$priority->color}}-700 tracking-normal font-inter">
                                     {{$priority->value}}
                                 </td>
-                                <td
-                                    class="whitespace-nowrap px-3 py-3 font-medium text-slate-700 dark:text-navy-100 lg:px-5"
-                                >
-                                {{$priority->description}}
+                                <td class="px-6 py-3 text-[15px] font-medium text-gray-800 tracking-normal font-inter">
+                                    {{$priority->description}}
                                 </td>
-                                <td class="whitespace-nowrap px-4 py-3 sm:px-5 relative">
-                                    <div class="flex justify-center space-x-2">
+                                <td class="px-6 py-3 text-[15px] font-medium text-gray-800 tracking-normal font-inter">
+                                    <div class="flex space-x-2">
                                         <button wire:click="editPriority({{$priority->id}})" 
                                             class="btn h-8 w-8 p-0 text-info hover:bg-info/20 focus:bg-info/20 active:bg-info/25">
                                             <i class="fa fa-edit"></i>

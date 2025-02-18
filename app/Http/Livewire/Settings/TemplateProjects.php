@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Settings;
 
 use Livewire\Component;
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Livewire\Attributes\On;
 
 class TemplateProjects extends Component
 {
@@ -16,9 +17,15 @@ class TemplateProjects extends Component
     protected $listeners = ['refreshTemplate' => '$refresh'
     ];
 
+    #[On('refreshTemplate')]
+    public function refreshTemplate()
+    {
+        $this->dispatch('$refresh');
+    }
+
     public function addNewTemplate()
     {
-        $this->emit('openTemplateModal', null);
+        $this->dispatch('openTemplateModal', null);
     }
 
     public function mount()
@@ -33,25 +40,27 @@ class TemplateProjects extends Component
         });
 
         $projectId = Auth::user()->project_id;
-        if($this->project != null) {
+        if($this->project == null) {
             $this->project = Project::find($projectId);
         }
     }
 
     public function editTemplate($id)
     {
-        $this->emit('openTemplateModal', $id);
+        $this->dispatch('openTemplateModal', $id);
     }
 
-    public function deleteTemplate($id)
+    #[On('deleteConfirmed')] 
+    public function deleteConfirmed($id)
     {
-        $res=Project::where('id', $id)->delete();
-        // $this->emit('openPriorityModal', $priority_id);
+        Project::findOrFail($id)->delete();
+        session()->flash('message', 'Template deleted successfully.');
     }
+
 
     public function render()
     {
-        return view('livewire.template-projects');
+        return view('livewire.settings.template-projects');
     }
 
     //------------------------------------------------------------

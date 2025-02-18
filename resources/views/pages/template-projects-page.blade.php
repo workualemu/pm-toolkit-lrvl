@@ -17,6 +17,6 @@
             </div>
         </div>
     </div>
-    @livewire('template-projects')
+    @livewire('settings.template-projects')
 
 </x-app-layout>

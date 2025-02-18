@@ -65,6 +65,7 @@ module.exports = {
       fontFamily: {
         sans: ["Poppins", ...defaultTheme.fontFamily.sans],
         inter: ["Inter", ...defaultTheme.fontFamily.sans],
+        montserrat: ['Montserrat', 'sans-serif'],
       },
       fontSize: {
         tiny: ["0.625rem", "0.8125rem"],

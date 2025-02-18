@@ -68,41 +68,58 @@
                                 </label>
                                 <label class="block">
                                     <span>{{ __('Select clause') }}</span>
-                                    <textarea rows="3" wire:model.defer="select_clause"
+                                    <textarea rows="2" wire:model.defer="select_clause"
                                     class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                         name="select_clause"
+                                        placeholder="Enter select clause"
                                         id="select_clause">
                                     </textarea>
                                 </label>
                                 <label class="block">
                                     <span>{{ __('From clause') }}</span>
-                                    <textarea rows="3" wire:model.defer="from_clause"
+                                    <textarea rows="2" wire:model.defer="from_clause"
                                     class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                         name="from_clause"
+                                        placeholder="Enter from clause"
                                         id="from_clause">
                                     </textarea>
                                 </label>
                                 <label class="block">
                                     <span>{{ __('Where clause') }}</span>
-                                    <textarea rows="3" wire:model.defer="where_clause"
+                                    <textarea rows="2" wire:model.defer="where_clause"
                                     class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                         name="where_clause"
+                                        placeholder="Enter where clause"
                                         id="where_clause">
                                     </textarea>
                                 </label>
                                 
-                                
                                 <label class="block">
                                     <span>{{ __('Group by clause') }}</span>
-                                    <input id="groupby_clause" wire:model.defer="groupby_clause"
-                                        class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                                        placeholder="Enter group by clause" type="text" rows="3"/>
+                                    <textarea rows="2" wire:model="groupby_clause"
+                                        class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                                        name="groupby_clause"
+                                        placeholder="Enter group by clause"
+                                        id="groupby_clause">
+                                    </textarea>
                                 </label>
                                 <label class="block">
                                     <span>{{ __('Having clause') }}</span>
-                                    <input id="having clause" wire:model.defer="having_clause"
-                                        class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                                        placeholder="Enter having clause" type="text" rows="3"/>
+                                    <textarea rows="2" wire:model="having_clause"
+                                        class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                                        name="having_clause"
+                                        placeholder="Enter having clause"
+                                        id="having_clause">
+                                    </textarea>
+                                </label>
+                                <label class="block">
+                                    <span>{{ __('Order by clause') }}</span>
+                                    <textarea rows="2" wire:model="order_clause"
+                                        class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                                        name="order_clause"
+                                        placeholder="Enter order by clause"
+                                        id="order_clause">
+                                    </textarea>
                                 </label>
                                 <label class="inline-flex items-center space-x-2">
                                     <input wire:model.defer="published"

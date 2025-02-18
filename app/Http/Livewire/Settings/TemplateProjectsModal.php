@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Settings;
 
 use Livewire\Component;
 use App\Models\Project;
@@ -21,14 +21,12 @@ class TemplateProjectsModal extends Component
     public $readOnly = '';
     public $sourceProject = 0;
 
-    protected $rules = [
-        'template.title' => 'required|min:2',
-        'template.user_id' => 'required',
-        'template.description'=>'',
-        'template.start_date'=>'',
-        'template.end_date'=>'',
-        'template.status' => 'required'
-    ];
+    public $title;
+    public $user_id;
+    public $description;
+    public $start_date;
+    public $end_date;
+    public $status;
 
     protected $listeners = ['openTemplateModal' => 'openTemplateModal'];
 
@@ -68,7 +66,7 @@ class TemplateProjectsModal extends Component
 
         $this->duplicateTemplateFromSource($sourceProject);
 
-        $this->emit('refreshTemplate');
+        $this->dispatch('refreshTemplate');
         $this->showModal = false;
     }
 
@@ -85,7 +83,7 @@ class TemplateProjectsModal extends Component
 
     public function render()
     {
-        return view('livewire.template-projects-modal');
+        return view('livewire.settings.template-projects-modal');
     }
 
     //--------------------- private methods ---------------------

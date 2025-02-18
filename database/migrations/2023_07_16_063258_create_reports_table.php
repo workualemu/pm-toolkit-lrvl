@@ -15,17 +15,23 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->text('description')->nullable();
             $table->timestamps();
             $table->string('title');
-            $table->string('db_table');
-            $table->string('sort_by');
-            $table->boolean('published');
-            $table->boolean('show_meta');
-            $table->boolean('show_print_user');
-            $table->boolean('show_print_date');
-
+            $table->boolean('published')->default(false);
+            $table->boolean('show_meta')->default(false);
+            $table->boolean('show_print_user')->default(false);
+            $table->boolean('show_print_date')->default(false);
+            $table->text('select_clause')->nullable();
+            $table->text('from_clause')->nullable();
+            $table->text('where_clause')->nullable();
+            $table->text('groupby_clause')->nullable();
+            $table->text('having_clause')->nullable();
+            $table->string('order_clause')->nullable();
+            $table->unsignedBigInteger('project_id')->nullable();
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('NO ACTION');
         });
     }
 
