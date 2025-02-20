@@ -9,7 +9,7 @@
                 </h3>
             </div>
             <label class="relative hidden w-full max-w-[16rem] sm:flex">
-                <input wire:model.debounce.500ms="searchTerm"
+                <input wire:model.live.debounce.500ms="searchTerm"
                     class="form-input peer h-8 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 pl-9 text-xs+ placeholder:text-slate-400/70 hover:z-10 hover:border-slate-400 focus:z-10 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                     placeholder="Search users" type="text" />
                 <span
@@ -23,20 +23,32 @@
             </label>
         </div>
         <div class="grid grid-cols-1 gap-4">
-            <div class="col-span-1">
+            <x-app-partials.delete-confirmation />
+            <div>
+                <div class="flex items-center justify-between">
+                    
+                    <div>
+                        <button wire:click="addNewRole()"
+                            class="border-b border-dotted border-current pb-0.5 font-medium text-primary outline-none transition-colors duration-300 hover:text-primary/70 focus:text-primary/70 dark:text-accent-light dark:hover:text-accent-light/70 dark:focus:text-accent-light/70"
+                        >
+                            {{ __('Add new role') }}
+                        </button>
+                    </div>
+                </div>
 
+            <div class="col-span-1">
                 <div class="grid grid-cols-1 gap-4 sm:gap-5 lg:gap-6">
                     <div>
                         <div class="card mt-3">
                             @if($success < 0)
                                 <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-                                    <strong class="font-bold">Error:</strong>
+                                    <strong class="font-bold">{{ __('Error') }}:</strong>
                                     <span class="block sm:inline">{{ $errorMessage }}!</span>
                                 </div>
                             @elseif($success > 0)
                                 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-                                    <strong class="font-bold">Success:</strong>
-                                    <span class="block sm:inline">Role assignment was completed successfully!</span>
+                                    <strong class="font-bold">{{ __('Success') }}:</strong>
+                                    <span class="block sm:inline">{{ __('Role assignment was completed successfully') }}!</span>
                                 </div>
                             @endif
                             <div
@@ -44,30 +56,27 @@
                                 x-data="pages.tables.initExample1"
                             >
                                 <table class="min-w-full divide-y divide-gray-200">
-                                    <thead class="bg-gray-50">
+                                    <thead class="bg-blue-200">
                                     <tr>
-                                        <th scope="col" class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th scope="col" class="px-6 py-2 text-left text-slate-800 uppercase font-montserrat">
                                             {{ __('Role') }}</th>
-                                        <th scope="col" class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            {{ __('Updated at') }}</th>
-                                        <th scope="col" class="relative px-2 py-3"></th>
+                                        <th scope="col" class="px-6 py-2 text-left text-slate-800 uppercase font-montserrat">
+                                            {{ __('Updated') }}</th>
+                                        <th scope="col" class="px-6 py-2 text-left text-slate-800 uppercase font-montserrat">
+                                            {{ __('Action') }}</th>
                                     </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
                                     @forelse($records as $record)
                                         <tr>
-                                            <td class="px-2 py-4 whitespace-nowrap">
-                                                <div class="flex items-center text-sm text-gray-500">
-                                                    {{$record?->name}}
-                                                </div>
+                                            <td class="px-6 py-3 text-[15px] font-medium text-gray-800 tracking-normal font-inter">
+                                                {{$record?->name}}
                                             </td>
-                                            <td class="px-2 py-4 whitespace-nowrap">
-                                                <div class="flex items-center text-sm text-gray-500">
-                                                    {{$record->updated_at}}
-                                                </div>
+                                            <td class="px-6 py-3 text-[15px] font-medium text-gray-800 tracking-normal font-inter">
+                                                {{ \Carbon\Carbon::parse($record->updated_at)->diffForHumans() }}
                                             </td>
                                             @if($record?->name != "Super Admin")
-                                            <td class="px-2 py-4 whitespace-nowrap text-right text-sm font-medium text-gray-600">
+                                            <td class="px-2 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
                                                 <a class="text-indigo-600 hover:text-indigo-900 cursor-pointer" wire:click.prevent="editRole({{$record->id}})">{{ __('Edit') }}</a>
                                                 |
                                                 <a class="text-green-600 hover:text-green-800 cursor-pointer" wire:click.prevent="grantPermissions({{$record->id}})">{{ __('Permissions') }}</a>
@@ -92,6 +101,7 @@
                         {{ $records->links() }}
                     </div>
                 </div>
+            </div>
             </div>
         </div>
     </main>

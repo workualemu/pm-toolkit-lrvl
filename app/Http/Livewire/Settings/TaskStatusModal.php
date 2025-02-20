@@ -32,7 +32,7 @@ class TaskStatusModal extends Component
             $this->status = TaskStatus::find($status_id);
         }
         $this->hidrate();
-        $this->currentColor =  $this->status->color ?? 'blue';
+        // $this->currentColor =  $this->status->color ?? 'blue';
         $this->showModal = true;
     }
 
@@ -46,7 +46,7 @@ class TaskStatusModal extends Component
         $user = Auth::user();
         $this->status->user_id = $user->id;
         $this->status->project_id = $user->project_id;
-        $this->status->color =  $this->currentColor;
+        // $this->status->color =  $this->currentColor;
         $this->dehidrate();
         
         $this->status->save();

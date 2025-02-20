@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Role;
 use Livewire\Component;
 use App\Models\Role;
 use Livewire\WithPagination;
-
+use Livewire\Attributes\On;
 
 class Roles extends Component
 {
@@ -16,49 +16,55 @@ class Roles extends Component
     public $searchTerm;
     public $errorMessage = null;
     public $success = 0;
-
-    // protected $rules = [
-    //     'role.name' => 'required|min:2',
-    // ];
-
-    protected $listeners = ['refreshRoles' => '$refresh',
-                            'closeRolePermissions' => 'onCloseRolePermissions'
-    ];
+    public $roles;
 
     public function addNewRole()
     {
-        $this->emit('openRoleModal', null);
+        $this->dispatch('openRoleModal', null);
     }
 
     public function editRole($id)
     {
-        $this->emit('openRoleModal', $id);
+        $this->dispatch('openRoleModal', $id);
     }
 
     public function deleteRole($id)
     {
         $res=Role::where('id', $id)->delete();
-        $this->emit('refreshRoles');
+        $this->dispatch('$refresh');
     }
 
     public function filterRoles()
     {
-        $this->emit('refreshRoles');
+        $this->dispatch('$refresh');
     }
 
     public function grantPermissions(Role $role)
     {
         $this->selectedRoleID = $role->id;
         $this->showRolePermission = true;
-        $this->emit('refreshRoles');
+        $this->dispatch('$refresh');
     }
 
+    #[On('closeRolePermissions')]
     public function onCloseRolePermissions($success, $message)
     {
         $this->showRolePermission = false;
         $this->errorMessage = $message;
         $this->success = $success;
-        $this->emit('refreshRoles');
+        $this->dispatch('refreshRoles');
+    }
+
+    #[On('refreshRoles')]
+    public function onRefreshRoles()
+    {
+        $this->dispatch('$refresh');
+    }
+
+
+    public function mount()
+    {
+        $this->roles = Role::all();
     }
 
     public function render()
@@ -66,7 +72,7 @@ class Roles extends Component
         $records = Role::when($this->searchTerm, function ($query) {
             $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($this->searchTerm) . '%']);
         })->paginate(10);
-    
+
         return view('livewire.role.roles', [
             'records' => $records,
         ]);

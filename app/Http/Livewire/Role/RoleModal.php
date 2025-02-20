@@ -4,25 +4,25 @@ namespace App\Http\Livewire\Role;
 
 use Livewire\Component;
 use App\Models\Role;
+use Livewire\Attributes\On;
+use Livewire\Attributes\Rule as LivewireRule;
 
 class RoleModal extends Component
 {
     public $role;
     public $showModal = false;
 
-    protected $rules = [
-        'role.name' => 'required|min:2',
-    ];
+    #[LivewireRule('required|string|min:2')]
+    public $name;
 
-    protected $listeners = ['openRoleModal' => 'openRoleModal'];
-
+    #[On('openRoleModal')]
     public function openRoleModal($id)
     {
         $this->role = new Role();
         if($id > 0) {
             $this->role = Role::find($id);
         }
-        
+        $this->name = $this->role->name;
         // $this->roles = Role::where('name', '!=', 'Super Admin')->get();
         $this->showModal = true;
     }
@@ -35,6 +35,7 @@ class RoleModal extends Component
     public function store()
     {
         $this->validate();
+        $this->role->name = $this->name;
         try {
             $role = Role::updateOrCreate(
                 ['id' => $this->role->id],
@@ -45,7 +46,7 @@ class RoleModal extends Component
         }
 
         $this->showModal = false;
-        $this->emit('refreshRoles');
+        $this->dispatch('refreshRoles');
     }
 
     public function mount()

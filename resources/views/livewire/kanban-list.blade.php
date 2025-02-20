@@ -4,8 +4,8 @@
             <div class="flex justify-between">
                 <div class="p-2 flex space-x-2 flex-grow ">
                     <div class="pt-1">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9.85714 3H4.14286C3.51167 3 3 3.51167 3 4.14286V9.85714C3 10.4883 3.51167 11 4.14286 11H9.85714C10.4883 11 11 10.4883 11 9.85714V4.14286C11 3.51167 10.4883 3 9.85714 3Z" fill="{{ $status->color }}" />
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="{{ $status->color }}" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9.85714 3H4.14286C3.51167 3 3 3.51167 3 4.14286V9.85714C3 10.4883 3.51167 11 4.14286 11H9.85714C10.4883 11 11 10.4883 11 9.85714V4.14286C11 3.51167 10.4883 3 9.85714 3Z" />
                         <path d="M9.85714 12.8999H4.14286C3.51167 12.8999 3 13.4116 3 14.0428V19.757C3 20.3882 3.51167 20.8999 4.14286 20.8999H9.85714C10.4883 20.8999 11 20.3882 11 19.757V14.0428C11 13.4116 10.4883 12.8999 9.85714 12.8999Z" fill="{{ $status->color }}" fill-opacity="0.3" />
                     </svg>
                     </div>
@@ -13,7 +13,7 @@
                 </div>
                 <div class="p-2">
                     <div
-                        class="badge h-5  rounded-full bg-{{ $status->color }}-300 px-1.5 text-{{ $status->color }}-900 dark:bg-accent-light/15 dark:text-accent-light">
+                        class="badge h-5  rounded-full bg-{{ $status->color }}-300 px-1.5 text-black dark:bg-accent-light/15 dark:text-accent-light">
                         {{ count($tasks->where('task_status_id', $status->id)) }}
                     </div>
                 </div>

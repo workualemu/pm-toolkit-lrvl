@@ -12,6 +12,7 @@ class TaskStatuses extends Component
     use WithPagination;
 
     public $showStatusModal = false;
+    public $searchTerm;
 
     #[On('refreshStatus')]
     public function refreshStatus()
@@ -33,15 +34,28 @@ class TaskStatuses extends Component
     public function deleteConfirmed($id)
     {
         TaskStatus::findOrFail($id)->delete();
-        session()->flash('message', 'Status deleted successfully.');
+        $this->dispatch('$refresh');
+        
     }
 
     public function render()
     {
         $user = \Auth::user();
 
+        $searchTerm = '%' . strtolower($this->searchTerm) . '%';
+
+        $records = TaskStatus::where('project_id', auth()->user()->project_id) 
+            ->when($this->searchTerm, function ($query) use ($searchTerm) {
+                $query->where(function ($q) use ($searchTerm) {
+                    $q->whereRaw('LOWER(value) LIKE ?', [$searchTerm])
+                    ->orWhereRaw('LOWER(description) LIKE ?', [$searchTerm]);
+                });
+            })
+            ->orderBy('kanban_list_rank')
+            ->paginate(10);
+
         return view('livewire.settings.task-statuses', [
-            'statuses' => TaskStatus::where('project_id', $user->project_id)->orderby('kanban_list_rank')->paginate(10),
+            'statuses' => $records,
         ]);
 
     }

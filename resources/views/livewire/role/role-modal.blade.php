@@ -30,19 +30,13 @@
             </div>
             <div class="overflow-y-auto px-4 py-4 sm:px-5">
                 <div class="mt-4 space-y-4">
-                    <label class="block">
-                        <input type="text" wire:model.lazy='role.name'
-                            class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                            placeholder="Enter role"/>
-                    </label>
+                    <x-input label="Role" name="name" model="name" placeholder="Enter role" />
                 </div>
-
+                <div class="py-4"></div>
                 <div
-                    class="flex items-center justify-between border-t border-slate-150 py-3 px-4 dark:border-navy-600">
-                    <button wire:click="store()"
-                        class="btn min-w-[7rem] bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
-                        {{ __('Save') }}
-                    </button>
+                    class="flex items-center justify-between border-t border-slate-150 py-3  dark:border-navy-600">
+                    <x-button color="error" @click="showModal=false">{{ __('Close') }}</x-button>
+                    <x-button color="info" wire:click="store()">{{ __('Save') }}</x-button>
                 </div>
             </div>
         </div>

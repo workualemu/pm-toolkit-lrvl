@@ -13,6 +13,7 @@ class TemplateProjects extends Component
     public $templates = [];
     public $project = null;
     public $showTemplateModal = false;
+    public $searchTerm;
 
     protected $listeners = ['refreshTemplate' => '$refresh'
     ];
@@ -60,7 +61,27 @@ class TemplateProjects extends Component
 
     public function render()
     {
-        return view('livewire.settings.template-projects');
+        $searchTerm = '%' . strtolower($this->searchTerm) . '%';
+
+        $templates = Project::where('is_template', true) // Always apply `is_template = true` first
+        ->when($this->searchTerm, function ($query) use ($searchTerm) {
+            $query->where(function ($q) use ($searchTerm) {
+                $q->whereRaw('LOWER(title) LIKE ?', [$searchTerm])
+                  ->orWhereRaw('LOWER(description) LIKE ?', [$searchTerm]);
+            });
+        })
+        ->orderBy('start_date')
+        ->paginate(10);
+        $templates->getCollection()->transform(function ($template) {
+            $template->duration = ($template->start_date && $template->end_date)
+                ? $this->getDuration($template)
+                : '';
+            return $template;
+        });
+
+        return view('livewire.settings.template-projects', [
+            'records' => $templates
+        ]);
     }
 
     //------------------------------------------------------------

@@ -32,14 +32,14 @@ class RolePermissions extends Component
         if ($isSave) {
             if (!$this->role) {
                 $errorMessage = "Invalid role selection.";
-                $this->emit('closeRolePermissions', -1, $errorMessage);
+                $this->dispatch('closeRolePermissions', -1, $errorMessage);
                 return;
             }
 
             // Ensure grantedPermissions is an array before processing
             if (!is_array($this->grantedPermissions)) {
                 $errorMessage = "Invalid permissions data.";
-                $this->emit('closeRolePermissions', -1, $errorMessage);
+                $this->dispatch('closeRolePermissions', -1, $errorMessage);
                 return;
             }
 
@@ -62,13 +62,13 @@ class RolePermissions extends Component
                     }
                 }
 
-                $this->emit('closeRolePermissions', 1, null);
+                $this->dispatch('closeRolePermissions', 1, null);
             } catch (\Exception $e) {
                 $errorMessage = "An error occurred while updating permissions.";
-                $this->emit('closeRolePermissions', -1, $errorMessage);
+                $this->dispatch('closeRolePermissions', -1, $errorMessage);
             }
         } else {
-            $this->emit('closeRolePermissions', 0, null);
+            $this->dispatch('closeRolePermissions', 0, null);
         }
     }
 
