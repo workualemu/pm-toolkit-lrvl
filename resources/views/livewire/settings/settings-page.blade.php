@@ -14,25 +14,13 @@
             @livewire('settings.task-statuses')
         @elseif($page_type == 'TEMPLATE')
             @livewire('settings.template-projects')
+        @elseif($page_type == 'TAG')
+            @livewire('settings.tags')
+        @elseif($page_type == 'PRIORITY')
+            @livewire('settings.prioritys')
+        @elseif($page_type == 'REPORT')
+            @livewire('settings.reports-admin')
         @endif
-        
-        <div class="flex items-center justify-between space-x-2 pl-2 pr-2 transition-all duration-[.25s]">
-            @if($page_type == 'REPORT')
-                <div class="w-full">
-                    @livewire('settings.reports-admin')
-                </div>
-            @elseif($page_type == 'TAG')
-                <div class="w-full">
-                    @livewire('settings.tags')
-                </div>
-            @elseif($page_type == 'PRIORITY')
-                <div class="w-full">
-                    @livewire('settings.prioritys')
-                </div>
-            
-                
-            @endif
-        </div>
     @endif
     </main>
 </div>

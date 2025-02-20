@@ -8,7 +8,7 @@
     <livewire:settings.template-projects-modal />
     
     <div class="flex-grow flex flex-col">          
-        @livewire('reports-page', ['project' => $project, 'title' => $page_title, 'type' => $page_type])
+        @livewire('settings.settings-page', ['project' => $project, 'title' => $page_title, 'type' => $page_type])
     </div>
 
 

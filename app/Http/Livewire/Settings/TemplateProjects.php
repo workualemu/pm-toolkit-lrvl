@@ -12,7 +12,6 @@ class TemplateProjects extends Component
 {
     public $templates = [];
     public $project = null;
-    public $showTemplateModal = false;
     public $searchTerm;
 
     protected $listeners = ['refreshTemplate' => '$refresh'
@@ -55,7 +54,7 @@ class TemplateProjects extends Component
     public function deleteConfirmed($id)
     {
         Project::findOrFail($id)->delete();
-        session()->flash('message', 'Template deleted successfully.');
+        $this->dispatch('$refresh');
     }
 
 

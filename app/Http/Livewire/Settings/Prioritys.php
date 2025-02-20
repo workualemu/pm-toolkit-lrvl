@@ -4,12 +4,16 @@ namespace App\Http\Livewire\Settings;
 
 use Livewire\Component;
 use App\Models\TaskPriority;
+use Livewire\WithPagination;
 use Livewire\Attributes\On;
 
 class Prioritys extends Component
 {
+    use WithPagination;
+
     public $prioritys = [];
     public $showPriorityModal = false;
+    public $searchTerm;
 
     #[On('refreshPriority')]
     public function refreshPriority()
@@ -31,14 +35,24 @@ class Prioritys extends Component
     public function deleteConfirmed($id)
     {
         TaskPriority::findOrFail($id)->delete();
-        session()->flash('message', 'Priority deleted successfully.');
+        $this->dispatch('$refresh');
     }
 
     public function render()
     {
-        $user = \Auth::user();
+        $searchTerm = '%' . strtolower($this->searchTerm) . '%';
 
-        $this->prioritys = TaskPriority::where('project_id', $user->project_id)->get();
-        return view('livewire.settings.prioritys');
+        $records = TaskPriority::where('project_id', auth()->user()->project_id) 
+            ->when($this->searchTerm, function ($query) use ($searchTerm) {
+                $query->where(function ($q) use ($searchTerm) {
+                    $q->whereRaw('LOWER(value) LIKE ?', [$searchTerm])
+                    ->orWhereRaw('LOWER(description) LIKE ?', [$searchTerm]);
+                });
+            })
+            ->paginate(10);
+
+        return view('livewire.settings.prioritys', [
+            'records' => $records,
+        ]);
     }
 }

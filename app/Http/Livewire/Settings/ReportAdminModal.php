@@ -11,7 +11,7 @@ use Livewire\Attributes\Rule as LivewireRule;
 class ReportAdminModal extends Component
 {
     public $report;
-    public $showReportModal = false;
+    public $showModal = false;
 
     #[LivewireRule('required|string|min:5')] 
     public $title;
@@ -42,12 +42,12 @@ class ReportAdminModal extends Component
             $this->report = Report::find($report_id);
         }
         $this->hidrate();
-        $this->showReportModal = true;
+        $this->showModal = true;
     }
 
     public function closeModal()
     {
-        $this->showReportModal = false;
+        $this->showModal = false;
     }
 
     public function store()
@@ -68,7 +68,7 @@ class ReportAdminModal extends Component
         // $this->report->refresh();
 
         $this->dispatch('refreshReport');
-        $this->showReportModal = false;
+        $this->showModal = false;
     }
 
     public function mount()

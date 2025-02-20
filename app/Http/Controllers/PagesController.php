@@ -74,7 +74,7 @@ class PagesController extends Controller
 
         $page_title = "Reports";
         $page_type = "REPORT";
-        return view('pages/reports', compact('project', 'page_title', 'page_type' ));
+        return view('pages/settings', compact('project', 'page_title', 'page_type' ));
     }
 
     public function getReportsUse()
@@ -83,7 +83,7 @@ class PagesController extends Controller
 
         $projectId = $user->project_id;
         $project = Project::find($projectId);
-        return view('pages/reports-use', compact('project'));
+        return view('pages/settings-use', compact('project'));
     }
 
     public function getReportViewer($report_id, $params)
@@ -103,7 +103,7 @@ class PagesController extends Controller
         $project = Project::find($projectId);
         $page_title = "Tags";
         $page_type = "TAG";
-        return view('pages/reports', compact('project', 'page_title', 'page_type' ));
+        return view('pages/settings', compact('project', 'page_title', 'page_type' ));
     }
 
     public function getPrioritys()
@@ -113,7 +113,7 @@ class PagesController extends Controller
         $project = Project::find($projectId);
         $page_title = "Priorities";
         $page_type = "PRIORITY";
-        return view('pages/reports', compact('project', 'page_title', 'page_type' ));
+        return view('pages/settings', compact('project', 'page_title', 'page_type' ));
     }
 
     public function getTemplateProjects()
@@ -124,7 +124,7 @@ class PagesController extends Controller
 
         $page_title = "Project templates";
         $page_type = "TEMPLATE";
-        return view('pages/reports', compact('project', 'page_title', 'page_type' ));
+        return view('pages/settings', compact('project', 'page_title', 'page_type' ));
         
     }
 
@@ -163,7 +163,7 @@ class PagesController extends Controller
         $project = Project::find($projectId);
         $page_title = "Task statuses";
         $page_type = "STATUS";
-        return view('pages/reports', compact('project', 'page_title', 'page_type' ));
+        return view('pages/settings', compact('project', 'page_title', 'page_type' ));
     }
 
     public function projectUsers($project_id)

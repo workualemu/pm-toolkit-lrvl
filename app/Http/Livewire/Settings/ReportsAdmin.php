@@ -8,9 +8,7 @@ use Livewire\Attributes\On;
 
 class ReportsAdmin extends Component
 {
-    // public $reports = [];
-    public $selectedReportId;
-    public $showReportModal = false;
+    public $searchTerm;
 
     #[On('refreshReport')]
     public function refreshReport()
@@ -28,25 +26,28 @@ class ReportsAdmin extends Component
         $this->dispatch('openReportModal', $report_id);
     }
 
-    public function updateParamColumn($report_id)
-    {
-        $this->selectedReportId = $report_id;
-        $this->dispatch('renderReportParam', $report_id);
-        $this->dispatch('renderReportColumn', $report_id);
-    }
-
     #[On('deleteConfirmed')] 
     public function deleteConfirmed($id)
     {
         Report::findOrFail($id)->delete();
-        session()->flash('message', 'Report deleted successfully.');
+        $this->dispatch('$refresh');
     }
 
     public function render()
     {
-        $user = \Auth::user();
+        $searchTerm = '%' . strtolower($this->searchTerm) . '%';
+
+        $records = Report::where('project_id', auth()->user()->project_id) 
+            ->when($this->searchTerm, function ($query) use ($searchTerm) {
+                $query->where(function ($q) use ($searchTerm) {
+                    $q->whereRaw('LOWER(title) LIKE ?', [$searchTerm])
+                    ->orWhereRaw('LOWER(description) LIKE ?', [$searchTerm]);
+                });
+            })
+            ->paginate(10);
+
         return view('livewire.settings.reports-admin', [
-            'reports' => Report::where('project_id', $user->project_id)->paginate(10),
+            'reports' => $records,
         ]);
     }
 }

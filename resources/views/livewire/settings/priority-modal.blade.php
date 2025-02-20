@@ -1,7 +1,4 @@
-<div 
-    x-data="appPriority()"  
-    x-init="[initColor()]"
-    >
+<div x-data="{showModal: @entangle('showModal')}">
     <div class="flex flex-col items-center justify-center h-screen bg-slate-200"
             x-on:drop="isDroppingFile = false"
             x-on:drop.prevent="handleFileDrop($event)"
@@ -34,29 +31,4 @@
             </div>
         </div>
     </div>
-    <script>
-  function appPriority() {
-      return {
-        showModal: @entangle('showModal'), 
-        colors: ['gray', 'red', 'pink', 'purple', 'indigo', 'blue', 'yellow', 'teal', 'green'],
-        currentColor: @entangle('currentColor'),
-        iconColor: '',
-        isOpen: false,
-        initColor () {
-          this.setIconBlack()
-        },
-        setIconWhite () {
-          this.iconColor = 'text-white'
-        },
-        setIconBlack () {
-          this.iconColor = 'text-black'
-        },
-        selectColor (color) {
-          this.currentColor = color
-          this.setIconWhite()
-        }
-      }
-  }
-</script>
-
 </div>

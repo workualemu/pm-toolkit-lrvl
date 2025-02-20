@@ -31,7 +31,6 @@ class PriorityModal extends Component
         }
         $this->hidrate();
         
-        // $this->currentColor =  $this->priority->color ?? 'blue';
         $this->showModal = true;
     }
 
@@ -46,10 +45,8 @@ class PriorityModal extends Component
         $user = Auth::user();
         $this->priority->user_id = $user->id;
         $this->priority->project_id = $user->project_id;
-        // $this->priority->color = $this->currentColor;
 
         $this->priority->save();
-        // $this->priority->refresh();
 
         $this->dispatch('refreshPriority');
         $this->showModal = false;

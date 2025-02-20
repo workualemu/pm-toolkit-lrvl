@@ -24,6 +24,9 @@
                                             {{ __('Kanban list rank') }}
                                         </th>
                                         <th scope="col" class="px-6 py-2 text-left text-slate-800 uppercase font-montserrat">
+                                            {{ __('Updated') }}
+                                        </th>
+                                        <th scope="col" class="px-6 py-2 text-left text-slate-800 uppercase font-montserrat">
                                             {{ __('Action') }}
                                         </th>
                                     </tr>
@@ -40,7 +43,9 @@
                                             <td class="px-6 py-3 text-[15px] font-medium text-gray-800 tracking-normal font-inter">
                                                 {{$status->kanban_list_rank}}
                                             </td>
-
+                                            <td class="px-6 py-3 text-[15px] font-medium text-gray-800 tracking-normal font-inter">
+                                                {{ \Carbon\Carbon::parse($status->updated_at)->diffForHumans() }}
+                                            </td>
                                             <td class="px-6 py-3 text-[15px] font-medium text-gray-800 tracking-normal font-inter">
                                                 <div class="flex space-x-2">
                                                     <button wire:click="editStatus({{$status->id}})" 

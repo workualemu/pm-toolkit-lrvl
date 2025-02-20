@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Settings;
 
 use Livewire\Component;
 use App\Models\Project;
@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Facades\Excel;
 use ExcelReport;
 
-class ReportsPage extends Component
+class SettingsPage extends Component
 {
     public $project;
     public $page_title;
@@ -62,6 +62,6 @@ class ReportsPage extends Component
 
     public function render()
     {
-        return view('livewire.reports-page');
+        return view('livewire.settings.settings-page');
     }
 }

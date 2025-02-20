@@ -12,8 +12,6 @@ class TagModal extends Component
 {
     public $tag;
     public $showModal = false;
-    public $colorSelected = 'success';
-    public $currentColor;
 
     #[LivewireRule('required|string|min:2')] 
     public $label;
@@ -21,8 +19,7 @@ class TagModal extends Component
     public $description;
     public $color;
 
-    protected $listeners = ['openTagModal' => 'openTagModal'];
-
+    #[On('openTagModal')]
     public function openTagModal($tag_id)
     {
         $this->tag = new Tag();
@@ -30,7 +27,6 @@ class TagModal extends Component
             $this->tag = Tag::find($tag_id);
         }
         $this->hidrate();
-        $this->currentColor =  $this->tag->color ?? 'blue';
         $this->showModal = true;
     }
 
@@ -43,11 +39,9 @@ class TagModal extends Component
     {
         $user = Auth::user();
         $this->tag->user_id = $user->id;
+        $this->tag->project_id = $user->project_id;
 
-        $this->tag->save();
-        $this->tag->refresh();
         $this->dehidrate();
-        $this->tag->color =  $this->currentColor;
         $this->tag->save();
         $this->tag->refresh();
 

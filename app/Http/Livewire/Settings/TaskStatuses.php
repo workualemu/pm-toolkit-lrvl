@@ -11,7 +11,6 @@ class TaskStatuses extends Component
 {
     use WithPagination;
 
-    public $showStatusModal = false;
     public $searchTerm;
 
     #[On('refreshStatus')]
@@ -40,8 +39,6 @@ class TaskStatuses extends Component
 
     public function render()
     {
-        $user = \Auth::user();
-
         $searchTerm = '%' . strtolower($this->searchTerm) . '%';
 
         $records = TaskStatus::where('project_id', auth()->user()->project_id) 

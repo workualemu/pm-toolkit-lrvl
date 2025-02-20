@@ -11,7 +11,7 @@ class Tags extends Component
 {
     use WithPagination;
 
-    public $showTagModal = false;
+    public $searchTerm;
 
     #[On('refreshTag')]
     public function refreshTag()
@@ -33,14 +33,24 @@ class Tags extends Component
     public function deleteConfirmed($id)
     {
         Tag::findOrFail($id)->delete();
-        session()->flash('message', 'Tag deleted successfully.');
+        $this->dispatch('$refresh');
     }
 
     public function render()
     {
-        $user = \Auth::user();
+        $searchTerm = '%' . strtolower($this->searchTerm) . '%';
+
+        $records = Tag::where('project_id', auth()->user()->project_id) 
+            ->when($this->searchTerm, function ($query) use ($searchTerm) {
+                $query->where(function ($q) use ($searchTerm) {
+                    $q->whereRaw('LOWER(label) LIKE ?', [$searchTerm])
+                    ->orWhereRaw('LOWER(description) LIKE ?', [$searchTerm]);
+                });
+            })
+            ->paginate(10);
+
         return view('livewire.settings.tags', [
-            'tags' => Tag::where('project_id', $user->project_id)->paginate(10),
+            'tags' => $records,
         ]);
     }
 }
