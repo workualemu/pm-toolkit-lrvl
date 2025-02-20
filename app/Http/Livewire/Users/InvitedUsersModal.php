@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Users;
 
 use Livewire\Component;
 use App\Models\Invitation;
@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Mail;
 use Spatie\Permission\Models\Role;
 use App\Mail\InvitationMail;
+use Livewire\Attributes\Rule as LivewireRule;
+use Livewire\Attributes\On;
 
 class InvitedUsersModal extends Component
 {
@@ -17,13 +19,11 @@ class InvitedUsersModal extends Component
     public $roles =[];
     // public $role;
 
-    protected $rules = [
-        'invitation.email' => 'required|min:2',
-        'invitation.role' => '',
-    ];
+    #[LivewireRule('required|string|min:2')]
+    public $email;
+    public $role;
 
-    protected $listeners = ['openInvitationModal' => 'openInvitationModal'];
-
+    #[On('openInvitationModal')]
     public function openInvitationModal($invitation_id)
     {
         $this->invitation = new Invitation();
@@ -31,6 +31,8 @@ class InvitedUsersModal extends Component
             $this->invitation = Invitation::find($invitation_id);
         }
         
+        $this->email = $this->invitation->email;
+        $this->role = $this->invitation->role;
         $this->roles = Role::where('name', '!=', 'Super Admin')->get();
         $this->showModal = true;
     }
@@ -44,6 +46,8 @@ class InvitedUsersModal extends Component
     public function submit()
     {
         $this->validate();
+        $this->invitation->email = $this->email;
+        $this->invitation->role = $this->role;
         try {
             $expiresAt = now()->addHours(72);
             $invitation = Invitation::create([
@@ -61,7 +65,7 @@ class InvitedUsersModal extends Component
 
         
         $this->showModal = false;
-        $this->emit('refreshInvitation');
+        $this->dispatch('refreshInvitation');
     }
 
     public function resendEmail()
@@ -80,7 +84,7 @@ class InvitedUsersModal extends Component
             // $this->addError('email', $exception->getMessage());
         }
         $this->showModal = false;
-        $this->emit('refreshInvitation');
+        $this->dispatch('refreshInvitation');
     }
 
     public function mount()
@@ -90,6 +94,6 @@ class InvitedUsersModal extends Component
 
     public function render()
     {
-        return view('livewire.invited-users-modal');
+        return view('livewire.users.invited-users-modal');
     }
 }

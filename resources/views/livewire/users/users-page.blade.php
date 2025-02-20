@@ -25,15 +25,11 @@
         <div class="grid grid-cols-1 gap-4">
             @if($page_type == 'INVITATION')
                 <div class="col-span-1">
-                    @livewire('invited-users')
+                    @livewire('users.invited-users')
                 </div>
             @elseif($page_type == 'USER')
                 <div class="col-span-1">
-                    @livewire('registered-users')
-                </div>
-            @elseif($page_type == 'TEAM')
-                <div class="col-span-1">
-                    @livewire('teams')
+                    @livewire('users.registered-users')
                 </div>
             @endif
         </div>

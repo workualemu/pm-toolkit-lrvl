@@ -17,7 +17,7 @@
                 <div class="flex w-full flex-col bg-white dark:bg-navy-700">
                     <div class="flex h-14 items-center justify-between bg-slate-150 p-4 dark:bg-navy-800">
                         <h3 class="text-base font-medium text-slate-700 dark:text-navy-100">
-                            User invitation
+                            {{ __('User invitation') }}
                         </h3>
                     </div>
 
@@ -26,14 +26,14 @@
                             <div class="is-scrollbar-hidden flex grow flex-col space-y-4 overflow-y-auto p-4">
                                 <label class="block">
                                     <span>Email address</span>
-                                    <input id="value" wire:model.defer="invitation.email"
+                                    <input id="value" wire:model.defer="email"
                                         class="form-input mt-1.5 h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                         placeholder="Enter email address" type="email" />
                                 </label>
                                 <label class="block">
                                     <span>Role:</span>
                                     <select x-init="$el._x_tom = new Tom($el)" class="mt-1.5 w-full" placeholder="Select user"
-                                        wire:model.defer="invitation.role" 
+                                        wire:model.defer="role" 
                                         autocomplete="off">
                                         <option value="">Select role</option>
                                         @foreach($roles as $key=>$role)
@@ -101,15 +101,15 @@
                         class="flex items-center justify-between border-t border-slate-150 py-3 px-4 dark:border-navy-600">
                         <button wire:click="submit()"
                             class="btn min-w-[7rem] bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
-                            Invite
+                            {{ __('Invite') }}
                         </button>
                         <button wire:click="resendEmail()"
                             class="btn min-w-[7rem] bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
-                            Resend email
+                            {{ __('Resend email') }}
                         </button>
                         <button @click="showModal=false"
                             class="btn min-w-[7rem] bg-error font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
-                            Cancel
+                            {{ __('Cancel') }}
                         </button>
                     </div>
                     

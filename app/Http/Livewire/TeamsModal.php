@@ -12,6 +12,10 @@ class TeamsModal extends Component
     public $showModal = false;
     public $readOnly = '';
 
+    public $name;
+    public $description;
+    public $status;
+
     protected $rules = [
         'team.name' => 'required|min:2',
         'team.created_by' => 'required',

@@ -32,7 +32,7 @@
                 <div class="mt-4 space-y-4">
                     <label class="block">
                         <span>{{ __('Name') }}:</span>
-                        <input {{$readOnly}} type="text" wire:model.lazy='team.name'
+                        <input {{$readOnly}} type="text" wire:model.lazy='name'
                             class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                             placeholder="Enter name"/>
                     </label>
@@ -41,7 +41,7 @@
                 <div class="mt-4 space-y-4">
                     <label class="block">
                         <span>{{ __('Description') }}:</span>
-                        <textarea {{$readOnly}} wire:model.lazy='team.description' 
+                        <textarea {{$readOnly}} wire:model.lazy='description' 
                             rows="4" placeholder="Enter description"
                             class="form-textarea mt-1.5 w-full resize-none rounded-lg border border-slate-300 bg-transparent p-2.5 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"></textarea>
                     </label>
@@ -53,7 +53,7 @@
                             <span>{{ __('Status') }}:</span>
                             <select {{$readOnly}} x-init="$el._x_tom = new Tom($el)" 
                                 class="mt-1.5 w-full" placeholder="Select team status"
-                                wire:model.lazy="team.status" 
+                                wire:model.lazy="status" 
                                 autocomplete="off">
                                 <option value="ACTIVE">{{ __('Active') }}</option>
                                 <option value="SUSPENDED">{{ __('Suspended') }}</option>

@@ -1,7 +1,7 @@
 <x-app-layout title="Reports" is-header-blur="true" sidebarToggle="false">
     <!-- Main Content Wrapper -->
     
-    <livewire:invited-users-modal />
+    <livewire:users.invited-users-modal />
     <livewire:teams-modal />
     <div class="sidebar print:hidden">
         <div class="sidebar-panel  ml-[-160px]">
@@ -26,11 +26,11 @@
 
         @if($page_type == 'USER')
             <div class="col-span-1">
-                @livewire('registered-users')
+                @livewire('users.registered-users')
             </div>
         @elseif($page_type == 'TEAM')
             <div class="col-span-1">
-            @livewire('users-page', ['title' => $page_title, 'type' => $page_type])
+            @livewire('users.users-page', ['title' => $page_title, 'type' => $page_type])
             </div>
         @endif
     </div>

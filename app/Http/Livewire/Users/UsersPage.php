@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Users;
 
 use Livewire\Component;
 use App\Models\Project;
@@ -25,6 +25,6 @@ class UsersPage extends Component
 
     public function render()
     {
-        return view('livewire.users-page');
+        return view('livewire.users.users-page');
     }
 }
