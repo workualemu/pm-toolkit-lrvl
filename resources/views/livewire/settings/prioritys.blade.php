@@ -1,4 +1,5 @@
 <div>
+    <x-status-message/>
     <x-search-header title="Task Priorities" searchModel="searchTerm" />
     <div class="flex items-center justify-between space-x-2 pl-2 pr-2 transition-all duration-[.25s]">
         <div class="w-full">

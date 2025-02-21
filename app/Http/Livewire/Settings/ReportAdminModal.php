@@ -13,7 +13,7 @@ class ReportAdminModal extends Component
     public $report;
     public $showModal = false;
 
-    #[LivewireRule('required|string|min:5')] 
+    #[LivewireRule('required|string|min:2')] 
     public $title;
 
     public $user_id;
@@ -52,21 +52,25 @@ class ReportAdminModal extends Component
 
     public function store()
     {
-        $user = Auth::user();
-        $this->report->user_id = $user->id;
+        $this->validate();
+        try{
+            $user = Auth::user();
+            $this->report->user_id = $user->id;
 
-        if(!$user->project_id){
-            return "Invalid project";
+            if(!$user->project_id){
+                return "Invalid project";
+            }
+            $this->dehidrate();
+            $this->report->project_id = $user->project_id;
+            $this->report->published = $this->report->published ?? false;
+            $this->report->show_print_user = $this->report->show_print_user ?? false;
+            $this->report->show_meta = $this->report->show_meta ?? false;
+            $this->report->show_print_date = $this->report->show_print_date ?? false;
+            $this->report->save();
+            $this->dispatch('status-message', success: true, message: 'Report has been saved successfully!');
+        } catch (Exception $exception) {
+            $this->dispatch('status-message', success: false, message: $exception->getMessage());
         }
-        $this->dehidrate();
-        $this->report->project_id = $user->project_id;
-        $this->report->published = $this->report->published ?? false;
-        $this->report->show_print_user = $this->report->show_print_user ?? false;
-        $this->report->show_meta = $this->report->show_meta ?? false;
-        $this->report->show_print_date = $this->report->show_print_date ?? false;
-        $this->report->save();
-        // $this->report->refresh();
-
         $this->dispatch('refreshReport');
         $this->showModal = false;
     }

@@ -11,8 +11,6 @@ class Prioritys extends Component
 {
     use WithPagination;
 
-    public $prioritys = [];
-    public $showPriorityModal = false;
     public $searchTerm;
 
     #[On('refreshPriority')]
@@ -34,15 +32,26 @@ class Prioritys extends Component
     #[On('deleteConfirmed')] 
     public function deleteConfirmed($id)
     {
-        TaskPriority::findOrFail($id)->delete();
+        try{
+            $selectedItem = TaskPriority::find($id);
+            if($selectedItem->delete()){
+                $this->dispatch('status-message', success: true, message: 'Priority has been deleted successfully!');
+            } else {
+                $this->dispatch('status-message', success: false, message: 'Priority cannot be deleted!');
+            }
+            $selectedItem->refresh();
+        } catch (Exception $exception) {
+            $this->dispatch('status-message', success: false, message: $exception->getMessage());
+        }
         $this->dispatch('$refresh');
     }
 
     public function render()
     {
+        logger('render');
         $searchTerm = '%' . strtolower($this->searchTerm) . '%';
 
-        $records = TaskPriority::where('project_id', auth()->user()->project_id) 
+        $priorities = TaskPriority::where('project_id', auth()->user()->project_id) 
             ->when($this->searchTerm, function ($query) use ($searchTerm) {
                 $query->where(function ($q) use ($searchTerm) {
                     $q->whereRaw('LOWER(value) LIKE ?', [$searchTerm])
@@ -51,8 +60,12 @@ class Prioritys extends Component
             })
             ->paginate(10);
 
+        if ($priorities->isEmpty() && $this->page > 1) {
+            $this->resetPage(); 
+        }
+
         return view('livewire.settings.prioritys', [
-            'records' => $records,
+            'records' => $priorities,
         ]);
     }
 }

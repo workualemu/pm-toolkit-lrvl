@@ -29,7 +29,18 @@ class ReportsAdmin extends Component
     #[On('deleteConfirmed')] 
     public function deleteConfirmed($id)
     {
-        Report::findOrFail($id)->delete();
+        try{
+            $selectedReport = Report::findOrFail($id);
+            if($selectedReport->delete()){
+                $this->dispatch('status-message', success: true, message: 'Report has been deleted successfully!');
+            } else {
+                $this->dispatch('status-message', success: false, message: 'Report cannot be deleted!');
+            }
+            $selectedReport->refresh();
+            
+        } catch (Exception $exception) {
+            $this->dispatch('status-message', success: false, message: $exception->getMessage());
+        }
         $this->dispatch('$refresh');
     }
 
@@ -45,6 +56,10 @@ class ReportsAdmin extends Component
                 });
             })
             ->paginate(10);
+
+        if ($records->isEmpty() && $this->page > 1) {
+            $this->resetPage(); 
+        }
 
         return view('livewire.settings.reports-admin', [
             'reports' => $records,

@@ -15,8 +15,8 @@
                 <div class="flex w-full flex-col bg-white dark:bg-navy-700">
                     <x-dialog-header title="{{ __('Priority') }}" />
                     <div class="is-scrollbar-hidden flex grow flex-col space-y-4 overflow-y-auto p-4">
-                        <x-input label="{{ __('Priority') }}" name="value" model="value" placeholder="Enter priority" />
-                        <x-textarea label="{{ __('Description') }}" name="description" model="description" placeholder="Enter description" />
+                        <x-input label="{{ __('Priority') }}" name="value" model="value" placeholder="Enter priority" required />
+                        <x-textarea label="{{ __('Description') }}" name="description" model="description" placeholder="Enter description" required/>
                         <x-color-picker name="color" model="color" />
                     </div>
                     <div class="py-4"></div>

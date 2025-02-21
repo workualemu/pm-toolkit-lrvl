@@ -15,7 +15,7 @@ class Roles extends Component
     public $showRolePermission = false;
     public $searchTerm;
     public $errorMessage = null;
-    public $success = 0;
+    public $success = true;
     public $roles;
 
     public function addNewRole()

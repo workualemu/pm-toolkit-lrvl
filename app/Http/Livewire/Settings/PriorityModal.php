@@ -19,6 +19,7 @@ class PriorityModal extends Component
     public $value;
 
     public $user_id;
+    #[LivewireRule('required|min:2')]
     public $description;
     public $color;
 
@@ -26,6 +27,7 @@ class PriorityModal extends Component
     public function openPriorityModal($priority_id)
     {
         $this->priority = new TaskPriority();
+        $this->priority->color = 'blue';
         if($priority_id > 0) {
             $this->priority = TaskPriority::find($priority_id);
         }
@@ -41,13 +43,18 @@ class PriorityModal extends Component
 
     public function store()
     {
-        $this->dehidrate();
-        $user = Auth::user();
-        $this->priority->user_id = $user->id;
-        $this->priority->project_id = $user->project_id;
+        try {
+            $this->validate(); 
+            $this->dehidrate();
+            $user = Auth::user();
+            $this->priority->user_id = $user->id;
+            $this->priority->project_id = $user->project_id;
 
-        $this->priority->save();
-
+            $this->priority->save();
+            $this->dispatch('status-message', success: true, message: 'Priority has been saved successfully!');
+        } catch (Exception $exception) {
+            $this->dispatch('status-message', success: false, message: $exception->getMessage());
+        }
         $this->dispatch('refreshPriority');
         $this->showModal = false;
     }
@@ -55,6 +62,7 @@ class PriorityModal extends Component
     public function mount()
     {
         $this->priority = new TaskPriority();
+        $this->priority->color = 'blue';
     }
 
     public function render()

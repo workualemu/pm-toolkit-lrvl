@@ -23,7 +23,6 @@ class RoleModal extends Component
             $this->role = Role::find($id);
         }
         $this->name = $this->role->name;
-        // $this->roles = Role::where('name', '!=', 'Super Admin')->get();
         $this->showModal = true;
     }
 
@@ -40,9 +39,15 @@ class RoleModal extends Component
             $role = Role::updateOrCreate(
                 ['id' => $this->role->id],
                 ['name' => $this->role->name, 'guard_name'=>'web']);
-
+            session()->put('status', [
+                'success' => false,
+                'message' =>'Role has been saved successfully!'
+            ]);
         } catch (Exception $exception) {
-            $this->addError('Role', $exception->getMessage());
+            session()->put('status', [
+                'success' => false,
+                'message' => $exception->getMessage()
+            ]);
         }
 
         $this->showModal = false;

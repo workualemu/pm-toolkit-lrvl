@@ -36,12 +36,12 @@
 
                         <!-- Scrollable Middle Section -->
                         <div class="flex-grow overflow-y-auto p-4 space-y-4 is-scrollbar-hidden">
-                            <x-input label="{{ __('Title') }}" name="title" model="title" placeholder="Enter report title" />
+                            <x-input label="{{ __('Title') }}" name="title" model="title" placeholder="Enter report title" required />
                             <x-textarea label="{{ __('Description') }}" name="description" model="description" placeholder="Enter description" />
-                            <x-textarea label="{{ __('Select clause') }}" name="select_clause" model="select_clause" placeholder="Enter select clause" />
-                            <x-textarea label="{{ __('From clause') }}" name="from_clause" model="from_clause" placeholder="Enter from clause" />
+                            <x-textarea label="{{ __('Select clause') }}" name="select_clause" model="select_clause" placeholder="Enter select clause" required />
+                            <x-textarea label="{{ __('From clause') }}" name="from_clause" model="from_clause" placeholder="Enter from clause" required />
                             <x-textarea label="{{ __('Where clause') }}" name="where_clause" model="where_clause" placeholder="Enter where clause" />
-                            <x-textarea label="{{ __('Group clause') }}" name="groupby_clause" model="group_clause" placeholder="Enter group clause" />
+                            <x-textarea label="{{ __('Group clause') }}" name="groupby_clause" model="groupby_clause" placeholder="Enter group clause" />
                             <x-textarea label="{{ __('Having clause') }}" name="having_clause" model="having_clause" placeholder="Enter having clause" />
                             <x-textarea label="{{ __('Order clause') }}" name="order_clause" model="order_clause" placeholder="Enter order clause" />
                             <x-check-box label="{{ __('Published') }}" id="published" model="published"/>
