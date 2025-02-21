@@ -1,5 +1,7 @@
 <div>
     <main class="main-content w-12/12">
+    <x-status-message/>
+    <x-app-partials.delete-confirmation />
     @if($project == null)
         <div
             class="flex items-center justify-between space-x-2 px-2 py-5 transition-all duration-[.25s]">

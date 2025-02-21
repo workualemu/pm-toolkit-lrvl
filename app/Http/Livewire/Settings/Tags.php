@@ -32,7 +32,17 @@ class Tags extends Component
     #[On('deleteConfirmed')] 
     public function deleteConfirmed($id)
     {
-        Tag::findOrFail($id)->delete();
+        try{
+            $selectedItem = Tag::find($id);
+            if($selectedItem->delete()){
+                $this->dispatch('status-message', success: true, message: 'Tag has been deleted successfully!');
+            } else {
+                $this->dispatch('status-message', success: false, message: 'Tag cannot be deleted!');
+            }
+            $selectedItem->refresh();
+        } catch (Exception $exception) {
+            $this->dispatch('status-message', success: false, message: $exception->getMessage());
+        }
         $this->dispatch('$refresh');
     }
 
@@ -48,6 +58,10 @@ class Tags extends Component
                 });
             })
             ->paginate(10);
+
+        if ($records->isEmpty() && $this->page > 1) {
+            $this->resetPage(); 
+        }
 
         return view('livewire.settings.tags', [
             'tags' => $records,

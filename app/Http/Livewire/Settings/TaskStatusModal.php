@@ -20,6 +20,8 @@ class TaskStatusModal extends Component
     #[LivewireRule('required|string|min:2')] 
     public $value;
     public $user_id;
+
+    #[LivewireRule('required|string|min:2')]
     public $description;
     public $kanban_list_rank;
     public $color;
@@ -28,11 +30,12 @@ class TaskStatusModal extends Component
     public function openStatusModal($status_id)
     {
         $this->status = new TaskStatus();
+        $this->status->color = 'blue';
         if($status_id > 0) {
             $this->status = TaskStatus::find($status_id);
         }
         $this->hidrate();
-        // $this->currentColor =  $this->status->color ?? 'blue';
+        
         $this->showModal = true;
     }
 
@@ -43,17 +46,22 @@ class TaskStatusModal extends Component
 
     public function store()
     {
-        $user = Auth::user();
-        $this->status->user_id = $user->id;
-        $this->status->project_id = $user->project_id;
-        // $this->status->color =  $this->currentColor;
-        $this->dehidrate();
+        try {
+            $this->validate();
+
+            $user = Auth::user();
+            $this->status->user_id = $user->id;
+            $this->status->project_id = $user->project_id;
+            $this->dehidrate();
+            
+            $this->status->save();
+            $this->dispatch('status-message', success: true, message: 'Priority has been saved successfully!');
+        } catch (Exception $exception) {
+            $this->dispatch('status-message', success: false, message: $exception->getMessage());
+        }
         
-        $this->status->save();
-        // $this->status->refresh();
         $this->dispatch('refreshStatus');
         $this->showModal = false;
-
     }
 
     public function mount()

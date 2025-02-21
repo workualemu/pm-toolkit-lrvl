@@ -32,9 +32,18 @@ class TaskStatuses extends Component
     #[On('deleteConfirmed')] 
     public function deleteConfirmed($id)
     {
-        TaskStatus::findOrFail($id)->delete();
+        try{
+            $selectedItem = TaskStatus::find($id);
+            if($selectedItem->delete()){
+                $this->dispatch('status-message', success: true, message: 'Status has been deleted successfully!');
+            } else {
+                $this->dispatch('status-message', success: false, message: 'Status cannot be deleted!');
+            }
+            $selectedItem->refresh();
+        } catch (Exception $exception) {
+            $this->dispatch('status-message', success: false, message: $exception->getMessage());
+        }
         $this->dispatch('$refresh');
-        
     }
 
     public function render()
@@ -50,6 +59,10 @@ class TaskStatuses extends Component
             })
             ->orderBy('kanban_list_rank')
             ->paginate(10);
+
+        if ($records->isEmpty() && $this->page > 1) {
+            $this->resetPage(); 
+        }
 
         return view('livewire.settings.task-statuses', [
             'statuses' => $records,

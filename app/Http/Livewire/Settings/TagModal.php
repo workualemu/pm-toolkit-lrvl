@@ -16,6 +16,8 @@ class TagModal extends Component
     #[LivewireRule('required|string|min:2')] 
     public $label;
     public $user_id;
+
+    #[LivewireRule('required|string|min:2')] 
     public $description;
     public $color;
 
@@ -23,6 +25,7 @@ class TagModal extends Component
     public function openTagModal($tag_id)
     {
         $this->tag = new Tag();
+        $this->tag->color='blue';
         if($tag_id > 0) {
             $this->tag = Tag::find($tag_id);
         }
@@ -37,17 +40,22 @@ class TagModal extends Component
 
     public function store()
     {
-        $user = Auth::user();
-        $this->tag->user_id = $user->id;
-        $this->tag->project_id = $user->project_id;
+        try {
+            $this->validate();
 
-        $this->dehidrate();
-        $this->tag->save();
-        $this->tag->refresh();
+            $user = Auth::user();
+            $this->tag->user_id = $user->id;
+            $this->tag->project_id = $user->project_id;
+            $this->dehidrate();
+            
+            $this->tag->save();
+            $this->dispatch('status-message', success: true, message: 'Tag has been saved successfully!');
+        } catch (Exception $exception) {
+            $this->dispatch('status-message', success: false, message: $exception->getMessage());
+        }
 
         $this->dispatch('refreshTag');
         $this->showModal = false;
-
     }
 
     public function mount()

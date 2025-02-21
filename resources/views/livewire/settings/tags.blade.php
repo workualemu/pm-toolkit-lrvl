@@ -1,10 +1,8 @@
-
 <div>
     <x-search-header title="Tags" searchModel="searchTerm" />
     <div class="flex items-center justify-between space-x-2 pl-2 pr-2 transition-all duration-[.25s]">
         <div class="w-full">
             <div class="grid grid-cols-1 gap-4 sm:gap-5 lg:gap-6">
-                <x-app-partials.delete-confirmation />
                 <div>
                     <x-button color="info" wire:click="addNewTag()">{{ __('Add new tag') }}</x-button>
 

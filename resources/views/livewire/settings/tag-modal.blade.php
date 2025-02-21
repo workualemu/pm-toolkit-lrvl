@@ -32,12 +32,14 @@
                             name="label" 
                             model="label" 
                             placeholder="Enter label" 
+                            required
                         />
                         <x-textarea 
                             label="{{ __('Description') }}" 
                             name="description" 
                             model="description" 
                             placeholder="Enter description" 
+                            required
                         />
                         <x-color-picker 
                             name="color" 

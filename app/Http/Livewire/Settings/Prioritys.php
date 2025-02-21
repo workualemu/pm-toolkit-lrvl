@@ -48,7 +48,6 @@ class Prioritys extends Component
 
     public function render()
     {
-        logger('render');
         $searchTerm = '%' . strtolower($this->searchTerm) . '%';
 
         $priorities = TaskPriority::where('project_id', auth()->user()->project_id) 
