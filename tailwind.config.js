@@ -121,6 +121,10 @@ module.exports = {
     'bg-rose-300',
     'bg-gray-300',
     'bg-slate-300',
+    'border-red-600',
+    'border-blue-600',
+    'border-green-600',
+    'border-sky-600'
     
   ],  
   darkMode: "class",

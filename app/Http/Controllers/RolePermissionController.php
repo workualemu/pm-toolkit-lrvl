@@ -11,11 +11,15 @@ class RolePermissionController extends Controller
 {
     public function index()
     {
-        $roles = Role::with('permissions')->get();
-        $permissions = Permission::all();
-        $users = User::with('roles')->get();
+        // $roles = Role::with('permissions')->get();
+        // $permissions = Permission::all();
+        // $users = User::with('roles')->get();
 
-        return view('roles.index', compact('roles', 'permissions', 'users'));
+        $page_title = "Roles";
+        $page_type = "ROLE";
+        return view('pages/users', compact('page_title', 'page_type' ));
+
+        // return view('roles.index', compact('roles', 'permissions', 'users'));
     }
 
     public function storeRole(Request $request)

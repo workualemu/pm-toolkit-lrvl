@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Users;
 
 use Livewire\Component;
 use App\Models\User;
+use Livewire\Attributes\On;
 
 class RegisteredUsers extends Component
 {
@@ -13,17 +14,39 @@ class RegisteredUsers extends Component
     public $showUserRole = false;
     public $errorMessage = null;
     public $success = 0;
+    public $suspend;
 
     protected $listeners = ['refreshUser' => '$refresh',
                             'closeUserRoles' => 'onCloseUserRoles'
     ];
 
 
+    public function inviteUser($user_id)
+    {
+        // $this->dispatch('openUserModal', $user_id);
+    }
 
     public function editUser($user_id)
     {
         $this->dispatch('openUserModal', $user_id);
     }
+
+    #[On('suspendConfirmed')] 
+    public function suspendConfirmed($id)
+    {
+        logger('suspend');
+        try{
+            $selectedItem = User::find($id);
+            $selectedItem->is_suspended = !$selectedItem->is_suspended;
+            $selectedItem->save();
+            $this->dispatch('status-message', success: true, message: 'Operation successful!');
+            $selectedItem->refresh();
+        } catch (Exception $exception) {
+            $this->dispatch('status-message', success: false, message: $exception->getMessage());
+        }
+        $this->dispatch('$refresh');
+    }
+
 
     public function deleteUser($user_id)
     {
@@ -49,9 +72,6 @@ class RegisteredUsers extends Component
     public function render()
     {
         $searchTerm = strtolower($this->searchTerm);
-        // $permissions = Permission::when($this->searchTerm, function ($query) {
-        //     $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($this->searchTerm) . '%']);
-        // })->get();
 
         $records = User::whereRaw('LOWER(name) LIKE ?', ['%' . $searchTerm . '%'])
                         ->orWhereRaw('LOWER(email) LIKE ?', ['%' . $searchTerm . '%'])
@@ -59,6 +79,10 @@ class RegisteredUsers extends Component
                             $query->whereRaw('LOWER(name) LIKE ?', ['%' . $searchTerm . '%']);
                         })
                         ->get();
+        $records = $records->map(function($rec){
+            $rec->suspend_action = $rec->is_suspended ? 'Unblock' : 'Block';
+            return $rec;
+        });
 
         return view('livewire.users.registered-users', [
             'records' => $records,

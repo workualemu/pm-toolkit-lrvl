@@ -130,8 +130,6 @@ class PagesController extends Controller
 
     public function getUsers()
     {
-        $user =  Auth::user();
-
         $page_title = "Users";
         $page_type = "USER";
         return view('pages/users', compact('page_title', 'page_type' ));
@@ -139,8 +137,6 @@ class PagesController extends Controller
 
     public function getInvitations()
     {
-        $user =  Auth::user();
-
         $page_title = "Invitations";
         $page_type = "INVITATION";
         return view('pages/users', compact('page_title', 'page_type' ));
@@ -148,8 +144,6 @@ class PagesController extends Controller
 
     public function getTeams()
     {
-        $user =  Auth::user();
-
         $page_title = "Teams";
         $page_type = "TEAM";
         return view('pages/users', compact('page_title', 'page_type' ));

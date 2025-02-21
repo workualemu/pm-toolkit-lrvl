@@ -28,9 +28,20 @@ class Roles extends Component
         $this->dispatch('openRoleModal', $id);
     }
 
-    public function deleteRole($id)
+    #[On('deleteConfirmed')] 
+    public function deleteConfirmed($id)
     {
-        $res=Role::where('id', $id)->delete();
+        try{
+            $selectedItem = Role::find($id);
+            if($selectedItem->delete()){
+                $this->dispatch('status-message', success: true, message: 'Role has been deleted successfully!');
+            } else {
+                $this->dispatch('status-message', success: false, message: 'Role cannot be deleted!');
+            }
+            $selectedItem->refresh();
+        } catch (Exception $exception) {
+            $this->dispatch('status-message', success: false, message: $exception->getMessage());
+        }
         $this->dispatch('$refresh');
     }
 
@@ -60,7 +71,6 @@ class Roles extends Component
     {
         $this->dispatch('$refresh');
     }
-
 
     public function mount()
     {

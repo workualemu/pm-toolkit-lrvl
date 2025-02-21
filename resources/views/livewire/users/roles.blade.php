@@ -1,5 +1,6 @@
 <div>
     @if(!$showRolePermission) 
+    <div>
         <x-search-header title="Roles" searchModel="searchTerm" />
         <div class="flex items-center justify-between space-x-2 pl-2 pr-2 transition-all duration-[.25s]">
             <div class="w-full">
@@ -37,7 +38,20 @@
                                                 |
                                                 <a class="text-green-600 hover:text-green-800 cursor-pointer" wire:click.prevent="grantPermissions({{$record->id}})">{{ __('Permissions') }}</a>
                                                 |
-                                                <a class="text-red-600 hover:text-red-800 cursor-pointer" wire:click.prevent="deleteRole({{$record->id}})">{{ __('Delete') }}</a>
+                                                <a class="text-red-600 hover:text-red-800 cursor-pointer" 
+                                                    @click.prevent="
+                                                        window.customConfirm({
+                                                            title: 'Delete role',
+                                                            message: 'Are you sure you want to delete this role? This action cannot be undone.',
+                                                            color: 'red',
+                                                            okText: 'Delete',
+                                                        }).then(confirmed => {
+                                                            if (confirmed) {
+                                                                $dispatch('deleteConfirmed', { id: {{ $record->id }} });
+                                                            }
+                                                        })
+                                                    "
+                                                >{{ __('Delete') }}</a>
                                             </td>
                                             @endif 
                                         </tr>
@@ -59,6 +73,7 @@
                 </div>
             </div>
         </div>
+    </div>
     @else
         @livewire('users.role-permissions', ['role_id' => $selectedRoleID])
     @endif

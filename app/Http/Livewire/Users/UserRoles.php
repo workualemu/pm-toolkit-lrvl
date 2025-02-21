@@ -11,7 +11,6 @@ class UserRoles extends Component
 {
     public $selectedUser;
     public $assignedRoles = [];
-    // public $roles;
     public $searchTerm = '';
     public $errorMessage = null;
 
@@ -25,8 +24,6 @@ class UserRoles extends Component
                 $this->assignedRoles[$rl->id]=true;
             }
         }
-        // $this->roles = Role::all();
-        
     }
 
     public function assignRoles($isSave)
@@ -42,15 +39,15 @@ class UserRoles extends Component
 
                 if ($role->name === 'Super Admin' && empty($this->assignedRoles[$role->id]) &&  $this->selectedUser->id === Auth::id()) {
                     $this->errorMessage = "You cannot revoke your own Super Admin role.";
-                    $this->emit('closeUserRoles', -1, $this->errorMessage);
+                    $this->dispatch('closeUserRoles', -1, $this->errorMessage);
                     return;
                 }
             }
             
             $this->selectedUser->syncRoles($assignRoles);
-            $this->emit('closeUserRoles', 1, null);
+            $this->dispatch('closeUserRoles', 1, null);
         } else {
-            $this->emit('closeUserRoles', 0, null);
+            $this->dispatch('closeUserRoles', 0, null);
         } 
     }
 
@@ -58,10 +55,10 @@ class UserRoles extends Component
     {
         $roles = Role::when($this->searchTerm, function ($query) {
             $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($this->searchTerm) . '%']);
-        })->paginate(10);
+        })->get();
     
         return view('livewire.users.user-roles', [
-            'records' => $records,
+            'roles' => $roles
         ]);
     }
 }

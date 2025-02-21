@@ -1,38 +1,12 @@
-<x-app-layout title="Reports" is-header-blur="true" sidebarToggle="false">
+<x-app-layout title="Users" is-header-blur="true" sidebarToggle="false">
     <!-- Main Content Wrapper -->
     
     <livewire:users.invited-users-modal />
+    <livewire:users.role-modal />
     <livewire:teams-modal />
-    <div class="sidebar print:hidden">
-        <div class="sidebar-panel  ml-[-160px]">
-            <div class="flex h-full grow flex-col bg-white pl-[var(--main-sidebar-width)] dark:bg-navy-750">
-                <!-- Sidebar Panel Header -->
-                <div class="flex h-18 w-full items-center justify-between pl-4 pr-1">
-                    <div></div>
-                    <button @click="$store.global.isSidebarExpanded = false"
-                        class="btn h-7 w-7 rounded-full p-0 text-primary hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:text-accent-light/80 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25 xl:hidden">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
-                    
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="flex-grow flex flex-col">          
-        
-
-        @if($page_type == 'USER')
-            <div class="col-span-1">
-                @livewire('users.registered-users')
-            </div>
-        @elseif($page_type == 'TEAM')
-            <div class="col-span-1">
-            @livewire('users.users-page', ['title' => $page_title, 'type' => $page_type])
-            </div>
-        @endif
+        @livewire('users.users-page', ['title' => $page_title, 'type' => $page_type])
     </div>
+
 
 </x-app-layout>
