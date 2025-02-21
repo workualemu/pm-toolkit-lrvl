@@ -1,7 +1,7 @@
 <x-app-layout title="Reports" is-header-blur="true" sidebarToggle="false">
     <!-- Main Content Wrapper -->
     
-    <livewire:role.role-modal />
+    <livewire:users.role-modal />
     <div class="sidebar print:hidden">
         <div class="sidebar-panel  ml-[-160px]">
             <div class="flex h-full grow flex-col bg-white pl-[var(--main-sidebar-width)] dark:bg-navy-750">
@@ -20,6 +20,6 @@
             </div>
         </div>
     </div>
-    @livewire('role.roles')
+    @livewire('users.roles')
 
 </x-app-layout>

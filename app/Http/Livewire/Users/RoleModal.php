@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Role;
+namespace App\Http\Livewire\Users;
 
 use Livewire\Component;
 use App\Models\Role;
@@ -39,15 +39,9 @@ class RoleModal extends Component
             $role = Role::updateOrCreate(
                 ['id' => $this->role->id],
                 ['name' => $this->role->name, 'guard_name'=>'web']);
-            session()->put('status', [
-                'success' => false,
-                'message' =>'Role has been saved successfully!'
-            ]);
+            $this->dispatch('status-message', success: true, message: 'Role has been saved successfully!');
         } catch (Exception $exception) {
-            session()->put('status', [
-                'success' => false,
-                'message' => $exception->getMessage()
-            ]);
+            $this->dispatch('status-message', success: false, message: $exception->getMessage());
         }
 
         $this->showModal = false;
@@ -61,6 +55,6 @@ class RoleModal extends Component
 
     public function render()
     {
-        return view('livewire.role.role-modal');
+        return view('livewire.users.role-modal');
     }
 }

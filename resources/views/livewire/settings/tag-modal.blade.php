@@ -48,8 +48,6 @@
                     </div>
 
                     <div class="py-4"></div>
-
-                    <!-- Modal Footer -->
                     <div class="items-center border-t border-slate-150 py-3 dark:border-navy-600">
                         <div class="px-2 flex items-center justify-between dark:border-navy-600">
                             <x-button color="error" @click="showModal=false">

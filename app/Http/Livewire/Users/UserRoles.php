@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Role;
+namespace App\Http\Livewire\Users;
 
 use Livewire\Component;
 use App\Models\Role;
@@ -60,10 +60,8 @@ class UserRoles extends Component
             $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($this->searchTerm) . '%']);
         })->paginate(10);
     
-        return view('livewire.role.user-roles', [
+        return view('livewire.users.user-roles', [
             'records' => $records,
         ]);
-
-        return view('livewire.role.user-roles');
     }
 }

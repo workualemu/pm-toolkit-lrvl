@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Role;
+namespace App\Http\Livewire\Users;
 
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
@@ -79,7 +79,7 @@ class RolePermissions extends Component
             $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($this->searchTerm) . '%']);
         })->get();
 
-        return view('livewire.role.role-permissions', [
+        return view('livewire.users.role-permissions', [
             'permissions' => $permissions,
         ]);
 

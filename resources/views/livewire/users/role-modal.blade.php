@@ -15,7 +15,7 @@
                 <div class="flex w-full flex-col bg-white dark:bg-navy-700">
                     <x-dialog-header title="{{ __('Role') }}" />
                     <div class="is-scrollbar-hidden flex grow flex-col space-y-4 overflow-y-auto p-4">
-                        <x-input label="Role" name="name" model="name" placeholder="Enter role" />
+                        <x-input label="Role" name="name" model="name" placeholder="Enter role" required />
                     </div>
                     <div class="py-4"></div>
                     <div class="items-center border-t border-slate-150 py-3  dark:border-navy-600">
