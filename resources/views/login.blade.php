@@ -28,6 +28,11 @@
                     </p>
                 </div>
             </div>
+            @if(session('error'))
+                <div class="bg-red-500 text-white p-2 rounded mb-4">
+                    {{ session('error') }}
+                </div>
+            @endif
             <form class="mt-16" action="{{ route('login') }}" method="post">
                 @method('POST') @csrf
                 <div>
