@@ -80,6 +80,7 @@
                             </table>
                         </div>
                     </div>
+                    {{ $statuses->links() }}
                 </div>
             </div>
         </div>

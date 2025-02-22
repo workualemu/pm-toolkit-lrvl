@@ -16,14 +16,19 @@ class RegisteredUsers extends Component
     public $success = 0;
     public $suspend;
 
-    protected $listeners = ['refreshUser' => '$refresh',
-                            'closeUserRoles' => 'onCloseUserRoles'
-    ];
-
-
-    public function inviteUser($user_id)
+    public function updatedSearchTerm()
     {
-        // $this->dispatch('openUserModal', $user_id);
+        $this->resetPage();
+    }
+
+    #[On('refreshUser')] 
+    public function onRefreshUser($id)
+    {
+        $this->dispatch('$refresh');
+    }
+    public function inviteUser()
+    {
+        $this->dispatch('openInvitationModal', null);
     }
 
     public function editUser($user_id)
@@ -34,7 +39,6 @@ class RegisteredUsers extends Component
     #[On('suspendConfirmed')] 
     public function suspendConfirmed($id)
     {
-        logger('suspend');
         try{
             $selectedItem = User::find($id);
             $selectedItem->is_suspended = !$selectedItem->is_suspended;
@@ -47,26 +51,20 @@ class RegisteredUsers extends Component
         $this->dispatch('$refresh');
     }
 
-
-    public function deleteUser($user_id)
-    {
-        $res=User::where('id', $user_id)->delete();
-        $this->dispatch('$refresh');
-    }
-
     public function assignRoles(User $user)
     {
         $this->selectedUserID = $user->id;
         $this->showUserRole = true;
-        $this->dispatch('refreshUser');
+        $this->dispatch('$refresh');
     }
 
+    #[On('closeUserRoles')]
     public function onCloseUserRoles($success, $message)
     {
         $this->showUserRole = false;
         $this->errorMessage = $message;
         $this->success = $success;
-        $this->dispatch('refreshUser');
+        $this->dispatch('$refresh');
     }
 
     public function render()
@@ -84,11 +82,13 @@ class RegisteredUsers extends Component
             return $rec;
         });
 
+        if ($records->isEmpty() && $this->getPage() > 1) {
+            $this->resetPage(); 
+        }
+
         return view('livewire.users.registered-users', [
             'records' => $records,
         ]);
-
-        // return view('livewire.registered-users');
     }
 }
 

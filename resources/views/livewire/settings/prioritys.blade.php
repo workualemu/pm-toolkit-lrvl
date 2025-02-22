@@ -27,7 +27,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @foreach($records AS $index=>$priority)
+                                    @forelse($records AS $index=>$priority)
                                         <tr>
                                             <td class="px-6 py-3 text-[15px] font-medium text-{{$priority->color}}-700 tracking-normal font-inter">
                                                 {{$priority->value}}
@@ -63,12 +63,20 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    @endforeach
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="px-6 py-4 whitespace-nowrap">
+                                                <div class="flex justify-center text-sm text-gray-500">
+                                                    {{ __('No records to display') }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
-                        {{ $records->links() }}
                     </div>
+                    {{ $records->links() }}
                 </div>
             </div>
         </div>

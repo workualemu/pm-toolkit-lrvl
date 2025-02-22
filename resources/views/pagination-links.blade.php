@@ -43,11 +43,5 @@
         @else
             <div class="w-16 px-2 py-1 text-center rounded border bg-gray-200 "> Next </div>
         @endif
-
-        
-        
- 
-       
-
 </div>
 @endif

@@ -14,9 +14,11 @@ class TemplateProjects extends Component
     public $project = null;
     public $searchTerm;
 
-    protected $listeners = ['refreshTemplate' => '$refresh'
-    ];
-
+    public function updatedSearchTerm()
+    {
+        $this->resetPage();
+    }
+    
     #[On('refreshTemplate')]
     public function refreshTemplate()
     {
@@ -71,6 +73,11 @@ class TemplateProjects extends Component
         })
         ->orderBy('start_date')
         ->paginate(10);
+
+        if ($templates->isEmpty() && $this->getPage() > 1) {
+            $this->resetPage(); 
+        }
+
         $templates->getCollection()->transform(function ($template) {
             $template->duration = ($template->start_date && $template->end_date)
                 ? $this->getDuration($template)

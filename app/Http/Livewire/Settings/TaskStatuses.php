@@ -13,6 +13,11 @@ class TaskStatuses extends Component
 
     public $searchTerm;
 
+    public function updatedSearchTerm()
+    {
+        $this->resetPage();
+    }
+
     #[On('refreshStatus')]
     public function refreshStatus()
     {
@@ -60,7 +65,7 @@ class TaskStatuses extends Component
             ->orderBy('kanban_list_rank')
             ->paginate(10);
 
-        if ($records->isEmpty() && $this->page > 1) {
+        if ($records->isEmpty() && $this->getPage() > 1) {
             $this->resetPage(); 
         }
 

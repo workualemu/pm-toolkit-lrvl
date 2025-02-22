@@ -91,8 +91,6 @@ import breakpoints from "./utils/breakpoints";
 import store from "./store";
 import './confirm-modal.js';
 
-
-
 // Register HTML, XML language for highlight.js
 // Just for demo purpose only for highlighting code
 hljs.registerLanguage("xml", xml);

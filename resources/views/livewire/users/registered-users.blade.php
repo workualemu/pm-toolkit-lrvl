@@ -14,20 +14,20 @@
                         >
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-blue-200">
-                            <tr>
-                                <th scope="col" class="px-6 py-2 text-left text-slate-800 uppercase font-montserrat">
-                                    {{ __('Name') }}
-                                </th>
-                                <th scope="col" class="px-6 py-2 text-left text-slate-800 uppercase font-montserrat">
-                                    {{ __('Email') }}
-                                </th>
-                                <th scope="col" class="px-6 py-2 text-left text-slate-800 uppercase font-montserrat">
-                                    {{ __('Role') }}
-                                </th>
-                                <th scope="col" class="px-6 py-2 text-left text-slate-800 uppercase font-montserrat">
-                                    {{ __('Action') }}
-                                </th>
-                            </tr>
+                                <tr>
+                                    <th scope="col" class="px-6 py-2 text-left text-slate-800 uppercase font-montserrat">
+                                        {{ __('Name') }}
+                                    </th>
+                                    <th scope="col" class="px-6 py-2 text-left text-slate-800 uppercase font-montserrat">
+                                        {{ __('Email') }}
+                                    </th>
+                                    <th scope="col" class="px-6 py-2 text-left text-slate-800 uppercase font-montserrat">
+                                        {{ __('Role') }}
+                                    </th>
+                                    <th scope="col" class="px-6 py-2 text-left text-slate-800 uppercase font-montserrat">
+                                        {{ __('Action') }}
+                                    </th>
+                                </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                             @forelse($records as $record)

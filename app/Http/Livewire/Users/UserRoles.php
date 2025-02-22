@@ -14,6 +14,11 @@ class UserRoles extends Component
     public $searchTerm = '';
     public $errorMessage = null;
 
+    public function updatedSearchTerm()
+    {
+        $this->resetPage();
+    }
+    
     public function mount($user_id)
     {
         $this->selectedUser = User::find($user_id);

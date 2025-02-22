@@ -18,6 +18,11 @@ class Roles extends Component
     public $success = true;
     public $roles;
 
+    public function updatedSearchTerm()
+    {
+        $this->resetPage();
+    }
+    
     public function addNewRole()
     {
         $this->dispatch('openRoleModal', null);
@@ -82,6 +87,10 @@ class Roles extends Component
         $records = Role::when($this->searchTerm, function ($query) {
             $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($this->searchTerm) . '%']);
         })->paginate(10);
+
+        if ($records->isEmpty() && $this->getPage() > 1) {
+            $this->resetPage(); 
+        }
 
         return view('livewire.users.roles', [
             'records' => $records,

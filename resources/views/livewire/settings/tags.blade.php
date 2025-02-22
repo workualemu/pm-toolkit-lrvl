@@ -29,7 +29,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @foreach($tags AS $index=>$tag)
+                                    @forelse($tags AS $index=>$tag)
                                         <tr>
                                             <td class="whitespace-nowrap px-3 py-3 font-medium text-slate-700 dark:text-navy-100 lg:px-5">
                                                 <div class="bg-{{$tag->color}}-600 badge text-white">
@@ -66,12 +66,20 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    @endforeach
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="px-6 py-4 whitespace-nowrap">
+                                                <div class="flex justify-center text-sm text-gray-500">
+                                                    {{ __('No records to display') }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
-                        {{ $tags->links() }}
                     </div>
+                    {{ $tags->links() }}
                 </div>
             </div>
         </div>

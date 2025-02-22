@@ -10,6 +10,11 @@ class ReportsAdmin extends Component
 {
     public $searchTerm;
 
+    public function updatedSearchTerm()
+    {
+        $this->resetPage();
+    }
+    
     #[On('refreshReport')]
     public function refreshReport()
     {
@@ -57,7 +62,7 @@ class ReportsAdmin extends Component
             })
             ->paginate(10);
 
-        if ($records->isEmpty() && $this->page > 1) {
+        if ($records->isEmpty() && $this->getPage() > 1) {
             $this->resetPage(); 
         }
 

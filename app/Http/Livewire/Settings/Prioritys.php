@@ -13,6 +13,11 @@ class Prioritys extends Component
 
     public $searchTerm;
 
+    public function updatedSearchTerm()
+    {
+        $this->resetPage();
+    }
+    
     #[On('refreshPriority')]
     public function refreshPriority()
     {
@@ -59,7 +64,7 @@ class Prioritys extends Component
             })
             ->paginate(10);
 
-        if ($priorities->isEmpty() && $this->page > 1) {
+        if ($priorities->isEmpty() && $this->getPage() > 1) {
             $this->resetPage(); 
         }
 

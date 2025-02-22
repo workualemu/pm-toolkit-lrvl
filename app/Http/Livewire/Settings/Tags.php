@@ -13,6 +13,11 @@ class Tags extends Component
 
     public $searchTerm;
 
+    public function updatedSearchTerm()
+    {
+        $this->resetPage();
+    }
+    
     #[On('refreshTag')]
     public function refreshTag()
     {
@@ -59,7 +64,7 @@ class Tags extends Component
             })
             ->paginate(10);
 
-        if ($records->isEmpty() && $this->page > 1) {
+        if ($records->isEmpty() && $this->getPage() > 1) {
             $this->resetPage(); 
         }
 

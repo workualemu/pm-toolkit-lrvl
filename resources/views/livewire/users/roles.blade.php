@@ -68,8 +68,8 @@
                                 </table>
                             </div>
                         </div>
+                        {{ $records->links() }}
                     </div>
-                    {{ $records->links() }}
                 </div>
             </div>
         </div>
