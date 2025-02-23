@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Tasks;
 
 use Livewire\Component;
 use App\Models\TaskPriority;
@@ -107,7 +107,7 @@ class TasksSideBar extends Component
 
     public function render()
     {
-        return view('livewire.tasks-side-bar');
+        return view('livewire.tasks.tasks-side-bar');
     }
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Partials\Tasks;
+namespace App\Http\Livewire\Tasks;
 
 use Livewire\Component;
 use App\Models\Task;
@@ -18,6 +18,6 @@ class TaskTable extends TasksView
             $this->tasks = $this->getTasks();
             $this->hasGeneratedTasks = true;
         }
-        return view('livewire.partials.tasks.task-table');
+        return view('livewire.tasks.task-table');
     }
 }

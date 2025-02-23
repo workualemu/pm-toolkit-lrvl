@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Tasks;
 
 use App\Models\File;
 use App\Models\Project;
@@ -222,7 +222,7 @@ class TaskRightPopup extends Component
     public function render()
     {
         $this->datePickerDisabled = $this->task->id > 0 && $this->task->level != 2 ? "disabled" : '';
-        return view('livewire.task-right-popup');
+        return view('livewire.tasks.task-right-popup');
     }
 
     //-------------------------------Private Functions--------------------------------

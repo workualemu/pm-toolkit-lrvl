@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Tasks;
 
 use Livewire\Component;
 use App\Models\Project;
@@ -157,7 +157,7 @@ class Tasks extends Component
 
     public function render()
     {
-        return view('livewire.tasks', [
+        return view('livewire.tasks.tasks', [
             'taskIds' => collect($this->tasks)->pluck('id')->join('-'),
         ]);
     }

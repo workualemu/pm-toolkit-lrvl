@@ -140,7 +140,7 @@
                                 <div>
                                     <span>{{ __('Attachment') }}</span>
                                     @if($task != null)
-                                        <livewire:task-file-upload :taskId="$task->id" />
+                                        <livewire:tasks.task-file-upload :taskId="$task->id" />
                                     @else
                                         <p>Task not found!</p>
                                     @endif

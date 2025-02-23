@@ -2,7 +2,7 @@
   <!-- Main Content Wrapper -->
   <main class="main-content todo-app w-full px-[2 * var(--margin-x)] pb-6">
     <!--header, title search, and filter block -->
-    @livewire('partials.tasks.header', ['title'=>'Tasks', 'showStatusFilter'=>true])
+    @livewire('tasks.header', ['title'=>'Tasks', 'showStatusFilter'=>true])
     <!-- Tab def -->
     <div class="tabs w-full flex flex-col">
       <div class="is-scrollbar-hidden overflow-x-auto">
@@ -54,7 +54,7 @@
         </div>
       </div>
       <div class="tab-content w-full pt-2">
-        <livewire:partials.tasks.task-list :tasks="$tasks" :key="$taskIds" />
+        <livewire:tasks.task-list :tasks="$tasks" :key="$taskIds" />
       </div>
     </div>
   </main>

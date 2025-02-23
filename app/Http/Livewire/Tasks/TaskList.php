@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Partials\Tasks;
+namespace App\Http\Livewire\Tasks;
 
 use Livewire\Component;
 use App\Models\Task;
@@ -16,6 +16,6 @@ class TaskList extends Component
 
     public function render()
     {
-        return view('livewire.partials.tasks.task-list');
+        return view('livewire.tasks.task-list');
     }
 }

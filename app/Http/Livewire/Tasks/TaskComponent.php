@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Tasks;
 
 use Livewire\Component;
 use App\Models\Task;
@@ -94,7 +94,7 @@ class TaskComponent extends Component
 
     public function render()
     {
-        return view('livewire.task-component')->with([
+        return view('livewire.tasks.task-component')->with([
             'styles' => $this->getTaskStyles(),
         ]);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Partials\Tasks;
+namespace App\Http\Livewire\Tasks;
 
 use Livewire\Component;
 use App\Models\Task;

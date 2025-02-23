@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Partials\Tasks;
+namespace App\Http\Livewire\Tasks;
 
 use Livewire\Component;
 use App\Models\TaskStatus;
@@ -109,6 +109,6 @@ class Header extends Component
             ->where('project_id', $user->project_id)
             ->get();
         
-        return view('livewire.partials.tasks.header');
+        return view('livewire.tasks.header');
     }
 }

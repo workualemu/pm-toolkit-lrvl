@@ -6,7 +6,7 @@
         </template>
         @forelse($tasks as $task)
             <div wire:key="task-{{ $task->id }}">
-                <livewire:task-component :task="$task" :key="'task-component-'.$task->id" />
+                <livewire:tasks.task-component :task="$task" :key="'task-component-'.$task->id" />
             </div>
         @empty
             <div wire:key="empty-task-message">
@@ -15,6 +15,6 @@
         @endforelse
     </div>
 
-    <livewire:task-right-popup />
+    <livewire:tasks.task-right-popup />
 
 </div>
