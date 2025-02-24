@@ -1,6 +1,6 @@
 <div x-data="{ activeTab: 'tabList' }">
   <!-- Main Content Wrapper -->
-  <main class="main-content todo-app w-full px-[2 * var(--margin-x)] pb-6">
+  <main class="main-content w-12/12 px-[2 * var(--margin-x)]">
     <!--header, title search, and filter block -->
     <x-status-message/>
     <x-app-partials.delete-confirmation />

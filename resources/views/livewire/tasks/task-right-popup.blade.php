@@ -27,7 +27,7 @@
             </div>
 
             <!-- Modal -->
-            <div class="fixed right-0 top-0 z-[101] h-full w-full sm:w-4/6 lg:w-5/12">
+            <div class="fixed right-0 top-0 z-[101] h-full w-full md:w-3/4 lg:w-7/12">
                 <div class="flex h-full w-full transform-gpu flex-col bg-white transition-transform duration-200 dark:bg-navy-700"
                     x-show="showModal" 
                     x-transition:enter="ease-out" x-transition:enter-start="translate-x-full"
