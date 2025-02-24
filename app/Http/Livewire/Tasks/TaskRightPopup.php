@@ -18,6 +18,7 @@ use Livewire\WithFileUploads;
 use App\Notifications\TaskAssignment;
 use Carbon\Carbon;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Rule as LivewireRule;
 
 class TaskRightPopup extends Component
 {
@@ -40,7 +41,7 @@ class TaskRightPopup extends Component
 
     public $file = 's9fwyeVg3ZO1j1V2vyNILxYD0PqqAl-metaZXhwb3J0ICg0KS54bHN4-.xlsx';
 
-    #[Validate('required|min:5')]
+    #[LivewireRule('required|string|min:5')] 
     public $title = '';
 
     public $start_date = '';
@@ -50,19 +51,8 @@ class TaskRightPopup extends Component
     public $description = '';
     public $task_priority_id = 0;
     public $task_status_id = 0;
+    public $progress = 0;
 
-    protected $rules = [
-        'task.title' => 'required|min:2',
-        'task.user_id' => 'required',
-        'task.start_date'=>'',
-        'task.end_date'=>'',
-        'task.task_priority_id'=>'required',
-        'task.task_status_id'=>'required',
-        'tagTasks.tag_id'=>'',
-        'task.description' => '',
-        'task.assigned_to'=>'',
-        'task.report_by'=>'',
-    ];
     // protected $listeners = ['openTaskModal' => 'openModal',
     //                         'fileDownloaded' => 'downloadFile',
     //                     ];
@@ -180,36 +170,40 @@ class TaskRightPopup extends Component
 
     public function store()
     {
-        $user = Auth::user();
-        $this->task->user_id = $user->id;
-        $this->task->project_id = $user->project_id;
+        try {
+            $user = Auth::user();
+            $this->task->user_id = $user->id;
+            $this->task->project_id = $user->project_id;
 
-        $this->task->level = $this->taskLevel < 0 ? $this->task->level : $this->taskLevel;
-        $this->task->parent = $this->taskParent < 1 ? $this->task->parent : $this->taskParent;
-        $this->dehidrate();
+            $this->task->level = $this->taskLevel < 0 ? $this->task->level : $this->taskLevel;
+            $this->task->parent = $this->taskParent < 1 ? $this->task->parent : $this->taskParent;
+            $this->dehidrate();
 
-        $this->task->save();
+            $this->validate();
+            $this->task->save();
 
-        $parentTask = $this->task->getParent()?->first();
-        $this->task->path = $parentTask != null ? $parentTask->path.'.'.$this->task->id : $this->task->id;
-        
-        $this->task->save();
+            $parentTask = $this->task->getParent()?->first();
+            $this->task->path = $parentTask != null ? $parentTask->path.'.'.$this->task->id : $this->task->id;
+            
+            $this->task->save();
 
-        $this->task->tags()->sync($this->taskTags);
-        // $this->task->tags()->detach();    
-        // $this->task->tags()->attach($this->taskTags);   
+            $this->task->tags()->sync($this->taskTags); 
 
-        if($this->task->isDirty('assigned_to') ){
-            $assgnee = User::find($this->task->assigned_to);
-            Notification::send($assgnee, new TaskAssignment($this->task));
+            if($this->task->isDirty('assigned_to') ){
+                $assgnee = User::find($this->task->assigned_to);
+                Notification::send($assgnee, new TaskAssignment($this->task));
+            }
+            // $this->emit('saveUploads', $this->task->id);
+
+            $this->dispatch('status-message', success: true, message: 'Task has been saved successfully!');
+        } catch (Exception $exception) {
+            $this->dispatch('status-message', success: false, message: $exception->getMessage());
         }
+        
 
-        // $this->emit('saveUploads', $this->task->id);
+        
 
-        // $this->dispatch("refreshTaskComponent.{$this->task->id}");
 
-        // $this->dispatch('refreshSingleTask', $this->task->id);
-        // $this->emitTo('task-component', 'refreshSingleTask', $this->task->id);
         $this->showTaskRightPopup = false;
     }
 
@@ -236,6 +230,7 @@ class TaskRightPopup extends Component
         $this->description = $this->task->description;
         $this->task_priority_id = $this->task->task_priority_id;
         $this->task_status_id = $this->task->task_status_id;
+        $this->progress = $this->task->progress;
     }
 
     private function dehidrate()
@@ -248,6 +243,7 @@ class TaskRightPopup extends Component
         $this->task->description = $this->description;
         $this->task->task_priority_id = $this->task_priority_id;
         $this->task->task_status_id = $this->task_status_id;
+        $this->task->progress = $this->progress ? $this->progress : 0;
     }
 
 }

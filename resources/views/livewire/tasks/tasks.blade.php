@@ -2,6 +2,8 @@
   <!-- Main Content Wrapper -->
   <main class="main-content todo-app w-full px-[2 * var(--margin-x)] pb-6">
     <!--header, title search, and filter block -->
+    <x-status-message/>
+    <x-app-partials.delete-confirmation />
     @livewire('tasks.header', ['title'=>'Tasks', 'showStatusFilter'=>true])
     <!-- Tab def -->
     <div class="tabs w-full flex flex-col">
