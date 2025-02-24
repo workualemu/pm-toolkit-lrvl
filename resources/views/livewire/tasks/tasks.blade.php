@@ -1,4 +1,4 @@
-<div x-data="{ activeTab: 'tabList' }">
+<div>
   <!-- Main Content Wrapper -->
   <main class="main-content w-12/12 px-[2 * var(--margin-x)]">
     <!--header, title search, and filter block -->
@@ -6,8 +6,8 @@
     <x-app-partials.delete-confirmation />
     @livewire('tasks.header', ['title'=>'Tasks', 'showStatusFilter'=>true])
     <!-- Tab def -->
-    <div class="tabs w-full flex flex-col">
-      <div class="is-scrollbar-hidden overflow-x-auto">
+    <div x-data="{ activeTab: 'tabList' }" class="tabs w-full flex flex-col overflow-y-auto">
+      <div class="is-scrollbar-hidden">
         <div class="border-b-2 border-slate-150 px-2 dark:border-navy-500 flex justify-between">
           <div class="tabs-list -mb-0.5 flex">
             <button @click="activeTab = 'tabList'"
@@ -55,7 +55,7 @@
 
         </div>
       </div>
-      <div class="tab-content w-full pt-2">
+      <div class="tab-content w-full pt-2 overflow-x-hidden overflow-y-auto h-[calc(100vh-200px)]">
         <livewire:tasks.task-list :tasks="$tasks" :key="$taskIds" />
       </div>
     </div>
