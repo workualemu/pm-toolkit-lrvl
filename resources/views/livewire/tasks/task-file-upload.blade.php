@@ -1,125 +1,48 @@
-<div>
-    <div wire:ignore class="filepond fp-bg-filled">
-        <input 
-            type="file" 
-            id="filepond" 
-            name="files"
-            wire:model="files"
-            multiple 
-        >
+<div x-data="{ isUploading: false }" class="p-6 bg-white rounded-lg shadow-md">
+    <div class="flex flex-col space-y-4">
+        <input type="file" wire:model="files" multiple x-ref="fileInput" class="hidden">
+        
+        <button type="button"
+            @click="$refs.fileInput.click()"
+            class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none">
+            {{ __('Select files to upload') }}
+        </button> 
+        @error('files.*') 
+            <span class="text-red-500 text-sm">{{ $message }}</span> 
+        @enderror
+        @if (session()->has('message'))
+            <div class="text-green-500 text-sm">{{ session('message') }}</div>
+        @endif
+    </div>
+    <div wire:loading wire:target="files" class="text-sm text-gray-500 mt-2">
+        Uploading files, please wait...
+    </div>
+    <div class="mt-6">
+        <ul class="bg-white shadow-sm rounded-md divide-y divide-gray-200 mt-2">
+            @foreach ($storedFiles as $index => $file)
+                <li class="flex justify-between items-center p-3">
+                    <a href="{{ $file['file_path'] }}" target="_blank"
+                        class="text-blue-500 hover:text-blue-700">
+                        <span class="text-sm text-gray-700">{{ $file['file_name'] }}</span> 
+                    </a>
+                    
+                    <button @click="
+                            window.customConfirm({
+                                title: 'Remove file',
+                                message: 'Are you sure you want to remove this file? This action cannot be undone.',
+                                color: 'red',
+                                okText: 'Remove',
+                            }).then(confirmed => {
+                                if (confirmed) {
+                                    $dispatch('removeFileConfirmed', { id: {{ $file['id'] }} });
+                                }
+                            })
+                        " 
+                        class="btn h-8 w-8 p-0 text-error hover:bg-error/20 focus:bg-error/20 active:bg-error/25">
+                            <i class="fa fa-trash-alt"></i>
+                    </button>
+                </li>
+            @endforeach
+        </ul>
     </div>
 </div>
-
-<script>
-    document.addEventListener('livewire:load', function () {
-        const inputElement = document.querySelector('#filepond');
-        let filePondInstance = null;
-        let temporaryFiles = [];
-
-        function initializeFilePond(savedFiles) {
-            if (!filePondInstance) {
-                filePondInstance = FilePond.create(inputElement, {
-                    credits: false,
-                    allowRevert: true, // Allow removing uploaded files from the list
-                    server: {
-                        process: (fieldName, file, metadata, load, error, progress, abort) => {
-                            @this.upload('files', file, load, error, progress);
-                        },
-                        revert: (filename, load) => {
-                            @this.removeUpload('files', filename, load);
-                        },
-                        load: (source, load, error, progress, abort, headers) => {
-                            fetch(source)
-                                .then((res) => res.blob())
-                                .then(load);
-                        }
-                    },
-                });
-            }
-
-            // Update files in FilePond instance
-            filePondInstance.setOptions({
-                files: savedFiles.map(file => ({
-                    source: file.file_path,
-                    options: {
-                        type: 'local',
-                        filename: file.file_name,
-                        metadata: {
-                            id: file.id,
-                            name: file.file_name,
-                        },
-                    }
-                }))
-            });
-
-            filePondInstance.on('addfile', (error, file) => {
-                if (!error) {
-                    const metadata = file.getMetadata();
-                    if (metadata && metadata.name) {
-                        console.log('Before:', file.filename); // Check before renaming
-                        // Update FilePond's internal metadata
-                        file.setMetadata('file_name', metadata.name, true);
-                        console.log('file', file);
-                        console.log('After:', file.getMetadata('file_name'), file.filename); 
-                    }
-                }
-            });
-            
-            filePondInstance.on('processfile', (error, file) => {
-                if (!error) {
-                    // Check if serverId already exists in the array
-                    if (!temporaryFiles.includes(file.serverId)) {
-                        // Add serverId to the array
-                        temporaryFiles.push(file.serverId);
-                    }
-                }
-            });
-
-            filePondInstance.on('removefile', (error, file) => {
-                if (error) {
-                    console.error('Error while removing file:', error);
-                } else {
-                    // Emit a Livewire event to update the files array or delete from the database
-                    const isSavedFile = savedFiles.some(savedFile => savedFile.file_path === file.serverId);
-                    if (isSavedFile) {
-                        // Livewire.emit('fileDeleted', file.serverId);
-                        Livewire.emit('trackUnsavedFiles', file.getMetadata('id'));
-                    } else {
-                        Livewire.emit('fileRemoved', file.serverId);
-                    }
-                }
-            });
-        }
-
-
-        function clearFilePond() {
-            temporaryFiles.forEach(serverId => {
-                filePondInstance.removeFile(serverId);
-            });
-
-            temporaryFiles = [];
-            
-            Livewire.emit('resetTrackingUnsavedFiles')
-        }
-
-        Livewire.on('savedFilesUpdated', savedFiles => {
-            initializeFilePond(savedFiles);
-        });
-
-        Livewire.on('clearFilePond', () => {
-            clearFilePond();
-        });
-        
-        Livewire.on('resetFilePond', () => {
-            clearFilePond();
-        });
-
-        // Livewire.on('fileDeleted', (fileId) => {
-        //     console.log(`File with ID ${fileId} was deleted.`);
-        // });
-
-        // Initial load
-        const initialSavedFiles = @json($savedFiles);
-        initializeFilePond(initialSavedFiles);
-    });
-</script>

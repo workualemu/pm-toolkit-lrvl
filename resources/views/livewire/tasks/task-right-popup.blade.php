@@ -71,7 +71,7 @@
                                 <div class="is-scrollbar-hidden flex grow flex-col space-y-4 p-4">
                                     <x-input label="{{ __('Progress(%)') }}" name="progress" model="progress" placeholder="Percent completed" />
                                     <div>
-                                        <span>{{ __('Attachment') }}</span>
+                                        <span>{{ __('Attachments') }}</span>
                                         @if($task != null)
                                             <livewire:tasks.task-file-upload :taskId="$task->id" />
                                         @else

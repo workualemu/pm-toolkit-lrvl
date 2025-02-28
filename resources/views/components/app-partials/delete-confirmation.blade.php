@@ -1,8 +1,8 @@
 <!-- Delete Confirmation Modal -->
 <div x-data="Alpine.store('confirmModal')" x-show="open"
-     class="fixed inset-0 flex items-center justify-center bg-gray-100 z-[99]"
+     class="fixed inset-0 flex items-center justify-center bg-gray-100 z-[9999]"
      style="background: rgba(28, 11, 11, 0.15);">
-    <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full z-[100] relative border-l-4"
+    <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full z-[10000] relative border-l-4"
          :class="{
             'border-red-600': color === 'red',
             'border-sky-600': color === 'sky',

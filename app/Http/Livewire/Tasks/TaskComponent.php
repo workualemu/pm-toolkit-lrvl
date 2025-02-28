@@ -52,7 +52,7 @@ class TaskComponent extends Component
     public function openModal($parentId, $taskId, $taskLevel)
     {
         $this->dispatch('openTaskRightPopup', $parentId, $taskId, $taskLevel);
-        $this->dispatch('setTaskId', $taskId);
+        // $this->dispatch('setTaskId', $taskId);
         // $this->showModal = true;
     }
 

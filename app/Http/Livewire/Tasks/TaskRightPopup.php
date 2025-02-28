@@ -154,7 +154,8 @@ class TaskRightPopup extends Component
         $this->taskTags = $this->taskTags->pluck('tag_id');
         $this->getFormTitle();
         $this->showTaskRightPopup = true;
-        
+        $this->dispatch('setTaskId', $taskId);
+        logger('setTaskId dispatched');
         $this->dispatch('$refresh');
         // $this->js("window.dispatchEvent(new CustomEvent('taskModalOpenForCommentModel', { detail: " . json_encode($this->task->toArray()) . " }));");
         // $this->dispatchBrowserEvent('taskModalOpenForCommentModel', ['task' => $this->task->toArray()]);
@@ -164,6 +165,7 @@ class TaskRightPopup extends Component
 
     public function closeModal()
     {
+        $this->dispatch('removeUnprocessedAttachments');
         $this->showTaskRightPopup = false;
         // $this->emit('clearFilePond');
     }
@@ -194,6 +196,7 @@ class TaskRightPopup extends Component
                 Notification::send($assgnee, new TaskAssignment($this->task));
             }
             // $this->emit('saveUploads', $this->task->id);
+            $this->dispatch('saveAttachments', $this->task->id);
 
             $this->dispatch('status-message', success: true, message: 'Task has been saved successfully!');
         } catch (Exception $exception) {
