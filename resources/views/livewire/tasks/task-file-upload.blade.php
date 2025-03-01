@@ -18,31 +18,51 @@
         Uploading files, please wait...
     </div>
     <div class="mt-6">
-        <ul class="bg-white shadow-sm rounded-md divide-y divide-gray-200 mt-2">
-            @foreach ($storedFiles as $index => $file)
-                <li class="flex justify-between items-center p-3">
-                    <a href="{{ $file['file_path'] }}" target="_blank"
-                        class="text-blue-500 hover:text-blue-700">
-                        <span class="text-sm text-gray-700">{{ $file['file_name'] }}</span> 
-                    </a>
-                    
-                    <button @click="
-                            window.customConfirm({
-                                title: 'Remove file',
-                                message: 'Are you sure you want to remove this file? This action cannot be undone.',
-                                color: 'red',
-                                okText: 'Remove',
-                            }).then(confirmed => {
-                                if (confirmed) {
-                                    $dispatch('removeFileConfirmed', { id: {{ $file['id'] }} });
-                                }
-                            })
-                        " 
-                        class="btn h-8 w-8 p-0 text-error hover:bg-error/20 focus:bg-error/20 active:bg-error/25">
+    <ul class="bg-white shadow-sm rounded-md divide-y divide-gray-200 mt-2">
+        @foreach ($storedFiles as $index => $file)
+            <li class="grid grid-cols-10 items-center p-3">
+                
+                <div class="col-span-9">
+                    @if (isset($file['id']))
+                        <a href="{{ $file['view_url'] }}" class="text-blue-400 hover:text-blue-700" target="_blank">
+                            {{ $file['file_name'] }}
+                        </a>
+                    @else
+                        <a href="#" class="text-gray-500" >
+                            {{ $file['file_name'] }}
+                        </a>
+                    @endif
+                </div>
+
+                <!-- Delete Button Column (Right-Aligned) -->
+                <div class="col-span-1 flex justify-end">
+                    @if (isset($file['id']))
+                        <button @click="
+                                window.customConfirm({
+                                    title: 'Remove file',
+                                    message: 'Are you sure you want to remove this file? This action cannot be undone.',
+                                    color: 'red',
+                                    okText: 'Remove',
+                                }).then(confirmed => {
+                                    if (confirmed) {
+                                        $dispatch('removeFileConfirmed', { id: {{ $file['id'] ?? 0 }} });
+                                    }
+                                })
+                            " 
+                            class="btn h-8 w-8 p-0 text-error hover:bg-error/20 focus:bg-error/20 active:bg-error/25">
                             <i class="fa fa-trash-alt"></i>
-                    </button>
-                </li>
-            @endforeach
-        </ul>
-    </div>
+                        </button>
+                    @else
+                        <button wire:click="removeSelectedFile({{ $index }})" 
+                            class="btn h-8 w-8 p-0 text-primary hover:bg-error/20 focus:bg-error/20 active:bg-error/25">
+                            <i class="fa fa-trash-alt"></i>
+                        </button>
+                    @endif
+                </div>
+
+            </li>
+        @endforeach
+    </ul>
+</div>
+
 </div>

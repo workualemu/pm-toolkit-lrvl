@@ -24,15 +24,23 @@ class TaskFileUpload extends Component
     #[On('setTaskId')]
     public function setTaskId($taskId)
     {
-        logger('setTaskId listened');
         $this->taskId = $taskId;
         $this->loadSavedFiles($taskId);
     }
 
-    #[On('removeUnprocessedAttachments')]
-    public function onRemoveUnprocessedAttachments()
+    #[On('removeUnuploadedAttachments')]
+    public function onRemoveUnuploadedAttachments()
     {
+        logger('removeUnuploadedAttachments');
+        foreach ($this->savedFiles as $file) {
+            if(!isset($file['id']))
+            {
+                Storage::disk('private')->delete($file['file_path']);
+            }
+        } 
+
         $this->files = [];
+        $this->deleteOldTempFiles();
     }
 
     #[On('saveAttachments')]
@@ -47,15 +55,17 @@ class TaskFileUpload extends Component
             return;
         }
 
-        foreach ($this->files as $file) {
-            $path = $file->store('task-files', 'public');
-            TaskFile::create([
-                'task_id' => $taskId,
-                'file_path' => $path,
-                'file_name' => $file->getClientOriginalName(),
-            ]);
+        foreach ($this->savedFiles as $file) {
+            if(!isset($file['id']))
+            {
+                TaskFile::create([
+                    'task_id' => $taskId,
+                    'file_path' => $file['file_path'],
+                    'file_name' => $file['file_name'],
+                ]);
+            }
         }
-
+        $this->loadSavedFiles($taskId);
         $this->files = [];
         session()->flash('message', 'Files uploaded successfully.');
     }
@@ -66,10 +76,11 @@ class TaskFileUpload extends Component
             ->get()
             ->map(fn($file) => [
                 'id' => $file->id,
-                'file_path' => Storage::url($file->file_path),
+                'download_url' => route('files.download', ['id' => $file->id]), 
+                'view_url' => route('files.view', ['id' => $file->id]), 
                 'file_name' => $file->file_name, 
-                'file_size' => Storage::exists('public/' . $file->file_path) 
-                    ? Storage::size('public/' . $file->file_path) 
+                'file_size' => Storage::exists('private/' . $file->file_path) 
+                    ? Storage::size('private/' . $file->file_path) 
                     : 0,
             ])
             ->toArray();
@@ -90,32 +101,32 @@ class TaskFileUpload extends Component
         $this->uploadedFiles = TaskFile::where('task_id', $this->taskId)->get();
     }
 
-    #[On('saveUploads')]
-    public function onSaveUploads()
-    {
-        $this->validate([
-            'files.*' => 'required|file|max:10240', 
-        ]);
+    // #[On('saveUploads')]
+    // public function onSaveUploads()
+    // {
+    //     $this->validate([
+    //         'files.*' => 'required|file|max:10240', 
+    //     ]);
 
-        foreach ($this->files as $file) {
-            $path = $file->store('task-files', 'public');
-            TaskFile::create([
-                'task_id' => $this->taskId,
-                'file_path' => $path,
-                'file_name' => $file->getClientOriginalName(),
-            ]);
+    //     foreach ($this->files as $file) {
+    //         $path = $file->store('uploads', 'private');
+    //         TaskFile::create([
+    //             'task_id' => $this->taskId,
+    //             'file_path' => $path,
+    //             'file_name' => $file->getClientOriginalName(),
+    //         ]);
 
-            $this->fileRemoved($file->getFilename());
-        }
+    //         $this->fileRemoved($file->getFilename());
+    //     }
 
-        foreach ($this->unsavedFiles as $serverId) {
-            $this->deleteUploadedFile($serverId);
-        }
+    //     foreach ($this->unsavedFiles as $serverId) {
+    //         $this->deleteUploadedFile($serverId);
+    //     }
 
-        $this->files = [];
-        $this->loadSavedFiles($this->taskId);
-        session()->flash('message', 'Files uploaded successfully!');
-    }
+    //     $this->files = [];
+    //     $this->loadSavedFiles($this->taskId);
+    //     session()->flash('message', 'Files uploaded successfully!');
+    // }
 
     #[On('removeFileConfirmed')]
     public function onRemoveFileConfirmed($id)
@@ -126,64 +137,43 @@ class TaskFileUpload extends Component
                 $this->dispatch('status-message', success: false, message: 'File not found.');
                 return;
             }
-            if (Storage::exists('public/' . $file->file_path)) {
-                Storage::delete('public/' . $file->file_path);
+
+            if (Storage::disk('private')->exists($file->file_path)) {
+                Storage::disk('private')->delete($file->file_path);
             }
+
             $file->delete();
             $this->dispatch('status-message', success: true, message: 'File removed successfully.');
             $this->dispatch('refreshFiles');
         } catch (Exception $exception) {
             $this->dispatch('status-message', success: false, message: $exception->getMessage());
         }
+        $this->dispatch('$refresh');
     }
 
-
-    #[On('fileRemoved')]
-    public function fileRemoved($serverId)
+    public function removeSelectedFile($index)
     {
-        $this->files = array_filter($this->files, function ($file) use ($serverId) {
-            return $file->getFilename() !== $serverId;
-        });
+        $files_index = $index - count($this->savedFiles) + count($this->files);  
+        if (isset($files_index) ) {
+            array_splice($this->files,  $files_index, 1); 
+        }
+
+        if (isset($this->savedFiles[$index])) {
+            $tempFile = $this->savedFiles[$index];
+            Storage::disk('private')->delete($tempFile['file_path']);
+            array_splice($this->savedFiles, $index, 1);
+        }
     }
 
-    #[On('fileDeleted')]
-    public function deleteUploadedFile($fileId)
+    public function deleteOldTempFiles()
     {
-        $file = TaskFile::find($fileId);
+        $tempDir = Storage::disk('public')->path('livewire-tmp');
 
-        if ($file) {
-            $filePath = 'public/' . $file->file_path;
-
-            if (Storage::exists($filePath)) {
-                Storage::delete($filePath);
+        foreach (scandir($tempDir) as $file) {
+            if ($file != '.' && $file != '..' && time() - filemtime($tempDir . '/' . $file) > 28800) { 
+                Storage::delete('livewire-tmp/' . $file);
             }
-
-            $file->delete();
-            $this->removeUnsavedFiles($fileId);
-            $this->dispatch('fileDeleted', $fileId);
-        } else {
-            session()->flash('error', 'File not found!');
         }
-    }
-
-    #[On('trackUnsavedFiles')]
-    public function trackUnsavedFiles($serverId)
-    {
-        if (!in_array($serverId, $this->unsavedFiles)) {
-            $this->unsavedFiles[] = $serverId;
-            $this->dispatch('unsavedFilesUpdated', $this->unsavedFiles);
-        }
-    }
-
-    public function removeUnsavedFiles($serverId)
-    {
-        $this->unsavedFiles = array_filter($this->unsavedFiles, fn($id) => $id !== $serverId);
-    }
-
-    #[On('resetTrackingUnsavedFiles')]
-    public function resetTrackingUnsavedFiles()
-    {
-        $this->unsavedFiles = [];
     }
 
     public function mount($taskId)
@@ -192,43 +182,28 @@ class TaskFileUpload extends Component
         $this->loadSavedFiles($taskId);
     }
 
-    public function testLivewire()
-    {
-        logger('Livewire button clicked!');
-        session()->flash('message', 'Livewire is working!');
-    }
-
     #[On('upload:finished')]
     public function processFiles()
     {
-        logger('in process files');
         if (empty($this->files)) {
-            logger('No files available for processing.');
             return;
         }
 
         foreach ($this->files as $file) {
-            $storedPath = $file->store('uploads', 'public');
+            $storedPath = $file->store('task_files', 'private');
             $this->savedFiles[] = [
-                'file_path' => Storage::url($storedPath),
+                'file_path' => $storedPath,
                 'file_name' => $file->getClientOriginalName(),
             ];
         }
 
-        session()->flash('message', 'Files processed successfully.');
     }
 
-    public function removeFile($index)
-    {
-        unset($this->files[$index]);
-        $this->files = array_values($this->files); // Reindex the array
-    }
-
-    public function deleteFile($filePath)
-    {
-        Storage::delete($filePath);
-        $this->files = array_filter($this->files, fn($file) => $file !== $filePath);
-    }
+    // public function deleteFile($filePath)
+    // {
+    //     Storage::delete($filePath);
+    //     $this->files = array_filter($this->files, fn($file) => $file !== $filePath);
+    // }
 
     public function render()
     {

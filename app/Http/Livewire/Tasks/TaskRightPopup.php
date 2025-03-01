@@ -84,35 +84,6 @@ class TaskRightPopup extends Component
 
     }
 
-    // public function downloadFile($file, $originalFileName)
-    // {
-    //     return response()->download(storage_path('app/livewire-tmp/'.$file), $originalFileName);
-    // }
-
-    public function removeUpload($name, $tmpFilename)
-    {
-        $uploads = $this->getPropertyValue($name);
-
-        if (is_array($uploads) && isset($uploads[0]) && $uploads[0] instanceof TemporaryUploadedFile) {
-            $this->emit('upload:removed', $name, $tmpFilename)->self();
-
-            $this->syncInput($name, array_values(array_filter($uploads, function ($upload) use ($tmpFilename) {
-                if ($upload->getFilename() === $tmpFilename) {
-                    $numb = File::where(['task_id'=>$this->task->id, 'name'=> $upload->getFilename()])->delete();
-                    $upload->delete();
-                    return false;
-                }
-                return true;
-            })));
-        } elseif ($uploads instanceof TemporaryUploadedFile && $uploads->getFilename() === $tmpFilename) {
-            $uploads->delete();
-
-            $this->emit('upload:removed', $name, $tmpFilename)->self();
-
-            $this->syncInput($name, null);
-        }
-    }
-
     private function getFormTitle()
     {
         $titles = [
@@ -155,19 +126,13 @@ class TaskRightPopup extends Component
         $this->getFormTitle();
         $this->showTaskRightPopup = true;
         $this->dispatch('setTaskId', $taskId);
-        logger('setTaskId dispatched');
         $this->dispatch('$refresh');
-        // $this->js("window.dispatchEvent(new CustomEvent('taskModalOpenForCommentModel', { detail: " . json_encode($this->task->toArray()) . " }));");
-        // $this->dispatchBrowserEvent('taskModalOpenForCommentModel', ['task' => $this->task->toArray()]);
-        // Livewire.dispatch('taskModalOpenForCommentModel', $this->task);
-        // $this->dispatch('taskModalOpenForCommentModel', $this->task);
     }
 
     public function closeModal()
     {
-        $this->dispatch('removeUnprocessedAttachments');
+        $this->dispatch('removeUnuploadedAttachments');
         $this->showTaskRightPopup = false;
-        // $this->emit('clearFilePond');
     }
 
     public function store()
@@ -202,11 +167,6 @@ class TaskRightPopup extends Component
         } catch (Exception $exception) {
             $this->dispatch('status-message', success: false, message: $exception->getMessage());
         }
-        
-
-        
-
-
         $this->showTaskRightPopup = false;
     }
 

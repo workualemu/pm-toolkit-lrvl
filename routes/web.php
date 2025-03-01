@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\FileController;
 
 use App\Http\Livewire\TaskRightPopup;
 
@@ -94,6 +95,10 @@ Route::middleware('auth')->group(function () {
         Route::get('team-members/{team_id}', 'teamMembers')->name('team-members');
        
     });
+
+    Route::get('/files/download/{id}', [FileController::class, 'download'])->name('files.download');
+    Route::get('/files/view/{id}', [FileController::class, 'view'])->name('files.view');
+
 
     // Route::get('kanban', [PagesController::class, 'getKanban'])->name('kanban');
     // Route::get('gantt', [PagesController::class, 'getGantt'])->name('gantt');
