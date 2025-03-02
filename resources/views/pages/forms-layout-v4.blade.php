@@ -90,9 +90,7 @@
                                 </div>
                                 <div>
                                     <span class="font-medium text-slate-600 dark:text-navy-100">Post Images</span>
-                                    <div class="filepond fp-bordered fp-grid mt-1.5 [--fp-grid:2]">
-                                        <input type="file" x-init="$el._x_filepond = FilePond.create($el)" multiple />
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>

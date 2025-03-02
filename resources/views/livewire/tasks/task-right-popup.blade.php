@@ -93,7 +93,20 @@
                     <div class="py-4"></div>
                     <div class="items-center border-t border-slate-150 py-3 dark:border-navy-600">
                         <div class="px-2 flex items-center justify-between dark:border-navy-600">
-                            <x-button color="error" @click="showModal=false">{{ __('Delete') }}</x-button>
+                            <x-button
+                                color="error" 
+                                @click="
+                                window.customConfirm({
+                                    title: 'Delete task',
+                                    message: 'Are you sure you want to delete this task? This action cannot be undone.',
+                                    color: 'red',
+                                    okText: 'Delete',
+                                }).then(confirmed => {
+                                    if (confirmed) {
+                                        $dispatch('deleteConfirmed', { id: {{ $task->id ?? 0 }} });
+                                    }
+                                })">{{ __('Delete') }}
+                            </x-button>
                             <x-button color="info" @click="showModal=false">{{ __('Close') }}</x-button>
                             <x-button color="info" wire:click="store()" @click="refreshTaskComponent({{ $task->id }})">{{ __('Save') }}</x-button>
                         </div>
@@ -103,4 +116,12 @@
             </div>
         </div>
     </div>
+    <script>
+document.addEventListener('deleteTask', event => {
+    console.log('Browser event received:', event.detail);
+
+    // Manually dispatch the event to Livewire
+    Livewire.dispatch('deleteTask', event.detail.id);
+});
+</script>
 </div>

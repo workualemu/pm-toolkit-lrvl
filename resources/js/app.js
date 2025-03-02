@@ -69,9 +69,6 @@ import * as Gridjs from "gridjs";
 
 //  Forms Libraries
 import "@caneara/iodine"; // @see https://github.com/caneara/iodine
-import * as FilePond from "filepond"; // @see https://pqina.nl/filepond/
-import FilePondPluginImagePreview from "filepond-plugin-image-preview"; // @see https://pqina.nl/filepond/docs/api/plugins/image-preview/
-import FilePondPluginGetFile from 'filepond-plugin-get-file';
 import Quill from "quill/dist/quill.min"; // @see https://quilljs.com/
 import flatpickr from "flatpickr"; 
 import Tom from "tom-select/dist/js/tom-select.complete.min"; // @see https://tom-select.js.org/
@@ -96,11 +93,6 @@ import './confirm-modal.js';
 hljs.registerLanguage("xml", xml);
 hljs.configure({ ignoreUnescapedHTML: true });
 
-// Register plugin image preview for filepond
-FilePond.registerPlugin(FilePondPluginImagePreview);
-// Register plugin to download files from filepond
-FilePond.registerPlugin(FilePondPluginGetFile);
-
 import AgGridTable from "./AgGridTable";
 
 
@@ -117,7 +109,6 @@ window.Swiper = Swiper;
 window.Sortable = Sortable;
 window.ApexCharts = ApexCharts;
 window.Gridjs = Gridjs;
-window.FilePond = FilePond;
 window.flatpickr = flatpickr;
 window.Quill = Quill;
 window.Tom = Tom;

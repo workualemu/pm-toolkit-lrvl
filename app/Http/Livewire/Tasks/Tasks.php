@@ -37,6 +37,26 @@ class Tasks extends Component
         // $this->showTaskRightPopup = true;
     }
 
+    #[On('deleteTask')]
+    public function onDeleteTask($id)
+    {
+        logger('onDeleteTask1'.$id);
+        try{
+            $selectedItem = Task::find($id);
+            if($selectedItem->delete()){
+                $this->dispatch('status-message', success: true, message: 'Task has been deleted successfully!');
+            } else {
+                $this->dispatch('status-message', success: false, message: 'Task cannot be deleted!');
+            }
+        } catch (Exception $exception) {
+            $this->dispatch('status-message', success: false, message: $exception->getMessage());
+        }
+
+        // logger('onDeleteTask2'.$id);
+        // $this->tasks = array_filter($this->tasks, fn($task) => $task['id'] !== $id);
+        // $this->tasks = array_values($this->tasks);
+    }
+
     #[On('filterTasksWithHeader')]
     public function filterTasksWithHeader($filterParams)
     {

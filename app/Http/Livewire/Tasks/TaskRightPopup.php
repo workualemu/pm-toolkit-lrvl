@@ -13,12 +13,12 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
-use Livewire\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 use App\Notifications\TaskAssignment;
 use Carbon\Carbon;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Rule as LivewireRule;
+use App\Http\Livewire\Tasks\Tasks;
 
 class TaskRightPopup extends Component
 {
@@ -36,10 +36,7 @@ class TaskRightPopup extends Component
     public $taskParent = -1;
     public $formTitle = '';
 
-    public $files = [];
     public $datePickerDisabled = '';
-
-    public $file = 's9fwyeVg3ZO1j1V2vyNILxYD0PqqAl-metaZXhwb3J0ICg0KS54bHN4-.xlsx';
 
     #[LivewireRule('required|string|min:5')] 
     public $title = '';
@@ -52,37 +49,6 @@ class TaskRightPopup extends Component
     public $task_priority_id = 0;
     public $task_status_id = 0;
     public $progress = 0;
-
-    // protected $listeners = ['openTaskModal' => 'openModal',
-    //                         'fileDownloaded' => 'downloadFile',
-    //                     ];
-
-    #[On('downloadFile')]
-    public function downloadFile($file)
-    {
-        logger('downloadFile is captured');
-    }
-
-    public function finishUpload($name, $tmpPath, $isMultiple)
-    {
-        $this->cleanupOldUploads();
-
-        $files = collect($tmpPath)->map(function ($i) {
-            return TemporaryUploadedFile::createFromLivewire($i);
-        })->toArray();
-
-        $this->emitSelf('upload:finished', $name, collect($files)->map->getFilename()->toArray());
-
-        $this->syncInput($name, $files);
-
-        foreach($files as $file){
-            File::updateOrCreate(
-                ['path' => $file->getPath(), 'task_id' => $this->task->id],
-                ['name' => $file->getFileName()]
-            );
-        }
-
-    }
 
     private function getFormTitle()
     {
@@ -98,7 +64,6 @@ class TaskRightPopup extends Component
         $this->formTitle = $titles[$level][$isEditing ? 'edit' : 'new'] ?? ($isEditing ? 'Edit ' : 'Add ');
     }
 
-
     #[On('openTaskRightPopup')]
     public function openTaskRightPopup($parentId, $taskId, $taskLevel)
     {
@@ -106,8 +71,6 @@ class TaskRightPopup extends Component
         $this->taskParent = $parentId;
 
         $attachments = File::filterByTask($taskId)->get();
-
-        // $this->files = TemporaryUploadedFile::serializeMultipleForLivewireResponse($attachments);
         
         if($taskId > 0) {
             $this->task = Task::find($taskId);
@@ -129,9 +92,31 @@ class TaskRightPopup extends Component
         $this->dispatch('$refresh');
     }
 
+    #[On('deleteConfirmed')] 
+    public function deleteConfirmed($id)
+    {
+        $this->dispatch('deleteTask', id: $id);
+        // try{
+        //     $selectedItem = Task::find($id);
+        //     if($selectedItem->delete()){
+        //         $this->dispatch('status-message', success: true, message: 'Task has been deleted successfully!');
+        //     } else {
+        //         $this->dispatch('status-message', success: false, message: 'Task cannot be deleted!');
+        //     }
+        //     // $this->dispatch('deleteTask', ['id' => $id])->toSelf();
+        //     $this->dispatch('deleteTask', taskId: $id)->to(Tasks::class);
+        // } catch (Exception $exception) {
+        //     $this->dispatch('status-message', success: false, message: $exception->getMessage());
+        // }
+        // // logger('about to dispatch');
+        // // $this->dispatch('deleteTask', $id)->self();
+        $this->showTaskRightPopup = false;
+    }
+
     public function closeModal()
     {
         $this->dispatch('removeUnuploadedAttachments');
+        
         $this->showTaskRightPopup = false;
     }
 
@@ -160,7 +145,6 @@ class TaskRightPopup extends Component
                 $assgnee = User::find($this->task->assigned_to);
                 Notification::send($assgnee, new TaskAssignment($this->task));
             }
-            // $this->emit('saveUploads', $this->task->id);
             $this->dispatch('saveAttachments', $this->task->id);
 
             $this->dispatch('status-message', success: true, message: 'Task has been saved successfully!');

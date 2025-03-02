@@ -12,8 +12,6 @@ class TaskList extends Component
     #[Reactive]
     public $tasks;
 
- 
-
     public function render()
     {
         return view('livewire.tasks.task-list');
