@@ -14,7 +14,7 @@
                 <!--  search bar -->
                 <div class="flex items-center space-x-2">
                     <label class="relative hidden sm:flex">
-                        <input wire:model = "searchTerm"
+                        <input wire:model.live.debounce.500ms = "searchTerm"
                             class="form-input peer h-9 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:z-10 hover:border-slate-400 focus:z-10 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                             placeholder="Search projects..." type="text" />
                         <span

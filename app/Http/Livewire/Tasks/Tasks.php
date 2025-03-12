@@ -40,7 +40,6 @@ class Tasks extends Component
     #[On('deleteTask')]
     public function onDeleteTask($id)
     {
-        logger('onDeleteTask1'.$id);
         try{
             $selectedItem = Task::find($id);
             if($selectedItem->delete()){

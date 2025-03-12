@@ -47,8 +47,8 @@ class ProjectUsers extends Component
 
     public function render()
     {
-        $this->users = User::whereHas('roles', function ($q) {
-            $q->where('roles.name', '!=', 'Super Admin'); 
+        $this->users = User::whereDoesntHave('roles', function ($q) {
+            $q->where('roles.name', '=', 'Super Admin'); 
           })->get();
 
         // $this->projectUsers = [];

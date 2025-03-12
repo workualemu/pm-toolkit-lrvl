@@ -38,47 +38,6 @@ class TasksView extends Component
         $this->onUpdateTaskList($filterParams);
     }
 
-    // #[On('filter-by-status')]
-    // public function onFilterByStatus($filterValue)
-    // {
-    //     $this->resetParams();
-    //     $this->filterParams['fStatus'] = [$filterValue=>true];
-    //     $this->tasks = $this->getTasks();
-    // }
-
-    // #[On('filter-by-priority')]
-    // public function onFilterByPriority($filterValue)
-    // {
-    //     $this->resetParams();
-    //     $this->filterParams['fPriority'] = $filterValue;
-    //     $this->tasks = $this->getTasks();
-    // }
-
-    // #[On('filter-by-assigneetempo')]
-    // public function onFilterByAssignee($filterValue)
-    // {
-    //     logger('filtertempo');
-    //     $this->resetParams();
-    //     $this->tasks = [];
-    //     usleep(100000); 
-    //     $this->filterParams['fAssignee'] = $filterValue;
-    //     $filteredTasks = $this->getTasks();
-    //     $this->tasks = $filteredTasks->isEmpty() ? [] : $filteredTasks->toArray();
-    // }
-
-    // #[On('filter-by-tag')]
-    // public function onFilterByTag($filterValue)
-    // {
-    //     $this->resetParams();
-    //     $tasks = \DB::table('tag_tasks')
-    //         ->where('tag_id', '=', $filterValue)
-    //         ->get();
-
-    //     $taggedTasks = $tasks->pluck('task_id')->toArray();
-    //     $this->filterParams['fTaskIds'] = $taggedTasks;
-    //     $this->tasks = $this->getTasks();
-    // }
-
     public function resetParams()
     {
         $user =  \Auth::user();

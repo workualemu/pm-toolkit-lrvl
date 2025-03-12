@@ -22,6 +22,11 @@ class Projects extends Component
     public $showProjectModal = false; // Define showProjectModal property
     public $showDeleteModal = false; 
 
+    public function updatedSearchTerm()
+    {
+        $this->dispatch('$refresh');
+    }
+
     #[On('refreshProjects')]
     public function onRefreshProjects()
     {
@@ -49,15 +54,6 @@ class Projects extends Component
         return redirect()->route('project-users', ['project_id'=>$project->id]);
     }
 
-    // public function deleteProject($projectId)
-    // {
-    //     $project = Project::find($projectId);
-    //     if ($project) {
-    //         $project->delete();
-    //         $this->dispatch('refreshProjects');
-    //     }
-    // }
-
     public function showDeleteProjectModal($projectId)
     {
         $this->projectToDelete = Project::find($projectId);
@@ -78,8 +74,16 @@ class Projects extends Component
 
     public function render()
     {
+        $searchTerm = '%' . strtolower($this->searchTerm) . '%';
         if(Auth::user()->hasRole('Super Admin') ){
-            $this->projects = Project::where('is_template', false)->get()->sortBy('status');
+            $this->projects = Project::where('is_template', false)
+            ->when($this->searchTerm, function ($query) use ($searchTerm) {
+                $query->where(function ($q) use ($searchTerm) {
+                    $q->whereRaw('LOWER(title) LIKE ?', [$searchTerm])
+                    ->orWhereRaw('LOWER(description) LIKE ?', [$searchTerm]);
+                });
+            })
+            ->get()->sortBy('status');
         } else{
             $this->projects = Auth::user()->projects->where('is_template', false)
                 ->where('status', '=', 'GRANTED');
