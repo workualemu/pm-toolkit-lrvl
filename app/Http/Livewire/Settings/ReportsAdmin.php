@@ -4,10 +4,13 @@ namespace App\Http\Livewire\Settings;
 
 use Livewire\Component;
 use App\Models\Report;
+use Livewire\WithPagination;
 use Livewire\Attributes\On;
 
 class ReportsAdmin extends Component
 {
+    use WithPagination;
+
     public $searchTerm;
 
     public function updatedSearchTerm()

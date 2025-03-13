@@ -85,8 +85,29 @@ class Projects extends Component
             })
             ->get()->sortBy('status');
         } else{
-            $this->projects = Auth::user()->projects->where('is_template', false)
-                ->where('status', '=', 'GRANTED');
+            $this->projects = Auth::user()->projects() // Ensure Query Builder is used
+                ->where('projects.is_template', false) // Explicit table reference
+                ->wherePivot('status', 'GRANTED') // Filter by pivot table status
+                ->when($this->searchTerm, function ($query) {
+                    $searchTerm = strtolower("%{$this->searchTerm}%"); // Ensure wildcard usage
+                    $query->where(function ($q) use ($searchTerm) {
+                        $q->whereRaw('LOWER(projects.title) LIKE ?', [$searchTerm])
+                        ->orWhereRaw('LOWER(projects.description) LIKE ?', [$searchTerm]);
+                    });
+                })
+                ->get();
+
+            // $this->projects = Auth::user()->projects
+            //     ->where('projects.is_template', false)
+            //     ->where('user_projects.status', '=', 'GRANTED')
+            //     ->when($this->searchTerm, function ($query) {
+            //         $searchTerm = strtolower("%{$this->searchTerm}%"); 
+            //         $query->where(function ($q) use ($searchTerm) {
+            //             $q->whereRaw('LOWER(projects.title) LIKE ?', [$searchTerm])
+            //               ->orWhereRaw('LOWER(projects.description) LIKE ?', [$searchTerm]);
+            //         });
+            //     })
+            //     ->get();
         }
         
         return view('livewire.projects');

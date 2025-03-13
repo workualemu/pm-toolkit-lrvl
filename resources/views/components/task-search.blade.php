@@ -2,9 +2,19 @@
     
     <!-- Title (Stacks Above on Small Screens) -->
     <div class="flex items-center justify-center sm:justify-start">
-        <h3 class="text-lg font-medium text-slate-700 line-clamp-1 dark:text-navy-50 text-center sm:text-left">
-            {{ $title ?? 'Tasks' }}
-        </h3>
+        <div>
+            <div class="flex space-x-2">
+                <p class="text-xl font-medium text-blue-800 dark:text-navy-50">
+                {{ __('Wakanda PHC 2030') }}
+                </p>
+                <p class="text-xl font-medium text-slate-800 dark:text-navy-50">
+                |
+                </p>
+                <p class="text-xl font-medium text-slate-800 dark:text-navy-50">
+                    {{ $title ?? 'Tasks' }}
+                </p>
+            </div>
+        </div>
     </div>
 
     <!-- Search and Filter (Stacks Below on Small Screens) -->

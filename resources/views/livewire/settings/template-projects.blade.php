@@ -80,7 +80,7 @@
                             </table>
                         </div>
                     </div>
-                    {{ $statuses->links() }}
+                    {{ $records->links() }}
                 </div>
             </div>
         </div>

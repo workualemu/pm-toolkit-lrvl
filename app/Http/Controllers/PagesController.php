@@ -83,7 +83,7 @@ class PagesController extends Controller
 
         $projectId = $user->project_id;
         $project = Project::find($projectId);
-        return view('pages/settings-use', compact('project'));
+        return view('pages/reports-use', compact('project'));
     }
 
     public function getReportViewer($report_id, $params)

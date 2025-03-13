@@ -1,7 +1,7 @@
 <x-app-layout title="Kanban Board" is-header-blur="true" sidebarToggle="false">
 
     <div class="sidebar print:hidden">
-        <livewire:task-right-popup />
+        <livewire:tasks.task-right-popup />
 
         <div class="sidebar-panel  ml-[-160px]">
             <div class="flex h-full grow flex-col bg-white pl-[var(--main-sidebar-width)] dark:bg-navy-750">
