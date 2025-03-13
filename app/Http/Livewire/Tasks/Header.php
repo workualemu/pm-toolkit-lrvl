@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Tasks;
 use Livewire\Component;
 use App\Models\TaskStatus;
 use App\Models\Task;
+use App\Models\Project;
 use Livewire\Attributes\On;
 
 class Header extends Component
@@ -24,6 +25,8 @@ class Header extends Component
     public $sidebarFilter = [];
 
     public $filterStatuses = [];
+    public $project_title;
+    public $page_title;
 
     #[On('resetHeaderCriteria')]
     public function onResetHeaderCriteria()
@@ -108,7 +111,9 @@ class Header extends Component
         $this->phases = Task::whereNull('parent')
             ->where('project_id', $user->project_id)
             ->get();
-        
+        $project = Project::find($user->project_id);
+        $this->project_title = $project->title ?? 'No Project';
+
         return view('livewire.tasks.header');
     }
 }

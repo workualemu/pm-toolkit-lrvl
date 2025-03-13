@@ -4,7 +4,7 @@
     <!--header, title search, and filter block -->
     <x-status-message/>
     <x-app-partials.delete-confirmation />
-    @livewire('tasks.header', ['title'=>'Tasks', 'showStatusFilter'=>true])
+    @livewire('tasks.header', ['page_title'=>'Tasks', 'showStatusFilter'=>true])
     <!-- Tab def -->
     <div x-data="{ activeTab: 'tabList' }" class="tabs w-full flex flex-col overflow-y-auto">
       <div class="is-scrollbar-hidden">

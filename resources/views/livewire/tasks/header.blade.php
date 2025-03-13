@@ -1,7 +1,7 @@
 <div class="" x-data="{ isFilterExpanded: false }"
     x-effect="$store.breakpoints.smAndUp ">
     <!-- My task and search bar -->
-    <x-task-search></x-task-search>
+    <x-task-search :project_title="$project_title" :page_title="$page_title"></x-task-search>
     <!-- Filter block -->
     <div x-show="isFilterExpanded" x-collapse>
     <div class="max-w-xl py-3">

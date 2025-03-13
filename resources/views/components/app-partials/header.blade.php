@@ -14,19 +14,8 @@
                     <span></span>
                 </button>
             </div>
-            @if($user->getProject() == null)
-            <div class="text-center text-error">
-                <div class="mt-4">
-                    <p class="text-error dark:text-navy-300">
-                        Please select a project
-                    </p>
-                </div>
-            </div>
-            @else
             <p class="mt-1 text-xs text-info">
-            <span>{{ $user->getProject()->title }}</span>
             </p>
-            @endif
             <!-- Right: Header buttons -->
             <div class="-mr-1.5 flex items-center space-x-2">
                 <!-- Add user to project -->

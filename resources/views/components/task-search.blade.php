@@ -1,3 +1,4 @@
+@props(['project_title', 'page_title'])
 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0 px-2 py-2 transition-all duration-[.25s] w-full">
     
     <!-- Title (Stacks Above on Small Screens) -->
@@ -5,13 +6,13 @@
         <div>
             <div class="flex space-x-2">
                 <p class="text-xl font-medium text-blue-800 dark:text-navy-50">
-                {{ __('Wakanda PHC 2030') }}
+                {{ $project_title ?? '' }}
                 </p>
                 <p class="text-xl font-medium text-slate-800 dark:text-navy-50">
                 |
                 </p>
                 <p class="text-xl font-medium text-slate-800 dark:text-navy-50">
-                    {{ $title ?? 'Tasks' }}
+                    {{ $page_title ?? '' }}
                 </p>
             </div>
         </div>

@@ -1,7 +1,7 @@
 <div>
     <main class="main-content kanban-app">
         <!--header, title search, and filter block -->
-        @livewire('tasks.header', ['title'=>'Kanban board', 'showStatusFilter'=>false])
+        @livewire('tasks.header', ['page_title'=>'Kanban board', 'showStatusFilter'=>false])
         
         <div class="flex h-[calc(100vh-8.5rem)] flex-grow flex-col  overflow-y-auto">
             <div x-init="Sortable.create($el, {
