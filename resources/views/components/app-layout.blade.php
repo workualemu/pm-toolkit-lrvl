@@ -39,7 +39,11 @@
 
 </head>
 
-<body x-data x-init="$store.global.removePreloader()"
+<body x-data x-init="setTimeout(() => { 
+                $store.global.isSidebarExpanded = {{ json_encode($isSidebarOpen === 'true') }};
+                $store.global.initialized = true; // ✅ Make sure Alpine knows it's ready
+              }, 50); 
+              $store.global.removePreloader();"
     class="@isset($isSidebarOpen) {{ $isSidebarOpen === 'true' ? 'is-sidebar-open' : '' }} @endisset 
            @isset($isHeaderBlur) {{ $isHeaderBlur === 'true' ? 'is-header-blur' : '' }} @endisset 
            @isset($hasMinSidebar) {{ $hasMinSidebar === 'true' ? 'has-min-sidebar' : '' }} @endisset  
@@ -66,6 +70,8 @@
 
         {{ $slot }}
     </div>
+
+    
 
     <wireui:scripts />
 

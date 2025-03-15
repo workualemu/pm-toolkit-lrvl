@@ -1,4 +1,4 @@
-<x-app-layout title="Reports" is-header-blur="true"  sidebarToggle="false">
+<x-app-layout title="Reports" is-sidebar-open="false" is-header-blur="true"  sidebarToggle="false">
     <!-- Main Content Wrapper -->
     
     <livewire:report-use-modal />

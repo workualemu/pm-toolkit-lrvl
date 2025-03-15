@@ -8,8 +8,9 @@ document.addEventListener("alpine:init", () => {
     isDarkModeEnabled: Alpine.$persist(false).as("_x_darkMode_on"),
     isMonochromeModeEnabled: false,
     isSearchbarActive: false,
-    isSidebarExpanded: false,
+    isSidebarExpanded: false, 
     isRightSidebarExpanded: false,
+    initialized: false, 
 
     toggleDarkMode() {
       this.isDarkModeEnabled = !this.isDarkModeEnabled;
@@ -46,15 +47,20 @@ document.addEventListener("alpine:init", () => {
   });
 
   Alpine.effect(() => {
-    Alpine.store("global").isSidebarExpanded
-      ? document.body.classList.add("is-sidebar-open")
-      : document.body.classList.remove("is-sidebar-open");
+    if (Alpine.store("global").initialized ) {
+      Alpine.store("global").isSidebarExpanded
+        ? document.body.classList.add("is-sidebar-open")
+        : document.body.classList.remove("is-sidebar-open");
+    }
   });
 
   Alpine.effect(() => {
-    if (Alpine.store("breakpoints").name && !firstTime) {
+    let currentBreakpoint = Alpine.store("breakpoints").name;
+
+    if (currentBreakpoint === "sm") {
       Alpine.store("global").isSidebarExpanded = false;
       Alpine.store("global").isRightSidebarExpanded = false;
+      document.body.classList.remove("is-sidebar-open");
     }
   });
 
@@ -64,6 +70,9 @@ document.addEventListener("alpine:init", () => {
     }
   });
 
+  setTimeout(() => {
+    Alpine.store("global").initialized = true;
+  }, 100);
+
   firstTime = false;
 });
-export const store = Alpine.store("global");
