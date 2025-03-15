@@ -102,9 +102,5 @@
             </div>
         </main>
     </div>
-    <script>
-        window.addEventListener("load", () => {
-            document.querySelector(".app-preloader").style.display = "none";
-        });
-    </script>
+    
 </x-base-layout>

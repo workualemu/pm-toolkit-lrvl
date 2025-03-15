@@ -85,7 +85,8 @@ import * as pages from "./pages";
 // Breakpoints Store
 import breakpoints from "./utils/breakpoints";
 // Global Store
-import store from "./store";
+// import store from "./store";
+import './store';
 import './confirm-modal.js';
 
 // Register HTML, XML language for highlight.js
@@ -127,7 +128,7 @@ Alpine.magic("notification", () => notification);
 Alpine.magic("clipboard", () => clipboard);
 
 Alpine.store("breakpoints", breakpoints);
-Alpine.store("global", store);
+// Alpine.store("global", store);
 
 Alpine.data("usePopper", usePopper);
 Alpine.data("accordionItem", accordionItem);
