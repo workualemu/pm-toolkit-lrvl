@@ -45,7 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('project', ProjectController::class)->only(['index', 'create', 'update', 'store', 'edit', 'destroy']);
 
     Route::get('gantt/data/{project_id}', [GanttController::class, 'get']);
-
+    Route::get('gantt/data/{project_id}/{search_term}', [GanttController::class, 'getWithFilter']);
     
     Route::post('upload-file', UploadTemporaryFileController::class);
     // Route::get('newtask', [Tasks::class, 'newTask'])->name('newtask');

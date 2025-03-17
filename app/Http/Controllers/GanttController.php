@@ -17,11 +17,17 @@ class GanttController extends Controller
         if (empty($user->projects->where('id', $project_id))) {
             abort(403, 'Unauthorized access.');
         }
+        $criteria = [['type'=>'where','column'=>'project_id', 'value'=>$project_id]];
 
-        $tasks = Task::where('id', '!=', null)
-                    ->where('project_id', $project_id)
-                    ->orderBy('path')->get();
-
+        $searchTerm = request('search');
+        if(!empty($searchTerm)){
+            array_push($criteria, ['type' => 'whereRaw', 'column' => 'LOWER(tasks.title) LIKE ? OR LOWER(tasks.description) LIKE ?', 
+                'values' => ['%' . strtolower($searchTerm) . '%',
+                             '%' . strtolower($searchTerm) . '%'
+                        ]]);
+        }
+        $tasks = Task::sortedTasks($criteria, 'path', 'asc');
+        
         $tasks = $tasks->map(function($task) {
             $task->text = $task->title;
             if($task->level == 0) {
@@ -45,4 +51,5 @@ class GanttController extends Controller
             "links" => $links->all()
         ]);
     }
+
 }

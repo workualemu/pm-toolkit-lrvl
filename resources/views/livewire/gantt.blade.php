@@ -1,16 +1,25 @@
 <main class="w-full px-2 pt-16 mb-[60px] md:ml-[var(--main-sidebar-width)] ">
-    <div
-        class="flex justify-between space-x-2 py-2 transition-all duration-[.25s]">
-        <div class="flex items-center space-x-1">
-            <h3 class="text-lg font-medium text-slate-700 line-clamp-1 dark:text-navy-50">
-                {{ __('Gantt chart') }}
-            </h3>
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0 py-2 transition-all duration-[.25s] w-full">
+        <div class="flex items-center justify-center sm:justify-start">
+            <div>
+                <div class="flex space-x-2">
+                    <p class="text-xl font-medium text-blue-800 dark:text-navy-50">
+                    {{ $project_title ?? '' }}
+                    </p>
+                    <p class="text-xl font-medium text-slate-800 dark:text-navy-50">
+                    |
+                    </p>
+                    <p class="text-xl font-medium text-slate-800 dark:text-navy-50">
+                        {{ $page_title ?? '' }}
+                    </p>
+                </div>
+            </div>
         </div>
-        <div class="flex items-center space-x-1">
-            <label class="relative w-full max-w-[16rem] flex">
-                <input
-                    class="form-input peer h-8 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 pl-9 text-xs+ placeholder:text-slate-400/70 hover:z-10 hover:border-slate-400 focus:z-10 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                    placeholder="Search task" type="text" />
+        <div class="flex items-center w-full sm:w-[50%] lg:w-[30%] space-x-1">
+            <label class="relative w-full flex">
+                <input id="searchTerm"
+                    class="form-input peer h-8 w-full rounded-lg border border-slate-300 bg-transparent px-2 py-2 pl-9 text-xs+ placeholder:text-slate-400/70 hover:z-10 hover:border-slate-400 focus:z-10 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                    placeholder="Search tasks..." type="text" />
                 <span
                     class="pointer-events-none absolute flex h-full w-9 items-center justify-center text-slate-400 peer-focus:text-primary dark:text-navy-300 dark:peer-focus:text-accent">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-colors duration-200"
@@ -20,26 +29,25 @@
                     </svg>
                 </span>
             </label>
-            <button x-tooltip="'Filter'"
-                class="btn h-6 w-6 rounded-full p-0 text-info hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25 sm:h-8 sm:w-8">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                </svg>
-            </button>
         </div>
         <div class="flex items-center space-x-1">
             <button x-tooltip="'Zoom out'" onclick="gantt.ext.zoom.zoomOut();" 
-                class="btn h-6 w-6 rounded-full p-0 text-info hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25 sm:h-8 sm:w-8">
+                class="btn h-6 w-6 rounded-full p-0 text-info hover:bg-slate-300/80 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25 sm:h-8 sm:w-8">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4 sm:h-5 sm:w-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM13.5 10.5h-6" />
                 </svg>
             </button>
             <button x-tooltip="'Zoom in'" onclick="gantt.ext.zoom.zoomIn();" 
-                class="btn h-6 w-6 rounded-full p-0 text-info hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25 sm:h-8 sm:w-8">
+                class="btn h-6 w-6 rounded-full p-0 text-info hover:bg-slate-300/80 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25 sm:h-8 sm:w-8">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4 sm:h-5 sm:w-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" />
+                </svg>
+            </button>
+            <button id="toggleGridBtn" x-tooltip="'Toggle grid'" 
+                class="btn h-8 w-8 rounded-full p-0 text-info hover:bg-slate-300/80 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25 sm:h-8 sm:w-8">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
+                    class="h-4.5 w-4.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0112 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125M3.375 8.25c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m17.25-3.75h-7.5c-.621 0-1.125.504-1.125 1.125m8.625-1.125c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M12 10.875v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125M13.125 12h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125M20.625 12c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5M12 14.625v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 14.625c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m0 1.5v-1.5m0 0c0-.621.504-1.125 1.125-1.125m0 0h7.5" />
                 </svg>
             </button>
         </div>
@@ -126,37 +134,6 @@
             gantt.ext.zoom.zoomOut()
         }
 
-
-        // var resourceConfig = {
-        //     columns: [
-        //         {
-        //             name: "name", label: "Name", tree: true, template: function (resource) {
-        //                 return resource.text;
-        //             }
-        //         },
-        //         {
-        //             name: "workload", label: "Workload", template: function (resource) {
-        //                 var tasks;
-        //                 var store = gantt.getDatastore(gantt.config.resource_store),
-        //                     field = gantt.config.resource_property;
-
-        //                 if (store.hasChild(resource.id)) {
-        //                     tasks = gantt.getTaskBy(field, store.getChildren(resource.id));
-        //                 } else {
-        //                     tasks = gantt.getTaskBy(field, resource.id);
-        //                 }
-
-        //                 var totalDuration = 0;
-        //                 for (var i = 0; i < tasks.length; i++) {
-        //                     totalDuration += tasks[i].duration;
-        //                 }
-
-        //                 return (totalDuration || 0) * 8 + "h";
-        //             }
-        //         }
-        //     ],
-        // };
-
         gantt.config.columns = [
             { name: "text", tree: true, width: 220, resize: true, sort: true },
             { name: "start_date", align: "center", width: 150, resize: true, sort: true },
@@ -164,28 +141,70 @@
             { name: "add", width: 44 }
         ];
 
-        gantt.config.layout = {
-            css: "gantt_container",
-            cols: [
-                {
-                    width:400,
-                    minWidth: 200,
-                    maxWidth: 600,
-                    rows:[
-                        {view: "grid", scrollX: "gridScroll", scrollable: true, scrollY: "scrollVer"}, 
-                        {view: "scrollbar", id: "gridScroll"}  
-                    ]
-                },
-                {resizer: true, width: 1},
-                {
-                    rows:[
-                        {view: "timeline", scrollX: "scrollHor", scrollY: "scrollVer"},
-                        {view: "scrollbar", id: "scrollHor", group:"horizontal"}
-                    ]
-                },
-                {view: "scrollbar", id: "scrollVer"}
-            ]
-        };
+        let isGridVisible = true; 
+        let isTimelineVisible = true;
+
+        // Function to get the correct layout based on grid visibility
+        function getGanttLayout() {
+            return {
+                css: "gantt_container",
+                cols: [
+                    ...(isGridVisible ? [ 
+                        {
+                            width: 500,
+                            minWidth: 200,
+                            maxWidth: 600,
+                            rows:[
+                                {view: "grid", scrollX: "gridScroll", scrollable: true, scrollY: "scrollVer"}, 
+                                {view: "scrollbar", id: "gridScroll"}  
+                            ]
+                        },
+                        {resizer: true, width: 1} 
+                    ] : []), 
+                    {
+                        rows:[
+                            {view: "timeline", scrollX: "scrollHor", scrollY: "scrollVer"},
+                            {view: "scrollbar", id: "scrollHor", group:"horizontal"}
+                        ]
+                    },
+                    {view: "scrollbar", id: "scrollVer"}
+                ]
+            };
+        }
+
+        // Function to reinitialize Gantt when toggling grid
+        function updateGanttLayout() {
+            gantt.config.layout = getGanttLayout();
+            
+            
+            const searchTerm = document.getElementById("searchTerm").value;
+            const projectId = "{{ $project->id }}";
+
+            gantt.clearAll(); 
+            gantt.init("gantt_here"); 
+            gantt.load(`/gantt/data/${projectId}?search=${encodeURIComponent(searchTerm)}`);
+            // if(searchTerm.empty()){
+            //     gantt.load("gantt/data/{{$project->id}}");
+            // } else {
+            //     gantt.load(`gantt/data/${projectId}/${searchTerm}`);
+            // }
+        }
+        document.getElementById("toggleGridBtn").addEventListener("click", function() {
+            isGridVisible = !isGridVisible; 
+            updateGanttLayout(); 
+        });
+
+        let debounceTimer;
+
+        document.getElementById("searchTerm").addEventListener("input", function () {
+            clearTimeout(debounceTimer); 
+
+            debounceTimer = setTimeout(() => {
+                const searchTerm = this.value;
+                updateGanttLayout(); 
+            }, 500); 
+        });
+
 
         var resourcesStore = gantt.createDatastore({
             name: gantt.config.resource_store,
@@ -205,6 +224,7 @@
         gantt.attachEvent("onAfterTaskDrag", function(id, mode, e){
             task = gantt.getTask(id);
             window.Livewire.dispatch('ganttTaskDragged', {id, mode, task});
+            gantt.refreshData();
         });
         
         gantt.attachEvent("onAfterTaskUpdate", function(id, task){
@@ -235,9 +255,9 @@
             window.Livewire.dispatch('ganttTaskVerticalMoved', {id, parent, tindex});
         });
 
-        gantt.attachEvent("onBeforeRowDragMove", function(id, parent, tindex){
-            window.Livewire.dispatch('ganttBeforeRowDragMove', {id, parent, tindex});
-        });
+        // gantt.attachEvent("onBeforeRowDragMove", function(id, parent, tindex){
+        //     window.Livewire.dispatch('ganttBeforeRowDragMove', {id, parent, tindex});
+        // });
 
         gantt.attachEvent("onBeforeRowDragEnd", function(id, parent, tindex){
             window.Livewire.dispatch('ganttBeforeRowDragEnd', {id, parent, tindex});
@@ -285,8 +305,16 @@
             return ""; 
         };
 
+        const searchTerm = document.getElementById("searchTerm").value;
+        const projectId = "{{ $project->id }}";
+
         gantt.config.xml_date = "%d-%M-%Y";
         gantt.init("gantt_here");
         gantt.load("gantt/data/{{$project->id}}");
+
+        // window.Livewire.on('ganttTaskUpdated', function(project_id) {
+        //     gantt.clearAll(); 
+        //     gantt.load(`gantt/data/${project_id}`); 
+        // });
     </script>
 </main>
