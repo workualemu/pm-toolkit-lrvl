@@ -250,4 +250,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboards/project-boards', [PagesController::class, 'dashboardsProjectBoards'])->name('dashboards/project-boards');
     Route::get('/dashboards/widget-ui', [PagesController::class, 'dashboardsWidgetUi'])->name('dashboards/widget-ui');
     Route::get('/dashboards/widget-contacts', [PagesController::class, 'dashboardsWidgetContacts'])->name('dashboards/widget-contacts');
+    Route::get('/privacy-notice', [PagesController::class, 'privacyNotice'])->name('privacy-notice');
+    Route::get('/terms-of-service', [PagesController::class, 'termsOfService'])->name('terms-of-service');
 });

@@ -47,30 +47,47 @@
             @endif
         </div>
 
-        <div class="mt-8 px-2 w-full grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
+        <!-- Summary Cards -->
+        <div class="mt-8 px-2 w-full grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-10 lg:grid-cols-4 lg:gap-12 xl:grid-cols-4">
+            <div class="card bg-white shadow-lg p-4 sm:p-5">
+                <h3 class="text-lg font-medium text-slate-700 dark:text-navy-100">{{ __('Total Projects') }}</h3>
+                <p class="mt-3 text-2xl font-bold text-black">{{ $totalProjects }}</p>
+            </div>
+            <div class="card bg-white shadow-lg p-4 sm:p-5">
+                <h3 class="text-lg font-medium text-slate-700 dark:text-navy-100">{{ __('In Progress') }}</h3>
+                <p class="mt-3 text-2xl font-bold text-green-600">{{ $totalProjects }}</p>
+            </div>
+            <div class="card bg-white shadow-lg p-4 sm:p-5">
+                <h3 class="text-lg font-medium text-slate-700 dark:text-navy-100">{{ __('Completed') }}</h3>
+                <p class="mt-3 text-2xl font-bold text-blue-600">{{ $completedProjects }}</p>
+            </div>
+            <div class="card bg-white shadow-lg p-4 sm:p-5">
+                <h3 class="text-lg font-medium text-slate-700 dark:text-navy-100">{{ __('On Hold') }}</h3>
+                <p class="mt-3 text-2xl font-bold text-red-600">{{ $onHoldProjects }}</p>
+            </div>
+        </div>
+
+        <!-- Project Cards -->
+        <div class="mt-8 px-2 w-full grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
             @forelse($projects as $key=>$project)
-                <div class="card shadow-none">
-                    <div class="flex flex-1 flex-col rounded-lg bg-{{ $colors[$key] }}/15 p-4 dark:bg-transparent sm:p-5">
-                        <div>
-                            <div class="flex items-start justify-between">
-                                <p class="text-xs+">
-                                    @if($project->start_date)
-                                        {{date('d-M-Y', strtotime($project->start_date))}}
-                                    @endif
-                                </p>
-                                
-                                <x-dropmenu name="test" :options="['Edit Project', 'Delete project', 'Manage project users']" 
-                                record="{{$project->id}}"/>
-                            </div>
+                <div class="card bg-white shadow-lg">
+                    <div class="flex flex-1 flex-col rounded-lg p-4 sm:p-5">
+                        <div class="flex items-start justify-between">
+                            <p class="text-xs+ bg-green-100 text-green-800 px-2 py-1 rounded">{{ __('In progress') }}</p>
+                            <x-dropmenu name="test" :options="['Edit Project', 'Delete project', 'Manage project users']" 
+                            record="{{$project->id}}"/>
                         </div>
-                        <div>
-                            <a href="{{ route('tasks', ['project_id' => $project->id]) }}">
-                                <h2 class="mt-3 font-medium text-slate-700 line-clamp-2 dark:text-navy-100">
-                                    {{$project->title}} 
-                                </h2>
-                                <p class="text-xs+">{{$project->description}}</p>
-                            </a>
-                        </div>
+                        <a href="{{ route('tasks', ['project_id' => $project->id]) }}">
+                            <h2 class="mt-3 font-medium text-slate-700 line-clamp-2 dark:text-navy-100">
+                                {{$project->title}} 
+                            </h2>
+                            <p class="mt-2 text-xs+">{{$project->description}}</p>
+                        </a>
+                        <p class="mt-4 text-xs+">
+                            @if($project->start_date)
+                                {{date('d-M-Y', strtotime($project->start_date))}}
+                            @endif
+                        </p>
                     </div>
                 </div>
             @empty
