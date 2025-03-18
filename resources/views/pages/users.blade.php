@@ -1,4 +1,4 @@
-<x-app-layout title="Users" is-header-blur="true" sidebarToggle="false">
+<x-app-layout title="Users" is-sidebar-open="false" is-header-blur="true" sidebarToggle="false">
     <!-- Main Content Wrapper -->
     
     <livewire:users.invited-users-modal />

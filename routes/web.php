@@ -45,7 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('project', ProjectController::class)->only(['index', 'create', 'update', 'store', 'edit', 'destroy']);
 
     Route::get('gantt/data/{project_id}', [GanttController::class, 'get']);
-
+    Route::get('gantt/data/{project_id}/{search_term}', [GanttController::class, 'getWithFilter']);
     
     Route::post('upload-file', UploadTemporaryFileController::class);
     // Route::get('newtask', [Tasks::class, 'newTask'])->name('newtask');
@@ -250,6 +250,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboards/project-boards', [PagesController::class, 'dashboardsProjectBoards'])->name('dashboards/project-boards');
     Route::get('/dashboards/widget-ui', [PagesController::class, 'dashboardsWidgetUi'])->name('dashboards/widget-ui');
     Route::get('/dashboards/widget-contacts', [PagesController::class, 'dashboardsWidgetContacts'])->name('dashboards/widget-contacts');
-    Route::get('/privacy-notice', [PagesController::class, 'privacyNotice'])->name('privacy-notice');
-    Route::get('/terms-of-service', [PagesController::class, 'termsOfService'])->name('terms-of-service');
+ 
 });

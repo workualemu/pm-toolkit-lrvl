@@ -3,22 +3,18 @@
 
 <head>
     <meta charset="UTF-8">
-
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}" />
-
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ config('app.name') }} @isset($title)
-            - {{ $title }}
-        @endisset
-    </title>
+    <title>{{ config('app.name') }} @isset($title) - {{ $title }} @endisset</title>
 
     <!-- CSS & JS Assets -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @livewireStyles
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,28 +22,32 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
         rel="stylesheet" />
 
+    <!-- Gantt Chart -->
     <link rel="stylesheet" href="{{ asset('vendor/dhtmlx-gantt/codebase/dhtmlxgantt.css') }}">
     <script src="{{ asset('vendor/dhtmlx-gantt/codebase/dhtmlxgantt.js') }}"></script>
 
+    <!-- Dark Mode Fix -->
     <script>
-        /**
-         * THIS SCRIPT REQUIRED FOR PREVENT FLICKERING IN SOME BROWSERS
-         */
-        localStorage.getItem("_x_darkMode_on") === "true" &&
+        if (localStorage.getItem("_x_darkMode_on") === "true") {
             document.documentElement.classList.add("dark");
+        }
     </script>
-    
+
     @isset($head)
         {{ $head }}
     @endisset
 
 </head>
 
-<body x-data x-bind="$store.global.documentBody"
+<body x-data x-init="setTimeout(() => { 
+                $store.global.isSidebarExpanded = {{ json_encode($isSidebarOpen === 'true') }};
+                $store.global.initialized = true; // ✅ Make sure Alpine knows it's ready
+              }, 50); 
+              $store.global.removePreloader();"
     class="@isset($isSidebarOpen) {{ $isSidebarOpen === 'true' ? 'is-sidebar-open' : '' }} @endisset 
-        @isset($isHeaderBlur) {{ $isHeaderBlur === 'true' ? 'is-header-blur' : '' }} @endisset 
-        @isset($hasMinSidebar) {{ $hasMinSidebar === 'true' ? 'has-min-sidebar' : '' }} @endisset  
-        @isset($headerSticky) {{ $headerSticky === 'false' ? 'is-header-not-sticky' : '' }} @endisset">
+           @isset($isHeaderBlur) {{ $isHeaderBlur === 'true' ? 'is-header-blur' : '' }} @endisset 
+           @isset($hasMinSidebar) {{ $hasMinSidebar === 'true' ? 'has-min-sidebar' : '' }} @endisset  
+           @isset($headerSticky) {{ $headerSticky === 'false' ? 'is-header-not-sticky' : '' }} @endisset">
 
     <!-- App preloader-->
     <x-app-preloader></x-app-preloader>
@@ -56,17 +56,12 @@
     <div id="root" class="min-h-100vh flex grow bg-slate-50 dark:bg-navy-900 h-full overflow-y-scroll" x-cloak>
         <!-- Sidebar -->
         <div class="sidebar print:hidden">
-            <!-- Main Sidebar -->
             <x-app-partials.main-sidebar></x-app-partials.main-sidebar>
-
-            <!-- Sidebar Panel -->
         </div>
 
         <!-- App Header -->
-        <x-app-partials.header
-                sidebarToggle='{{ $sidebarToggle}}'
-        ></x-app-partials.header>
-    
+        <x-app-partials.header sidebarToggle="{{ $sidebarToggle }}"></x-app-partials.header>
+
         <!-- Mobile Searchbar -->
         <x-app-partials.mobile-searchbar></x-app-partials.mobile-searchbar>
 
@@ -74,31 +69,19 @@
         <x-app-partials.right-sidebar></x-app-partials.right-sidebar>
 
         {{ $slot }}
-
     </div>
+
+    
+
     <wireui:scripts />
-    <!--
-  This is a place for Alpine.js Teleport feature
-  @see https://alpinejs.dev/directives/teleport
--->
-    <!-- <div id="x-teleport-target"></div> -->
 
-    <script>
-        // document.addEventListener("DOMContentLoaded", () => Alpine.start());
-    </script>
-
-
-
-    <!-- <script>
-        window.addEventListener("load", () => {
-            document.querySelector(".app-preloader").style.display = "none";
-        });
-    </script> -->
+    <!-- Livewire Scripts -->
     @livewireScripts
+
     @isset($script)
         {{ $script }}
     @endisset
-    
+
 </body>
 
 </html>

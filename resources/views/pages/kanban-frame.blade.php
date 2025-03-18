@@ -1,4 +1,4 @@
-<x-app-layout title="Kanban Board" is-header-blur="true" sidebarToggle="false">
+<x-app-layout title="Kanban Board"  is-sidebar-open="false" is-header-blur="true" sidebarToggle="false">
 
     <div class="sidebar print:hidden">
         <livewire:tasks.task-right-popup />

@@ -9,10 +9,8 @@
     </div>
     <div class="hidden w-full place-items-center lg:grid">
         <div class="w-full max-w-lg p-6">
-            <img class="w-full" x-show="!$store.global.isDarkModeEnabled"
+            <img class="w-full"
                 src="{{ asset('images/illustrations/dashboard-check.svg') }}" alt="image" />
-            <img class="w-full" x-show="$store.global.isDarkModeEnabled"
-                src="{{ asset('images/illustrations/dashboard-check-dark.svg') }}" alt="image" />
         </div>
     </div>
     <main class="flex w-full flex-col items-center bg-white dark:bg-navy-700 lg:max-w-md">
@@ -98,4 +96,5 @@
             <a href="#">Term of service</a>
         </div>
     </main>
+    
 </x-base-layout>

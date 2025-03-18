@@ -19,16 +19,15 @@ class Gantt extends Component
     public $dragEnded = false;
     public $moveToIndex = -1;
     public $moveToParent = -1;
+    public $searchTerm = '';
+    public $project_title;
+    public $page_title = 'Gantt chart';
 
-    // protected $listeners = ['ganttTaskAdded' => 'onTaskAdd',
-    //                         'ganttTaskDragged' => 'onTaskDragged',
-    //                         'gantt-task-deleted' => 'onTaskDeleted',
-    //                         'ganttTaskUpdated' => 'onTaskUpdated',
-    //                         'ganttLinkAdded' => 'onLinkAdd',
-    //                         'gantt-link-deleted' => 'onLinkDeleted',
-    //                         'ganttTaskVerticalMoved' => 'onAfterTaskMove',
-    //                         'gantt-before-row-drag-end' => 'onBeforeRowDraggedEnd'
-                            // ];
+
+    public function updatedSearchTerm()
+    {
+        $this->dispatch('$refresh');
+    }
 
     #[On('ganttTaskAdded')]
     public function onTaskAdd($task)
@@ -59,31 +58,35 @@ class Gantt extends Component
     }
 
     #[On('ganttTaskDragged')]
-    public function onTaskDragged($task_id, $mode, $task)
+    public function onTaskDragged($id, $mode, $task)
     {
+        
         // $dt = $this->tasks->keyBy('id');
         $dTask = Task::find($task['id']);
         $dTask->start_date = $task['start_date'];
-        $dTask->duration = $task['duration'];
+        $dTask->duration = isset($task['duration']) ? (int)$task['duration'] : 0;
         $dTask->progress = $task['progress'];
         $dTask->end_date = \Carbon\Carbon::parse($dTask->start_date)->addDays($dTask->duration);
         $dTask->save();
+        // $this->dispatch('ganttTaskUpdated', $this->project->id);
+       
+        
 
-        $parent_id = $dTask->parent;
-        while($parent_id != null) {
-            $parent = Task::find($parent_id);
-            if($parent->start_date > $dTask->start_date) {
-                $parent->start_date = $dTask->start_date;
-            }
-            if($parent->end_date < $dTask->end_date) {
-                $parent->end_date = $dTask->end_date;
-            }
-            $to = \Carbon\Carbon::parse($parent->end_date);
-            $from = \Carbon\Carbon::parse($parent->start_date);
-            $parent->duration =$to->diffInDays($from);
-            $parent->save();
-            $parent_id = $parent->parent;
-        }
+        // $parent_id = $dTask->parent;
+        // while($parent_id != null) {
+        //     $parent = Task::find($parent_id);
+        //     if($parent->start_date > $dTask->start_date) {
+        //         $parent->start_date = $dTask->start_date;
+        //     }
+        //     if($parent->end_date < $dTask->end_date) {
+        //         $parent->end_date = $dTask->end_date;
+        //     }
+        //     $to = \Carbon\Carbon::parse($parent->end_date);
+        //     $from = \Carbon\Carbon::parse($parent->start_date);
+        //     $parent->duration =$to->diffInDays($from);
+        //     $parent->save();
+        //     $parent_id = $parent->parent;
+        // }
     }
 
     #[On('ganttTaskUpdated')]
@@ -95,6 +98,7 @@ class Gantt extends Component
             [
             'title' => $task['text'],
             'start_date' => $task['start_date'],
+            'end_date' => \Carbon\Carbon::parse($task['start_date'])->addDays($task['duration']),
             'duration' => $task['duration'],
             'parent' => $task['parent']==0?null:$task['parent'],
             'task_status_id' => 1,
@@ -105,6 +109,7 @@ class Gantt extends Component
             'level' => $task['$level']
         ]
         );
+        $this->dispatch('$refresh');
 
     }
 
@@ -112,16 +117,17 @@ class Gantt extends Component
     public function onTaskDeleted($id)
     {
         $res=Task::where('id', $id)->delete();
+        $this->dispatch('$refresh');
     }
 
     #[On('ganttLinkAdded')]
     public function onLinkAdd($id, $item)
     {
-        logger('onLinkAdd');
         Link::updateOrCreate(
             ['source' => $item['source'], 'target' => $item['target']],
             ['type' => $item['type']]
         );
+        $this->dispatch('$refresh');
     }
 
     #[On('ganttLinkDeleted')]
@@ -201,7 +207,7 @@ class Gantt extends Component
         //     "links" => $links->all()
         // ]);
 
-        // $this->data = $ldata->content();
+        $this->project_title = $this->project->title;
         return view('livewire.gantt');
     }
 }

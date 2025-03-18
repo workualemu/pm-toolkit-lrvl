@@ -1,7 +1,7 @@
 <x-base-layout title="Forgot password?">
 <div class="fixed top-0 hidden p-6 lg:block lg:px-12">
         <a href="#" class="flex items-center space-x-2">
-            <img class="h-12 w-12" src="{{ asset('images/app-logo.svg') }}" alt="logo" />
+            <img class="h-12 w-12" src="{{ asset('images/uneca_main_logo.png') }}" alt="logo" />
             <p class="text-xl font-semibold uppercase text-slate-700 dark:text-navy-100">
                 {{ config('app.name') }}
             </p>
@@ -9,10 +9,8 @@
     </div>
     <div class="hidden w-full place-items-center lg:grid">
         <div class="w-full max-w-lg p-6">
-            <img class="w-full" x-show="!$store.global.isDarkModeEnabled"
+            <img class="w-full" 
                 src="{{ asset('images/illustrations/dashboard-check.svg') }}" alt="image" />
-            <img class="w-full" x-show="$store.global.isDarkModeEnabled"
-                src="{{ asset('images/illustrations/dashboard-check-dark.svg') }}" alt="image" />
         </div>
     </div>
     <main class="flex w-full flex-col items-center bg-white dark:bg-navy-700 lg:max-w-md">
@@ -73,4 +71,5 @@
             <a href="#">Term of service</a>
         </div>
     </main>
+    
 </x-base-layout>
