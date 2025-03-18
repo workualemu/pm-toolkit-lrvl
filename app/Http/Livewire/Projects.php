@@ -20,7 +20,7 @@ class Projects extends Component
     public $searchTerm;
     public $projectToDelete;
     public $showProjectModal = false; // Define showProjectModal property
-    public $showDeleteModal = false; 
+    public $showDeleteModal = false;
 
     public function updatedSearchTerm()
     {
@@ -76,16 +76,16 @@ class Projects extends Component
     {
         $searchTerm = '%' . strtolower($this->searchTerm) . '%';
         if(Auth::user()->hasRole('Super Admin') ){
-            $this->projects = Project::where('is_template', false)
+            $projectsQuery = Project::where('is_template', false)
             ->when($this->searchTerm, function ($query) use ($searchTerm) {
                 $query->where(function ($q) use ($searchTerm) {
                     $q->whereRaw('LOWER(title) LIKE ?', [$searchTerm])
                     ->orWhereRaw('LOWER(description) LIKE ?', [$searchTerm]);
                 });
-            })
-            ->get()->sortBy('status');
+            });
+            $this->projects = $projectsQuery->get()->sortBy('status');
         } else{
-            $this->projects = Auth::user()->projects() // Ensure Query Builder is used
+            $projectsQuery = Auth::user()->projects() // Ensure Query Builder is used
                 ->where('projects.is_template', false) // Explicit table reference
                 ->wherePivot('status', 'GRANTED') // Filter by pivot table status
                 ->when($this->searchTerm, function ($query) {
@@ -94,22 +94,20 @@ class Projects extends Component
                         $q->whereRaw('LOWER(projects.title) LIKE ?', [$searchTerm])
                         ->orWhereRaw('LOWER(projects.description) LIKE ?', [$searchTerm]);
                     });
-                })
-                ->get();
-
-            // $this->projects = Auth::user()->projects
-            //     ->where('projects.is_template', false)
-            //     ->where('user_projects.status', '=', 'GRANTED')
-            //     ->when($this->searchTerm, function ($query) {
-            //         $searchTerm = strtolower("%{$this->searchTerm}%"); 
-            //         $query->where(function ($q) use ($searchTerm) {
-            //             $q->whereRaw('LOWER(projects.title) LIKE ?', [$searchTerm])
-            //               ->orWhereRaw('LOWER(projects.description) LIKE ?', [$searchTerm]);
-            //         });
-            //     })
-            //     ->get();
+                });
+            $this->projects = $projectsQuery->get();
         }
-        
-        return view('livewire.projects');
+
+        $totalProjects = $this->projects->count();
+        $inProgressProjects = $this->projects->where('status', 'in progress')->count();
+        $completedProjects = 0;
+        $onHoldProjects = 0;
+
+        return view('livewire.projects', [
+            'totalProjects' => $totalProjects,
+            'inProgressProjects' => $inProgressProjects,
+            'completedProjects' => $completedProjects,
+            'onHoldProjects' => $onHoldProjects,
+        ]);
     }
 }

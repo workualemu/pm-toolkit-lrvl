@@ -1,7 +1,7 @@
 <x-base-layout title="Login">
-    <div class="fixed top-0 hidden p-6 lg:block lg:px-12">
+    <div class="fixed top-0 p-6 lg:block lg:px-12 md:hidden flex justify-center w-full mb-8">
         <a href="#" class="flex items-center space-x-2">
-            <img class="h-12 w-12" src="{{ asset('images/uneca_main_logo.png') }}" alt="logo" />
+            <img class="h-12 w-12" src="{{ asset('images/app-logo.png') }}" alt="logo" />
             <p class="text-xl font-semibold uppercase text-slate-700 dark:text-navy-100">
                 {{ config('app.name') }}
             </p>
@@ -18,10 +18,10 @@
             </div>
         </div>
         <main class="flex flex-col items-center justify-center w-full bg-white dark:bg-navy-700 p-4 lg:p-8">
-            <div class="lg:hidden mb-6 flex justify-center">
-                <img class="h-20 w-20" src="{{ asset('images/uneca_main_logo.png') }}" alt="logo" />
+            <div class="lg:hidden mb-6 hidden">
+                <img class="h-20 w-20" src="{{ asset('images/app-logo.png') }}" alt="logo" />
             </div>
-            <div class="flex w-full max-w-md grow flex-col justify-center p-4 sm:p-6 lg:p-8">
+            <div class="flex w-full max-w-md grow flex-col justify-center p-4 sm:p-6 lg:p-8 mt-16">
                 <div class="text-center">
                     <div class="mt-4">
                         <h2 class="text-3xl sm:text-4xl font-bold text-slate-600 dark:text-navy-100">
@@ -93,14 +93,133 @@
                     </button>
                 </form>
             </div>
+            <div class="lg:hidden flex flex-col items-center text-center my-5 text-sm text-slate-400 dark:text-navy-300">
+                <span>&copy; 2025 UNECA. All rights reserved.</span>
+                <div class="mx-3 my-1 h-px w-full bg-slate-200 dark:bg-navy-500"></div>
+                <a href="#" onclick="toggleModal('termsModal')">Terms of Service</a>
+                <div class="mx-3 my-1 h-px w-full bg-slate-200 dark:bg-navy-500"></div>
+                <a href="#" onclick="toggleModal('privacyModal')">Privacy Notice</a>
+            </div>
             <div class="hidden lg:flex my-5 justify-center text-sm text-slate-400 dark:text-navy-300">
                 <span>&copy; 2025 UNECA. All rights reserved.</span>
                 <div class="mx-3 my-1 w-px bg-slate-200 dark:bg-navy-500"></div>
-                <a href="#">Privacy Notice</a>
+                <a href="#" onclick="toggleModal('termsModal')">Terms of Service</a>
                 <div class="mx-3 my-1 w-px bg-slate-200 dark:bg-navy-500"></div>
-                <a href="#">Term of service</a>
+                <a href="#" onclick="toggleModal('privacyModal')">Privacy Notice</a>
             </div>
         </main>
     </div>
-    
+     <!-- Terms of Service Modal -->
+     <div id="termsModal" class="fixed inset-0 flex items-center justify-center hidden z-50 backdrop-blur-2xl" style="background-color: rgba(0,0,0,0.7);">
+        <div class="bg-white dark:bg-navy-700 rounded-lg shadow-lg p-6 w-md max-h-[90vh] overflow-y-auto" style="width: 40vw;">
+            <h2 class="text-2xl font-bold text-slate-600 dark:text-navy-100 mb-4 text-center">Terms of Service</h2>
+            <div class="text-gray-700 dark:text-navy-100 text-base space-y-3">
+                <p><strong>1. Introduction</strong></p>
+                <p class="text-justify">Welcome to the Census Project Management System. By accessing or using our services, you agree to be bound by these Terms of Service. Please read them carefully before proceeding.</p>
+
+                <p><strong>2. Definitions</strong></p>
+                <ul class="list-disc pl-5" style="margin-left: 1.25em;">
+                    <li><strong>"Service"</strong> refers to the Census Project Management System</li>
+                    <li><strong>"User"</strong> refers to anyone who accesses or uses the Service</li>
+                    <li><strong>"Content"</strong> refers to all data, information, and materials within the Service</li>
+                </ul>
+
+                <p><strong>3. Terms of Usage</strong></p>
+                <p class="text-justify">Users must ensure that all census data handling complies with relevant data protection regulations and privacy laws. The service must be used solely for authorized census management activities.</p>
+
+                <p><strong>4. Privacy & Data Protection</strong></p>
+                <p class="text-justify">All census data collected and processed through our system is subject to strict confidentiality requirements. Users must adhere to data protection protocols and privacy guidelines established by relevant authorities.</p>
+
+                <p><strong>5. Limitation of Liability</strong></p>
+                <p class="text-justify">The service is provided "as is" without warranties of any kind. We shall not be liable for any damages arising from the use or inability to use the service.</p>
+
+                <p><strong>6. Termination</strong></p>
+                <p class="text-justify">We reserve the right to terminate or suspend access to our Service immediately, without prior notice or liability, for any reason whatsoever.</p>
+            </div>
+            <div class="flex justify-end mt-4 space-x-2">
+                <button onclick="toggleModal('termsModal')" class="px-4 py-2 text-gray-600 bg-gray-200 rounded-lg text-base">Decline</button>
+                <button onclick="toggleModal('termsModal')" class="px-4 py-2 text-white bg-blue-600 rounded-lg text-base">Accept Terms</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy Notice Modal -->
+    <div id="privacyModal" class="fixed inset-0 flex items-center justify-center hidden z-50 backdrop-blur-2xl" style="background-color: rgba(0,0,0,0.7);">
+        <div class="bg-white dark:bg-navy-700 rounded-lg shadow-lg p-6 w-md max-h-[90vh] overflow-y-auto" style="width: 40vw;">
+            <h2 class="text-2xl font-bold text-slate-600 dark:text-navy-100 mb-4 text-center">Privacy Notice</h2>
+            <p class="text-gray-700 dark:text-navy-100 text-base">
+                <strong>Census Project Management System Privacy Policy</strong><br>
+                <span class="text-gray-500">Last updated: January 15, 2025</span>
+            </p>
+            <p class="text-gray-700 dark:text-navy-100 text-base mt-3 text-justify">
+                This privacy notice explains how we collect, use, and protect your personal information when you use our Census Project Management System.
+            </p>
+            <div class="mt-4 text-gray-700 dark:text-navy-100 text-base">
+                <p class="font-semibold">Information We Collect</p>
+                <ul class="list-disc pl-5" style="margin-left: 1.25em;">
+                    <li>Personal identification information (Name, email address, phone number)</li>
+                    <li>Professional information (Job title, department)</li>
+                    <li>System usage data and activity logs</li>
+                    <li>Census project-related information</li>
+                </ul>
+            </div>
+            <div class="mt-4 text-gray-700 dark:text-navy-100 text-base">
+                <p class="font-semibold">How We Use Your Information</p>
+                <ul class="list-disc pl-5" style="margin-left: 1.25em;">
+                    <li>Project management and coordination</li>
+                    <li>Communication with team members</li>
+                    <li>System performance monitoring</li>
+                    <li>Legal compliance and reporting</li>
+                </ul>
+            </div>
+            <div class="mt-4 text-gray-700 dark:text-navy-100 text-base">
+                <p class="font-semibold">Data Protection</p>
+                <p class="text-justify">We implement appropriate security measures to protect your personal information from unauthorized access, alteration, disclosure, or destruction.</p>
+            </div>
+            <div class="mt-4 text-gray-700 dark:text-navy-100 text-base">
+                <p class="font-semibold">Your Rights</p>
+                <p>You have the right to:</p>
+                <ul class="list-disc pl-5" style="margin-left: 1.25em;">
+                    <li>Access the personal data we hold about you</li>
+                    <li>Request the correction of inaccurate data</li>
+                    <li>Request the deletion of your data</li>
+                    <li>Object to the processing of your data</li>
+                </ul>
+            </div>
+            <div class="flex justify-end items-center mt-6">
+                <button onclick="toggleModal('privacyModal')" class="px-4 py-2 text-white bg-blue-600 rounded-lg text-base">I Understand</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.toggle('hidden');
+        }
+
+        function acceptTerms() {
+            toggleModal('termsModal');
+        }
+
+        window.addEventListener("load", () => {
+            document.querySelector(".app-preloader").style.display = "none";
+        });
+    </script>
+
+    <style>
+        @media (width: 1024px) and (height: 600px) {
+            .lg\:grid {
+                display: block !important;
+            }
+
+            .hidden.lg\:flex {
+                display: none !important;
+            }
+
+            .lg\:flex.flex-col {
+                display: none !important;
+            }
+        }
+    </style>
 </x-base-layout>

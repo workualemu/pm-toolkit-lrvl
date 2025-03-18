@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use App\Observers\TaskDateObserver;
 use App\Models\Task;
+use Livewire\Livewire;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -39,6 +41,10 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Task::observe(TaskDateObserver::class);
-    }
 
+        Livewire::component('privacy-modal', \App\Http\Livewire\PrivacyModal::class);
+        Livewire::component('terms-modal', \App\Http\Livewire\TermsModal::class);
+    
+    }
+    
 }

@@ -808,4 +808,14 @@ class PagesController extends Controller
     {
         return view('pages/dashboards-widget-contacts');
     }
+
+    public function privacyNotice()
+    {
+        return view('livewire.privacy-notice');
+    }
+
+    public function termsOfService()
+    {
+        return view('livewire.terms-of-service');
+    }
 }
