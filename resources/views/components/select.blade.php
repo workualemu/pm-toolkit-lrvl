@@ -24,7 +24,7 @@
                 x-init="$el._x_tom = new Tom($el)" 
                 @focus="open = true" 
                 @blur="setTimeout(() => open = false, 200)" 
-                class="mt-1.5 w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 focus:border-blue-500"
+                class="mt-1.5 w-full bg-white rounded-md shadow-sm focus:ring focus:ring-blue-300 focus:border-blue-500"
                 placeholder="{{ $defaultText }}"
                 wire:model.defer="{{ $model }}" 
                 autocomplete="off"

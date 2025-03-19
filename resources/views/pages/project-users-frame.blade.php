@@ -1,4 +1,4 @@
-<x-app-layout title="Project users" is-header-blur="true" sidebarToggle="false">
+<x-app-layout title="Project users" is-sidebar-open="false"  is-header-blur="true" sidebarToggle="false">
     <!-- Main Content Wrapper -->
     <div class="sidebar print:hidden">
     <div class="sidebar-panel  ml-[-160px]">

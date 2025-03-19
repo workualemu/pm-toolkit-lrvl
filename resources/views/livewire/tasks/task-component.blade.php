@@ -6,13 +6,22 @@
             taskId: '{{ $task->id }}',
             taskLevel: '-1'
         }); ">
-        <div class="flex items-center space-x-2 sm:space-x-3">
-            <h2 class="cursor-pointer text-slate-600 line-clamp-1 dark:text-navy-100">
-            <div wire:key="task-{{ $task->id }}">
-                <h2>{{ $task->title }}</h2>
+        
+
+        <div class="mt-4 flex justify-between items-center pr-2">
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <h2 class="cursor-pointer text-slate-600 line-clamp-1 dark:text-navy-100">
+                    <div wire:key="task-{{ $task->id }}">
+                        <h2>{{ $task->title }}</h2>
+                    </div>
+                </h2>
             </div>
-            </h2>
+            <div class="w-2/12 bg-gray-200 h-4 dark:bg-gray-700 overflow-hidden">
+                <x-progress-bar :progress="$task->progress" :status="$task->status" :end_date="$task->end_date" />
+            </div>
+            
         </div>
+
         <div class="mt-1 flex items-end justify-between">
             <div class="flex flex-wrap items-center font-inter text-xs">
                 <p>

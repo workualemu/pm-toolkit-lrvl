@@ -1,14 +1,17 @@
 @props([
     'title' => 'Default Title',
+    'subtitle' => '',
     'searchModel' => null
 ])
 
 <div class="flex flex-col sm:flex-row sm:justify-between sm:space-x-2 px-2 py-2 transition-all duration-[.25s] space-y-2 sm:space-y-0">
-    <!-- Title -->
-    <div class="flex">
-        <h3 class="text-lg font-medium text-slate-700 line-clamp-1 dark:text-navy-50">
+    <div>
+        <h2 class="text-xl font-medium text-blue-800 dark:text-navy-50">
             {{ __($title) }}
-        </h3>
+        </h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+            {{ __($subtitle) }}
+        </p>
     </div>
 
     <!-- Search Box (Responsive) -->

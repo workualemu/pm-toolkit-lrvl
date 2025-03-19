@@ -18,6 +18,7 @@
         </div>
     </div>
   </div>
-  @livewire('projects')
-
+  <div class="flex-grow flex flex-col">
+    @livewire('projects')
+  </div>
 </x-app-layout>

@@ -24,7 +24,7 @@
                   </svg>
                 <span>{{ __('List') }}</span>
             </button>
-            <button @click="activeTab = 'tabTable'"
+            <!-- <button @click="activeTab = 'tabTable'"
                 :class="activeTab === 'tabTable' ?
                     'border-primary dark:border-accent text-primary dark:text-accent-light' :
                     'border-transparent hover:text-slate-800 focus:text-slate-800 dark:hover:text-navy-100 dark:focus:text-navy-100'"
@@ -35,6 +35,7 @@
                 </svg>
                 <span>{{ __('Table') }}</span>
             </button>
+-->
           </div>
 
           @if($user->hasRole('Super Admin') || $user->can('create phase')) 

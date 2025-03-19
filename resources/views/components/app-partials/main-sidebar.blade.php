@@ -391,6 +391,7 @@
                                     </div>
                                 </div>
                             </a>
+                            <!--
                             <a href="#"
                                 class="group flex items-center space-x-3 py-2 px-4 tracking-wide outline-none transition-all hover:bg-slate-100 focus:bg-slate-100 dark:hover:bg-navy-600 dark:focus:bg-navy-600">
                                 <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-info text-white">
@@ -450,6 +451,7 @@
                                     </div>
                                 </div>
                             </a>
+-->
                             <div class="mt-3 px-4">
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf

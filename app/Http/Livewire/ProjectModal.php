@@ -22,9 +22,16 @@ class ProjectModal extends Component
     public $readOnly = '';
     public $templates = [];
     public $selectedTemplate = 0;
+    public $datePickerDisabled = false;
+    public $statuses = [
+        ['id' => '1-in-progress', 'name' => 'In Progress'],
+        ['id' => '2-on-hold', 'name' => 'On Hold'],
+        ['id' => '3-completed', 'name' => 'Completed']
+    ];
 
     #[LivewireRule('required|string|min:2')]
     public $title;
+
     public $description;
     public $start_date;
     public $end_date;

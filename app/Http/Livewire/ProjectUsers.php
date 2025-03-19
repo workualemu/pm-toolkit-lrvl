@@ -25,23 +25,23 @@ class ProjectUsers extends Component
         }
     }
 
-    public function assignUsers()
+    public function assignUsers($isSave)
     {
-        $user =  Auth::user();
-        foreach($this->projectUsers as $key=>$pUser){
-            if($pUser){
-                $projectUser = UserProject::updateOrCreate(
-                    ['user_id' => $key, 'project_id'=>$this->project->id],
-                    ['status' => 'GRANTED', 'created_by'=>Auth::user()->id]);
-            } else {
-                $projectUser = UserProject::updateOrCreate(
-                    ['user_id' => $key, 'project_id'=>$this->project->id],
-                    ['status' => 'DENIED', 'created_by'=>Auth::user()->id]);
-            }
+        if($isSave){
             
-
+            $user =  Auth::user();
+            foreach($this->projectUsers as $key=>$pUser){
+                if($pUser){
+                    $projectUser = UserProject::updateOrCreate(
+                        ['user_id' => $key, 'project_id'=>$this->project->id],
+                        ['status' => 'GRANTED', 'created_by'=>Auth::user()->id]);
+                } else {
+                    $projectUser = UserProject::updateOrCreate(
+                        ['user_id' => $key, 'project_id'=>$this->project->id],
+                        ['status' => 'DENIED', 'created_by'=>Auth::user()->id]);
+                }
+            }
         }
-
         redirect()->route('index');
     }
 

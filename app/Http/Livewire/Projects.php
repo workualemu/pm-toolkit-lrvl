@@ -85,23 +85,23 @@ class Projects extends Component
             });
             $this->projects = $projectsQuery->get()->sortBy('status');
         } else{
-            $projectsQuery = Auth::user()->projects() // Ensure Query Builder is used
-                ->where('projects.is_template', false) // Explicit table reference
-                ->wherePivot('status', 'GRANTED') // Filter by pivot table status
+            $projectsQuery = Auth::user()->projects() 
+                ->where('projects.is_template', false) 
+                ->wherePivot('status', 'GRANTED') 
                 ->when($this->searchTerm, function ($query) {
-                    $searchTerm = strtolower("%{$this->searchTerm}%"); // Ensure wildcard usage
+                    $searchTerm = strtolower("%{$this->searchTerm}%"); 
                     $query->where(function ($q) use ($searchTerm) {
                         $q->whereRaw('LOWER(projects.title) LIKE ?', [$searchTerm])
                         ->orWhereRaw('LOWER(projects.description) LIKE ?', [$searchTerm]);
                     });
                 });
-            $this->projects = $projectsQuery->get();
+            $this->projects = $projectsQuery->sortBy('status')->get();
         }
 
         $totalProjects = $this->projects->count();
-        $inProgressProjects = $this->projects->where('status', 'in progress')->count();
-        $completedProjects = 0;
-        $onHoldProjects = 0;
+        $inProgressProjects = $this->projects->where('status', '1-in-progress')->count();
+        $onHoldProjects = $this->projects->where('status', '2-on-hold')->count();
+        $completedProjects = $this->projects->where('status', '3-completed')->count();
 
         return view('livewire.projects', [
             'totalProjects' => $totalProjects,

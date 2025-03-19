@@ -18,7 +18,7 @@
             </p>
             <!-- Right: Header buttons -->
             <div class="-mr-1.5 flex items-center space-x-2">
-                <!-- Add user to project -->
+                <!-- Add user to project 
                 @if($user->getProject() != null)
 
                 <div x-effect="if($store.global.isSearchbarActive) isShowPopper = false" x-data="usePopper({ placement: 'bottom-end', offset: 12 })"
@@ -191,7 +191,7 @@
                     </div>
                 </div>
                 @endif
-                <!-- Mobile Search Toggle -->
+                 Mobile Search Toggle 
                 <button @click="$store.global.isSearchbarActive = !$store.global.isSearchbarActive"
                                     class="btn h-8 w-8 rounded-full p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25 sm:hidden">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5.5 w-5.5 text-slate-500 dark:text-navy-100"
@@ -200,8 +200,8 @@
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </button>
-                
-                <!-- Dark Mode Toggle -->
+                -->
+                <!-- Dark Mode Toggle 
                 <button @click="$store.global.isDarkModeEnabled = !$store.global.isDarkModeEnabled"
                     class="btn h-8 w-8 rounded-full p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
                     <svg x-show="$store.global.isDarkModeEnabled"
@@ -219,7 +219,7 @@
                             d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
                             clip-rule="evenodd" />
                     </svg>
-                </button> <!-- Monochrome Mode Toggle -->
+                </button>  Monochrome Mode Toggle -->
                 <button @click="$store.global.isMonochromeModeEnabled = !$store.global.isMonochromeModeEnabled"
                     class="btn h-8 w-8 rounded-full p-0 hover:bg-slate-300/20 focus:bg-slate-300/20 active:bg-slate-300/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
                     <i
