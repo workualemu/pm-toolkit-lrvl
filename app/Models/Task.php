@@ -326,4 +326,13 @@ class Task extends Model
         }, 'filtered_tasks');
     }
 
+    public function weightedProgress(): float
+    {
+        $children = $this->children()->get();
+
+        $totalWeightedProgress = $children->sum(fn($child) => $child->duration * $child->progress);
+        $totalDuration = $children->sum('duration');
+
+        return $totalDuration > 0 ? ($totalWeightedProgress / $totalDuration) : 0;
+    }
 }

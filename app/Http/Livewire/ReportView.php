@@ -22,6 +22,7 @@ class ReportView extends Component
     public $report_id;
     public $columns;
     public $results;
+    public $selectedReportTitle;
 
     public function mount($report_id, $results)
     {

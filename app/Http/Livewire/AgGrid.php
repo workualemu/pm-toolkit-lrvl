@@ -13,6 +13,7 @@ class AgGrid extends Component
     public array $data = [];
     public array $layout = [];
     public array $options = [];
+    public $selectedReportTitle;
 
     // protected $listeners = ['changeOccurred' => 'reactToChanges'];
 

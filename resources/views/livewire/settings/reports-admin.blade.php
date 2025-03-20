@@ -1,5 +1,5 @@
 <div>
-    <x-search-header title="Task Priorities" searchModel="searchTerm" />
+    <x-search-header :project_title="$project->title" title="Report Configuration" searchModel="searchTerm" />
     <div class="flex items-center justify-between space-x-2 pl-2 pr-2 transition-all duration-[.25s]">
         <div class="w-full">
             <div class="grid grid-cols-1 gap-4 sm:gap-5 lg:gap-6">

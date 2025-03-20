@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Settings;
 
 use Livewire\Component;
 use App\Models\TaskPriority;
+use App\Models\Project;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
 
@@ -12,6 +13,7 @@ class Prioritys extends Component
     use WithPagination;
 
     public $searchTerm;
+    public $project;
 
     public function updatedSearchTerm()
     {
@@ -53,6 +55,7 @@ class Prioritys extends Component
 
     public function render()
     {
+        $this->project = Project::find(auth()->user()->project_id);
         $searchTerm = '%' . strtolower($this->searchTerm) . '%';
 
         $priorities = TaskPriority::where('project_id', auth()->user()->project_id) 

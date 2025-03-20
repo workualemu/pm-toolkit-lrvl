@@ -10,7 +10,7 @@
       <div class="is-scrollbar-hidden">
         <div class="border-b-2 border-slate-150 px-2 dark:border-navy-500 flex justify-between">
           <div class="tabs-list -mb-0.5 flex">
-            <button @click="activeTab = 'tabList'"
+            <!--<button @click="activeTab = 'tabList'"
                 :class="activeTab === 'tabList' ?
                     'border-primary dark:border-accent text-primary dark:text-accent-light' :
                     'border-transparent hover:text-slate-800 focus:text-slate-800 dark:hover:text-navy-100 dark:focus:text-navy-100'"
@@ -24,7 +24,7 @@
                   </svg>
                 <span>{{ __('List') }}</span>
             </button>
-            <!-- <button @click="activeTab = 'tabTable'"
+             <button @click="activeTab = 'tabTable'"
                 :class="activeTab === 'tabTable' ?
                     'border-primary dark:border-accent text-primary dark:text-accent-light' :
                     'border-transparent hover:text-slate-800 focus:text-slate-800 dark:hover:text-navy-100 dark:focus:text-navy-100'"
@@ -41,7 +41,8 @@
           @if($user->hasRole('Super Admin') || $user->can('create phase')) 
           <span>
             <div class="mt-2 px-4 ml-auto">
-              <button 
+            <x-button color="info" wire:click="addNewPhase()">{{ __('Add new phase') }}</x-button>
+              <!-- <button 
               wire:click="addNewPhase()"
                   class="btn w-full space-x-2 border border-slate-200 py-2 font-medium text-slate-800 hover:bg-slate-150 focus:bg-slate-150 active:bg-slate-150/80 dark:border-navy-500 dark:text-navy-50 dark:hover:bg-navy-500 dark:focus:bg-navy-500 dark:active:bg-navy-500/90">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
@@ -49,7 +50,7 @@
                       <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                   </svg>
                   <span> {{ __('New phase') }} </span>
-              </button>
+              </button> -->
             </div>
           </span>
           @endif

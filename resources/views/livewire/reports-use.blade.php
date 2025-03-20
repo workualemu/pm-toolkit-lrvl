@@ -1,8 +1,9 @@
 <div>
-    <main class="main-content w-full">
+    <main class="main-content w-12/12">
     @if($project == null)
         <div
             class="flex items-center justify-between space-x-2 px-[var(--margin-x)] py-5 transition-all duration-[.25s]">
+            
             <div class="flex items-center space-x-1">
                 <h3 class="text-lg font-medium text-slate-700 line-clamp-1 dark:text-navy-50">
                     {{ __('Reports') }}
@@ -10,17 +11,27 @@
             </div>
         </div>
     @else
-        <div
-            class="flex items-center justify-between space-x-2 px-2 py-5 transition-all duration-[.25s]">
-            <div class="flex items-center space-x-1">
-                <h3 class="text-lg font-medium text-slate-700 line-clamp-1 dark:text-navy-50">
-                    {{ __('Reports') }}
-                </h3>
+        <div class="flex items-center px-2 justify-center sm:justify-start">
+            <div>
+                <div class="flex space-x-2">
+                    <p class="text-xl font-medium text-blue-800 dark:text-navy-50">
+                    {{ $project->title ?? '' }}
+                    </p>
+                    <p class="text-xl font-medium text-slate-800 dark:text-navy-50">
+                    |
+                    </p>
+                    <p class="text-xl font-medium text-slate-800 dark:text-navy-50">
+                        {{ __('Reports') }}
+                    </p>
+                </div>
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                    {{ __('List of predefined reports') }}
+                </p>
             </div>
-            
         </div>
+
         @if($showReportUse)
-        <div class="w-full">
+        <div class="w-full px-2 py-5 ">
             <div >
             <div
                     class="popper-box w-128 rounded-lg border border-slate-150 bg-white shadow-soft dark:border-navy-600 dark:bg-navy-700">
@@ -54,7 +65,7 @@
         @else
             <div class="w-full">
                 <div>
-                    @livewire('report-view', ['report_id' => $selectedReportID, 'results'=>$results])
+                    @livewire('report-view', ['selectedReportTitle' => $selectedReportTitle, 'report_id' => $selectedReportID, 'results'=>$results])
                 </div>
             </div>
         @endif

@@ -62,6 +62,7 @@ class TemplateProjects extends Component
 
     public function render()
     {
+        $this->project = Project::find(auth()->user()->project_id);
         $searchTerm = '%' . strtolower($this->searchTerm) . '%';
 
         $templates = Project::where('is_template', true) // Always apply `is_template = true` first

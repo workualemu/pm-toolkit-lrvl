@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Settings;
 
 use Livewire\Component;
 use App\Models\Report;
+use App\Models\Project;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
 
@@ -12,6 +13,7 @@ class ReportsAdmin extends Component
     use WithPagination;
 
     public $searchTerm;
+    public $project;
 
     public function updatedSearchTerm()
     {
@@ -54,6 +56,8 @@ class ReportsAdmin extends Component
 
     public function render()
     {
+        $this->project = Project::find(auth()->user()->project_id);
+
         $searchTerm = '%' . strtolower($this->searchTerm) . '%';
 
         $records = Report::where('project_id', auth()->user()->project_id) 

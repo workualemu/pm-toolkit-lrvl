@@ -1,18 +1,30 @@
 @props([
+    'project_title' => '',
     'title' => 'Default Title',
     'subtitle' => '',
     'searchModel' => null
 ])
 
 <div class="flex flex-col sm:flex-row sm:justify-between sm:space-x-2 px-2 py-2 transition-all duration-[.25s] space-y-2 sm:space-y-0">
-    <div>
-        <h2 class="text-xl font-medium text-blue-800 dark:text-navy-50">
-            {{ __($title) }}
-        </h2>
-        <p class="text-sm text-gray-500 dark:text-gray-400">
-            {{ __($subtitle) }}
-        </p>
+    <div class="flex items-center px-2 justify-center sm:justify-start">
+        <div>
+            <div class="flex space-x-2">
+                <p class="text-xl font-medium text-blue-800 dark:text-navy-50">
+                {{ $project_title ?? '' }}
+                </p>
+                <p class="text-xl font-medium text-slate-800 dark:text-navy-50">
+                |
+                </p>
+                <p class="text-xl font-medium text-slate-800 dark:text-navy-50">
+                    {{ __($title) }}
+                </p>
+            </div>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+                {{ __($subtitle) }}
+            </p>
+        </div>
     </div>
+
 
     <!-- Search Box (Responsive) -->
     <label class="relative flex w-full sm:max-w-[16rem]">

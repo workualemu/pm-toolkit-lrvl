@@ -1,8 +1,11 @@
 <div>
-    <div class="mb-4">
-        <button x-on:click="table.exportToExcel()" class="px-4 py-2 bg-blue-600 text-white rounded">
-            Export to Excel
-        </button>
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:space-x-2 px-2 py-2 transition-all duration-[.25s] space-y-2 sm:space-y-0">
+        <div>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+                {{ __($selectedReportTitle) }}
+            </p>
+        </div>
+        <x-button color="info" wire:click="table.exportToExcel()">{{ __('Export to Excel') }}</x-button>
     </div>
     <div
         id="{{ $htmlId }}"

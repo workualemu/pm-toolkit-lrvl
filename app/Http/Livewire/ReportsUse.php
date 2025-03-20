@@ -22,6 +22,7 @@ class ReportsUse extends Component
     public $selectedParams;
 
     public $selectedReportId;
+    public $selectedReportTitle;
 
     public $showReportModal = false;
 
@@ -29,6 +30,8 @@ class ReportsUse extends Component
     public function showReportViewer($report_id, $results)
     {
         $this->selectedReportID = $report_id;
+        $report = Report::find($report_id);
+        $this->selectedReportTitle = $report?->title;
         $this->results = $results;
         $this->showReportUse = false;
         // $this->queryBuilder = $queryBuilder;
@@ -88,11 +91,13 @@ class ReportsUse extends Component
             $sql .= " ORDER BY " . $selectedReport->order_clause;
         }
 
-        logger($sql);
         $this->results = DB::select($sql);
         $this->selectedReportID = $selectedReport->id;
 
-        $this->showReportViewer($selectedReport->id, $this->results);
+        if(!empty($this->results)){
+            $this->showReportViewer($selectedReport->id, $this->results);
+        }
+        
     }
 
     public function mount($project)

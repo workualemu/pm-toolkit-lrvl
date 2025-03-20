@@ -19,6 +19,8 @@ class TaskDateObserver
         if (isset($task->end_date)) {
             $this->setParentEndDate($task);
         }
+
+        $this->setParentProgress($task);
     }
 
     /**
@@ -33,6 +35,11 @@ class TaskDateObserver
         if ($task->isDirty('end_date') && isset($task->end_date)) {
             $this->setParentEndDate($task);
         }
+
+        if ($task->isDirty('duration') || $task->isDirty('progress')) {
+            $this->setParentProgress($task);
+        }
+        
     }
 
     /**
@@ -47,6 +54,8 @@ class TaskDateObserver
         if (isset($task->end_date)) {
             $this->setParentEndDate($task, true);
         }
+
+        $this->setParentProgress($task);
     }
 
     /**
@@ -102,6 +111,21 @@ class TaskDateObserver
         $project = Project::find($task->project_id);
         $project->end_date = $latestEndDate;
         $project->save();
+        return;
+    }
+
+    private function setParentProgress($task){
+
+        $parent = $task->getParent;
+        if($parent){
+            $parent->progress = $parent->weightedProgress();
+            $parent->save();
+            return;
+        }
+        $project = Project::find($task->project_id);
+        $project->progress = $project->weightedProgress();
+        $project->save();
+
         return;
     }
 }

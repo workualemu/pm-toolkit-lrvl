@@ -58,4 +58,14 @@ class Project extends Model
         return ReportColumn::where('project_id', '=', $this->id)
             ->get();
     }
+
+    public function weightedProgress(): float
+    {
+        $children = $this->getTasksByLevel(0);
+
+        $totalWeightedProgress = $children->sum(fn($child) => $child->duration * $child->progress);
+        $totalDuration = $children->sum('duration');
+
+        return $totalDuration > 0 ? ($totalWeightedProgress / $totalDuration) : 0;
+    }
 }
