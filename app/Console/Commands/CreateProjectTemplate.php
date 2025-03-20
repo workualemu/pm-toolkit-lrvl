@@ -48,7 +48,8 @@ class CreateProjectTemplate extends Command
 
         try {
             DB::beginTransaction();
-            $json = file_get_contents(base_path('storage/app/template_project.json'));
+            $json = file_get_contents(resource_path('json/template_project.json'));
+
             $data = json_decode($json, true);
             if (!$data) {
                 $this->error('Invalid JSON data. Please check the file.');

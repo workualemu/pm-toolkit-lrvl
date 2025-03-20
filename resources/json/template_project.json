@@ -1,0 +1,2323 @@
+{
+    "title": "Population and Housing Census",
+    "description": "This is the default template for new population and census projects.",
+    "start_date": "2025-01-01",
+    "end_date": "2025-12-31",
+    "status": "ongoing",
+    "task_statuses": [
+        {
+            "value": "Backlog",
+            "description": "Tasks that are not yet started",
+            "color": "red",
+            "kanban_list_rank": 1
+        },
+        {
+            "value": "Pending",
+            "description": "Tasks that are waiting to be started",
+            "color": "pink",
+            "kanban_list_rank": 2
+        },
+        {
+            "value": "In progress",
+            "description": "Tasks that are currently being worked on",
+            "color": "blue",
+            "kanban_list_rank": 3
+        },
+        {
+            "value": "Submitted",
+            "description": "Tasks that have been submitted for review",
+            "color": "teal",
+            "kanban_list_rank": 4
+        },
+        {
+            "value": "Completed",
+            "description": "Tasks that have been completed",
+            "color": "green",
+            "kanban_list_rank": 5
+        },
+        {
+            "value": "Archived",
+            "description": "Tasks that have been archived",
+            "color": "gray",
+            "kanban_list_rank": 6
+        }
+    ],
+    "tags": [
+        {
+            "label": "IT",
+            "description": "Information technology",
+            "color": "red"
+        },
+        {
+            "label": "Operations",
+            "description": "Operations and logistics",
+            "color": "pink"
+        },
+        {
+            "label": "Finance",
+            "description": "Finance",
+            "color": "blue"
+        },
+        {
+            "label": "Legal",
+            "description": "Legal",
+            "color": "green"
+        },
+        {
+            "label": "GIS",
+            "description": "Mapping and GIS",
+            "color": "purple"
+        },
+        {
+            "label": "Demography",
+            "description": "Demography",
+            "color": "orange"
+        },
+        {
+            "label": "Management",
+            "description": "Management",
+            "color": "yellow"
+        }
+    ],
+    "task_priorities": [
+        {
+            "value": "Urgent",
+            "description": "Urgent",
+            "color": "red"
+        },
+        {
+            "value": "High",
+            "description": "High",
+            "color": "purple"
+        },
+        {
+            "value": "Medium",
+            "description": "Medium",
+            "color": "yellow"
+        },
+        {
+            "value": "Low",
+            "description": "Low",
+            "color": "green"
+        }
+    ],
+    "reports": [
+        {
+            "title": "All tasks",
+            "description": "All tasks of the project",
+            "select_clause": "title, TO_CHAR(start_date,  'Mon DD, YYYY' ) as \"Start Date\", TO_CHAR(end_date,  'Mon DD, YYYY' ) as \"End Date\", task_statuses.value as Status, (task_statuses.is_completing = false AND now() > tasks.end_date) AS \"Is overdue\"",
+            "from_clause": "tasks LEFT JOIN task_statuses ON tasks.task_status_id=task_statuses.id",
+            "where_clause": "level=2",
+            "order_clause": "start_date",
+            "groupby_clause": "",
+            "having_clause": "",
+            "published": true
+        },
+        {
+            "title": "Tasks by assignee",
+            "description": "All tasks of the project by assignee",
+            "select_clause": "users.name as Assignee, tasks.title, TO_CHAR(tasks.start_date,'Mon DD, YYYY' ) as \"Start Date\", TO_CHAR(tasks.end_date,  'Mon DD, YYYY' ) as \"End Date\", task_statuses.value as Status, (task_statuses.is_completing = false AND now() > tasks.end_date) AS \"Is overdue\"",
+            "from_clause": "tasks LEFT JOIN users ON tasks.assigned_to=users.id LEFT JOIN task_statuses ON tasks.task_status_id=task_statuses.id",
+            "where_clause": "users.name IS NOT NULL",
+            "order_clause": "users.name",
+            "groupby_clause": "",
+            "having_clause": "",
+            "published": true
+        }
+    ],
+    "phases": [
+        {
+            "title": "CENSUS PLANNING AND PREPARATION",
+            "description": "CENSUS PLANNING AND PREPARATION",
+            "start_date": "2019-10-01",
+            "end_date": "2019-10-01",
+            "task_status": "Backlog",
+            "task_priority": "Urgent",
+            "activities": [
+                {
+                    "title": "Setting strategic objectives for the entire census programme - developing the census project document",
+                    "description": "Setting strategic objectives for the entire census programme - developing the census project document",
+                    "start_date": "2019-10-01",
+                    "end_date": "2019-10-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Overall census planning",
+                            "description": "Overall census planning",
+                            "start_date": "2019-10-01",
+                            "end_date": "2021-03-31",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Preparation of the Census Strategic Documents",
+                            "description": "Preparation of the Census Strategic Documents",
+                            "start_date": "2019-10-01",
+                            "end_date": "2021-03-31",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Statistical capacity assessment",
+                    "description": "Statistical capacity assessment",
+                    "start_date": "2020-07-01",
+                    "end_date": "2020-07-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                },
+                {
+                    "title": "Develop Census calendar",
+                    "description": "Develop Census calendar",
+                    "start_date": "2025-01-16",
+                    "end_date": "2025-01-16",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                },
+                {
+                    "title": "Administrative organization and management structure",
+                    "description": "Administrative organization and management structure",
+                    "start_date": "2021-01-01",
+                    "end_date": "2021-01-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Establishment of an internal census task team",
+                            "description": "Establishment of an internal census task team",
+                            "start_date": "2019-10-01",
+                            "end_date": "2020-01-01",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Convening government stakeholders",
+                    "description": "Convening government stakeholders",
+                    "start_date": "2020-07-01",
+                    "end_date": "2020-07-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Presentation of Census Plan and Budget to the Ministry of Finance",
+                            "description": "Presentation of Census Plan and Budget to the Ministry of Finance",
+                            "start_date": "2020-07-01",
+                            "end_date": "2020-09-01",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Organization of commissions and committees",
+                    "description": "Organization of commissions and committees",
+                    "start_date": "2020-07-01",
+                    "end_date": "2020-07-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Establishment of Census Organizational Structures, Steering, and Technical committees",
+                            "description": "Establishment of Census Organizational Structures, Steering, and Technical committees",
+                            "start_date": "2020-07-01",
+                            "end_date": "2021-03-31",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Consultation with users",
+                    "description": "Consultation with users",
+                    "start_date": "2020-07-01",
+                    "end_date": "2020-07-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Convene stakeholder meetings",
+                            "description": "Convene stakeholder meetings",
+                            "start_date": "2020-07-01",
+                            "end_date": "2023-02-01",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Financial management",
+                    "description": "Financial management",
+                    "start_date": "2020-07-01",
+                    "end_date": "2020-07-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Budgeting and mobilization of funding for Census to kick-start mapping and other preliminary activities",
+                            "description": "Budgeting and mobilization of funding for Census to kick-start mapping and other preliminary activities",
+                            "start_date": "2020-07-01",
+                            "end_date": "2020-09-01",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Quality assurance",
+                    "description": "Quality assurance",
+                    "start_date": "2020-09-01",
+                    "end_date": "2020-09-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Decision to use a census monitoring dashboard, issues tracker, and other methods",
+                            "description": "Decision to use a census monitoring dashboard, issues tracker, and other methods",
+                            "start_date": "2020-09-01",
+                            "end_date": "2023-02-01",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "GIS, MAPPING AND ENUMERATION AREA DELINEATION",
+            "description": "GIS, MAPPING AND ENUMERATION AREA DELINEATION",
+            "start_date": "2019-10-01",
+            "end_date": "2019-10-01",
+            "task_status": "Ongoing",
+            "task_priority": "Urgent",
+            "activities": [
+                {
+                    "title": "Decision on technology and method",
+                    "description": "Decision on technology and method",
+                    "start_date": "2019-10-01",
+                    "end_date": "2019-10-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Development of the GIS and Mapping Strategic Plan",
+                            "description": "Development of the GIS and Mapping Strategic Plan",
+                            "start_date": "2019-10-01",
+                            "end_date": "2021-03-31",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Procurement of mapping software and hardware",
+                    "description": "Procurement of mapping software and hardware",
+                    "start_date": "2020-05-01",
+                    "end_date": "2020-05-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        { 
+                            "title": "Procurement of GIS software and hardware",
+                            "description": "Procurement of GIS software and hardware",
+                            "start_date": "2020-05-01",
+                            "end_date": "2021-02-28",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Development of data collection tools and instruments",
+                    "description": "Development of data collection tools and instruments",
+                    "start_date": "2020-09-01",
+                    "end_date": "2020-09-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Developing data collection tools and manuals",
+                            "description": "Developing data collection tools and manuals",
+                            "start_date": "2020-09-01",
+                            "end_date": "2020-11-30",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Recruitment of Census mapping staff",
+                    "description": "Recruitment of Census mapping staff",
+                    "start_date": "2020-09-01",
+                    "end_date": "2020-09-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Recruitment of Census mapping staff",
+                            "description": "Recruitment of Census mapping staff",
+                            "start_date": "2020-09-01",
+                            "end_date": "2021-04-01",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Briefing of Stakeholders on the census mapping tools",
+                    "description": "Briefing of Stakeholders on the census mapping tools",
+                    "start_date": "2021-04-01",
+                    "end_date": "2021-04-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Briefing of Stakeholders on the census mapping tools",
+                            "description": "Briefing of Stakeholders on the census mapping tools",
+                            "start_date": "2021-04-01",
+                            "end_date": "2021-04-30",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Training of Census mapping staff (Office and field Staff)",
+                    "description": "Training of Census mapping staff (Office and field Staff)",
+                    "start_date": "2021-04-05",
+                    "end_date": "2021-04-05",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Training of Census mapping staff",
+                            "description": "Training of Census mapping staff",
+                            "start_date": "2021-04-05",
+                            "end_date": "2021-04-25",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Office cartographic work and other preparations for field work",
+                    "description": "Office cartographic work and other preparations for field work",
+                    "start_date": "2021-04-05",
+                    "end_date": "2021-04-05",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Office cartographic work and other preparations",
+                            "description": "Office cartographic work and other preparations",
+                            "start_date": "2021-04-05",
+                            "end_date": "2021-05-02",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Develop Census mapping Advocacy and Publicity",
+                    "description": "Develop Census mapping Advocacy and Publicity",
+                    "start_date": "2021-04-05",
+                    "end_date": "2021-04-05",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Field mapping activities",
+                            "description": "Field mapping activities",
+                            "start_date": "2021-04-05",
+                            "end_date": "2023-04-01",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Gathering point data, satellite imagery",
+                    "description": "Gathering point data, satellite imagery",
+                    "start_date": "2021-04-05",
+                    "end_date": "2021-04-05",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Cartographic Field Work and Map updating (includes M&E & QA)",
+                            "description": "Cartographic Field Work and Map updating (includes M&E & QA)",
+                            "start_date": "2021-05-21",
+                            "end_date": "2023-04-23",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Identifying number of households by small area",
+                    "description": "Identifying number of households by small area",
+                    "start_date": "2021-05-01",
+                    "end_date": "2021-05-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Compilation and collection of household listings from local Governments",
+                            "description": "Compilation and collection of household listings from local Governments",
+                            "start_date": "2021-05-01",
+                            "end_date": "2023-04-23",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Data editing/ compilation",
+                            "description": "Data editing/ compilation",
+                            "start_date": "2021-05-08",
+                            "end_date": "2023-04-16",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Demarcation of Enumeration Area (EA) boundary",
+                    "description": "Demarcation of Enumeration Area (EA) boundary",
+                    "start_date": "2021-05-01",
+                    "end_date": "2021-05-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Demarcation of Enumeration Area (EA) boundary",
+                            "description": "Demarcation of Enumeration Area (EA) boundary",
+                            "start_date": "2021-05-01",
+                            "end_date": "2023-04-16",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Creating a GIS database",
+                    "description": "Creating a GIS database",
+                    "start_date": "2021-05-08",
+                    "end_date": "2021-05-08",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Digitizing EA Maps",
+                            "description": "Digitizing EA Maps",
+                            "start_date": "2021-05-08",
+                            "end_date": "2023-04-16",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Verifying GIS database",
+                    "description": "Verifying GIS database",
+                    "start_date": "2021-05-08",
+                    "end_date": "2021-05-08",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                },
+                {
+                    "title": "Release of census mapping products",
+                    "description": "Release of census mapping products",
+                    "start_date": "2021-05-31",
+                    "end_date": "2021-05-31",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Release of census mapping products",
+                            "description": "Release of census mapping products",
+                            "start_date": "2021-05-31",
+                            "end_date": "2023-04-16",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Milestone 1",
+                            "description": "Milestone 1",
+                            "start_date": "2023-04-26",
+                            "end_date": "2023-04-26",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Printing base maps and EA maps",
+                    "description": "Printing base maps and EA maps",
+                    "start_date": "2021-10-1",
+                    "end_date": "2021-10-1",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Printing and Labelling of the final NPHC maps",
+                            "description": "Printing and Labelling of the final NPHC maps",
+                            "start_date": "2021-10-1",
+                            "end_date": "2023-06-04",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Production of the census mapping Report",
+                            "description": "Production of the census mapping Report",
+                            "start_date": "2023-05-01",
+                            "end_date": "2023-10-04",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Training in Map reading and Interpretation of EAs",
+                            "description": "Training in Map reading and Interpretation of EAs",
+                            "start_date": "2023-07-05",
+                            "end_date": "2023-08-15",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Support to Data Analysis in production of Census Reports",
+                    "description": "Support to Data Analysis in production of Census Reports",
+                    "start_date": "2023-09-25",
+                    "end_date": "2023-09-25",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Support to Data Analysis in production of Census Reports",
+                            "description": "Support to Data Analysis in production of Census Reports",
+                            "start_date": "2023-09-25",
+                            "end_date": "2024-05-01",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Production of the Census Atlas",
+                    "description": "Production of the Census Atlas",
+                    "start_date": "2023-09-25",
+                    "end_date": "2023-09-25",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Production of the Census Atlas",
+                            "description": "Production of the Census Atlas",
+                            "start_date": "2023-09-25",
+                            "end_date": "2024-03-25",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "DESIGN OF CENSUS QUESTIONNAIRES, MANUALS AND PROCEDURES",
+            "description": "DESIGN OF CENSUS QUESTIONNAIRES, MANUALS AND PROCEDURES",
+            "start_date": "2020-01-01",
+            "end_date": "2020-01-01",
+            "task_status": "Backlog",
+            "task_priority": "Urgent",
+            "activities": [
+                {
+                    "title": "Selection of topics for questionnaire",
+                    "description": "Selection of topics for questionnaire",
+                    "start_date": "2020-01-01",
+                    "end_date": "2020-01-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Selection of topics for questionnaire",
+                            "description": "Selection of topics for questionnaire",
+                            "start_date": "2020-01-01",
+                            "end_date": "2022-03-14",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Form design and testing",
+                    "description": "Form design and testing",
+                    "start_date": "2020-01-01",
+                    "end_date": "2020-01-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Development of Draft Zero of the Census Questionnaire",
+                            "description": "Development of Draft Zero of the Census Questionnaire",
+                            "start_date": "2020-01-01",
+                            "end_date": "2020-03-04",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Review of first draft of questionnaire by the NSO Census Technical Team",
+                            "description": "Review of first draft of questionnaire by the NSO Census Technical Team",
+                            "start_date": "2020-03-04",
+                            "end_date": "2020-10-04",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Draft the census Dictionary from the census Questionnaire",
+                            "description": "Draft the census Dictionary from the census Questionnaire",
+                            "start_date": "2021-03-04",
+                            "end_date": "2021-08-04",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Translate the Questionnaire into Local Languages",
+                            "description": "Translate the Questionnaire into Local Languages",
+                            "start_date": "2021-08-17",
+                            "end_date": "2021-10-17",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Consultation with users",
+                    "description": "Consultation with users",
+                    "start_date": "2021-07-04",
+                    "end_date": "2021-07-04",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Review of the Questionnaire by the census taskforce",
+                            "description": "Review of the Questionnaire by the census taskforce",
+                            "start_date": "2021-07-04",
+                            "end_date": "2021-07-19",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Review the Census Questionnaire by External Stakeholders",
+                            "description": "Review the Census Questionnaire by External Stakeholders",
+                            "start_date": "2021-07-20",
+                            "end_date": "2021-08-03",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Review and update the questionnaire based on the comments of external stakeholders",
+                            "description": "Review and update the questionnaire based on the comments of external stakeholders",
+                            "start_date": "2021-08-03",
+                            "end_date": "2021-08-17",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "CAPI application development",
+                    "description": "CAPI application development",
+                    "start_date": "2021-08-17",
+                    "end_date": "2021-08-17",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "CAPI application development",
+                            "description": "CAPI application development",
+                            "start_date": "2021-08-17",
+                            "end_date": "2021-12-08",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Design manual for enumerators",
+                    "description": "Design manual for enumerators",
+                    "start_date": "2021-08-17",
+                    "end_date": "2021-08-17",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Develop a verbatim training guide based on the enumerator's manual",
+                            "description": "Develop a verbatim training guide based on the enumerator's manual",
+                            "start_date": "2021-08-18",
+                            "end_date": "2021-12-17",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Development of census tabulation and analysis plan",
+                    "description": "Development of census tabulation and analysis plan",
+                    "start_date": "2020-01-01",
+                    "end_date": "2020-01-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Development of census tabulation and analysis plan",
+                            "description": "Development of census tabulation and analysis plan",
+                            "start_date": "2020-01-01",
+                            "end_date": "2022-03-14",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Design manual for supervisors",
+                    "description": "Design manual for supervisors",
+                    "start_date": "2021-08-17",
+                    "end_date": "2021-08-17",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Update the Supervisor's manual and data transmittal procedures",
+                            "description": "Update the Supervisor's manual and data transmittal procedures",
+                            "start_date": "2021-08-17",
+                            "end_date": "2021-11-17",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Design manual for editors",
+                    "description": "Design manual for editors",
+                    "start_date": "2021-08-17",
+                    "end_date": "2021-08-17",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Develop guidelines that will be used to qualitatively and quantitatively evaluate the questionnaire",
+                            "description": "Develop guidelines that will be used to qualitatively and quantitatively evaluate the questionnaire",
+                            "start_date": "2021-08-17",
+                            "end_date": "2021-12-08",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Selection of areas to be covered",
+                    "description": "Selection of areas to be covered",
+                    "start_date": "2020-01-01",
+                    "end_date": "2020-01-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Selection of areas to be covered",
+                            "description": "Selection of areas to be covered",
+                            "start_date": "2020-01-01",
+                            "end_date": "2022-03-14",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Upload and test the CAPI version of the Questionnaire using the pretest tablets",
+                    "description": "Upload and test the CAPI version of the Questionnaire using the pretest tablets",
+                    "start_date": "2021-11-17",
+                    "end_date": "2021-11-17",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Upload and test the CAPI version of the Questionnaire using the pretest tablets",
+                            "description": "Upload and test the CAPI version of the Questionnaire using the pretest tablets",
+                            "start_date": "2021-11-17",
+                            "end_date": "2021-12-17",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Reproduce materials and identify NSO staff for pretest",
+                    "description": "Reproduce materials and identify NSO staff for pretest",
+                    "start_date": "2021-11-17",
+                    "end_date": "2021-11-17",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Reproduce materials and identify NSO staff for pretest",
+                            "description": "Reproduce materials and identify NSO staff for pretest",
+                            "start_date": "2021-11-17",
+                            "end_date": "2021-12-17",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Train NSO staff who will conduct the pre-test",
+                    "description": "Train NSO staff who will conduct the pre-test",
+                    "start_date": "2022-01-07",
+                    "end_date": "2022-01-07",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Train NSO staff who will conduct the pre-test",
+                            "description": "Train NSO staff who will conduct the pre-test",
+                            "start_date": "2022-01-07",
+                            "end_date": "2022-01-21",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Data processing (coding, data entry, tabulations)",
+                    "description": "Data processing (coding, data entry, tabulations)",
+                    "start_date": "2020-01-01",
+                    "end_date": "2020-01-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Data processing (coding, data entry, tabulations)",
+                            "description": "Data processing (coding, data entry, tabulations)",
+                            "start_date": "2020-01-01",
+                            "end_date": "2022-03-14",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Analysis and evaluation of data and information",
+                    "description": "Analysis and evaluation of data and information",
+                    "start_date": "2020-01-01",
+                    "end_date": "2020-01-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Analysis and evaluation of data and information",
+                            "description": "Analysis and evaluation of data and information",
+                            "start_date": "2020-01-01",
+                            "end_date": "2022-03-14",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Preparation of the detailed pretest report",
+                    "description": "Preparation of the detailed pretest report",
+                    "start_date": "2022-02-01",
+                    "end_date": "2022-02-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Questionnaire pre-test review meeting",
+                            "description": "Questionnaire pre-test review meeting",
+                            "start_date": "2022-02-08",
+                            "end_date": "2022-02-14",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Update of census tools based on feedback from pretest",
+                    "description": "Update of census tools based on feedback from pretest",
+                    "start_date": "2022-02-01",
+                    "end_date": "2022-02-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Update of census tools based on feedback from pretest",
+                            "description": "Update of census tools based on feedback from pretest",
+                            "start_date": "2022-02-01",
+                            "end_date": "2022-02-22",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Determine if there is need for another pretest",
+                    "description": "Determine if there is need for another pretest",
+                    "start_date": "2022-02-01",
+                    "end_date": "2022-02-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Determine if there is need for another pretest",
+                            "description": "Determine if there is need for another pretest",
+                            "start_date": "2022-02-01",
+                            "end_date": "2022-02-22",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Update of the data editing instructions",
+                    "description": "Update of the data editing instructions",
+                    "start_date": "2022-02-14",
+                    "end_date": "2022-02-14",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Update of the data editing instructions",
+                            "description": "Update of the data editing instructions",
+                            "start_date": "2022-02-14",
+                            "end_date": "2022-03-14",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "PILOT CENSUS",
+            "description": "PILOT CENSUS",
+            "start_date": "2022-02-22",
+            "end_date": "2022-02-22",
+            "task_status": "Backlog",
+            "task_priority": "Urgent",
+            "activities": [
+                {
+                    "title": "Development of concept note for pilot census",
+                    "description": "Development of concept note for pilot census",
+                    "start_date": "2022-02-22",
+                    "end_date": "2022-02-22",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Development of concept note for pilot census",
+                            "description": "Development of concept note for pilot census",
+                            "start_date": "2022-02-22",
+                            "end_date": "2022-07-07",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Selection of areas to be covered",
+                    "description": "Selection of areas to be covered",
+                    "start_date": "2022-03-07",
+                    "end_date": "2022-03-07",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Determination of EAs type and size for Pilot",
+                            "description": "Determination of EAs type and size for Pilot",
+                            "start_date": "2022-03-07",
+                            "end_date": "2022-04-07",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Setting up field operations",
+                    "description": "Setting up field operations",
+                    "start_date": "2022-03-07",
+                    "end_date": "2022-03-07",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Determination of Field operations needs (tablets/smartphone and other field materials)",
+                            "description": "Determination of Field operations needs (tablets/smartphone and other field materials)",
+                            "start_date": "2022-03-07",
+                            "end_date": "2022-04-07",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Determination of DP needs (Procedures, quality, or operational controls, editing, Tabulation)",
+                            "description": "Determination of DP needs (Procedures, quality, or operational controls, editing, Tabulation)",
+                            "start_date": "2022-03-07",
+                            "end_date": "2022-06-07",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Selection of data processing software and appropriate NSO staff training",
+                            "description": "Selection of data processing software and appropriate NSO staff training",
+                            "start_date": "2022-05-07",
+                            "end_date": "2022-07-07",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Development of the field operations plan/ logistical plan for deployment of personnel, devices, and materials",
+                            "description": "Development of the field operations plan/ logistical plan for deployment of personnel, devices, and materials",
+                            "start_date": "2022-05-07",
+                            "end_date": "2022-07-07",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Procurement and Installation of Tablets and other DP devices/Equipment to use in the pilot census",
+                            "description": "Procurement and Installation of Tablets and other DP devices/Equipment to use in the pilot census",
+                            "start_date": "2022-05-07",
+                            "end_date": "2022-07-25",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Procurement of other field materials and accessories",
+                            "description": "Procurement of other field materials and accessories",
+                            "start_date": "2022-05-07",
+                            "end_date": "2022-07-07",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Recruiting and training supervisors",
+                    "description": "Recruiting and training supervisors",
+                    "start_date": "2022-05-09",
+                    "end_date": "2022-05-09",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Identification of District Pilot Census Trainers/supervisors",
+                            "description": "Identification of District Pilot Census Trainers/supervisors",
+                            "start_date": "2022-05-09",
+                            "end_date": "2022-06-17",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Orientation of Pilot census district staff on census activities (recruitment, publicity etc)",
+                            "description": "Orientation of Pilot census district staff on census activities (recruitment, publicity etc)",
+                            "start_date": "2022-06-24",
+                            "end_date": "2022-06-30",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Recruiting and training enumerators",
+                    "description": "Recruiting and training enumerators",
+                    "start_date": "2022-07-10",
+                    "end_date": "2022-07-10",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Recruitment of field staff (supervisors and enumerators)",
+                            "description": "Recruitment of field staff (supervisors and enumerators)",
+                            "start_date": "2022-07-10",
+                            "end_date": "2022-07-30",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Training of field staff (supervisors and enumerators)",
+                            "description": "Training of field staff (supervisors and enumerators)",
+                            "start_date": "2022-08-02",
+                            "end_date": "2022-08-16",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Pilot Census Pre-enumeration listing and familiarization of EA boundaries",
+                    "description": "Pilot Census Pre-enumeration listing and familiarization of EA boundaries",
+                    "start_date": "2022-08-17",
+                    "end_date": "2022-08-17",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Pilot Census enumeration pre-listing and familiarization",
+                            "description": "Pilot Census enumeration pre-listing and familiarization",
+                            "start_date": "2022-08-17",
+                            "end_date": "2022-08-18",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Cleaning of the Results from Pre-enumeration listing and uploading",
+                            "description": "Cleaning of the Results from Pre-enumeration listing and uploading",
+                            "start_date": "2022-08-18",
+                            "end_date": "2022-08-24",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Milestone 3: Pilot Census enumeration",
+                            "description": "Milestone 3: Pilot Census enumeration",
+                            "start_date": "2022-08-26",
+                            "end_date": "2022-09-04",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Identification of Pilot census data editors",
+                    "description": "Identification of Pilot census data editors",
+                    "start_date": "2022-09-05",
+                    "end_date": "2022-09-05",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Training of Pilot census data editors",
+                            "description": "Training of Pilot census data editors",
+                            "start_date": "2022-09-05",
+                            "end_date": "2022-09-07",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Editing of pilot census data",
+                            "description": "Editing of pilot census data",
+                            "start_date": "2022-09-08",
+                            "end_date": "2022-10-08",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Receipt of Pilot enumeration devices and materials at NSO HQ",
+                    "description": "Receipt of Pilot enumeration devices and materials at NSO HQ",
+                    "start_date": "2022-09-05",
+                    "end_date": "2022-09-05",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                },
+                {
+                    "title": "Data processing (coding, data entry, tabulations)",
+                    "description": "Data processing (coding, data entry, tabulations)",
+                    "start_date": "2022-09-05",
+                    "end_date": "2022-09-05",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Training of Pilot census data editors",
+                            "description": "Training of Pilot census data editors",
+                            "start_date": "2022-09-05",
+                            "end_date": "2022-09-07",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Editing of pilot census data",
+                            "description": "Editing of pilot census data",
+                            "start_date": "2022-09-08",
+                            "end_date": "2022-10-08",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Data Analysis and Report Writing",
+                    "description": "Data Analysis and Report Writing",
+                    "start_date": "2022-09-26",
+                    "end_date": "2022-09-26",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Debriefing meeting and review of District Technical Officers reports",
+                            "description": "Debriefing meeting and review of District Technical Officers reports",
+                            "start_date": "2022-09-26",
+                            "end_date": "2022-09-26",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Analysis and evaluation of the Pilot census with a report",
+                            "description": "Analysis and evaluation of the Pilot census with a report",
+                            "start_date": "2022-10-10",
+                            "end_date": "2022-11-10",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Update of census questionnaire based on findings from Pilot Census",
+                    "description": "Update of census questionnaire based on findings from Pilot Census",
+                    "start_date": "2022-10-11",
+                    "end_date": "2022-10-11",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                },
+                {
+                    "title": "Submission of Questionnaire to Cabinet for approval",
+                    "description": "Submission of Questionnaire to Cabinet for approval",
+                    "start_date": "2022-11-14",
+                    "end_date": "2022-11-14",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                },
+                {
+                    "title": "Update of CAPI system based on findings from Pilot Census",
+                    "description": "Update of CAPI system based on findings from Pilot Census",
+                    "start_date": "2022-12-01",
+                    "end_date": "2022-12-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                },
+                {
+                    "title": "Gazetting of Census dates if not earlier done",
+                    "description": "Gazetting of Census dates if not earlier done",
+                    "start_date": "2023-02-22",
+                    "end_date": "2023-02-22",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                }
+            ]
+        },
+        {
+            "title": "CENSUS COMMUNICATION, PUBLICITY AND ADVOCACY",
+            "description": "CENSUS COMMUNICATION, PUBLICITY AND ADVOCACY",
+            "start_date": "2019-10-01",
+            "end_date": "2019-10-01",
+            "task_status": "Backlog",
+            "task_priority": "Urgent",
+            "activities": [
+                {
+                    "title": "Communication and publicity strategies",
+                    "description": "Communication and publicity strategies",
+                    "start_date": "2019-10-01",
+                    "end_date": "2019-10-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Development of the publicity & Advocacy Strategic Plan",
+                            "description": "Development of the publicity & Advocacy Strategic Plan",
+                            "start_date": "2019-10-01",
+                            "end_date": "2021-03-31",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Establishment of a communication & coordination centre",
+                            "description": "Establishment of a communication & coordination centre",
+                            "start_date": "2021-08-01",
+                            "end_date": "2021-09-01",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Definition of census theme",
+                    "description": "Definition of census theme",
+                    "start_date": "2022-02-26",
+                    "end_date": "2022-02-26",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Design the census publicity programme",
+                            "description": "Design the census publicity programme",
+                            "start_date": "2022-02-26",
+                            "end_date": "2022-05-27",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Undertake an Environment Analysis",
+                            "description": "Undertake an Environment Analysis",
+                            "start_date": "2022-02-26",
+                            "end_date": "2022-03-26",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Professional Seminar on census publicity",
+                            "description": "Professional Seminar on census publicity",
+                            "start_date": "2022-02-26",
+                            "end_date": "2022-03-05",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Undertake Census Branding",
+                            "description": "Undertake Census Branding",
+                            "start_date": "2022-03-26",
+                            "end_date": "2022-04-26",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Census message design, developing & Pretesting",
+                            "description": "Census message design, developing & Pretesting",
+                            "start_date": "2022-03-26",
+                            "end_date": "2022-04-26",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Stakeholder Engagements- Media Consultations",
+                            "description": "Stakeholder Engagements- Media Consultations",
+                            "start_date": "2022-03-26",
+                            "end_date": "2023-09-06",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Development of Field Monitoring tools",
+                            "description": "Development of Field Monitoring tools",
+                            "start_date": "2022-03-26",
+                            "end_date": "2022-04-26",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Development of Census Publicity tools and Materials",
+                            "description": "Development of Census Publicity tools and Materials",
+                            "start_date": "2022-03-26",
+                            "end_date": "2022-04-26",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Design and Reproduction of census publicity print products",
+                            "description": "Design and Reproduction of census publicity print products",
+                            "start_date": "2022-05-27",
+                            "end_date": "2023-06-25",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Initiate procurement of publicity materials, equipment, tools and services",
+                            "description": "Initiate procurement of publicity materials, equipment, tools and services",
+                            "start_date": "2022-05-27",
+                            "end_date": "2023-06-25",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Shooting and editing the Census Documentary",
+                            "description": "Shooting and editing the Census Documentary",
+                            "start_date": "2022-08-26",
+                            "end_date": "2023-09-03",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Conduct 1/2-day publicity workshops for Parliamentarians",
+                    "description": "Conduct 1/2-day publicity workshops for Parliamentarians",
+                    "start_date": "2023-02-02",
+                    "end_date": "2023-02-02",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                },
+                {
+                    "title": "Publicity campaign for Sub-County chiefs and opinion leaders",
+                    "description": "Publicity campaign for Sub-County chiefs and opinion leaders",
+                    "start_date": "2023-02-16",
+                    "end_date": "2023-02-16",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                },
+                {
+                    "title": "Preparation of Census publicity materials (jingles, charts, etc.)",
+                    "description": "Preparation of Census publicity materials (jingles, charts, etc.)",
+                    "start_date": "2023-02-25",
+                    "end_date": "2023-02-25",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Radio and TV Programs in different languages",
+                            "description": "Radio and TV Programs in different languages",
+                            "start_date": "2023-04-25",
+                            "end_date": "2023-09-08",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Conduct Press Conferences",
+                    "description": "Conduct Press Conferences",
+                    "start_date": "2023-05-01",
+                    "end_date": "2023-05-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Initial Press Conference",
+                            "description": "Initial Press Conference",
+                            "start_date": "2023-05-10",
+                            "end_date": "2023-05-10",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Final Press Conference",
+                            "description": "Final Press Conference",
+                            "start_date": "2023-11-25",
+                            "end_date": "2023-11-30",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Conduct a publicity workshop for district leaders",
+                    "description": "Conduct a publicity workshop for district leaders",
+                    "start_date": "2023-06-01",
+                    "end_date": "2023-06-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                },
+                {
+                    "title": "Distribution of publicity materials",
+                    "description": "Distribution of publicity materials",
+                    "start_date": "2023-07-01",
+                    "end_date": "2023-07-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Printing and packaging of publicity materials",
+                            "description": "Printing and packaging of publicity materials",
+                            "start_date": "2023-07-01",
+                            "end_date": "2023-07-15",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Distribution of publicity materials to districts",
+                            "description": "Distribution of publicity materials to districts",
+                            "start_date": "2023-07-16",
+                            "end_date": "2023-08-30",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Launching of census publicity activities",
+                    "description": "Launching of census publicity activities",
+                    "start_date": "2023-09-01",
+                    "end_date": "2023-09-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "National Census Publicity Launch Event",
+                            "description": "National Census Publicity Launch Event",
+                            "start_date": "2023-09-10",
+                            "end_date": "2023-09-10",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Regional Census Publicity Launch Events",
+                            "description": "Regional Census Publicity Launch Events",
+                            "start_date": "2023-09-15",
+                            "end_date": "2023-09-30",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Carry out the \"intensive\" census publicity campaign",
+                    "description": "Carry out the \"intensive\" census publicity campaign",
+                    "start_date": "2023-05-01",
+                    "end_date": "2023-05-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                },
+                {
+                    "title": "Airing the census documentary",
+                    "description": "Airing the census documentary",
+                    "start_date": "2023-06-01",
+                    "end_date": "2023-06-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                },
+                {
+                    "title": "Carry out publicity and Advocacy programmes on social media",
+                    "description": "Carry out publicity and Advocacy programmes on social media",
+                    "start_date": "2023-06-01",
+                    "end_date": "2023-06-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                },
+                {
+                    "title": "Conduct Road shows",
+                    "description": "Conduct Road shows",
+                    "start_date": "2023-07-01",
+                    "end_date": "2023-07-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                }
+            ]
+        },
+        {
+            "title": "PROCUREMENT AND PREPARATION OF ENUMERATION MATERIALS",
+            "description": "PROCUREMENT AND PREPARATION OF ENUMERATION MATERIALS",
+            "start_date": "2023-01-25",
+            "end_date": "2023-01-25",
+            "task_status": "Backlog",
+            "task_priority": "Urgent",
+            "activities": [
+                {
+                    "title": "Use of technology",
+                    "description": "Use of technology",
+                    "start_date": "2023-01-25",
+                    "end_date": "2023-01-25",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Consult and make decisions on specifications for all technological requirements",
+                            "description": "Consult and make decisions on specifications for all technological requirements",
+                            "start_date": "2023-01-25",
+                            "end_date": "2023-01-25",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "International logistics and customs clearance",
+                    "description": "International logistics and customs clearance",
+                    "start_date": "2023-01-25",
+                    "end_date": "2023-01-25",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                },
+                {
+                    "title": "Contracting out",
+                    "description": "Contracting out",
+                    "start_date": "2023-01-25",
+                    "end_date": "2023-01-25",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                },
+                {
+                    "title": "Selection and contracting census main office, logistic and processing centres",
+                    "description": "Selection and contracting census main office, logistic and processing centres",
+                    "start_date": "2023-01-25",
+                    "end_date": "2023-01-25",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                },
+                {
+                    "title": "Procurement of census furniture and other materials",
+                    "description": "Procurement of census furniture and other materials",
+                    "start_date": "2023-01-25",
+                    "end_date": "2023-01-25",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                },
+                {
+                    "title": "Local and International Procurement",
+                    "description": "Local and International Procurement",
+                    "start_date": "2023-01-25",
+                    "end_date": "2023-01-25",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                },
+                {
+                    "title": "International logistics and customs clearance",
+                    "description": "International logistics and customs clearance",
+                    "start_date": "2023-01-25",
+                    "end_date": "2023-01-25",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Make Advertisements of Census procurements in the Media",
+                            "description": "Make Advertisements of Census procurements in the Media",
+                            "start_date": "2023-01-25",
+                            "end_date": "2023-01-25",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Make specifications for Tablets and other field devices and Fill procurement forms",
+                            "description": "Make specifications for Tablets and other field devices and Fill procurement forms",
+                            "start_date": "2023-01-25",
+                            "end_date": "2023-01-25",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Local and International Procurement",
+                    "description": "Local and International Procurement",
+                    "start_date": "2023-01-25",
+                    "end_date": "2023-01-25",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Procurement of field enumeration materials",
+                            "description": "Procurement of field enumeration materials",
+                            "start_date": "2023-01-25",
+                            "end_date": "2023-01-25",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Printing of Census enumeration documents (instruction manuals, etc.)",
+                            "description": "Printing of Census enumeration documents (instruction manuals, etc.)",
+                            "start_date": "2023-01-25",
+                            "end_date": "2023-01-25",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Logistics for census materials",
+                    "description": "Logistics for census materials",
+                    "start_date": "2023-01-25",
+                    "end_date": "2023-01-25",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Packing of census enumeration materials into containers using the EA master list (excluding tablets)",
+                            "description": "Packing of census enumeration materials into containers using the EA master list (excluding tablets)",
+                            "start_date": "2023-01-25",
+                            "end_date": "2023-01-25",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Provisioning, Packing of the Tablets",
+                            "description": "Provisioning, Packing of the Tablets",
+                            "start_date": "2023-01-25",
+                            "end_date": "2023-01-25",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Distribution of census enumeration materials in the field",
+                            "description": "Distribution of census enumeration materials in the field",
+                            "start_date": "2023-01-25",
+                            "end_date": "2023-01-25",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "FIELD OPERATIONS AND ENUMERATION",
+            "description": "FIELD OPERATIONS AND ENUMERATION",
+            "start_date": "2023-01-01",
+            "end_date": "2023-01-01",
+            "task_status": "Backlog",
+            "task_priority": "Urgent",
+            "activities": [
+                {
+                    "title": "Establishment of district census offices",
+                    "description": "Establishment of district census offices",
+                    "start_date": "2023-01-01",
+                    "end_date": "2023-01-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                },
+                {
+                    "title": "Establishing payment method for census staff in the whole country",
+                    "description": "Establishing payment method for census staff in the whole country",
+                    "start_date": "2023-01-01",
+                    "end_date": "2023-01-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                },
+                {
+                    "title": "Recruitment and training of field staff",
+                    "description": "Recruitment and training of field staff",
+                    "start_date": "2023-03-01",
+                    "end_date": "2023-03-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Recruitment of Sub-County ICT Supervisors",
+                            "description": "Recruitment of Sub-County ICT Supervisors",
+                            "start_date": "2023-03-01",
+                            "end_date": "2023-04-01",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Recruitment of Parish supervisors and enumerators",
+                            "description": "Recruitment of Parish supervisors and enumerators",
+                            "start_date": "2023-05-01",
+                            "end_date": "2023-05-12",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Training of District Census Officers and assistants",
+                            "description": "Training of District Census Officers and assistants",
+                            "start_date": "2023-07-05",
+                            "end_date": "2023-07-18",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Training of Sub-County supervisors by District Officers",
+                            "description": "Training of Sub-County supervisors by District Officers",
+                            "start_date": "2023-07-19",
+                            "end_date": "2023-08-01",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Training of Parish supervisors and enumerators",
+                            "description": "Training of Parish supervisors and enumerators",
+                            "start_date": "2023-08-02",
+                            "end_date": "2023-08-15",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Pre-enumeration listing and familiarization of EA boundaries",
+                            "description": "Pre-enumeration listing and familiarization of EA boundaries",
+                            "start_date": "2023-08-16",
+                            "end_date": "2023-08-17",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Cleaning of the Results from the listing and uploading",
+                            "description": "Cleaning of the Results from the listing and uploading",
+                            "start_date": "2023-08-17",
+                            "end_date": "2023-08-23",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Milestone 4: Census Enumeration",
+                            "description": "Milestone 4: Census Enumeration",
+                            "start_date": "2023-08-25",
+                            "end_date": "2023-09-03",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Assembling of field materials",
+                    "description": "Assembling of field materials",
+                    "start_date": "2023-09-04",
+                    "end_date": "2023-09-04",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Collection of Tablets and other documents at Sub-County level offices",
+                            "description": "Collection of Tablets and other documents at Sub-County level offices",
+                            "start_date": "2023-09-04",
+                            "end_date": "2023-09-08",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Collection of Tablets and other field materials at district census offices",
+                            "description": "Collection of Tablets and other field materials at district census offices",
+                            "start_date": "2023-09-09",
+                            "end_date": "2023-09-15",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Dispatch of Census Tablets and other field materials to Census Head Office",
+                            "description": "Dispatch of Census Tablets and other field materials to Census Head Office",
+                            "start_date": "2023-09-16",
+                            "end_date": "2023-09-22",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Writing of field operations report",
+                    "description": "Writing of field operations report",
+                    "start_date": "2023-09-25",
+                    "end_date": "2023-09-25",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                }
+            ]
+        },
+        {
+            "title": "FIELD OPERATIONS AND ENUMERATION",
+            "description": "FIELD OPERATIONS AND ENUMERATION",
+            "start_date": "2023-01-01",
+            "end_date": "2023-01-01",
+            "task_status": "Backlog",
+            "task_priority": "Urgent",
+            "activities": [
+                {
+                    "title": "Establishment of district census offices",
+                    "description": "Establishment of district census offices",
+                    "start_date": "2023-01-01",
+                    "end_date": "2023-01-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                },
+                {
+                    "title": "Establishing payment method for census staff in the whole country",
+                    "description": "Establishing payment method for census staff in the whole country",
+                    "start_date": "2023-01-01",
+                    "end_date": "2023-01-01",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                }
+            ]
+        },
+        {
+            "title": "RELEASE OF RESULTS",
+            "description": "RELEASE OF RESULTS",
+            "start_date": "2023-09-08",
+            "end_date": "2023-09-08",
+            "task_status": "Backlog",
+            "task_priority": "Urgent",
+            "activities": [
+                {
+                    "title": "Preliminary results",
+                    "description": "Preliminary results",
+                    "start_date": "2023-09-08",
+                    "end_date": "2023-09-08",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                },
+                {
+                    "title": "Provisional census results",
+                    "description": "Provisional census results",
+                    "start_date": "2023-09-08",
+                    "end_date": "2023-09-08",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Review of the Provisional Results Tabulation Plan",
+                            "description": "Review of the Provisional Results Tabulation Plan",
+                            "start_date": "2023-09-08",
+                            "end_date": "2023-09-13",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Review of the computer programs for the Provisional Results Report",
+                            "description": "Review of the computer programs for the Provisional Results Report",
+                            "start_date": "2023-09-08",
+                            "end_date": "2023-09-15",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Generation of Tables for the Provisional Results Report",
+                            "description": "Generation of Tables for the Provisional Results Report",
+                            "start_date": "2023-09-13",
+                            "end_date": "2023-09-22",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Drafting of the Report by authors",
+                            "description": "Drafting of the Report by authors",
+                            "start_date": "2023-09-25",
+                            "end_date": "2023-10-09",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Review of draft report by select committee",
+                            "description": "Review of draft report by select committee",
+                            "start_date": "2023-10-10",
+                            "end_date": "2023-10-17",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Finalization of publication containing provisional results",
+                            "description": "Finalization of publication containing provisional results",
+                            "start_date": "2023-10-18",
+                            "end_date": "2023-10-25",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Printing and publication of provisional results",
+                            "description": "Printing and publication of provisional results",
+                            "start_date": "2023-10-25",
+                            "end_date": "2023-11-08",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Launch of provisional results of Census",
+                    "description": "Launch of provisional results of Census",
+                    "start_date": "2023-11-15",
+                    "end_date": "2023-11-15",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": []
+                }
+            ]
+        },
+        {
+            "title": "POST-ENUMERATION SURVEY",
+            "description": "POST-ENUMERATION SURVEY",
+            "start_date": "2023-01-08",
+            "end_date": "2023-01-08",
+            "task_status": "Backlog",
+            "task_priority": "Urgent",
+            "activities": [
+                {
+                    "title": "Development of a comprehensive plan of procedures and processes for the PES",
+                    "description": "Development of a comprehensive plan of procedures and processes for the PES",
+                    "start_date": "2023-01-08",
+                    "end_date": "2023-01-08",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Develop PES work plans, budgets, and training plans",
+                            "description": "Develop PES work plans, budgets, and training plans",
+                            "start_date": "2023-01-08",
+                            "end_date": "2023-01-16",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Design of PES questionnaires and manuals",
+                    "description": "Design of PES questionnaires and manuals",
+                    "start_date": "2023-01-16",
+                    "end_date": "2023-01-16",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Design of the data processing system for the PES",
+                            "description": "Design of the data processing system for the PES",
+                            "start_date": "2023-02-06",
+                            "end_date": "2023-03-27",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Solicitation of estimates for printing field operations manuals",
+                            "description": "Solicitation of estimates for printing field operations manuals",
+                            "start_date": "2023-04-12",
+                            "end_date": "2023-04-14",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Reproduction and delivery of PES materials (manuals & training guides) to Census HQ",
+                            "description": "Reproduction and delivery of PES materials (manuals & training guides) to Census HQ",
+                            "start_date": "2023-04-14",
+                            "end_date": "2023-07-07",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "PES IT Matching System",
+                    "description": "PES IT Matching System",
+                    "start_date": "2023-02-07",
+                    "end_date": "2023-02-07",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Finalization of the PES Matching guidelines",
+                            "description": "Finalization of the PES Matching guidelines",
+                            "start_date": "2023-04-08",
+                            "end_date": "2023-07-07",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Drawing of the sample EAs by cluster for the PES",
+                    "description": "Drawing of the sample EAs by cluster for the PES",
+                    "start_date": "2023-03-08",
+                    "end_date": "2023-03-08",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Determine the sampling and estimation procedures for the main census and post-enumeration survey",
+                            "description": "Determine the sampling and estimation procedures for the main census and post-enumeration survey",
+                            "start_date": "2023-03-08",
+                            "end_date": "2023-05-08",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Draw the respective samples for the main census and the post-enumeration survey",
+                            "description": "Draw the respective samples for the main census and the post-enumeration survey",
+                            "start_date": "2023-05-25",
+                            "end_date": "2023-07-25",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Assemble PES documents for distribution to field staff",
+                    "description": "Assemble PES documents for distribution to field staff",
+                    "start_date": "2023-07-30",
+                    "end_date": "2023-07-30",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Prepare training questionnaire & manuals",
+                            "description": "Prepare training questionnaire & manuals",
+                            "start_date": "2023-07-30",
+                            "end_date": "2023-09-25",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Recruitment and training of field staff",
+                    "description": "Recruitment and training of field staff",
+                    "start_date": "2023-09-27",
+                    "end_date": "2023-09-27",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Recruitment and training of PES district supervisors",
+                            "description": "Recruitment and training of PES district supervisors",
+                            "start_date": "2023-09-27",
+                            "end_date": "2023-10-07",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Recruitment and training of Sub-County supervisors",
+                            "description": "Recruitment and training of Sub-County supervisors",
+                            "start_date": "2023-10-08",
+                            "end_date": "2023-10-18",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Recruitment and training of PES enumerators",
+                            "description": "Recruitment and training of PES enumerators",
+                            "start_date": "2023-10-19",
+                            "end_date": "2023-10-29",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Deployment of PES enumerators to the field",
+                            "description": "Deployment of PES enumerators to the field",
+                            "start_date": "2023-10-30",
+                            "end_date": "2023-10-30",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Milestone 5: PES Re-Interviewing",
+                            "description": "Milestone 5: PES Re-Interviewing",
+                            "start_date": "2023-10-31",
+                            "end_date": "2023-11-10",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Assemble of field materials",
+                    "description": "Assemble of field materials",
+                    "start_date": "2023-11-11",
+                    "end_date": "2023-11-11",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Assemble and dispatch Tablets and other PES materials to Sub-County Headquarters",
+                            "description": "Assemble and dispatch Tablets and other PES materials to Sub-County Headquarters",
+                            "start_date": "2023-11-11",
+                            "end_date": "2023-11-13",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Assemble and dispatch Tablets and other PES materials to District Census Offices",
+                            "description": "Assemble and dispatch Tablets and other PES materials to District Census Offices",
+                            "start_date": "2023-11-13",
+                            "end_date": "2023-11-15",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Assemble and dispatch Tablets and other PES materials to Census Head Office",
+                            "description": "Assemble and dispatch Tablets and other PES materials to Census Head Office",
+                            "start_date": "2023-11-15",
+                            "end_date": "2023-11-18",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Receipt and checking of PES data",
+                    "description": "Receipt and checking of PES data",
+                    "start_date": "2023-11-18",
+                    "end_date": "2023-11-18",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Check and validate received PES data",
+                            "description": "Check and validate received PES data",
+                            "start_date": "2023-11-18",
+                            "end_date": "2023-11-28",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Processing of PES questionnaires and compilation of tabulations",
+                            "description": "Processing of PES questionnaires and compilation of tabulations",
+                            "start_date": "2023-11-28",
+                            "end_date": "2024-04-01",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Office matching procedures by matching staff",
+                            "description": "Office matching procedures by matching staff",
+                            "start_date": "2023-12-04",
+                            "end_date": "2024-02-03",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        },
+                        {
+                            "title": "Reconciliation visits for non-matches",
+                            "description": "Reconciliation visits for non-matches",
+                            "start_date": "2024-02-04",
+                            "end_date": "2024-03-02",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Draft and review of PES report",
+                    "description": "Draft and review of PES report",
+                    "start_date": "2024-04-18",
+                    "end_date": "2024-04-18",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Draft and review PES report",
+                            "description": "Draft and review PES report",
+                            "start_date": "2024-04-18",
+                            "end_date": "2024-05-09",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                },
+                {
+                    "title": "Finalization and Printing of the final PES report",
+                    "description": "Finalization and Printing of the final PES report",
+                    "start_date": "2024-05-09",
+                    "end_date": "2024-05-09",
+                    "task_status": "Backlog",
+                    "task_priority": "Urgent",
+                    "tasks": [
+                        {
+                            "title": "Finalize and print PES report",
+                            "description": "Finalize and print PES report",
+                            "start_date": "2024-05-09",
+                            "end_date": "2024-05-30",
+                            "task_status": "Backlog",
+                            "task_priority": "Urgent"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
