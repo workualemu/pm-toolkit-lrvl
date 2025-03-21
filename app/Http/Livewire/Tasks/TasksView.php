@@ -111,6 +111,6 @@ class TasksView extends Component
             array_push($criteria, ['type' => 'whereIn', 'column' => 'id', 'values' => $this->filterParams['fTaskIds']]);  
         }
 
-        return Task::sortedTasks($criteria, 'path', 'asc', $this->filterParams['fPhase']);   
+        return Tasks::sortedTasks($criteria, 'path', 'desc', $this->filterParams['fPhase']);   
     }
 }

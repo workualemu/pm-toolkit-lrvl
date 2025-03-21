@@ -41,17 +41,6 @@ class ProjectModal extends Component
     private $taskPriorityMap = [];
     private $tagMap = [];
 
-    // protected $rules = [
-    //     'title' => 'required|min:2',
-    //     'user_id' => 'required',
-    //     'description'=>'',
-    //     'start_date'=>'',
-    //     'end_date'=>'',
-    //     'status' => 'required'
-    // ];
-
-    // protected $listeners = ['openProjectModal' => 'openProjectModal'];
-
     #[On('openProjectModal')]
     public function openProjectModal($project)
     {
@@ -64,16 +53,6 @@ class ProjectModal extends Component
         $this->hidrate();
         $this->showProjectModal = true;
     }
-
-    // public function openProjectModal($report_id)
-    // {
-    //     $this->project = new Report();
-    //     if($report_id > 0){
-    //         $this->project = Report::find($report_id);
-    //     }
-
-    //     $this->showProjectModal = true;
-    // }
 
     public function closeModal()
     {
@@ -92,7 +71,6 @@ class ProjectModal extends Component
         }
         $this->project->status = $this->project->status == '' ? 'ACTIVE' : $this->project->status;
 
-        
         DB::beginTransaction();
         $this->project->save();
 
@@ -143,7 +121,7 @@ class ProjectModal extends Component
             $this->createStatuses($source->getTaskStatuses(), $user->id);
             $this->createPriorities($source->getTaskPriorities(), $user->id);
             $this->createReports($source->getReports(), $user->id);
-            $this->copyTasks($source->getTasksByLevel(0), null, "", $user->id, 0, $slackDays);
+            $this->copyTasks($source->getTasksByLevel(0)->sortBy('path'), null, "", $user->id, 0, $slackDays);
         } catch (\Exception $e) {
             logger($e->getMessage());
             $this->dispatch('errorCreatingProjectFromTemplate', 'Error creating project from template');
@@ -256,7 +234,7 @@ class ProjectModal extends Component
             $task->save();
 
             if ($level < 2 && isset($sourceTask->children)) {
-                $this->copyTasks($sourceTask->children, $task->id, $taskPath, $user_id,
+                $this->copyTasks($sourceTask->children->sortBy('path'), $task->id, $taskPath, $user_id,
                     $level + 1, $slackDays);
             }
         }
