@@ -67,7 +67,7 @@ class ReportsUse extends Component
         }
         $sql .= " FROM " . $selectedReport->from_clause;
 
-        $projectTable = $this->findTableWithProjectId($selectedReport->from_clause);
+        $projectTable = $this->findTableWithProjectId($sql);
         if($projectTable != null){
             $sql .= " WHERE " . $projectTable . ".project_id = " . $user->project_id;
             if(!empty($selectedReport->where_clause)){
@@ -124,26 +124,66 @@ class ReportsUse extends Component
     private function validateInput($selectClause, $fromClause, $whereClause, 
         $groupByClause, $havingClause, $orderByClause='') 
     {
-        $forbiddenKeywords = ['DELETE', 'UPDATE', 'DROP', 'ALTER', 'INSERT', 'EXEC', '--', ';'];
     
-        foreach ([$selectClause, $fromClause, $whereClause, 
-            $groupByClause, $havingClause, $orderByClause] as $input) {
-            foreach ($forbiddenKeywords as $keyword) {
-                if (stripos($input, $keyword) !== false) {
-                    throw new InvalidArgumentException("Forbidden keyword detected: $keyword");
-                }
-            }
+        if ($selectClause && !$this->isSafeCondition($selectClause)) {
+            throw new InvalidArgumentException("Invalid SELECT condition: $selectClause");
         }
-    
-        $conditionRegex = '/^[a-zA-Z_][a-zA-Z0-9_\.]*\s*(?:=|!=|<>|>=|<=|>|<|LIKE|IS(?:\s+NOT)?)\s*(\'[^\']*\'|\"[^\"]*\"|\d+|\w+|NULL)$/i';
-        if ($whereClause && !preg_match($conditionRegex, $whereClause)) {
+        if ($fromClause && !$this->isSafeCondition($fromClause)) {
+            throw new InvalidArgumentException("Invalid FROM condition: $fromClause");
+        }
+        
+        if ($groupByClause && !$this->isSafeCondition($groupByClause)) {
+            throw new InvalidArgumentException("Invalid GROUP condition: $groupByClause");
+        }
+
+        if ($orderByClause && !isSafeCondition($orderByClause)) {
+            throw new InvalidArgumentException("Invalid ORDER condition: $orderByClause");
+        }
+
+        if ($whereClause && !$this->isSafeCondition($whereClause)) {
             throw new InvalidArgumentException("Invalid WHERE condition: $whereClause");
         }
-        if ($havingClause && !preg_match($conditionRegex, $havingClause)) {
+        if ($havingClause && !$this->isSafeCondition($havingClause)) {
             throw new InvalidArgumentException("Invalid HAVING condition: $havingClause");
         }
         return true;
     }
+
+    function isSafeCondition(string $clause): bool
+    {
+        $rawForbidden = [
+            ';',               
+            '--',              
+            '#',               
+            '/*', '*/',        
+            'exec',
+            'execute',
+            'update',
+            'delete',
+            'insert',
+            'drop',
+            'truncate',
+            'alter',
+            'create',
+            'grant',
+            'revoke',
+            'use',
+            'shutdown',
+            'merge',
+            'call',
+            'load_file',
+            'outfile'
+        ];
+
+        $escaped = array_map(function($word) {
+            return ctype_alpha($word) ? '\b' . preg_quote($word, '/') . '\b' : preg_quote($word, '/');
+        }, $rawForbidden);
+
+        $pattern = '/(' . implode('|', $escaped) . ')/i';
+
+        return !preg_match($pattern, $clause);
+    }
+
 
     function hasColumn($tableName, $columnName)
     {
@@ -171,17 +211,21 @@ class ReportsUse extends Component
     function findTableWithProjectId($fromClause)
     {
         $tables = $this->getTablesFromFromClause($fromClause);
-
         if (!empty($tables)) {
             foreach ($tables as $table) {
+                $ret = null;
                 if(strtoupper($table) == 'USERS'){
                     continue;
                 }
+                if(strtoupper($table) == 'TASKS'){
+                    return $table;
+                }
 
                 if ($this->hasColumn($table, 'project_id')) {
-                    return $table; 
+                    $ret = $table; 
                 }
             }
+            return $ret;
         }
 
         return null; 
