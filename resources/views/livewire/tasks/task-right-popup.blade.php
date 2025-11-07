@@ -80,9 +80,9 @@
                                     </div>
 
                                     @if($task->id > 0)
-                                        <label class="block">
-                                            <livewire:comments :model="$task"/>
-                                        </label>
+                                        <div class="block">
+                                            <livewire:comments :model="$task" :key="'comments-' . $task->id" />
+                                        </div>
                                     @endif
                                 </div>
                             </div>
