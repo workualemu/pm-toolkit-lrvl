@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
+    public const TWO_FACTOR_SESSION_KEY = 'two_factor:user:id';
+    public const TWO_FACTOR_REMEMBER_KEY = 'two_factor:remember';
+
     public $email ='';
     public function loginView()
     {
@@ -33,12 +36,23 @@ class AuthController extends Controller
 
         $validated = $validator->validated();
 
-        if (Auth::attempt(array('email' => $validated['email'], 'password' => $validated['password']))) {
+        $remember = $request->boolean('remember', false);
+
+        if (Auth::attempt(['email' => $validated['email'], 'password' => $validated['password']], $remember)) {
             $user =  Auth::user();
             if($user->name == 'Admin'){
                 $user->assignRole('Super Admin');
             }
-            
+
+            if($user->two_factor_enabled){
+                Auth::logout();
+                $request->session()->put(self::TWO_FACTOR_SESSION_KEY, $user->id);
+                $request->session()->put(self::TWO_FACTOR_REMEMBER_KEY, $remember);
+                return redirect()->route('two-factor.show');
+            }
+
+            $user->forceFill(['last_login_at' => now()])->save();
+
             return redirect()->route('index');
         } else {
             $validator->errors()->add(
@@ -100,6 +114,8 @@ class AuthController extends Controller
                 $role =  $invitation->role;
             }
             $user->assignRole($role);
+            $user->last_login_at = now();
+            $user->save();
             
             auth()->login($user);
             DB::commit();
@@ -111,9 +127,16 @@ class AuthController extends Controller
         return redirect()->route('index');
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
+        $request->session()->forget([
+            self::TWO_FACTOR_SESSION_KEY,
+            self::TWO_FACTOR_REMEMBER_KEY,
+        ]);
         auth()->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect()->route('login');
     }
 }

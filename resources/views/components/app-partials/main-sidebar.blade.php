@@ -348,7 +348,7 @@
                 <button @click="isShowPopper = !isShowPopper" x-ref="popperRef" 
                     x-tooltip.placement.right="'Profile'"
                     class="avatar h-12 w-12">
-                    <img class="rounded-full" src="{{ asset('images/200x200.png') }}" alt="avatar" />
+                    <img class="rounded-full object-cover" src="{{ $user->profile_photo_url ?? asset('images/200x200.png') }}" alt="{{ $user->name }}" />
                     <span
                         class="absolute right-0 h-3.5 w-3.5 rounded-full border-2 border-white bg-success dark:border-navy-700"></span>
                 </button>
@@ -357,8 +357,8 @@
                         class="popper-box w-64 rounded-lg border border-slate-150 bg-white shadow-soft dark:border-navy-600 dark:bg-navy-700">
                         <div class="flex items-center space-x-4 rounded-t-lg bg-slate-100 py-5 px-4 dark:bg-navy-800">
                             <div class="avatar h-14 w-14">
-                                <img class="rounded-full" src="{{ asset('images/200x200.png') }}"
-                                    alt="avatar" />
+                                <img class="rounded-full object-cover" src="{{ $user->profile_photo_url ?? asset('images/200x200.png') }}"
+                                    alt="{{ $user->name }}" />
                             </div>
                             <div>
                                 <a href="{{ route('setProfile') }}"
