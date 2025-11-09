@@ -2,7 +2,7 @@
     @php
         $twoFactorEnabled = (bool) $user->two_factor_enabled;
         $twoFactorMethod = $user->two_factor_method;
-        $recoveryCodes = collect($user->two_factor_recovery_codes ?? []);
+        $recoveryCodes = collect(session('recovery_codes_plain', []));
         $statusMessages = [
             'profile-updated' => 'Profile updated successfully.',
             'avatar-updated' => 'Profile image updated.',
@@ -13,7 +13,8 @@
         ];
         $statusKey = session('status');
         $qrCodeDataUri = $qrCodeDataUri ?? null;
-        $displaySecret = $user->two_factor_secret ? trim(chunk_split($user->two_factor_secret, 4, ' ')) : null;
+        $displaySecret = isset($displaySecret) ? trim(chunk_split($displaySecret, 4, ' ')) : null;
+        $hasPreview = !empty($qrCodeDataUri);
     @endphp
     <main class="main-content w-full px-[var(--margin-x)] pb-8 space-y-4">
         @if ($statusKey)
@@ -52,6 +53,7 @@
 
         <div class="grid grid-cols-12 gap-4 sm:gap-5 lg:gap-6">
             <div class="col-span-12 xl:col-span-4 space-y-4">
+                <div x-data="{ showPasswordModal: false }">
                 <div class="card p-5">
                     <div class="flex flex-col items-center space-y-4 text-center">
                         <div class="relative">
@@ -99,7 +101,7 @@
                                 <p class="font-medium text-slate-700 dark:text-navy-50">Password updated</p>
                                 <p class="text-xs text-slate-400 dark:text-navy-200">{{ optional($user->updated_at)?->diffForHumans() ?? 'Unknown' }}</p>
                             </div>
-                            <a href="{{ route('password.request') }}" class="btn h-8 rounded-full border border-primary/30 px-3 text-xs text-primary hover:border-primary dark:border-accent/40 dark:text-accent-light">Update</a>
+                            <button type="button" @click="showPasswordModal = true" class="btn h-8 rounded-full border border-primary/30 px-3 text-xs text-primary hover:border-primary dark:border-accent/40 dark:text-accent-light">Update</button>
                         </div>
                         <div class="flex items-center justify-between rounded-2xl border border-slate-200/70 p-3 dark:border-navy-600">
                             <div>
@@ -121,6 +123,38 @@
                             @endif
                         </div>
                     </div>
+                </div>
+
+                <div x-show="showPasswordModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 px-4">
+                    <div @click.away="showPasswordModal = false" class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl dark:bg-navy-700">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-semibold text-slate-700 dark:text-navy-50">Update password</h3>
+                            <button type="button" class="text-slate-400 hover:text-slate-600 dark:text-navy-200" @click="showPasswordModal = false">&times;</button>
+                        </div>
+                        <p class="mt-1 text-xs text-slate-500 dark:text-navy-200">Confirm your current password and choose a new one.</p>
+
+                        <form class="mt-5 space-y-4" method="POST" action="{{ route('profile.password.update') }}">
+                            @csrf
+                            @method('PUT')
+                            <label class="block">
+                                <span class="text-xs+ font-medium text-slate-600 dark:text-navy-200">Current password</span>
+                                <input type="password" name="current_password" autocomplete="current-password" required class="form-input mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-primary focus:ring-primary dark:border-navy-500 dark:bg-transparent dark:text-navy-50" />
+                            </label>
+                            <label class="block">
+                                <span class="text-xs+ font-medium text-slate-600 dark:text-navy-200">New password</span>
+                                <input type="password" name="password" autocomplete="new-password" required class="form-input mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-primary focus:ring-primary dark:border-navy-500 dark:bg-transparent dark:text-navy-50" />
+                            </label>
+                            <label class="block">
+                                <span class="text-xs+ font-medium text-slate-600 dark:text-navy-200">Confirm password</span>
+                                <input type="password" name="password_confirmation" autocomplete="new-password" required class="form-input mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-primary focus:ring-primary dark:border-navy-500 dark:bg-transparent dark:text-navy-50" />
+                            </label>
+                            <div class="flex items-center justify-end space-x-3">
+                                <button type="button" class="text-xs font-medium text-slate-500 hover:text-slate-700 dark:text-navy-200" @click="showPasswordModal = false">Cancel</button>
+                                <button type="submit" class="btn h-10 rounded-full bg-primary px-4 text-sm font-semibold text-white hover:bg-primary-focus dark:bg-accent">Save password</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
                 </div>
             </div>
 
@@ -148,15 +182,6 @@
                             </span>
                         </label>
                         <label class="block">
-                            <span class="text-xs+ font-medium text-slate-500 dark:text-navy-200">Email Address</span>
-                            <span class="relative mt-1.5 flex">
-                                <input class="form-input peer w-full rounded-full border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent" placeholder="Enter email address" type="email" name="email" value="{{ old('email', $user->email) }}" />
-                                <span class="pointer-events-none absolute flex h-full w-10 items-center justify-center text-slate-400 peer-focus:text-primary dark:text-navy-300 dark:peer-focus:text-accent">
-                                    <i class="fa-regular fa-envelope text-base"></i>
-                                </span>
-                            </span>
-                        </label>
-                        <label class="block">
                             <span class="text-xs+ font-medium text-slate-500 dark:text-navy-200">Phone Number</span>
                             <span class="relative mt-1.5 flex">
                                 <input class="form-input peer w-full rounded-full border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent" placeholder="+1 555 0123 456" type="text" name="phone_number" value="{{ old('phone_number', $user->phone_number) }}" />
@@ -166,37 +191,6 @@
                             </span>
                         </label>
                     </div>
-                    <div class="my-7 h-px bg-slate-200 dark:bg-navy-500"></div>
-                    <div>
-                        <h3 class="text-base font-medium text-slate-600 dark:text-navy-100">Linked Accounts</h3>
-                        <p class="text-xs+ text-slate-400 dark:text-navy-300">Accounts connected to this profile.</p>
-                        <div class="mt-4 space-y-3">
-                            <div class="flex items-center justify-between rounded-2xl border border-slate-200/70 p-3 dark:border-navy-600">
-                                <div class="flex items-center space-x-4">
-                                    <div class="h-12 w-12">
-                                        <img class="rounded-full" src="{{ asset('images/100x100.png') }}" alt="logo" />
-                                    </div>
-                                    <div>
-                                        <p class="font-medium text-slate-700 dark:text-navy-50">Sign in with Google</p>
-                                        <p class="text-xs text-slate-400 dark:text-navy-200">Coming soon</p>
-                                    </div>
-                                </div>
-                                <button class="btn h-8 rounded-full border border-slate-200 px-3 text-xs+ font-medium text-primary hover:border-primary hover:bg-primary/10 dark:border-navy-500 dark:text-accent-light" type="button">Connect</button>
-                            </div>
-                            <div class="flex items-center justify-between rounded-2xl border border-slate-200/70 p-3 dark:border-navy-600">
-                                <div class="flex items-center space-x-4">
-                                    <div class="h-12 w-12">
-                                        <img class="rounded-full" src="{{ asset('images/100x100.png') }}" alt="logo" />
-                                    </div>
-                                    <div>
-                                        <p class="font-medium text-slate-700 dark:text-navy-50">Sign in with Microsoft</p>
-                                        <p class="text-xs text-slate-400 dark:text-navy-200">Coming soon</p>
-                                    </div>
-                                </div>
-                                <button class="btn h-8 rounded-full border border-slate-200 px-3 text-xs+ font-medium text-slate-500 dark:border-navy-500 dark:text-navy-200" type="button" disabled>Disconnect</button>
-                            </div>
-                        </div>
-                    </div>
                 </form>
 
                 <div class="card p-5">
@@ -205,10 +199,6 @@
                             <p class="text-xs uppercase tracking-wide text-primary">Two Factor Authentication</p>
                             <h3 class="text-lg font-semibold text-slate-700 dark:text-navy-50">Add a second layer of security</h3>
                         </div>
-                        <label class="inline-flex items-center space-x-2 text-sm font-medium text-slate-600 dark:text-navy-100">
-                            <span>Status</span>
-                            <input type="checkbox" class="form-switch h-6 w-11 rounded-full border border-slate-300 bg-slate-200 focus:border-primary dark:border-navy-500 dark:bg-navy-600" {{ $twoFactorEnabled ? 'checked' : 'disabled' }} disabled />
-                        </label>
                     </div>
                     <p class="mt-2 text-sm text-slate-500 dark:text-navy-200">Use an authenticator app to confirm it is you when you sign in from a new device.</p>
 
@@ -226,20 +216,24 @@
                                 </div>
                             </div>
                             <div class="mt-4 space-y-3 text-sm">
-                                <p>1. Install Google Authenticator or Authy.</p>
-                                <p>2. Scan this QR code.</p>
-                                @if ($qrCodeDataUri && $twoFactorMethod === 'authenticator')
+                                @if ($hasPreview)
+                                    <p>1. Scan the QR code below with your authenticator app.</p>
+                                    <p>2. Enter the generated code next time you log in.</p>
                                     <div class="flex flex-col items-center space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-navy-600 dark:bg-navy-700/60">
                                         <img src="{{ $qrCodeDataUri }}" alt="Authenticator QR code" class="h-40 w-40 rounded-xl border border-slate-200 bg-white p-2 dark:border-navy-500" />
-                                        
+                                        @if ($displaySecret)
+                                            <p class="text-xs text-slate-500 dark:text-navy-200">Manual code: <span class="font-mono text-sm">{{ $displaySecret }}</span></p>
+                                        @endif
                                     </div>
+                                @elseif ($twoFactorEnabled && $twoFactorMethod === 'authenticator')
+                                    <p>Authenticator is active. Reconfigure to generate a fresh QR code.</p>
                                 @else
                                     <div class="rounded-xl bg-slate-100 p-3 text-center text-xs text-slate-500 dark:bg-navy-700 dark:text-navy-200">
-                                        Enable two-factor to generate your QR code and secret.
+                                        Click “Enable & Generate QR” to start the setup process.
                                     </div>
                                 @endif
                             </div>
-                            <button class="btn mt-4 h-10 w-full rounded-full bg-primary text-sm font-semibold text-white hover:bg-primary-focus dark:bg-accent" type="submit">{{ $twoFactorEnabled && $twoFactorMethod === 'authenticator' ? 'Reconfigure' : 'Enable' }}</button>
+                            <button class="btn mt-4 h-10 w-full rounded-full bg-primary text-sm font-semibold text-white hover:bg-primary-focus dark:bg-accent" type="submit">{{ $twoFactorEnabled && ! $hasPreview ? 'Reconfigure (new QR)' : 'Enable & Generate QR' }}</button>
                         </form>
                     </div>
 
@@ -258,7 +252,7 @@
                             @forelse ($recoveryCodes as $code)
                                 <div class="rounded-xl bg-slate-100 px-3 py-2 text-slate-600 dark:bg-navy-700 dark:text-navy-50">{{ $code }}</div>
                             @empty
-                                <p class="col-span-2 text-xs text-slate-400 dark:text-navy-200">No codes yet. Enable two-factor to generate recovery codes.</p>
+                                <p class="col-span-2 text-xs text-slate-400 dark:text-navy-200">Backup codes are only shown once right after enabling. Regenerate to view fresh codes.</p>
                             @endforelse
                         </div>
                     </div>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use PragmaRX\Google2FA\Google2FA;
 
 class TwoFactorController extends Controller
@@ -54,18 +56,15 @@ class TwoFactorController extends Controller
         $remainingCodes = $user->two_factor_recovery_codes ?? [];
 
         if ($request->filled('recovery_code')) {
-            $inputCode = strtoupper(str_replace([' ', '-'], '', $request->input('recovery_code')));
-            $match = collect($remainingCodes)->first(function ($code) use ($inputCode) {
-                $normalized = strtoupper(str_replace([' ', '-'], '', $code));
-                return hash_equals($normalized, $inputCode);
-            });
+            $inputCode = $this->normalizeRecoveryCode($request->input('recovery_code'));
 
-            if ($match) {
-                $authenticated = true;
-                $remainingCodes = collect($remainingCodes)
-                    ->reject(fn ($code) => $code === $match)
-                    ->values()
-                    ->toArray();
+            foreach ($remainingCodes as $index => $storedHash) {
+                if ($this->recoveryCodeMatches($storedHash, $inputCode)) {
+                    $authenticated = true;
+                    unset($remainingCodes[$index]);
+                    $remainingCodes = array_values($remainingCodes);
+                    break;
+                }
             }
         }
 
@@ -96,5 +95,19 @@ class TwoFactorController extends Controller
             AuthController::TWO_FACTOR_SESSION_KEY,
             AuthController::TWO_FACTOR_REMEMBER_KEY,
         ]);
+    }
+
+    protected function normalizeRecoveryCode(string $code): string
+    {
+        return strtoupper(str_replace([' ', '-'], '', $code));
+    }
+
+    protected function recoveryCodeMatches(string $storedHash, string $input): bool
+    {
+        if (Str::startsWith($storedHash, '$2y$')) {
+            return Hash::check($input, $storedHash);
+        }
+
+        return hash_equals($this->normalizeRecoveryCode($storedHash), $input);
     }
 }

@@ -83,11 +83,15 @@ Route::middleware('auth')->group(function () {
 
     Route::controller(ProfileController::class)->group(function () {
         Route::get('setProfile', 'show')->name('setProfile');
+    });
+
+    Route::middleware('password.confirm')->controller(ProfileController::class)->group(function () {
         Route::put('profile', 'updateProfile')->name('profile.update');
         Route::post('profile/avatar', 'updateAvatar')->name('profile.avatar');
         Route::post('profile/two-factor/enable', 'enableTwoFactor')->name('profile.two-factor.enable');
         Route::delete('profile/two-factor', 'disableTwoFactor')->name('profile.two-factor.disable');
         Route::post('profile/two-factor/regenerate', 'regenerateRecoveryCodes')->name('profile.two-factor.regenerate');
+        Route::put('profile/password', 'updatePassword')->name('profile.password.update');
     });
 
     Route::controller(PagesController::class)->group(function(){

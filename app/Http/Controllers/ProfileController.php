@@ -3,26 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\TwoFactorSecretManager;
 use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
 {
+    public function __construct(private TwoFactorSecretManager $twoFactorSecretManager)
+    {
+    }
+
     public function show()
     {
         /** @var User $user */
         $user = Auth::user();
-        $otpauthUrl = $user->two_factor_secret ? $this->makeOtpAuthUrl($user) : null;
-        $qrCodeDataUri = $this->makeQrCodeDataUri($otpauthUrl);
 
-        return view('pages/set-profile', compact('user', 'otpauthUrl', 'qrCodeDataUri'));
+        $preview = session('two_factor_preview');
+        $displaySecret = $preview['secret'] ?? null;
+        $qrCodeDataUri = isset($preview['otpauth'])
+            ? $this->makeQrCodeDataUri($preview['otpauth'])
+            : null;
+
+        return view('pages/set-profile', compact('user', 'qrCodeDataUri', 'displaySecret'));
     }
 
     public function updateProfile(Request $request)
@@ -89,11 +100,21 @@ class ProfileController extends Controller
             $user->phone_number = $validated['sms_phone'];
         }
 
+        $plainCodes = $this->generateRecoveryCodes();
+        $secret = $validated['method'] === 'authenticator'
+            ? $this->twoFactorSecretManager->createTrialSecret($user)
+            : null;
+
         $user->two_factor_enabled = true;
         $user->two_factor_method = $validated['method'];
-        $user->two_factor_secret = $this->generateSecret();
-        $user->two_factor_recovery_codes = $this->generateRecoveryCodes();
+        $user->two_factor_secret = $secret['secret'] ?? null;
+        $user->two_factor_recovery_codes = $this->hashRecoveryCodes($plainCodes);
         $user->save();
+
+        if ($secret) {
+            session()->flash('two_factor_preview', $secret);
+        }
+        session()->flash('recovery_codes_plain', $plainCodes);
 
         return back()->with('status', 'two-factor-enabled');
     }
@@ -110,7 +131,30 @@ class ProfileController extends Controller
             'two_factor_recovery_codes' => null,
         ])->save();
 
+        session()->forget('two_factor_preview');
+
         return back()->with('status', 'two-factor-disabled');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        $validated = $request->validate([
+            'current_password' => ['required'],
+            'password' => ['required', 'confirmed', Password::defaults()],
+        ]);
+
+        if (! Hash::check($validated['current_password'], $user->password)) {
+            return back()->withErrors(['current_password' => 'Your current password is incorrect.']);
+        }
+
+        $user->forceFill([
+            'password' => Hash::make($validated['password']),
+        ])->save();
+
+        return back()->with('status', 'password-updated');
     }
 
     public function regenerateRecoveryCodes()
@@ -122,8 +166,11 @@ class ProfileController extends Controller
             return back()->with('error', 'two-factor-not-enabled');
         }
 
-        $user->two_factor_recovery_codes = $this->generateRecoveryCodes();
+        $plainCodes = $this->generateRecoveryCodes();
+        $user->two_factor_recovery_codes = $this->hashRecoveryCodes($plainCodes);
         $user->save();
+
+        session()->flash('recovery_codes_plain', $plainCodes);
 
         return back()->with('status', 'two-factor-recovery-codes-regenerated');
     }
@@ -133,26 +180,6 @@ class ProfileController extends Controller
         return collect(range(1, 8))->map(function () {
             return strtoupper(Str::random(4)) . '-' . strtoupper(Str::random(4));
         })->toArray();
-    }
-
-    protected function generateSecret(int $length = 32): string
-    {
-        $alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
-        $secret = '';
-
-        for ($i = 0; $i < $length; $i++) {
-            $secret .= $alphabet[random_int(0, strlen($alphabet) - 1)];
-        }
-
-        return $secret;
-    }
-
-    protected function makeOtpAuthUrl(User $user): string
-    {
-        $issuer = urlencode(config('app.name', 'Laravel'));
-        $label = urlencode($user->email);
-
-        return "otpauth://totp/{$issuer}:{$label}?secret={$user->two_factor_secret}&issuer={$issuer}";
     }
 
     protected function makeQrCodeDataUri(?string $otpauthUrl): ?string
@@ -170,5 +197,17 @@ class ProfileController extends Controller
         $svg = $writer->writeString($otpauthUrl);
 
         return 'data:image/svg+xml;base64,' . base64_encode($svg);
+    }
+
+    protected function hashRecoveryCodes(array $codes): array
+    {
+        return collect($codes)->map(function ($code) {
+            return Hash::make($this->normalizeRecoveryCode($code));
+        })->all();
+    }
+
+    protected function normalizeRecoveryCode(string $code): string
+    {
+        return strtoupper(str_replace([' ', '-'], '', $code));
     }
 }
