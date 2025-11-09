@@ -73,13 +73,11 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string'],
             'email' => ['required', 'email','unique:users'],
             'password' => ['required',"confirmed", Password::min(7)],
         ]);
-
         $validated = $validator->validated();
 
         DB::beginTransaction();
@@ -97,12 +95,13 @@ class AuthController extends Controller
             ]);
             $role = 'Project Officer';
 
+            
             if(isSet($invitation->role) && $invitation->role != null){
                 $role =  $invitation->role;
             }
             $user->assignRole($role);
-            auth()->login($user);
             
+            auth()->login($user);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();

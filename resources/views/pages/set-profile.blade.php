@@ -1,292 +1,184 @@
-<x-app-layout title="Form Layout v5" is-header-blur="true">
+<x-app-layout title="User Profile" is-header-blur="true" is-sidebar-open="false" sidebarToggle="false">
     <main class="main-content w-full px-[var(--margin-x)] pb-8">
-        <div class="flex items-center space-x-4 py-5 lg:py-6">
-          <h2
-            class="text-xl font-medium text-slate-800 dark:text-navy-50 lg:text-2xl"
-          >
-            Form Layout User
-          </h2>
-          <div class="hidden h-full py-1 sm:flex">
-            <div class="h-full w-px bg-slate-300 dark:bg-navy-600"></div>
-          </div>
-          <ul class="hidden flex-wrap items-center space-x-2 sm:flex">
-            <li class="flex items-center space-x-2">
-              <a
-                class="text-primary transition-colors hover:text-primary-focus dark:text-accent-light dark:hover:text-accent"
-                href="#"
-                >Forms</a
-              >
-              <svg
-                x-ignore
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </li>
-            <li>Form Layout 5</li>
-          </ul>
+        <div class="flex flex-wrap items-center justify-between space-y-3 py-5 lg:py-6">
+            <div>
+                <p class="text-xs uppercase tracking-wide text-slate-400 dark:text-navy-300">Account</p>
+                <h2 class="text-xl font-semibold text-slate-800 dark:text-navy-50 lg:text-2xl">Profile &amp; Security</h2>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button class="btn h-10 rounded-full border border-slate-200/70 px-4 text-xs+ font-medium text-slate-700 hover:border-primary hover:text-primary dark:border-navy-500 dark:text-navy-50">
+                    Preview
+                </button>
+                <button class="btn h-10 rounded-full bg-primary px-4 text-xs+ font-medium text-white hover:bg-primary-focus dark:bg-accent">
+                    Save Changes
+                </button>
+            </div>
         </div>
 
         <div class="grid grid-cols-12 gap-4 sm:gap-5 lg:gap-6">
-          <div class="col-span-12 lg:col-span-4">
-            <div class="card p-4 sm:p-5">
-              <div class="flex items-center space-x-4">
-                <div class="avatar h-14 w-14">
-                  <img
-                    class="rounded-full"
-                    src="{{asset('images/200x200.png')}}"
-                    alt="avatar"
-                  />
-                </div>
-                <div>
-                  <h3
-                    class="text-base font-medium text-slate-700 dark:text-navy-100"
-                  >
-                    {{$user->name}}
-                  </h3>
-                  <p class="text-xs+">System administrator</p>
-                </div>
-              </div>
-              <ul class="mt-6 space-y-1.5 font-inter font-medium">
-                <li>
-                  <a
-                    class="flex items-center space-x-2 rounded-lg bg-primary px-4 py-2.5 tracking-wide text-white outline-none transition-all dark:bg-accent"
-                    href="#"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1.5"
-                        d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    <span>Account</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    class="group flex space-x-2 rounded-lg px-4 py-2.5 tracking-wide outline-none transition-all hover:bg-slate-100 hover:text-slate-800 focus:bg-slate-100 focus:text-slate-800 dark:hover:bg-navy-600 dark:hover:text-navy-100 dark:focus:bg-navy-600 dark:focus:text-navy-100"
-                    href="#"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-5 w-5 text-slate-400 transition-colors group-hover:text-slate-500 group-focus:text-slate-500 dark:text-navy-300 dark:group-hover:text-navy-200 dark:group-focus:text-navy-200"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                      />
-                    </svg>
-
-                    <span>Notification</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    class="group flex space-x-2 rounded-lg px-4 py-2.5 tracking-wide outline-none transition-all hover:bg-slate-100 hover:text-slate-800 focus:bg-slate-100 focus:text-slate-800 dark:hover:bg-navy-600 dark:hover:text-navy-100 dark:focus:bg-navy-600 dark:focus:text-navy-100"
-                    href="#"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-5 w-5 text-slate-400 transition-colors group-hover:text-slate-500 group-focus:text-slate-500 dark:text-navy-300 dark:group-hover:text-navy-200 dark:group-focus:text-navy-200"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                      />
-                    </svg>
-                    <span>Security</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    class="group flex space-x-2 rounded-lg px-4 py-2.5 tracking-wide outline-none transition-all hover:bg-slate-100 hover:text-slate-800 focus:bg-slate-100 focus:text-slate-800 dark:hover:bg-navy-600 dark:hover:text-navy-100 dark:focus:bg-navy-600 dark:focus:text-navy-100"
-                    href="#"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-5 w-5 text-slate-400 transition-colors group-hover:text-slate-500 group-focus:text-slate-500 dark:text-navy-300 dark:group-hover:text-navy-200 dark:group-focus:text-navy-200"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                      />
-                    </svg>
-                    <span>Apps</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    class="group flex space-x-2 rounded-lg px-4 py-2.5 tracking-wide outline-none transition-all hover:bg-slate-100 hover:text-slate-800 focus:bg-slate-100 focus:text-slate-800 dark:hover:bg-navy-600 dark:hover:text-navy-100 dark:focus:bg-navy-600 dark:focus:text-navy-100"
-                    href="#"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-5 w-5 text-slate-400 transition-colors group-hover:text-slate-500 group-focus:text-slate-500 dark:text-navy-300 dark:group-hover:text-navy-200 dark:group-focus:text-navy-200"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                      />
-                    </svg>
-                    <span> Privacy & data </span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-span-12 lg:col-span-8">
-            <div class="card">
-              <div
-                class="flex flex-col items-center space-y-4 border-b border-slate-200 p-4 dark:border-navy-500 sm:flex-row sm:justify-between sm:space-y-0 sm:px-5"
-              >
-                <h2
-                  class="text-lg font-medium tracking-wide text-slate-700 dark:text-navy-100"
-                >
-                  Account Setting
-                </h2>
-                <div class="flex justify-center space-x-2">
-                  <button
-                    class="btn min-w-[7rem] rounded-full border border-slate-300 font-medium text-slate-700 hover:bg-slate-150 focus:bg-slate-150 active:bg-slate-150/80 dark:border-navy-450 dark:text-navy-100 dark:hover:bg-navy-500 dark:focus:bg-navy-500 dark:active:bg-navy-500/90"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    class="btn min-w-[7rem] rounded-full bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90"
-                  >
-                    Save
-                  </button>
-                </div>
-              </div>
-              <div class="p-4 sm:p-5">
-                <div class="my-7 h-px bg-slate-200 dark:bg-navy-500"></div>
-                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <label class="block">
-                    <span>Display name </span>
-                    <span class="relative mt-1.5 flex">
-                      <input
-                        class="form-input peer w-full rounded-full border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                        placeholder="Enter name"
-                        type="text"
-                      />
-                      <span
-                        class="pointer-events-none absolute flex h-full w-10 items-center justify-center text-slate-400 peer-focus:text-primary dark:text-navy-300 dark:peer-focus:text-accent"
-                      >
-                        <i class="fa-regular fa-user text-base"></i>
-                      </span>
-                    </span>
-                  </label>
-                  <label class="block">
-                    <span>Full Name </span>
-                    <span class="relative mt-1.5 flex">
-                      <input
-                        class="form-input peer w-full rounded-full border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                        placeholder="Enter full name"
-                        type="text"
-                      />
-                      <span
-                        class="pointer-events-none absolute flex h-full w-10 items-center justify-center text-slate-400 peer-focus:text-primary dark:text-navy-300 dark:peer-focus:text-accent"
-                      >
-                        <i class="fa-regular fa-user text-base"></i>
-                      </span>
-                    </span>
-                  </label>
-                  <label class="block">
-                    <span>Email Address </span>
-                    <span class="relative mt-1.5 flex">
-                      <input
-                        class="form-input peer w-full rounded-full border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                        placeholder="Enter email address"
-                        type="text"
-                      />
-                      <span
-                        class="pointer-events-none absolute flex h-full w-10 items-center justify-center text-slate-400 peer-focus:text-primary dark:text-navy-300 dark:peer-focus:text-accent"
-                      >
-                        <i class="fa-regular fa-envelope text-base"></i>
-                      </span>
-                    </span>
-                  </label>
-                  <label class="block">
-                    <span>Phone Number</span>
-                    <span class="relative mt-1.5 flex">
-                      <input
-                        class="form-input peer w-full rounded-full border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                        placeholder="Enter phone number"
-                        type="text"
-                      />
-                      <span
-                        class="pointer-events-none absolute flex h-full w-10 items-center justify-center text-slate-400 peer-focus:text-primary dark:text-navy-300 dark:peer-focus:text-accent"
-                      >
-                        <i class="fa fa-phone"></i>
-                      </span>
-                    </span>
-                  </label>
-                </div>
-                <div class="my-7 h-px bg-slate-200 dark:bg-navy-500"></div>
-                <div>
-                  <h3
-                    class="text-base font-medium text-slate-600 dark:text-navy-100"
-                  >
-                    Linked Accounts
-                  </h3>
-                  <p class="text-xs+ text-slate-400 dark:text-navy-300">
-                    Accounts which are connected to this account
-                  </p>
-                  <div class="flex items-center justify-between pt-4">
-                    <div class="flex items-center space-x-4">
-                      <div class="h-12 w-12">
-                        <img src="{{asset('images/100x100.png') }}" />
-                      </div>
-                      <p class="font-medium line-clamp-1">
-                        Sign In with Google
-                      </p>
+            <div class="col-span-12 xl:col-span-4 space-y-4">
+                <div class="card p-5">
+                    <div class="flex flex-col items-center space-y-4 text-center">
+                        <div class="relative">
+                            <div class="avatar h-28 w-28">
+                                <img class="rounded-full object-cover" src="{{ asset('images/200x200.png') }}" alt="avatar" />
+                            </div>
+                            <button class="btn absolute -bottom-2 left-1/2 h-8 w-28 -translate-x-1/2 rounded-full border border-white/70 bg-white text-xs font-medium text-slate-700 shadow hover:border-primary dark:border-navy-500 dark:bg-navy-600 dark:text-navy-50">
+                                Change
+                            </button>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-slate-700 dark:text-navy-50">{{ $user->name }}</h3>
+                            <p class="text-sm text-slate-400 dark:text-navy-200">{{ $user->email }}</p>
+                        </div>
+                        <div class="flex w-full flex-col gap-3 rounded-2xl bg-slate-100/60 p-4 text-left dark:bg-navy-700/70">
+                            <div class="flex items-center justify-between text-xs+">
+                                <span class="text-slate-500 dark:text-navy-200">Role</span>
+                                <span class="font-semibold text-slate-700 dark:text-navy-50">{{ optional($user->roles->first())->name ?? 'Member' }}</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs+">
+                                <span class="text-slate-500 dark:text-navy-200">Projects</span>
+                                <span class="font-semibold text-slate-700 dark:text-navy-50">12 active</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs+">
+                                <span class="text-slate-500 dark:text-navy-200">Last Login</span>
+                                <span class="font-semibold text-slate-700 dark:text-navy-50">2 hours ago</span>
+                            </div>
+                        </div>
                     </div>
-                    <button
-                      class="btn h-8 rounded-full border border-slate-200 px-3 text-xs+ font-medium text-primary hover:bg-slate-150 focus:bg-slate-150 active:bg-slate-150/80 dark:border-navy-500 dark:text-accent-light dark:hover:bg-navy-500 dark:focus:bg-navy-500 dark:active:bg-navy-500/90"
-                    >
-                      Connect
-                    </button>
-                  </div>
+                    <div class="mt-6 grid grid-cols-2 gap-3 text-sm">
+                        <button class="btn h-11 rounded-2xl bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-navy-600 dark:text-navy-50">
+                            Upload Avatar
+                        </button>
+                        <button class="btn h-11 rounded-2xl border border-slate-200 text-slate-600 hover:border-primary hover:text-primary dark:border-navy-500 dark:text-navy-100">
+                            Remove
+                        </button>
+                    </div>
                 </div>
-              </div>
+
+                <div class="card p-5">
+                    <h3 class="text-base font-semibold text-slate-700 dark:text-navy-50">Security Snapshot</h3>
+                    <p class="text-xs+ text-slate-400 dark:text-navy-200">Keep your account protected and up to date.</p>
+                    <div class="mt-5 space-y-4">
+                        <div class="flex items-center justify-between rounded-2xl border border-slate-200/70 p-3 dark:border-navy-600">
+                            <div>
+                                <p class="font-medium text-slate-700 dark:text-navy-50">Password updated</p>
+                                <p class="text-xs text-slate-400 dark:text-navy-200">Last changed 45 days ago</p>
+                            </div>
+                            <button class="btn h-8 rounded-full border border-primary/30 px-3 text-xs text-primary hover:border-primary dark:border-accent/40 dark:text-accent-light">Update</button>
+                        </div>
+                        <div class="flex items-center justify-between rounded-2xl border border-slate-200/70 p-3 dark:border-navy-600">
+                            <div>
+                                <p class="font-medium text-slate-700 dark:text-navy-50">Devices trusted</p>
+                                <p class="text-xs text-slate-400 dark:text-navy-200">3 browsers currently verified</p>
+                            </div>
+                            <button class="btn h-8 rounded-full border border-slate-200 px-3 text-xs text-slate-600 hover:border-primary hover:text-primary dark:border-navy-500 dark:text-navy-100">Review</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
+
+            <div class="col-span-12 xl:col-span-8 space-y-4">
+                <div class="card p-5">
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <label class="block">
+                            <span class="text-xs+ font-medium text-slate-500 dark:text-navy-200">Display name</span>
+                            <span class="relative mt-1.5 flex">
+                                <input class="form-input peer w-full rounded-full border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent" placeholder="Enter name" type="text" value="{{ $user->name }}" />
+                                <span class="pointer-events-none absolute flex h-full w-10 items-center justify-center text-slate-400 peer-focus:text-primary dark:text-navy-300 dark:peer-focus:text-accent">
+                                    <i class="fa-regular fa-user text-base"></i>
+                                </span>
+                            </span>
+                        </label>
+                        <label class="block">
+                            <span class="text-xs+ font-medium text-slate-500 dark:text-navy-200">Full name</span>
+                            <span class="relative mt-1.5 flex">
+                                <input class="form-input peer w-full rounded-full border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent" placeholder="Enter full name" type="text" value="{{ $user->name }}" />
+                                <span class="pointer-events-none absolute flex h-full w-10 items-center justify-center text-slate-400 peer-focus:text-primary dark:text-navy-300 dark:peer-focus:text-accent">
+                                    <i class="fa-regular fa-user text-base"></i>
+                                </span>
+                            </span>
+                        </label>
+                        <label class="block">
+                            <span class="text-xs+ font-medium text-slate-500 dark:text-navy-200">Email Address</span>
+                            <span class="relative mt-1.5 flex">
+                                <input class="form-input peer w-full rounded-full border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent" placeholder="Enter email address" type="email" value="{{ $user->email }}" />
+                                <span class="pointer-events-none absolute flex h-full w-10 items-center justify-center text-slate-400 peer-focus:text-primary dark:text-navy-300 dark:peer-focus:text-accent">
+                                    <i class="fa-regular fa-envelope text-base"></i>
+                                </span>
+                            </span>
+                        </label>
+                        <label class="block">
+                            <span class="text-xs+ font-medium text-slate-500 dark:text-navy-200">Phone Number</span>
+                            <span class="relative mt-1.5 flex">
+                                <input class="form-input peer w-full rounded-full border border-slate-300 bg-transparent px-3 py-2 pl-9 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent" placeholder="+1 555 0123 456" type="text" />
+                                <span class="pointer-events-none absolute flex h-full w-10 items-center justify-center text-slate-400 peer-focus:text-primary dark:text-navy-300 dark:peer-focus:text-accent">
+                                    <i class="fa fa-phone"></i>
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="card p-5">
+                    <div class="flex flex-wrap items-center justify-between gap-4">
+                        <div>
+                            <p class="text-xs uppercase tracking-wide text-primary">Two Factor Authentication</p>
+                            <h3 class="text-lg font-semibold text-slate-700 dark:text-navy-50">Add a second layer of security</h3>
+                        </div>
+                        <label class="inline-flex items-center space-x-2 text-sm font-medium text-slate-600 dark:text-navy-100">
+                            <span>Status</span>
+                            <input type="checkbox" class="form-switch h-6 w-11 rounded-full border border-slate-300 bg-slate-200 checked:bg-primary focus:border-primary focus:ring-primary dark:border-navy-500 dark:bg-navy-600" checked />
+                        </label>
+                    </div>
+                    <p class="mt-2 text-sm text-slate-500 dark:text-navy-200">Use an authenticator app or SMS to confirm it is you when you sign in from a new device.</p>
+
+                    <div class="mt-6 grid gap-4 md:grid-cols-2">
+                        <div class="rounded-2xl border border-primary/30 p-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                                    <i class="fa-solid fa-shield-halved"></i>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-slate-700 dark:text-navy-50">Authenticator App</p>
+                                    <p class="text-xs text-slate-400 dark:text-navy-200">Best balance between security and convenience.</p>
+                                </div>
+                            </div>
+                            <div class="mt-4 space-y-3 text-sm">
+                                <p>1. Install Google Authenticator or Authy.</p>
+                                <p>2. Scan this QR code or add the key manually.</p>
+                                <div class="rounded-xl bg-slate-100 p-3 text-center font-mono text-sm tracking-wide dark:bg-navy-700">A3DF-44QX-LM92</div>
+                            </div>
+                            <button class="btn mt-4 h-10 w-full rounded-full bg-primary text-sm font-semibold text-white hover:bg-primary-focus dark:bg-accent">Enable</button>
+                        </div>
+
+                        <div class="rounded-2xl border border-slate-200/70 p-4 dark:border-navy-600">
+                            <div class="flex items-center space-x-3">
+                                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 text-amber-500 dark:bg-amber-500/10 dark:text-amber-300">
+                                    <i class="fa-solid fa-mobile-screen"></i>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-slate-700 dark:text-navy-50">Text Message</p>
+                                    <p class="text-xs text-slate-400 dark:text-navy-200">Codes will be sent to your phone number.</p>
+                                </div>
+                            </div>
+                            <div class="mt-4 space-y-3 text-sm">
+                                <label class="block">
+                                    <span class="text-xs+ font-medium text-slate-500 dark:text-navy-200">Phone</span>
+                                    <input class="form-input mt-1 w-full rounded-full border border-slate-300 bg-transparent px-4 py-2 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent" placeholder="+1 555 000 1122" type="text" />
+                                </label>
+                                <label class="block">
+                                    <span class="text-xs+ font-medium text-slate-500 dark:text-navy-200">Verify code</span>
+                                    <div class="mt-1 flex items-center space-x-2">
+                                        <input class="form-input w-full rounded-full border border-slate-300 bg-transparent px-4 py-2 text-center text-lg font-semibold tracking-[0.4em] hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent" placeholder="123456" type="text" />
+                                        <button class="btn h-10 rounded-full border border-slate-200 px-4 text-xs font-medium text-slate-600 hover:border-primary hover:text-primary dark:border-navy-500 dark:text-navy-100">Send</button>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </main>
+    </main>
 </x-app-layout>

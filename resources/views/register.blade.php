@@ -22,7 +22,7 @@
                         Welcome To {{ config('app.name') }}
                     </h2>
                     <p class="text-slate-400 dark:text-navy-300">
-                        Please sign up to continue
+                        Please register to continue
                     </p>
                 </div>
             </div>
@@ -114,7 +114,7 @@
                     </div>
                     <button type="submit"
                         class="btn mt-10 h-10 w-full bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
-                        Sign In
+                        Register
                     </button>
                 </form>
             @endif

@@ -95,7 +95,7 @@ class Projects extends Component
                         ->orWhereRaw('LOWER(projects.description) LIKE ?', [$searchTerm]);
                     });
                 });
-            $this->projects = $projectsQuery->sortBy('status')->get();
+            $this->projects = $projectsQuery->get()->sortBy('status');
         }
 
         $totalProjects = $this->projects->count();
