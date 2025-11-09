@@ -133,6 +133,7 @@ class TaskRightPopup extends Component
 
             $this->validate();
             $this->task->save();
+            $assignmentChanged = $this->task->wasChanged('assigned_to');
 
             $parentTask = $this->task->getParent()?->first();
             $this->task->path = $parentTask != null ? $parentTask->path.'.'.$this->task->id : $this->task->id;
@@ -141,9 +142,11 @@ class TaskRightPopup extends Component
 
             $this->task->tags()->sync($this->taskTags); 
 
-            if($this->task->isDirty('assigned_to') ){
-                $assgnee = User::find($this->task->assigned_to);
-                Notification::send($assgnee, new TaskAssignment($this->task));
+            if($assignmentChanged){
+                $assignee = User::find($this->task->assigned_to);
+                if($assignee){
+                    Notification::send($assignee, new TaskAssignment($this->task));
+                }
             }
             $this->dispatch('saveAttachments', $this->task->id);
 
