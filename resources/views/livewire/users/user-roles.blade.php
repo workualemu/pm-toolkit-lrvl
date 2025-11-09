@@ -1,5 +1,8 @@
 <div>
     <x-search-header title="Roles" searchModel="searchTerm" />
+    <div class="mb-3">
+        <x-select label="Guard" model="guard_name" :options="[['id'=>'web','value'=>'Web'],['id'=>'api','value'=>'API']]" valueField="id" nameField="value" />
+    </div>
     <p class="mt-1 text-xs p-2">{{ __('For user: ') }} {{ $selectedUser->name }}</p>
         <!-- Filter block -->
     <div class="grid grid-cols-4 gap-4 sm:grid-cols-2 sm:gap-5 lg:gap-6">

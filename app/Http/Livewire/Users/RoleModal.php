@@ -15,6 +15,9 @@ class RoleModal extends Component
     #[LivewireRule('required|string|min:2')]
     public $name;
 
+    #[LivewireRule('required|string|in:web,api')]
+    public $guard_name = 'web';
+
     #[On('openRoleModal')]
     public function openRoleModal($id)
     {
@@ -23,6 +26,7 @@ class RoleModal extends Component
             $this->role = Role::find($id);
         }
         $this->name = $this->role->name;
+        $this->guard_name = $this->role->guard_name ?: 'web';
         $this->showModal = true;
     }
 
@@ -38,7 +42,7 @@ class RoleModal extends Component
         try {
             $role = Role::updateOrCreate(
                 ['id' => $this->role->id],
-                ['name' => $this->role->name, 'guard_name'=>'web']);
+                ['name' => $this->role->name, 'guard_name' => $this->guard_name]);
             $this->dispatch('status-message', success: true, message: 'Role has been saved successfully!');
         } catch (Exception $exception) {
             $this->dispatch('status-message', success: false, message: $exception->getMessage());
