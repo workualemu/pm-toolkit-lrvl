@@ -9,6 +9,7 @@ use App\Models\Role;
 class RolePermissions extends Component
 {
     public $role;
+    public $guard_name = 'web';
     public $grantedPermissions = [];
     // public $permissions;
     public $searchTerm = '';
@@ -17,6 +18,7 @@ class RolePermissions extends Component
     public function mount($role_id)
     {
         $this->role = Role::find($role_id);
+        $this->guard_name = $this->role?->guard_name ?? 'web';
 
         if($this->role != null){
             $rolePermissions = $this->role->permissions;
@@ -75,9 +77,10 @@ class RolePermissions extends Component
     public function render()
     {
         $searchTerm = strtolower($this->searchTerm);
-        $permissions = Permission::when($this->searchTerm, function ($query) {
-            $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($this->searchTerm) . '%']);
-        })->get();
+        $permissions = Permission::where('guard_name', $this->guard_name)
+            ->when($this->searchTerm, function ($query) {
+                $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($this->searchTerm) . '%']);
+            })->get();
 
         return view('livewire.users.role-permissions', [
             'permissions' => $permissions,

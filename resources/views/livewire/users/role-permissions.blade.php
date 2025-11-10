@@ -1,6 +1,6 @@
 <div>
     <x-search-header title="Permissions" searchModel="searchTerm" />
-    <p class="mt-1 text-xs p-2">{{ __('For role: ') }} {{ $role->name }}</p>
+    <p class="mt-1 text-xs p-2">{{ __('For role: ') }} {{ $role->name }} <span class="text-slate-400">({{ $role->guard_name }})</span></p>
     <div class="grid grid-cols-4 gap-4 sm:grid-cols-2 sm:gap-5 lg:gap-6">
         <div class="sm:col-span-2">
             <div class="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-4 sm:gap-5 lg:gap-6">

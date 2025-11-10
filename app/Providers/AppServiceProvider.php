@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Auth;
 use App\Observers\TaskDateObserver;
 use App\Models\Task;
 use Livewire\Livewire;
@@ -35,9 +35,15 @@ class AppServiceProvider extends ServiceProvider
             $view->with('projectId', 0);
         });
 
-        Blade::if('roles', function (array $roles) { 
-            return Auth::check() 
-                && in_array(Auth::user()->role, $roles, true); 
+        Blade::if('role', function (string|array $roles, ?string $guard = null) {
+            $user = Auth::guard($guard)->user();
+            $roles = (array) $roles;
+            return $user?->hasAnyRole($roles) ?? false;
+        });
+        Blade::if('permission', function (string|array $permissions, ?string $guard = null) {
+            $user = Auth::guard($guard)->user();
+            $permissions = (array) $permissions;
+            return $user?->hasAnyPermission($permissions) ?? false;
         });
 
         Task::observe(TaskDateObserver::class);

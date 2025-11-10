@@ -11,6 +11,7 @@ use Spatie\Permission\Models\Role;
 use App\Mail\InvitationMail;
 use Livewire\Attributes\Rule as LivewireRule;
 use Livewire\Attributes\On;
+use Exception;
 
 class InvitedUsersModal extends Component
 {
@@ -26,6 +27,7 @@ class InvitedUsersModal extends Component
     #[On('openInvitationModal')]
     public function openInvitationModal($invitation_id)
     {
+        $this->resetValidation();
         $this->invitation = new Invitation();
         if($invitation_id > 0) {
             $this->invitation = Invitation::find($invitation_id);
@@ -52,20 +54,18 @@ class InvitedUsersModal extends Component
             $expiresAt = now()->addHours(72);
             $invitation = Invitation::create([
                 'email' => $this->invitation->email,
-                'link' => URL::temporarySignedRoute('register', $expiresAt, ['email' => $this->invitation->email]),
+                'link' => URL::temporarySignedRoute('registerView', $expiresAt, ['email' => $this->invitation->email]),
                 'expires_at' => $expiresAt,
                 'role' => $this->invitation->role,
             ]);
 
             Mail::to($invitation['email'])->send(new InvitationMail($invitation));
+            $this->showModal = false;
+            $this->dispatch('refreshInvitation');
 
         } catch (Exception $exception) {
-            $this->addError('email', $exception->getMessage());
+            $this->addError('email', "Something went wrong: Email might already be invited.");
         }
-
-        
-        $this->showModal = false;
-        $this->dispatch('refreshInvitation');
     }
 
     public function resendEmail()
@@ -74,7 +74,7 @@ class InvitedUsersModal extends Component
         try {
             $expiresAt = now()->addHours(24);
             $this->invitation->update([
-                'link' => URL::temporarySignedRoute('register', $expiresAt, ['email' => $this->invitation->email]),
+                'link' => URL::temporarySignedRoute('registerView', $expiresAt, ['email' => $this->invitation->email]),
                 'expires_at' => $expiresAt,
                 'role' => $this->invitation->role,
             ]);

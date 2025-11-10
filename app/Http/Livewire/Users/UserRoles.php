@@ -11,6 +11,7 @@ class UserRoles extends Component
 {
     public $selectedUser;
     public $assignedRoles = [];
+    public $guard_name = 'web';
     public $searchTerm = '';
     public $errorMessage = null;
 
@@ -18,10 +19,22 @@ class UserRoles extends Component
     {
         $this->resetPage();
     }
+
+    public function updatedGuardName($value)
+    {
+        $this->assignedRoles = [];
+        if ($this->selectedUser) {
+            $this->selectedUser->load('roles');
+            foreach ($this->selectedUser->roles->where('guard_name', $value) as $role) {
+                $this->assignedRoles[$role->id] = true;
+            }
+        }
+    }
     
     public function mount($user_id)
     {
         $this->selectedUser = User::find($user_id);
+        $this->guard_name = config('auth.defaults.guard');
 
         if($this->selectedUser != null){
             $userRoles = $this->selectedUser->roles;
@@ -34,7 +47,8 @@ class UserRoles extends Component
     public function assignRoles($isSave)
     {
         if($isSave){
-            $roles = Role::whereIn('id', array_keys($this->assignedRoles))->get();
+            $roles = Role::where('guard_name', $this->guard_name)
+                ->whereIn('id', array_keys($this->assignedRoles))->get();
 
             $assignRoles = [];
             foreach ($roles as $role) {
@@ -58,9 +72,10 @@ class UserRoles extends Component
 
     public function render()
     {
-        $roles = Role::when($this->searchTerm, function ($query) {
-            $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($this->searchTerm) . '%']);
-        })->get();
+        $roles = Role::where('guard_name', $this->guard_name)
+            ->when($this->searchTerm, function ($query) {
+                $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($this->searchTerm) . '%']);
+            })->get();
     
         return view('livewire.users.user-roles', [
             'roles' => $roles

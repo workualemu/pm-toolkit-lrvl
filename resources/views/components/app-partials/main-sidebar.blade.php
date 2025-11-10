@@ -348,7 +348,7 @@
                 <button @click="isShowPopper = !isShowPopper" x-ref="popperRef" 
                     x-tooltip.placement.right="'Profile'"
                     class="avatar h-12 w-12">
-                    <img class="rounded-full" src="{{ asset('images/200x200.png') }}" alt="avatar" />
+                    <img class="rounded-full object-cover" src="{{ $user->profile_photo_url ?? asset('images/200x200.png') }}" alt="{{ $user->name }}" />
                     <span
                         class="absolute right-0 h-3.5 w-3.5 rounded-full border-2 border-white bg-success dark:border-navy-700"></span>
                 </button>
@@ -357,11 +357,11 @@
                         class="popper-box w-64 rounded-lg border border-slate-150 bg-white shadow-soft dark:border-navy-600 dark:bg-navy-700">
                         <div class="flex items-center space-x-4 rounded-t-lg bg-slate-100 py-5 px-4 dark:bg-navy-800">
                             <div class="avatar h-14 w-14">
-                                <img class="rounded-full" src="{{ asset('images/200x200.png') }}"
-                                    alt="avatar" />
+                                <img class="rounded-full object-cover" src="{{ $user->profile_photo_url ?? asset('images/200x200.png') }}"
+                                    alt="{{ $user->name }}" />
                             </div>
                             <div>
-                                <a href="#"
+                                <a href="{{ route('setProfile') }}"
                                     class="text-base font-medium text-slate-700 hover:text-primary focus:text-primary dark:text-navy-100 dark:hover:text-accent-light dark:focus:text-accent-light">
                                     {{$user->name}}
                                 </a>
@@ -371,26 +371,7 @@
                             </div>
                         </div>
                         <div class="flex flex-col pt-2 pb-5">
-                            <a href="#"
-                                class="group flex items-center space-x-3 py-2 px-4 tracking-wide outline-none transition-all hover:bg-slate-100 focus:bg-slate-100 dark:hover:bg-navy-600 dark:focus:bg-navy-600">
-                                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-warning text-white">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                    </svg>
-                                </div>
-
-                                <div>
-                                    <h2
-                                        class="font-medium text-slate-700 transition-colors group-hover:text-primary group-focus:text-primary dark:text-navy-100 dark:group-hover:text-accent-light dark:group-focus:text-accent-light">
-                                        {{ __('Profile') }}
-                                    </h2>
-                                    <div class="text-xs text-slate-400 line-clamp-1 dark:text-navy-300">
-                                    {{ __('Your profile setting') }}
-                                    </div>
-                                </div>
-                            </a>
+                            
                             <!--
                             <a href="#"
                                 class="group flex items-center space-x-3 py-2 px-4 tracking-wide outline-none transition-all hover:bg-slate-100 focus:bg-slate-100 dark:hover:bg-navy-600 dark:focus:bg-navy-600">

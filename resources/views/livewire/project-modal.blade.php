@@ -66,9 +66,11 @@
                 <x-button color="error" @click="showModal=false">
                     {{ __('Close') }}
                 </x-button>
+                @if(($user->hasRole('Super Admin') || $user->can(['create project', 'edit project'])) )
                 <x-button color="info" wire:click="store()">
                     {{ __('Save') }}
                 </x-button>
+                @endif
             </div>
         </div>
     </div>

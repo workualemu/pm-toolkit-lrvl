@@ -31,8 +31,17 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'display_name',
+        'full_name',
         'email',
+        'phone_number',
         'password',
+        'profile_photo_path',
+        'last_login_at',
+        'two_factor_enabled',
+        'two_factor_method',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
     ];
 
     /**
@@ -54,6 +63,10 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'last_login_at' => 'datetime',
+        'two_factor_enabled' => 'boolean',
+        'two_factor_secret' => 'encrypted',
+        'two_factor_recovery_codes' => 'encrypted:array',
     ];
 
     /**

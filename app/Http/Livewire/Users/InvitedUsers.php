@@ -12,6 +12,12 @@ class InvitedUsers extends Component
     use WithPagination;
     public $searchTerm;
 
+    #[On('refreshInvitation')]
+    public function onRefreshInvitation()
+    {
+        $this->dispatch('$refresh');
+    }
+
     public function addNewInvitation()
     {
         $this->dispatch('openInvitationModal', null);

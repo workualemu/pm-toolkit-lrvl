@@ -48,6 +48,7 @@ class TaskRightPopup extends Component
     public $description = '';
     public $task_priority_id = 0;
     public $task_status_id = 0;
+    #[LivewireRule('numeric|min:0|max:100')]
     public $progress = 0;
 
     private function getFormTitle()
@@ -133,6 +134,7 @@ class TaskRightPopup extends Component
 
             $this->validate();
             $this->task->save();
+            $assignmentChanged = $this->task->wasChanged('assigned_to');
 
             $parentTask = $this->task->getParent()?->first();
             $this->task->path = $parentTask != null ? $parentTask->path.'.'.$this->task->id : $this->task->id;
@@ -141,9 +143,11 @@ class TaskRightPopup extends Component
 
             $this->task->tags()->sync($this->taskTags); 
 
-            if($this->task->isDirty('assigned_to') ){
-                $assgnee = User::find($this->task->assigned_to);
-                Notification::send($assgnee, new TaskAssignment($this->task));
+            if($assignmentChanged){
+                $assignee = User::find($this->task->assigned_to);
+                if($assignee){
+                    Notification::send($assignee, new TaskAssignment($this->task));
+                }
             }
             $this->dispatch('saveAttachments', $this->task->id);
 
@@ -177,7 +181,7 @@ class TaskRightPopup extends Component
         $this->description = $this->task->description;
         $this->task_priority_id = $this->task->task_priority_id;
         $this->task_status_id = $this->task->task_status_id;
-        $this->progress = $this->task->progress;
+        $this->progress = $this->task->progress ? $this->task->progress * 100 : 0;
     }
 
     private function dehidrate()
@@ -190,7 +194,7 @@ class TaskRightPopup extends Component
         $this->task->description = $this->description;
         $this->task->task_priority_id = $this->task_priority_id;
         $this->task->task_status_id = $this->task_status_id;
-        $this->task->progress = $this->progress ? $this->progress : 0;
+        $this->task->progress = $this->progress ? $this->progress / 100 : 0;
     }
 
 }

@@ -14,6 +14,6 @@
 <div class="w-full bg-gray-200 h-4 dark:bg-gray-700 overflow-hidden">
     <div class="h-full text-center text-xs text-white font-bold leading-4 transition-all duration-500"
         style="width: {{ $progress * 100}}%; background-color: {{ $color }};">
-        {{ sprintf('%.2f', $progress * 100) }}%
+        {{ sprintf('%.0f', $progress * 100) }}%
     </div>
 </div>

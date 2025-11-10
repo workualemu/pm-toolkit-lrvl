@@ -20,7 +20,7 @@
                             label="Role"
                             model="role"
                             :options="$roles"
-                            valueField="id"
+                            valueField="name"
                             nameField="name"
                             selected="{{ $selectedRole ?? '' }}"
                         />

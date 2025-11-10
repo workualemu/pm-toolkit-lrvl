@@ -28,10 +28,11 @@
                 </label>
                 
             </div>
-            
-            <x-button color="info" wire:click="newProject()">
-                {{ __('Add new project') }}
-            </x-button>
+            @if(($user->hasRole('Super Admin') || $user->can('create project')))
+                <x-button color="info" wire:click="newProject()">
+                    {{ __('Add new project') }}
+                </x-button>
+            @endif
         </div>
 
         <!-- Summary Cards -->

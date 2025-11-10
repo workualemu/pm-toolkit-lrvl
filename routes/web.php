@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TwoFactorController;
 use App\Http\Controllers\FileController;
 
 use App\Http\Livewire\TaskRightPopup;
@@ -32,6 +34,8 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login'])->name('login');
     Route::get('/register', [\App\Http\Controllers\AuthController::class, 'registerView'])->name('registerView');
     Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register'])->name('register');
+    Route::get('/two-factor-challenge', [TwoFactorController::class, 'show'])->name('two-factor.show');
+    Route::post('/two-factor-challenge', [TwoFactorController::class, 'store'])->name('two-factor.store');
 
     Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
     Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
@@ -77,6 +81,19 @@ Route::middleware('auth')->group(function () {
 
     Route::get('role-permissions/{role_id}', [RolePermissionController::class, 'manageRolePermission'])->name('role-permissions');
 
+    Route::controller(ProfileController::class)->group(function () {
+        Route::get('setProfile', 'show')->name('setProfile');
+    });
+
+    Route::middleware('password.confirm')->controller(ProfileController::class)->group(function () {
+        Route::put('profile', 'updateProfile')->name('profile.update');
+        Route::post('profile/avatar', 'updateAvatar')->name('profile.avatar');
+        Route::post('profile/two-factor/enable', 'enableTwoFactor')->name('profile.two-factor.enable');
+        Route::delete('profile/two-factor', 'disableTwoFactor')->name('profile.two-factor.disable');
+        Route::post('profile/two-factor/regenerate', 'regenerateRecoveryCodes')->name('profile.two-factor.regenerate');
+        Route::put('profile/password', 'updatePassword')->name('profile.password.update');
+    });
+
     Route::controller(PagesController::class)->group(function(){
         Route::get('kanban', 'getKanban')->name('kanban');
         Route::get('gantt', 'getGantt')->name('gantt');
@@ -116,7 +133,6 @@ Route::middleware('auth')->group(function () {
    
     // Route::post('project-users', [PagesController::class, 'projectUsers'])->name('project-users');
     
-    Route::get('setProfile', [PagesController::class, 'formsSetProfile'])->name('setProfile');
 
     Route::get('/elements/avatar', [PagesController::class, 'elementsAvatar'])->name('elements/avatar');
     Route::get('/elements/alert', [PagesController::class, 'elementsAlert'])->name('elements/alert');

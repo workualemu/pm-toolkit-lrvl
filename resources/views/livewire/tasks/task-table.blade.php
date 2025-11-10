@@ -31,8 +31,8 @@
                                 {{$task->title}}
                             </td>
                             <td class="whitespace-nowrap sm:px-5">
-                                <div style="width: 100px" x-tooltip.primary="'{{$task->progress}}% Completed'" class="progress h-2 {{$task->color}} dark:bg-navy-500">
-                                    <div style="width: {{$task->progress}}px" class="rounded-full bg-primary dark:bg-accent"></div>
+                                <div style="width: 100px" x-tooltip.primary="'{{ round($task->progress * 100) }}% Completed'" class="progress h-2 {{$task->color}} dark:bg-navy-500">
+                                    <div style="width: {{ max(0, min(100, $task->progress * 100)) }}px" class="rounded-full bg-primary dark:bg-accent"></div>
                                 </div>
                             </td>
                             <td class="whitespace-nowrap sm:px-5">
